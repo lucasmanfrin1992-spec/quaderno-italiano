@@ -1573,7 +1573,7 @@ function gerund(v){const irr={fare:"facendo",bere:"bevendo",dire:"dicendo",tradu
 const TENSES={pres:{n:"presente",f:pres},pass:{n:"passato prossimo",f:pass},fut:{n:"futuro",f:fut},imp:{n:"imperfetto",f:imperf},cond:{n:"condizionale",f:cond}};
 
 /* ============================ ESTADO ============================ */
-const PROFILES=[{id:"rafaela",name:"Rafaela",color:"#B4572E"},{id:"eder",name:"Éder",color:"#22744A"},{id:"lucas",name:"Lucas",color:"#1E4E9E"},{id:"glenda",name:"Glenda",color:"#7A3E9D"}];
+const PROFILES=[{id:"rafaela",name:"Rafaela",color:"#B4572E"},{id:"eder",name:"Éder",color:"#22744A"},{id:"lucas",name:"Lucas",color:"#1E4E9E"},{id:"glenda",name:"Glenda",color:"#7A3E9D"},{id:"rafael-neves",name:"Rafael Neves",color:"#0F7C80"}];
 const RESET_TAG="2026-11-01c";
 try{if(localStorage.getItem("quaderno.reset")!==RESET_TAG){Object.keys(localStorage).filter(k=>k.startsWith("quaderno")).forEach(k=>localStorage.removeItem(k));localStorage.setItem("quaderno.reset",RESET_TAG)}}catch(e){}
 let CURID=null;try{CURID=localStorage.getItem("quaderno.current")}catch(e){}
