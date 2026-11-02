@@ -1,21 +1,24 @@
 /* Layout: caderno de estudo mobile-first — uma coluna de leitura, barra de abas fixa embaixo, faixa de azulejo (maiolica) como assinatura */
 :root{
-  --paper:#F4F7FB; --surface:#FFFFFF; --ink:#16213A; --muted:#5A6684; --line:#D8E0EC;
-  --cobalt:#1E4E9E; --cobalt-soft:#E3EBF8; --saffron:#D99A12; --saffron-soft:#FBF0D6;
-  --ok:#22744A; --ok-soft:#E1F2E8; --bad:#B0281F; --bad-soft:#FBE4E1;
-  --display:"Young Serif", Georgia, "Times New Roman", serif;
-  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --paper:#FBF5EA; --surface:#FFFFFF; --ink:#2B1D16; --muted:#5C4A3E; --line:#EADFCB;
+  --cobalt:#C2402A; --cobalt-soft:#F9E4DC; --saffron:#D9A21F; --saffron-soft:#FCF0CC;
+  --ok:#2F6B3A; --ok-soft:#E3EEDF; --bad:#9E2A1E; --bad-soft:#F8E0DB;
+  --itc:#8A3A26; --lino:#EADFCB; --press:#8A2B1C; --masc:#2D5F9A; --masc-soft:#E3ECF6;
+  --display:"Fraunces", Georgia, "Times New Roman", serif;
+  --body:"Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
-  --r:12px;
+  --r:20px;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --paper:#0D1424; --surface:#151F36; --ink:#E6ECF6; --muted:#9AA7C2; --line:#28344F;
-  --cobalt:#86A9EE; --cobalt-soft:#1C2B4D; --saffron:#F0B947; --saffron-soft:#3A2F14;
-  --ok:#62C48F; --ok-soft:#143326; --bad:#F08B80; --bad-soft:#3D1A17; color-scheme:dark}}
+  --paper:#1B1410; --surface:#271D17; --ink:#F6ECDF; --muted:#C9B6A4; --line:#3E3028;
+  --cobalt:#EE7A62; --cobalt-soft:#45231A; --saffron:#F2C14E; --saffron-soft:#43361A;
+  --ok:#86C994; --ok-soft:#1E3322; --bad:#F59384; --bad-soft:#44201B;
+  --itc:#F2A58F; --lino:#3E3028; --press:#9E3A28; --masc:#8DB4E8; --masc-soft:#1E2B3D; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --paper:#0D1424; --surface:#151F36; --ink:#E6ECF6; --muted:#9AA7C2; --line:#28344F;
-  --cobalt:#86A9EE; --cobalt-soft:#1C2B4D; --saffron:#F0B947; --saffron-soft:#3A2F14;
-  --ok:#62C48F; --ok-soft:#143326; --bad:#F08B80; --bad-soft:#3D1A17; color-scheme:dark}
+  --paper:#1B1410; --surface:#271D17; --ink:#F6ECDF; --muted:#C9B6A4; --line:#3E3028;
+  --cobalt:#EE7A62; --cobalt-soft:#45231A; --saffron:#F2C14E; --saffron-soft:#43361A;
+  --ok:#86C994; --ok-soft:#1E3322; --bad:#F59384; --bad-soft:#44201B;
+  --itc:#F2A58F; --lino:#3E3028; --press:#9E3A28; --masc:#8DB4E8; --masc-soft:#1E2B3D; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
   padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));
@@ -25,7 +28,7 @@ h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;line-heigh
 h2{font-size:1.55rem} h3{font-size:1.2rem}
 p{margin:0}
 .label{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.it{font-style:italic;color:var(--cobalt)}
+.it{font-style:italic;color:var(--itc)}
 b,strong{font-weight:700}
 button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--saffron);outline-offset:2px}
