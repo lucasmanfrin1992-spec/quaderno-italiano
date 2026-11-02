@@ -671,10 +671,10 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center;color:inherit}
 }
 .vdseg.eve .w,.vdseg.night .w{color:#fff}.vdseg.morn .w{color:#1a1a1a}
 /* ---------- diálogo de abertura do vocabulário ---------- */
-.dlg{border-top:4px solid var(--saffron)}
+.vdlg{border-top:4px solid var(--saffron)}
 .dlines{display:flex;flex-direction:column;gap:12px}
-.stl.dl{gap:3px}
-.stl.dl.nar .it{font-style:italic;color:var(--muted)}
+.stl.vdline{gap:3px}
+.stl.vdline.nar .it{font-style:italic;color:var(--muted)}
 .dwho{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
 .dwho.dc0{color:var(--cobalt)}.dwho.dc1{color:var(--fem)}.dwho.dc2{color:var(--ok)}.dwho.dc3{color:var(--saffron)}
 mark.vk{background:var(--cobalt-soft);color:inherit;border-radius:4px;padding:0 2px;box-shadow:inset 0 -2px 0 var(--cobalt)}
@@ -2296,7 +2296,7 @@ DLG["a1-2"]={t:"Che cosa c'è nello zaino?",L:[
 ["Giulia","{Ho trent'anni|ho trent'anni}. Mio fratello fa {l'impiegato|l'impiegato} in banca e mia madre fa {l'insegnante|l'insegnante}.","Tenho trinta anos. Meu irmão é funcionário de banco e minha mãe é professora."]],
 q:[["Il libro di italiano è nello zaino.",true,"«Nello zaino ho anche un quaderno e il libro di italiano»."],["La chiave è sulla scrivania.",false,"Sulla scrivania c'è il computer. La chiave è nella borsa."],["Pedro fa il medico.",false,"Pedro è studente. Il medico è Sara."],["Giulia ha trent'anni.",true,"«Ho trent'anni»."]]};
 
-DLG["a1-3"]={t:"Com'è il nuovo collega?",L:[
+DLG["a1-3"]={t:"Il collega brasiliano",L:[
 ["Marco","Giulia, com'è il nuovo collega brasiliano?","Giulia, como é o novo colega brasileiro?"],
 ["Giulia","Lucas? È {alto|alto}, {magro|magro}, ha {i capelli|i capelli} {castani|castano} e {gli occhi|gli occhi} {verdi|verde}.","O Lucas? É alto, magro, tem cabelo castanho e olhos verdes."],
 ["Marco","È {simpatico|simpatico}?","Ele é simpático?"],
@@ -2590,12 +2590,12 @@ function dlgLineFor(d,hit){const [who,s,pt]=d.L[hit.i];let done=false;
  return{who,it,pt}}
 function dlgSpeakers(d){const o=[];d.L.forEach(l=>{if(l[0]&&!o.includes(l[0]))o.push(l[0])});return o}
 function dlgHTML(d){const sp=dlgSpeakers(d);
- return`<section class="card stack dlg" id="dlgBox"><div><span class="label">Diálogo de abertura · leia e ouça</span><h3>${esc(d.t)}</h3></div>
+ return`<section class="card stack vdlg" id="dlgBox"><div><span class="label">Diálogo de abertura · leia e ouça</span><h3>${esc(d.t)}</h3></div>
  <div class="row">${canSpeak?`<button class="btn" id="dlgRead">${SPK_SVG}Ouvir o diálogo</button>`:""}<button class="btn ghost" id="dlgPt" aria-pressed="false">Mostrar tradução</button></div>
- <div class="dlines">${d.L.map(([who,s,pt])=>who?`<div class="stl dl"><span class="dwho dc${sp.indexOf(who)%4}">${esc(who)}</span><span class="it">${dlgMarked(s)}</span><span class="stpt" hidden>${esc(pt)}</span></div>`:`<div class="stl dl nar"><span class="it">${dlgMarked(s)}</span><span class="stpt" hidden>${esc(pt)}</span></div>`).join("")}</div>
+ <div class="dlines">${d.L.map(([who,s,pt])=>who?`<div class="stl vdline"><span class="dwho dc${sp.indexOf(who)%4}">${esc(who)}</span><span class="it">${dlgMarked(s)}</span><span class="stpt" hidden>${esc(pt)}</span></div>`:`<div class="stl vdline nar"><span class="it">${dlgMarked(s)}</span><span class="stpt" hidden>${esc(pt)}</span></div>`).join("")}</div>
  <p class="hint">As palavras destacadas são o vocabulário do tópico (nos substantivos, azul é masculino e laranja é feminino). Leia primeiro sem a tradução e tente entender pelo contexto; toque numa palavra para ver o significado.</p></section>`}
 function dlgQHTML(d){return`<section class="card stack"><div><span class="label">Hai capito? · vero o falso</span><h3>Você entendeu o diálogo?</h3></div>
- ${d.q.map(([s,v,e],i)=>`<div class="vfq" data-i="${i}"><p class="it" style="font-style:normal;color:var(--ink)">${esc(s)}</p><div class="row"><button class="btn vfb" data-v="1">Vero</button><button class="btn vfb" data-v="0">Falso</button></div><p class="small vfr" hidden></p></div>`).join("")}</section>`}
+ ${d.q.map(([s,v,e],i)=>`<div class="vfq" data-i="${i}"><p class="it" style="font-style:normal;color:var(--ink)">${esc(s)}</p><div class="row"><button class="btn vfbtn" data-v="1">Vero</button><button class="btn vfbtn" data-v="0">Falso</button></div><p class="small vfres" hidden></p></div>`).join("")}</section>`}
 function dlgClozeHTML(d){const items=[];const seen=new Set();
  const cand=d.L.filter(l=>DLGRE.test(l[1])&&!(DLGRE.lastIndex=0)),step=Math.max(1,cand.length/5),pick=[];for(let k=0;k<cand.length&&pick.length<5;k+=step)pick.push(cand[Math.floor(k)]);
  pick.forEach(([who,s])=>{const ms=[...s.matchAll(DLGRE)].filter(m=>!seen.has(m[1].toLowerCase())&&m[1].split(" ").length<=3);if(!ms.length)return;
@@ -2605,17 +2605,17 @@ function dlgClozeHTML(d){const items=[];const seen=new Set();
  const pool=[...new Set(items.map(x=>x.ans))];
  return`<section class="card stack"><div><span class="label">Palavras em contexto</span><h3>Complete com a palavra do diálogo</h3></div><p class="small muted">Tente lembrar a palavra que estava na frase, sem voltar ao diálogo.</p>
  ${items.map((x,i)=>{const opts=[x.ans,...pool.filter(p=>p!==x.ans).sort(()=>Math.random()-.5).slice(0,2)].sort(()=>Math.random()-.5);
-  return`<div class="vfq clz" data-a="${esc(x.ans)}"><p>${x.who?`<span class="dwho">${esc(x.who)}</span> `:""}<span class="it" style="font-style:normal;color:var(--ink)">${esc(x.before)}</span><span class="blank"></span><span class="it" style="font-style:normal;color:var(--ink)">${esc(x.after)}</span></p><div class="row">${opts.map(o=>`<button class="btn clzb" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</div><p class="small vfr" hidden></p></div>`}).join("")}</section>`}
+  return`<div class="vfq clz" data-a="${esc(x.ans)}"><p>${x.who?`<span class="dwho">${esc(x.who)}</span> `:""}<span class="it" style="font-style:normal;color:var(--ink)">${esc(x.before)}</span><span class="blank"></span><span class="it" style="font-style:normal;color:var(--ink)">${esc(x.after)}</span></p><div class="row">${opts.map(o=>`<button class="btn clzb" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</div><p class="small vfres" hidden></p></div>`}).join("")}</section>`}
 function dlgWire(root,d){if(!d)return;
  const pt=root.querySelector("#dlgPt");if(pt)pt.onclick=e=>{const on=e.currentTarget.getAttribute("aria-pressed")!=="true";e.currentTarget.setAttribute("aria-pressed",on);e.currentTarget.textContent=on?"Esconder tradução":"Mostrar tradução";root.querySelectorAll("#dlgBox .stpt").forEach(x=>x.hidden=!on)};
- const rd=root.querySelector("#dlgRead");if(rd)rd.onclick=()=>readLines(d.L.map(l=>dlgPlain(l[1])),[...root.querySelectorAll("#dlgBox .dl")]);
- root.querySelectorAll(".vfq:not(.clz)").forEach(q=>q.querySelectorAll(".vfb").forEach(b=>b.onclick=()=>{const [s,v,e]=d.q[+q.dataset.i],ok=(b.dataset.v==="1")===v;
-  q.querySelectorAll(".vfb").forEach(x=>{x.disabled=true;x.classList.toggle("okb",(x.dataset.v==="1")===v);x.classList.toggle("badb",x===b&&!ok)});
-  const r=q.querySelector(".vfr");r.hidden=false;r.innerHTML=`<b class="${ok?"okt":"warnt"}">${ok?"Certo!":"Não."}</b> ${esc(e)}`}));
+ const rd=root.querySelector("#dlgRead");if(rd)rd.onclick=()=>readLines(d.L.map(l=>dlgPlain(l[1])),[...root.querySelectorAll("#dlgBox .vdline")]);
+ root.querySelectorAll(".vfq:not(.clz)").forEach(q=>q.querySelectorAll(".vfbtn").forEach(b=>b.onclick=()=>{const [s,v,e]=d.q[+q.dataset.i],ok=(b.dataset.v==="1")===v;
+  q.querySelectorAll(".vfbtn").forEach(x=>{x.disabled=true;x.classList.toggle("okb",(x.dataset.v==="1")===v);x.classList.toggle("badb",x===b&&!ok)});
+  const r=q.querySelector(".vfres");r.hidden=false;r.innerHTML=`<b class="${ok?"okt":"warnt"}">${ok?"Certo!":"Não."}</b> ${esc(e)}`}));
  root.querySelectorAll(".clz").forEach(q=>q.querySelectorAll(".clzb").forEach(b=>b.onclick=()=>{const a=q.dataset.a,ok=b.dataset.o===a;
   q.querySelectorAll(".clzb").forEach(x=>{x.disabled=true;x.classList.toggle("okb",x.dataset.o===a);x.classList.toggle("badb",x===b&&!ok)});
   q.querySelector(".blank").textContent=a;q.querySelector(".blank").classList.add("filled");
-  const r=q.querySelector(".vfr");r.hidden=false;r.innerHTML=ok?`<b class="okt">Certo!</b>`:`<b class="warnt">Era “${esc(a)}”.</b>`}))}
+  const r=q.querySelector(".vfres");r.hidden=false;r.innerHTML=ok?`<b class="okt">Certo!</b>`:`<b class="warnt">Era “${esc(a)}”.</b>`}))}
 
 /* ============================ VERBOS ============================ */
 const P=["io","tu","lui/lei","noi","voi","loro"];
