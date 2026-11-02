@@ -12,7 +12,7 @@ function renderShadow(){if(SCUR&&!$("#sPlay").hidden)return;
  $$("#sSeg button").forEach(b=>{const on=b.dataset.sl===SLVL;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
  $("#slist").innerHTML=PODS.filter(p=>TOPIC[p.topic].lvl===SLVL).map(p=>{const t=TOPIC[p.topic],s=(S.shadow||{})[p.topic];return`<button class="tcard${s&&s.n>=3?" done":""}" data-sopen="${p.topic}"><span class="tn">${t.n}</span><div><h3>${esc(p.t)}</h3><p>${esc(t.t)} · ${p.L.length} falas</p></div><span class="pill ${s?"ok":""}">${s?s.n+"×":"novo"}</span></button>`}).join("");
  $$("[data-sopen]").forEach(b=>b.onclick=()=>openPod(b.dataset.sopen))}
-function openPod(id){const p=PODS.find(x=>x.topic===id);if(!p)return;SCUR=p;SLVL=TOPIC[id].lvl;stopPod();SHP.i=0;$("#sHome").hidden=true;$("#sPlay").hidden=false;renderPod();window.scrollTo(0,0)}
+function openPod(id){const p=PODS.find(x=>x.topic===id);if(!p)return;SMODE="pod";renderSMode();SCUR=p;SLVL=TOPIC[id].lvl;stopPod();SHP.i=0;$("#sHome").hidden=true;$("#sPlay").hidden=false;renderPod();window.scrollTo(0,0)}
 function closePod(){stopPod();SCUR=null;$("#sPlay").hidden=true;$("#sHome").hidden=false;renderShadow();window.scrollTo(0,0)}
 const MODES={shadow:"Frase + pausa",loop:"Cada frase 3×",listen:"Direto, sem pausa"};
 function renderPod(){const p=SCUR,t=TOPIC[p.topic],s=(S.shadow||{})[p.topic];

@@ -6,7 +6,7 @@ Uso: python3 tools/build.py   (depois suba o número da versão em sw.js)
 import os
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 S=os.path.join(ROOT,'src')
-ORDER=['ig.js','a1.js','a2.js','lex.js','writing.js','shadow_data.js','app.js','practice.js','sheet.js','shadow.js','news.js','init.js']
+ORDER=['ig.js','a1.js','a2.js','lex.js','writing.js','shadow_data.js','stories.js','app.js','practice.js','extras.js','sheet.js','shadow.js','news.js','init.js']
 r=lambda f:open(os.path.join(S,f)).read()
 css=r('style_orig.css')+r('style_new.css')
 js=''.join(r(f)+'\n' for f in ORDER)

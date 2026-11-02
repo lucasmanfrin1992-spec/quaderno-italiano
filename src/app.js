@@ -29,7 +29,7 @@ const TENSES={pres:{n:"presente",f:pres},pass:{n:"passato prossimo",f:pass},fut:
 const KEY="quaderno.v1";
 const RESET_EPOCH="2026-11-02"; // muda este valor para zerar os cartões de todos
 const DECKS={err:"Meus erros",fav:"Minhas palavras",vA1:"Vocabulário A1",vA2:"Vocabulário A2",verb:"Verbos (presente, passato, futuro)"};
-function defState(){return{cards:{},settings:{decks:{err:true,fav:true,vA1:true,vA2:true,verb:true},newPerDay:20,dir:"mix"},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},favs:{},newsDone:{},course:{},writing:{},shadow:{},errs:{},log:{},tests:{},resetEpoch:RESET_EPOCH,updatedAt:0}}
+function defState(){return{cards:{},settings:{decks:{err:true,frase:true,fav:true,vA1:true,vA2:true,verb:true},newPerDay:20,dir:"mix",typing:false},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},favs:{},newsDone:{},course:{},writing:{},shadow:{},errs:{},log:{},tests:{},sents:{},estat:{},diary:{},chats:{},bt:{},dict:{},pairs:{},resetEpoch:RESET_EPOCH,updatedAt:0}}
 function hydrate(o){const d=defState();S=Object.assign(d,o);S.settings=Object.assign(defState().settings,o.settings||{});S.settings.decks=Object.assign(defState().settings.decks,(o.settings||{}).decks||{});
  S.favs=S.favs||{};S.newsDone=S.newsDone||{};S.cards=S.cards||{};S.course=S.course||{};S.writing=S.writing||{};S.shadow=S.shadow||{};S.errs=S.errs||{};S.log=S.log||{};S.tests=S.tests||{};
  if(o.resetEpoch!==RESET_EPOCH){S.cards={};S.daily={date:"",newDone:0,reviewed:0};S.streak={last:"",count:0};delete S.best;S.resetEpoch=RESET_EPOCH;return true}return false}
@@ -108,7 +108,7 @@ function tokenize(root){(root||document).querySelectorAll(".it").forEach(el=>{if
 /* ============================ ABAS ============================ */
 const VALID=["inicio","curso","escrita","shadow","news","cartoes"];
 function showTab(name){if(!VALID.includes(name))name="inicio";if(name!=="news"&&typeof READ!=="undefined"&&READ.state!=="idle")stopReading();$$("[data-view]").forEach(v=>v.hidden=v.dataset.view!==name);$$("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===name));
- try{localStorage.setItem(KEY+".tab",name)}catch(e){}window.scrollTo(0,0);if(name==="cartoes")renderFlash();if(name==="inicio")renderHome();if(name==="curso")renderCourse();if(name==="escrita")renderWriting();if(name!=="shadow"&&typeof SHP!=="undefined"&&SHP.state!=="idle")stopPod(true);if(name==="shadow")renderShadow();if(name==="news"){renderNews();if(!$("#ns-cal").hidden)renderCal();if(!$("#ns-favs").hidden)renderFavs()}}
+ try{localStorage.setItem(KEY+".tab",name)}catch(e){}window.scrollTo(0,0);if(name==="cartoes")renderFlash();if(name==="inicio")renderHome();if(name==="curso")renderCourse();if(name==="escrita"){renderWriting();renderWMode()}if(name!=="shadow"&&typeof SHP!=="undefined"&&SHP.state!=="idle")stopPod(true);if(name==="shadow"){renderShadow();renderSMode()}if(name==="news"){renderNews();if(!$("#ns-cal").hidden)renderCal();if(!$("#ns-favs").hidden)renderFavs()}}
 $$("nav.tabs button").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
 document.addEventListener("click",e=>{const g=e.target.closest("[data-goto]");if(g){showTab(g.dataset.goto);if(g.dataset.pod)openPod(g.dataset.pod);if(g.dataset.topic)openTopic(g.dataset.topic,g.dataset.part||"voc");if(g.dataset.wtask)openWTask(g.dataset.wtask)}});
 
@@ -132,7 +132,7 @@ function openTopic(id,part){const t=TOPIC[id];if(!t)return;CUR=t;CLVL=t.lvl;CPAR
 function closeTopic(){CUR=null;RUN=null;TEST=null;$("#cTopic").hidden=true;$("#cHome").hidden=false;renderCourse();try{localStorage.removeItem(KEY+".topic")}catch(e){}window.scrollTo(0,0)}
 function markSeen(part){const c=S.course[CUR.id]=S.course[CUR.id]||{};if(!c[part]){c[part]=1;save()}}
 function renderTopic(){const t=CUR,c=tprog(t.id),idx=COURSE.indexOf(t),nxt=COURSE[idx+1],w=WRITING.find(x=>x.topic===t.id);
- const tabs=[["voc","Vocabulário"],["gram","Gramática"],["ex","Exercícios"]];
+ const tabs=[["voc","Vocabulário"],["gram","Gramática"],["hist","História"],["ex","Exercícios"]];
  let h=`<button class="back" id="cBack">← Unidade ${t.lvl}</button>
  <div class="tophead"><span class="label">${t.lvl} · Tópico ${t.n} de 10</span><h2 class="it" style="font-style:normal;color:var(--ink)">${esc(t.t)}</h2><p class="muted small">${esc(t.sub)}</p></div>
  <div class="subtabs" role="tablist">${tabs.map(([k,n])=>`<button role="tab" data-part="${k}" class="${CPART===k?"on":""}" aria-selected="${CPART===k}">${n}${c[k]||(k==="ex"&&c.best!=null)?`<span class="ok">✓</span>`:""}</button>`).join("")}</div><div id="cBody" class="stack" style="gap:18px"></div>`;
@@ -144,7 +144,8 @@ function renderTopic(){const t=CUR,c=tprog(t.id),idx=COURSE.indexOf(t),nxt=COURS
   <div class="vgrid">${t.voc.map(v=>`<div class="vcell"><div><span class="it">${esc(v[0])}</span><span class="pt">${esc(v[1])}</span></div>${spkBtn(v[0])}</div>`).join("")}</div>
   <button class="btn primary" data-part-go="gram">Ir para a gramática →</button>`}
  else if(CPART==="gram"){markSeen("gram");
-  body.innerHTML=t.gram.map(g=>`<section class="gsec"><h3>${esc(g.h)}</h3>${g.html}</section>`).join("")+`<button class="btn primary" data-part-go="ex">Praticar com exercícios →</button>`}
+  body.innerHTML=t.gram.map(g=>`<section class="gsec"><h3>${esc(g.h)}</h3>${g.html}</section>`).join("")+`<button class="btn primary" data-part-go="hist">Ler a história do tópico →</button>`}
+ else if(CPART==="hist"){markSeen("hist");renderStory(body)}
  else{if(!RUN||RUN.topic!==t.id)RUN=null;if(RUN)renderQ();else renderExIntro()}
  if(CPART!=="ex"||!RUN){const nav=document.createElement("div");nav.className="row";
   if(CPART==="ex"&&w)nav.innerHTML=`<button class="btn" data-goto="escrita" data-wtask="${w.id}">Escrita deste tópico: ${esc(w.t)}</button>`;
@@ -168,20 +169,20 @@ function renderQ(){const r=RUN,q=r.qs[r.i],n=r.qs.length;
  if(q.type==="f"||q.type==="lf")h+=`${q.hint?`<span class="hintchip">${esc(q.hint)}</span>`:""}<form id="fForm" class="fillrow"><input type="text" id="fIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="uma palavra" aria-label="Resposta"><button class="btn primary" type="submit">Verificar</button></form>`;
  else h+=`<div class="opts">${q.opts.map((o,k)=>`<button class="opt" data-k="${k}">${esc(o)}</button>`).join("")}</div>`;
  h+=`<div id="fb"></div></div>`;$("#cBody").innerHTML=h;if(q.type!=="lf")tokenize($("#cBody"));
- $("#exQuit").onclick=()=>{const t=r.test;RUN=null;t?openTest(t):renderTopic()};
+ $("#exQuit").onclick=()=>{const t=r.test,f=r.focus;RUN=null;t?openTest(t):f?closeTopic():renderTopic()};
  if($("#lPlay")){const sp=()=>speak(q.say);$("#lPlay").onclick=sp;setTimeout(sp,250)}
  if(q.type!=="f"&&q.type!=="lf")$$("#cBody .opt").forEach(b=>b.onclick=()=>{const ch=q.opts[+b.dataset.k],ok=ch===q.a;q.chosen=ch;$$("#cBody .opt").forEach(x=>{x.disabled=true;if(q.opts[+x.dataset.k]===q.a)x.classList.add("right")});if(!ok)b.classList.add("wrong");feedback(ok,q)});
  else{const inp=$("#fIn");if(q.type==="f")inp.focus({preventScroll:true});$("#fForm").onsubmit=e=>{e.preventDefault();if(!inp.value.trim())return;const answers=q.a.split("/");const u=norm(inp.value);
   const okN=answers.some(a=>norm(a)===u);const exact=answers.some(a=>a.toLowerCase().trim()===inp.value.toLowerCase().trim().replace(/[’`]/g,"'"));inp.disabled=true;$("#fForm button").disabled=true;feedback(okN,q,okN&&!exact)}}}
-function feedback(ok,q,accentNote){const r=RUN;q.ok=ok;if(ok)r.score++;else{r.wrong.push(q);addErrCard(q);save()}
+function feedback(ok,q,accentNote){const r=RUN;q.ok=ok;recordCat(qCat(q),ok);if(ok)r.score++;else{r.wrong.push(q);addErrCard(q);save()}
  const full=q.type==="lf"||q.type==="lm"?q.say:q.type==="f"&&!q.q.includes("→")?q.q.replace("___",q.a.split("/")[0]).replace(/\s*\(.*?\)\s*$/,""):q.type==="x"?q.a:"";
  $("#fb").innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${ok?"Certo!":"Resposta: "+esc(q.a.split("/").join(" ou "))}</b>${accentNote?`<span>Atenção à grafia/acento: <b>${esc(q.a.split("/")[0])}</b></span>`:""}${full?`<div class="row" style="gap:8px;flex-wrap:nowrap"><i class="it" style="flex:1">${esc(full)}</i>${spkBtn(full)}</div>`:""}<div>${esc(q.exp)}</div></div>
  <button class="btn primary" id="nextQ" style="margin-top:12px">${r.i<r.qs.length-1?"Próxima":"Ver resultado"}</button>`;tokenize($("#fb"));
- $("#nextQ").onclick=()=>{r.i++;r.i<r.qs.length?renderQ():(r.test?endTest():endEx())};$("#nextQ").focus({preventScroll:true})}
-function endEx(){const r=RUN,n=r.qs.length,pct=Math.round(r.score/n*100),c=S.course[r.topic]=S.course[r.topic]||{};if(c.best==null||pct>c.best)c.best=pct;c.ex=1;c.last=today();logInc("e");save();
- const msg=pct>=90?"Excelente. Tópico dominado.":pct>=70?"Muito bom. Tópico concluído.":pct>=50?"No caminho. Releia a gramática dos erros e tente de novo.":"Vale rever a gramática antes de repetir.";
+ $("#nextQ").onclick=()=>{r.i++;r.i<r.qs.length?renderQ():(r.test?endTest():r.focus?endFocus():endEx())};$("#nextQ").focus({preventScroll:true})}
+function endEx(){const r=RUN,n=r.qs.length,pct=Math.round(r.score/n*100),c=S.course[r.topic]=S.course[r.topic]||{};if(c.best==null||pct>c.best)c.best=pct;c.ex=1;c.last=today();if(r.review)revAfter(r.topic,pct);else revInit(r.topic);logInc("e");save();
+ const msg=r.review?(pct>=70?"Revisão feita. O tópico volta mais tarde para a próxima revisão.":"Vale rever a gramática: esta revisão volta em 2 dias."):pct>=90?"Excelente. Tópico dominado.":pct>=70?"Muito bom. Tópico concluído.":pct>=50?"No caminho. Releia a gramática dos erros e tente de novo.":"Vale rever a gramática antes de repetir.";
  const t=CUR,idx=COURSE.indexOf(t),nxt=COURSE[idx+1];
- $("#cBody").innerHTML=`<div class="card stack"><span class="label">Resultado</span><h2>${r.score}/${n} · ${pct}%</h2><p>${msg}</p>
+ $("#cBody").innerHTML=`<div class="card stack"><span class="label">${r.review?"Revisão do tópico":"Resultado"}</span><h2>${r.score}/${n} · ${pct}%</h2><p>${msg}</p>
  ${r.wrong.length?`<p class="small muted">Os erros foram para os cartões, no baralho “Meus erros”.</p><div class="stack"><div class="label">Para revisar</div>${r.wrong.map(q=>`<div class="fb no"><div class="${q.voc?"":"it"}">${q.type==="x"||q.type==="lm"?esc(q.a):q.voc?esc(q.q):blankify(q.q)}</div><b>${esc(q.a.split("/").join(" ou "))}</b><span>${esc(q.exp)}</span></div>`).join("")}</div>`:""}
  <div class="row"><button class="btn primary" id="again">Nova rodada</button><button class="btn" id="toGram">Rever a gramática</button>${nxt&&pct>=70?`<button class="btn" id="goNext">Próximo tópico →</button>`:""}</div></div>`;
  tokenize($("#cBody"));RUN=null;
@@ -198,7 +199,7 @@ function renderWriting(){if(WCUR&&!$("#wTask").hidden)return;
 function draftKey(id){return KEY+".draft."+id}
 function getDraft(w){try{const d=localStorage.getItem(draftKey(w.id));if(d)return JSON.parse(d)}catch(e){}const s=S.writing[w.id];return s?{text:s.text||"",answers:s.answers||[]}:{text:"",answers:[]}}
 function setDraft(w,d){try{localStorage.setItem(draftKey(w.id),JSON.stringify(d))}catch(e){}}
-function openWTask(id){const w=WRITING.find(x=>x.id===id);if(!w)return;WCUR=w;WLVL=w.lvl;$("#wHome").hidden=true;$("#wTask").hidden=false;renderWTask();window.scrollTo(0,0)}
+function openWTask(id){const w=WRITING.find(x=>x.id===id);if(!w)return;WMODE="text";renderWMode();WCUR=w;WLVL=w.lvl;$("#wHome").hidden=true;$("#wTask").hidden=false;renderWTask();window.scrollTo(0,0)}
 function closeWTask(){WCUR=null;$("#wTask").hidden=true;$("#wHome").hidden=false;renderWriting();window.scrollTo(0,0)}
 function curText(w){if(w.kind==="frasi")return w.qs.map((q,i)=>($("#wa"+i)||{}).value||"").map((a,i)=>a.trim()).join("\n");return($("#wText")||{}).value||""}
 function renderWTask(){const w=WCUR,d=getDraft(w),s=S.writing[w.id];const t=TOPIC[w.topic];
@@ -280,13 +281,14 @@ ORDER.verb=[...ORDER.verb.filter(x=>x.includes(":pres:")),...ORDER.verb.filter(x
 let SESSION=null;
 function enabledDecks(){return Object.keys(DECKS).filter(d=>S.settings.decks[d])}
 function dueIds(){const t=today();return Object.keys(S.cards).filter(id=>CARDS[id]&&S.settings.decks[CARDS[id].deck]&&S.cards[id].due<=t)}
-function newIds(n){const out=[],lists=enabledDecks().filter(d=>d!=="fav"&&d!=="err").map(d=>ORDER[d].filter(id=>!S.cards[id]&&cardUnlocked(id)));let k=0;
+function newIds(n){const out=[],lists=enabledDecks().filter(d=>d!=="fav"&&d!=="err"&&d!=="frase").map(d=>ORDER[d].filter(id=>!S.cards[id]&&cardUnlocked(id)));let k=0;
  while(out.length<n&&lists.some(l=>l.length)){const l=lists[k%lists.length];if(l.length)out.push(l.shift());k++}return out}
 function newLeft(){return Math.max(0,S.settings.newPerDay-S.daily.newDone)}
-function buildSession(){rollDay();const due=shuffle(dueIds()),nw=[...newErrIds(),...newFavIds(),...newIds(newLeft())];const q=[];let i=0,j=0;
+function buildSession(){rollDay();const due=shuffle(dueIds()),nw=[...newErrIds(),...newSentIds(),...newFavIds(),...newIds(newLeft())];const q=[];let i=0,j=0;
  while(i<due.length||j<nw.length){if(i<due.length)q.push(due[i++]);if(i<due.length)q.push(due[i++]);if(j<nw.length)q.push(nw[j++])}
  SESSION={queue:q,total:q.length,done:0,shown:false,dirFlip:null}}
-function cardFace(id){const c=CARDS[id];if(c.err){const e=c.err;return{front:e.f,sub:"meus erros · "+e.s,back:e.b,note:e.n,say:e.say,sayFront:false,blank:true}}if(c.fav){const f=c.fav,bits=[];if(f.synonyms&&f.synonyms.length)bits.push("Sinônimos: "+f.synonyms.join(", "));if(f.example)bits.push("Ex.: "+f.example+(f.examplePt?" ("+f.examplePt+")":""));
+function cardFace(id){const c=CARDS[id];if(c.sent){const e=c.sent;return{front:blankWord(e.s,e.w),sub:"minhas frases"+(e.m?" · "+e.m:""),back:e.w,note:e.s,say:e.s,sayFront:false,blank:true}}
+ if(c.err){const e=c.err;return{front:e.f,sub:"meus erros · "+e.s,back:e.b,note:e.n,say:e.say,sayFront:false,blank:true}}if(c.fav){const f=c.fav,bits=[];if(f.synonyms&&f.synonyms.length)bits.push("Sinônimos: "+f.synonyms.join(", "));if(f.example)bits.push("Ex.: "+f.example+(f.examplePt?" ("+f.examplePt+")":""));
   return{front:f.lemma,sub:f.date?"salva em "+fmtBR(f.added||f.date):"minhas palavras",back:f.meaning,note:bits.join(" · "),say:f.lemma,sayFront:true}}
  if(c.v){let dir=S.settings.dir;if(dir==="mix"){if(SESSION.dirFlip===null)SESSION.dirFlip=Math.random()<.5;dir=SESSION.dirFlip?"pt":"it"}
   return dir==="it"?{front:c.v.it,sub:c.v.theme,back:c.v.pt,say:c.v.it,sayFront:true}:{front:c.v.pt,sub:c.v.theme,back:c.v.it,say:c.v.it,sayFront:false}}
@@ -309,21 +311,24 @@ function renderFlash(){if(!SESSION||SESSION.queue.length===0&&SESSION.total===0)
   <p class="muted">${s.total?`Você revisou ${s.total} cartões hoje.`:"Todos os cartões de hoje já foram feitos."} ${nextDue?"Próxima revisão: "+nextDue.split("-").reverse().join("/")+".":""}</p>
   ${newIds(1).length?`<button class="btn" id="more">Estudar mais 10 novos</button>`:`<p class="small muted">Os cartões novos são liberados quando você abre o vocabulário de um tópico do curso.</p><button class="btn" data-goto="curso">Ir para o curso</button>`}</div>`;
   if($("#more"))$("#more").onclick=()=>{const extra=newIds(10);SESSION={queue:extra,total:extra.length,done:0,shown:false,dirFlip:null,extra:true};renderFlash()};renderBoxes();return}
- const id=s.queue[0],f=cardFace(id),c=CARDS[id],isNew=!S.cards[id];
+ const id=s.queue[0],f=cardFace(id),c=CARDS[id],isNew=!S.cards[id],typ=canType(f,c);
+ const sugR=s.typed?(s.typed.ok?2:0):-1;
  area.innerHTML=`<div class="flash"><span class="deck label">${esc(DECKS[c.deck])}${isNew?" · novo":""}</span>${spkBtn(f.say)}
   <span class="label">${esc(f.sub||"")}</span><div class="front">${f.blank?blankify(f.front):esc(f.front)}</div>
-  ${s.shown?`<div class="back"><b>${esc(f.back)}</b>${f.note?`<div class="note">${esc(f.note)}</div>`:""}</div>`:""}</div>
-  ${s.shown?`<div class="rate"><button class="r0" data-r="0">Errei<span>${intervalLabel(id,0)}</span></button><button data-r="1">Difícil<span>${intervalLabel(id,1)}</span></button><button data-r="2">Bom<span>${intervalLabel(id,2)}</span></button><button class="r3" data-r="3">Fácil<span>${intervalLabel(id,3)}</span></button></div>`
+  ${s.shown?`<div class="back">${s.typed?`<div class="typed ${s.typed.ok?"tok":"tno"}">Você escreveu: <b>${esc(s.typed.v)}</b> ${s.typed.ok?"✓":"✗"}</div>`:""}<b>${esc(f.back)}</b>${f.note?`<div class="note">${esc(f.note)}</div>`:""}</div>`:""}</div>
+  ${s.shown?`<div class="rate">${[["r0",0,"Errei"],["",1,"Difícil"],["",2,"Bom"],["r3",3,"Fácil"]].map(([cl,r,l])=>`<button class="${cl}${r===sugR?" sug":""}" data-r="${r}">${l}<span>${intervalLabel(id,r)}</span></button>`).join("")}</div>`
+  :typ?`<form id="tyForm" class="fillrow"><input type="text" id="tyIn" autocomplete="off" autocapitalize="off" spellcheck="false" lang="it" placeholder="Escreva em italiano" aria-label="Sua resposta"><button class="btn primary" type="submit">Conferir</button></form><button class="btn ghost small" id="reveal">Não sei — mostrar resposta</button>`
   :`<button class="btn primary" id="reveal">Mostrar resposta</button>`}`;
- if(s.shown)$$(".rate button").forEach(b=>b.onclick=()=>rate(+b.dataset.r));else{$("#reveal").onclick=()=>{s.shown=true;renderFlash();if(!f.sayFront)speak(f.say)};if(f.sayFront&&isNew)speak(f.say)}
+ if(s.shown)$$(".rate button").forEach(b=>b.onclick=()=>rate(+b.dataset.r));else{$("#reveal").onclick=()=>{s.shown=true;renderFlash();if(!f.sayFront)speak(f.say)};if(f.sayFront&&isNew)speak(f.say);
+  if($("#tyForm")){$("#tyIn").focus({preventScroll:true});$("#tyForm").onsubmit=e=>{e.preventDefault();const v=$("#tyIn").value.trim();if(!v)return;s.typed={v,ok:typeAnswers(f.back).includes(norm(v))};s.shown=true;renderFlash();speak(f.say)}}}
  renderBoxes()}
 function rate(r){const s=SESSION,id=s.queue.shift(),isNew=!S.cards[id];
- if(isNew&&!s.extra&&CARDS[id]&&CARDS[id].deck!=="fav"&&CARDS[id].deck!=="err")S.daily.newDone++;logInc("c");
+ if(isNew&&!s.extra&&CARDS[id]&&CARDS[id].deck!=="fav"&&CARDS[id].deck!=="err"&&CARDS[id].deck!=="frase")S.daily.newDone++;logInc("c");
  const st=sched(S.cards[id],r);
  if(r===0)s.queue.splice(Math.min(3,s.queue.length),0,id);else s.done++;
  S.cards[id]=st;S.daily.reviewed++;
  const t=today();if(S.streak.last!==t){S.streak.count=S.streak.last===addDays(-1)?S.streak.count+1:1;S.streak.last=t}
- if(!s.queue.length)logInc("cz",1);save();s.shown=false;s.dirFlip=null;renderFlash()}
+ if(!s.queue.length)logInc("cz",1);save();s.shown=false;s.typed=null;s.dirFlip=null;renderFlash()}
 document.addEventListener("keydown",e=>{if($("#v-cartoes").hidden||!SESSION||!SESSION.queue.length||e.target.matches("input,select,textarea"))return;
  if(!SESSION.shown&&(e.key===" "||e.key==="Enter")){e.preventDefault();$("#reveal")&&$("#reveal").click()}else if(SESSION.shown&&"1234".includes(e.key))rate(+e.key-1)});
 function ivlOf(c){return c.ivl!=null?c.ivl:(IV[c.b]||0)}
@@ -331,10 +336,11 @@ function renderBoxes(){const cnt=[0,0,0,0,0,0,0,0],lim=[0,1,3,7,15,31,63,1e9];Ob
  $("#boxes").innerHTML=cnt.map(n=>`<div style="height:${Math.max(4,n/mx*100)}%" title="${n} cartões"></div>`).join("")}
 function renderDecks(){$("#decks").innerHTML=Object.entries(DECKS).map(([k,n])=>`<label for="dk-${k}"><input type="checkbox" id="dk-${k}" data-deck="${k}" ${S.settings.decks[k]?"checked":""}><span>${n}</span><em>${ORDER[k].length}</em></label>`).join("");
  $$("[data-deck]").forEach(cb=>cb.onchange=()=>{S.settings.decks[cb.dataset.deck]=cb.checked;save();SESSION=null;renderFlash()});
- $("#newPerDay").value=String(S.settings.newPerDay);$("#dir").value=S.settings.dir}
+ $("#newPerDay").value=String(S.settings.newPerDay);$("#dir").value=S.settings.dir;$("#typing").checked=!!S.settings.typing}
+$("#typing").onchange=e=>{S.settings.typing=e.target.checked;save();renderFlash()};
 $("#newPerDay").onchange=e=>{S.settings.newPerDay=+e.target.value;save();SESSION=null;renderFlash()};
 $("#dir").onchange=e=>{S.settings.dir=e.target.value;save();renderFlash()};
-function updateChips(){rollDay();const due=dueIds().length,nw=newErrIds().length+newFavIds().length+Math.min(newLeft(),newIds(newLeft()).length);
+function updateChips(){rollDay();const due=dueIds().length,nw=newErrIds().length+newSentIds().length+newFavIds().length+Math.min(newLeft(),newIds(newLeft()).length);
  $("#chipStreak").textContent=goalStreak()+(goalStreak()===1?" dia de meta":" dias de meta");
  $("#chipDue").textContent=(due+nw)+" para hoje";return{due,nw}}
 function renderHome(){const {due,nw}=updateChips();$("#nDue").textContent=due;$("#nNew").textContent=nw;$("#nLearned").textContent=Object.keys(S.cards).length;
@@ -345,4 +351,4 @@ function renderHome(){const {due,nw}=updateChips();$("#nDue").textContent=due;$(
  $("#homeWriting").innerHTML=`<span class="label">Escrita</span>${lastW?`<p class="small">Última correção: <b>${esc((WRITING.find(w=>w.id===lastW[0])||{}).t||"")}</b> · nota ${lastW[1].result.nota}/10</p>`:`<p class="small muted">Escreva textos curtos e receba a correção do Claude.</p>`}${nextW?`<h3>${esc(nextW.t)}</h3><div class="row"><button class="btn" data-goto="escrita" data-wtask="${nextW.id}">Escrever agora</button></div>`:""}`;
  const sp=PODS.find(p=>p.topic===t.id)||PODS[0],ss=S.shadow[sp.topic];
  $("#homeShadow").innerHTML=`<div class="row" style="justify-content:space-between"><span class="label">Shadowing · ${esc(TOPIC[sp.topic].lvl)} · tópico ${TOPIC[sp.topic].n}</span>${ss?`<span class="pill ok">${ss.n}×</span>`:""}</div><h3>${esc(sp.t)}</h3><p class="small muted">${esc(sp.sit)}</p><div class="row"><button class="btn" data-goto="shadow" data-pod="${sp.topic}">Praticar a pronúncia</button></div>`;
- renderGoal();renderHomeNews()}
+ renderGoal();renderHomeReview();renderHomeWeak();renderHomeNews()}

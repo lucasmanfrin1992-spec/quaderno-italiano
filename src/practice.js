@@ -67,7 +67,7 @@ const GEN={
 const TOPIC_GEN={"a1-1":["essere","adj"],"a1-2":["art","plur","avere"],"a1-3":["adj","artind"],"a1-4":["pres"],"a1-5":["presirr"],"a1-6":["mod","cesono"],"a1-7":["prepsimple"],"a1-8":["prep"],"a1-9":["poss"],"a1-10":["rifl","ger"],
  "a2-1":["pp"],"a2-2":["aux","ppess"],"a2-3":["dir"],"a2-4":["ind"],"a2-5":["imp"],"a2-6":["fut"],"a2-7":["volerci","si"],"a2-8":["impv"],"a2-9":["compar","adv"],"a2-10":["cond"]};
 function genQs(tid,n){const gs=TOPIC_GEN[tid]||[],out=[],seen=new Set();let tries=0;
- while(gs.length&&out.length<n&&tries<n*8){tries++;const q=GEN[gs[out.length%gs.length]]();if(!q||seen.has(q.q))continue;seen.add(q.q);q.tp=tid;out.push(q)}return out}
+ while(gs.length&&out.length<n&&tries<n*8){tries++;const g=gs[out.length%gs.length],q=GEN[g]();if(!q||seen.has(q.q))continue;seen.add(q.q);q.tp=tid;q.g=g;out.push(q)}return out}
 /* --- escuta: frases por tópico (exemplos da gramática + podcast) --- */
 const LSENT={};
 COURSE.forEach(t=>{const arr=[];t.gram.forEach(g=>{const re=/<div class="exi"><div><i class="it">([^<]+)<\/i><span>([^<]*)<\/span>/g;let m;while((m=re.exec(g.html)))arr.push([m[1].replace(/&amp;/g,"&").replace(/&quot;/g,'"'),m[2]])});
@@ -106,7 +106,7 @@ function cardUnlocked(id){const c=CARDS[id];if(!c)return false;if(c.deck==="vA1"
  if(c.deck==="verb"){const [,inf,tk]=id.split(":");if(tk==="pres")return opened(VERB_UNLOCK_PRES[inf]||"a1-4");if(tk==="pass")return opened(VERBMAP[inf]&&VERBMAP[inf].aux==="e"?"a2-2":"a2-1");if(tk==="fut")return opened("a2-6");return true}
  return true}
 /* --- meta diária --- */
-const GOALS=[["c","Cartões","10 revisões",'cartoes'],["e","Exercício","1 rodada ou teste",'curso'],["s","Shadowing","1 podcast",'shadow'],["n","Notícia","responder o quiz",'news']];
+const GOALS=[["c","Cartões","10 revisões",'cartoes'],["e","Exercício","rodada, teste ou treino",'curso'],["s","Pronúncia","podcast, pares ou ditado",'shadow'],["n","Notícia","responder o quiz",'news']];
 function dayLog(d){S.log=S.log||{};return S.log[d||today()]||{}}
 function logInc(k,v){S.log=S.log||{};const t=today(),o=S.log[t]=S.log[t]||{};o[k]=v!=null?v:(o[k]||0)+1;
  const ks=Object.keys(S.log).sort();if(ks.length>120)ks.slice(0,ks.length-120).forEach(x=>delete S.log[x])}
@@ -133,7 +133,7 @@ function openTest(id){const T=TESTS.find(x=>x.id===id);if(!T)return;TEST=T;CUR=n
  $("#tStart").onclick=()=>{RUN={test:id,qs:buildTest(T),i:0,score:0,wrong:[],by:{}};renderQ()};window.scrollTo(0,0)}
 function endTest(){const r=RUN,T=TESTS.find(x=>x.id===r.test),n=r.qs.length,pct=Math.round(r.score/n*100);S.tests=S.tests||{};const prev=S.tests[T.id];S.tests[T.id]={best:Math.max(pct,prev?prev.best:0),last:today()};
  const per=T.ts.map(id=>{const qs=r.qs.filter(q=>q.tp===id),ok=qs.filter(q=>q.ok).length;return{id,ok,n:qs.length,pct:qs.length?Math.round(ok/qs.length*100):0}});
- const passed=[];per.forEach(p=>{if(p.pct>=75){const c=S.course[p.id]=S.course[p.id]||{};if(c.best==null||p.pct>c.best){c.best=p.pct;c.viaTest=1}if(!isDone(p.id)||c.viaTest)passed.push(p.id)}});
+ const passed=[];per.forEach(p=>{if(p.pct>=75){const c=S.course[p.id]=S.course[p.id]||{};if(c.best==null||p.pct>c.best){c.best=p.pct;c.viaTest=1}revInit(p.id);passed.push(p.id)}});
  logInc("e");save();
  const weak=per.filter(p=>p.pct<75);
  $("#cBody").innerHTML=`<div class="card stack"><span class="label">Resultado do teste</span><h2>${r.score}/${n} · ${pct}%</h2>

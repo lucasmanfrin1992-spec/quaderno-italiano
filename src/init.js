@@ -1,5 +1,5 @@
 /* ============================ INÍCIO ============================ */
-syncFavCards();syncErrCards();renderDecks();renderBoxes();renderHome();updateFavCount();
+syncFavCards();syncErrCards();syncSentCards();renderDecks();renderBoxes();renderHome();updateFavCount();
 try{const ns=localStorage.getItem(KEY+".ns");if(["read","cal","favs"].includes(ns))setNS(ns)}catch(e){}
 initCloud();
 (function(){let start="inicio";const h=location.hash.slice(1);

@@ -53,7 +53,9 @@ function renderSheet(){const e=SH.entry,fk=e?favKeyOf(e,SH.k):null,isFav=!!(fk&&
   if(SH.src!=="ai"&&SH.src!=="news")h+=hasClaude()?`<button class="btn ghost small" id="shAsk">Explicar melhor com o Claude</button><p class="small muted" id="shAskMsg"></p>`:extLinks()}
  else h+=`<p class="muted">Esta palavra ainda não está no dicionário do curso.</p>`+(hasClaude()?`<button class="btn primary" id="shAsk">Perguntar ao Claude</button><p class="small muted" id="shAskMsg"></p>`:extLinks());
  if(SH.sentence&&SH.sentence.toLowerCase()!==SH.surface.toLowerCase())h+=`<div class="stack" style="gap:6px"><span class="label">Onde aparece</span><div class="exi"><div><i class="it">${esc(SH.sentence)}</i></div>${spkBtn(SH.sentence)}</div></div>`;
+ if(SH.sentence&&SH.sentence.split(/\s+/).length>2){const sid=sentCardId(SH.sentence,SH.surface),sv=!!(S.sents||{})[sid];h+=`<button class="btn small${sv?" ghost":""}" id="shSent">${sv?"★ Frase salva nos cartões (tocar para remover)":"Salvar a frase nos cartões"}</button>`}
  $("#shBody").innerHTML=h;tokenize($("#shBody"));
+ if($("#shSent"))$("#shSent").onclick=()=>{saveSentence(SH.sentence,SH.surface,SH.entry&&SH.entry.meaning);renderSheet();renderDecks();renderHome()};
  if($("#shAsk"))$("#shAsk").onclick=askClaude}
 $("#shClose").onclick=()=>showSheet(false);
 $("#sheetBack").onclick=()=>showSheet(false);

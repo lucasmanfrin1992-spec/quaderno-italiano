@@ -24,6 +24,8 @@
       </div>
       <button class="btn" data-goto="cartoes">Começar revisão</button>
     </div>
+    <div class="card stack" id="homeReview" hidden></div>
+    <div class="card stack" id="homeWeak" hidden></div>
     <div class="homegrid">
       <div class="card" id="homeCourse"></div>
       <div class="card" id="homeWriting"></div>
@@ -49,12 +51,23 @@
   <!-- ===================== ESCRITA ===================== -->
   <section class="view" id="v-escrita" data-view="escrita" hidden>
     <div id="wHome" class="stack" style="gap:16px">
-      <div class="stack" style="gap:6px"><h2>Escrita</h2><p class="muted small">Temas para escrever com calma. Ao terminar, o Claude corrige o texto, explica cada erro e dá uma nota.</p></div>
-      <div class="seg seg2" id="wSeg" role="tablist" aria-label="Nível da escrita">
-        <button role="tab" data-wl="A1" class="on" aria-selected="true">Escrita A1</button>
-        <button role="tab" data-wl="A2" aria-selected="false">Escrita A2</button>
+      <div class="stack" style="gap:6px"><h2>Escrita</h2><p class="muted small">Textos com correção do Claude, tradução de volta, diário de 3 frases e conversa com o Claude.</p></div>
+      <div class="seg seg4" id="wMode" role="tablist" aria-label="Tipo de escrita">
+        <button role="tab" data-wm="text" class="on" aria-selected="true">Textos</button>
+        <button role="tab" data-wm="tr" aria-selected="false">Tradução</button>
+        <button role="tab" data-wm="diary" aria-selected="false">Diário</button>
+        <button role="tab" data-wm="chat" aria-selected="false">Conversa</button>
       </div>
-      <div class="wlist" id="wlist"></div>
+      <div id="wp-text" class="stack" style="gap:16px">
+        <div class="seg seg2" id="wSeg" role="tablist" aria-label="Nível da escrita">
+          <button role="tab" data-wl="A1" class="on" aria-selected="true">Escrita A1</button>
+          <button role="tab" data-wl="A2" aria-selected="false">Escrita A2</button>
+        </div>
+        <div class="wlist" id="wlist"></div>
+      </div>
+      <div id="wp-tr" class="stack" style="gap:16px" hidden></div>
+      <div id="wp-diary" class="stack" style="gap:16px" hidden></div>
+      <div id="wp-chat" class="stack" style="gap:16px" hidden></div>
     </div>
     <div id="wTask" class="stack" style="gap:16px" hidden></div>
   </section>
@@ -62,13 +75,22 @@
   <!-- ===================== SHADOWING ===================== -->
   <section class="view" id="v-shadow" data-view="shadow" hidden>
     <div id="sHome" class="stack" style="gap:18px">
-      <div id="sIntro" class="stack" style="gap:16px"></div>
-      <div class="seg seg2" id="sSeg" role="tablist" aria-label="Nível dos podcasts">
-        <button role="tab" data-sl="A1" class="on" aria-selected="true">Podcasts A1</button>
-        <button role="tab" data-sl="A2" aria-selected="false">Podcasts A2</button>
+      <div class="seg" id="sMode" role="tablist" aria-label="Tipo de prática">
+        <button role="tab" data-sm="pod" class="on" aria-selected="true">Podcasts</button>
+        <button role="tab" data-sm="pairs" aria-selected="false">Pares mínimos</button>
+        <button role="tab" data-sm="dict" aria-selected="false">Ditado</button>
       </div>
-      <div class="tlist" id="slist"></div>
-      <div class="card" id="sLinks"></div>
+      <div id="shp-pod" class="stack" style="gap:18px">
+        <div id="sIntro" class="stack" style="gap:16px"></div>
+        <div class="seg seg2" id="sSeg" role="tablist" aria-label="Nível dos podcasts">
+          <button role="tab" data-sl="A1" class="on" aria-selected="true">Podcasts A1</button>
+          <button role="tab" data-sl="A2" aria-selected="false">Podcasts A2</button>
+        </div>
+        <div class="tlist" id="slist"></div>
+        <div class="card" id="sLinks"></div>
+      </div>
+      <div id="shp-pairs" class="stack" style="gap:16px" hidden></div>
+      <div id="shp-dict" class="stack" style="gap:16px" hidden></div>
     </div>
     <div id="sPlay" class="stack" style="gap:16px" hidden></div>
   </section>
@@ -108,6 +130,7 @@
         <label for="newPerDay" class="small" style="flex:1">Cartões novos por dia</label>
         <select id="newPerDay" style="width:auto"><option>10</option><option>15</option><option>20</option><option>30</option><option>50</option></select>
       </div>
+      <label class="row small" for="typing" style="gap:8px"><input type="checkbox" id="typing"> Digitar a resposta antes de ver (vocabulário português → italiano, verbos, frases e erros)</label>
       <div class="row">
         <label for="dir" class="small" style="flex:1">Direção do vocabulário</label>
         <select id="dir" style="width:auto"><option value="it">Italiano → Português</option><option value="pt">Português → Italiano</option><option value="mix">Misturado</option></select>

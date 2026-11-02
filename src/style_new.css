@@ -211,3 +211,34 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center;color:inherit}
 .tr{display:grid;grid-template-columns:minmax(0,1.4fr) 1fr auto;gap:10px;align-items:center;font-size:.9rem}
 .tr b{font-variant-numeric:tabular-nums}
 .listenbtn{align-self:flex-start;display:inline-flex;align-items:center}
+/* técnicas extras */
+.seg4{grid-template-columns:repeat(4,1fr)}
+.subtabs{grid-template-columns:repeat(4,1fr)}
+.subtabs button{font-size:.8rem;padding:10px 2px}
+.stlines{display:flex;flex-direction:column;gap:10px}
+.stl{display:flex;flex-direction:column;gap:2px;border-radius:8px;padding:2px 4px}
+.stl .it{font-style:normal;color:var(--ink);font-size:1.08rem;line-height:1.7}
+.stpt{font-size:.88rem;color:var(--muted);border-left:3px solid var(--saffron);padding-left:8px}
+.stl.reading{background:var(--saffron-soft)}
+.qq.it{font-style:normal;color:var(--ink)}
+.dok{color:var(--ok);font-weight:600}
+.dmiss{color:var(--bad);font-weight:600;text-decoration:underline wavy;text-underline-offset:3px}
+.trorig{font-style:normal;font-size:1.05rem;line-height:1.7}
+.tcard.dim{opacity:.62}
+.tr.trb{border:0;background:transparent;text-align:left;padding:4px 0;width:100%}
+.rate button.sug{box-shadow:0 0 0 3px var(--saffron)}
+.typed{font-size:.95rem;margin-bottom:6px}
+.typed.tok{color:var(--ok)}.typed.tno{color:var(--bad)}
+.chat{display:flex;flex-direction:column;gap:8px;max-height:58vh;overflow-y:auto;padding:4px}
+.bub{max-width:86%;padding:10px 12px;border-radius:14px;display:flex;flex-direction:column;gap:6px;border:1px solid var(--line)}
+.bub.bot{align-self:flex-start;background:var(--surface);border-bottom-left-radius:4px}
+.bub.me{align-self:flex-end;background:var(--cobalt-soft);border-color:var(--cobalt);border-bottom-right-radius:4px}
+.bub .it{font-style:normal;color:var(--ink)}
+.bub .spk{align-self:flex-start}
+.bfix{font-size:.84rem;color:var(--bad);border-top:1px dashed var(--line);padding-top:4px}
+.prlist{display:grid;gap:6px}
+.prr{display:grid;grid-template-columns:auto 1fr auto auto 1fr;gap:8px;align-items:center}
+.prch{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.prch .opt{display:flex;flex-direction:column;align-items:center;gap:2px;padding:16px 8px;font-size:1.25rem}
+@media (max-width:420px){.prr{grid-template-columns:auto 1fr;}.prr .op{display:none}}
+.blank{display:inline-block;min-width:60px;border-bottom:2px solid var(--saffron);margin:0 4px;vertical-align:baseline}
