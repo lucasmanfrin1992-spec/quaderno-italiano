@@ -1,0 +1,142 @@
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="label">Curso de italiano · A1 → A2</div>
+      <h1>Quaderno <span>d'Italiano</span></h1>
+    </div>
+    <div class="streak">
+      <span class="chip hot" id="chipStreak">0 dias seguidos</span>
+      <span class="chip" id="chipDue">0 para hoje</span>
+    </div>
+  </header>
+  <div class="tiles" aria-hidden="true"></div>
+
+  <!-- ===================== INÍCIO ===================== -->
+  <section class="view" id="v-inicio" data-view="inicio">
+    <div class="card stack" id="homeGoal"></div>
+    <div class="today">
+      <div class="label">Revisão de hoje</div>
+      <h2 id="todayTitle">Seus cartões de hoje</h2>
+      <div class="nums">
+        <div><b id="nDue">0</b><span>para revisar</span></div>
+        <div><b id="nNew">0</b><span>novos hoje</span></div>
+        <div><b id="nLearned">0</b><span>já estudados</span></div>
+      </div>
+      <button class="btn" data-goto="cartoes">Começar revisão</button>
+    </div>
+    <div class="homegrid">
+      <div class="card" id="homeCourse"></div>
+      <div class="card" id="homeWriting"></div>
+    </div>
+    <div class="card" id="homeNews"><span class="label">Notícia do dia</span><p class="muted small">Carregando…</p></div>
+    <div class="card" id="homeShadow"></div>
+    <p class="hint">Dica: em qualquer parte do curso, toque numa palavra em italiano para ver o significado, exemplos e, nas preposições e artigos, como a forma se constrói.</p>
+  </section>
+
+  <!-- ===================== CURSO ===================== -->
+  <section class="view" id="v-curso" data-view="curso" hidden>
+    <div id="cHome" class="stack" style="gap:16px">
+      <div class="seg seg2" id="lvlSeg" role="tablist" aria-label="Nível">
+        <button role="tab" data-lvl="A1" class="on" aria-selected="true">Unidade A1</button>
+        <button role="tab" data-lvl="A2" aria-selected="false">Unidade A2</button>
+      </div>
+      <div id="lvlHead" class="stack"></div>
+      <div class="tlist" id="tlist"></div>
+    </div>
+    <div id="cTopic" class="stack" style="gap:18px" hidden></div>
+  </section>
+
+  <!-- ===================== ESCRITA ===================== -->
+  <section class="view" id="v-escrita" data-view="escrita" hidden>
+    <div id="wHome" class="stack" style="gap:16px">
+      <div class="stack" style="gap:6px"><h2>Escrita</h2><p class="muted small">Temas para escrever com calma. Ao terminar, o Claude corrige o texto, explica cada erro e dá uma nota.</p></div>
+      <div class="seg seg2" id="wSeg" role="tablist" aria-label="Nível da escrita">
+        <button role="tab" data-wl="A1" class="on" aria-selected="true">Escrita A1</button>
+        <button role="tab" data-wl="A2" aria-selected="false">Escrita A2</button>
+      </div>
+      <div class="wlist" id="wlist"></div>
+    </div>
+    <div id="wTask" class="stack" style="gap:16px" hidden></div>
+  </section>
+
+  <!-- ===================== SHADOWING ===================== -->
+  <section class="view" id="v-shadow" data-view="shadow" hidden>
+    <div id="sHome" class="stack" style="gap:18px">
+      <div id="sIntro" class="stack" style="gap:16px"></div>
+      <div class="seg seg2" id="sSeg" role="tablist" aria-label="Nível dos podcasts">
+        <button role="tab" data-sl="A1" class="on" aria-selected="true">Podcasts A1</button>
+        <button role="tab" data-sl="A2" aria-selected="false">Podcasts A2</button>
+      </div>
+      <div class="tlist" id="slist"></div>
+      <div class="card" id="sLinks"></div>
+    </div>
+    <div id="sPlay" class="stack" style="gap:16px" hidden></div>
+  </section>
+
+  <!-- ===================== NOTÍCIA ===================== -->
+  <section class="view" id="v-news" data-view="news" hidden>
+    <div class="seg" id="newsSeg" role="tablist" aria-label="Notícia">
+      <button role="tab" data-ns="read" class="on" aria-selected="true">Notícia</button>
+      <button role="tab" data-ns="cal" aria-selected="false">Calendário</button>
+      <button role="tab" data-ns="favs" aria-selected="false">Minhas palavras<span class="cnt" id="favCount"></span></button>
+    </div>
+    <div id="ns-read" class="stack" style="gap:20px">
+      <div id="newsBox"><div class="card stack"><span class="label">Notícia do dia</span><p class="muted small">Carregando…</p></div></div>
+      <div id="quizBox"></div>
+    </div>
+    <div id="ns-cal" hidden><div class="card stack" id="calBox"></div></div>
+    <div id="ns-favs" class="stack" hidden><div id="favBox" class="stack"></div></div>
+  </section>
+
+  <!-- ===================== CARTÕES ===================== -->
+  <section class="view" id="v-cartoes" data-view="cartoes" hidden>
+    <div class="row" style="justify-content:space-between">
+      <h2>Cartões do dia</h2>
+      <span class="chip" id="sessInfo"></span>
+    </div>
+    <div id="flashArea" class="stack"></div>
+    <div class="card stack">
+      <h3>Seu progresso</h3>
+      <div class="boxes" id="boxes"></div>
+      <div class="boxlbl"><span>hoje</span><span>1d</span><span>2–3d</span><span>4–7d</span><span>8–15d</span><span>16–31d</span><span>1–2m</span><span>2m+</span></div>
+      <p class="small muted">Revisão espaçada no estilo do Anki: cada cartão tem seu intervalo e sua facilidade. Bom multiplica o intervalo, Fácil aumenta mais e deixa o cartão mais leve, Difícil cresce pouco e Errei faz o cartão voltar na mesma sessão. Os cartões novos seguem a ordem dos tópicos do curso.</p>
+    </div>
+    <div class="card stack">
+      <h3>Configurar</h3>
+      <div class="decks" id="decks"></div>
+      <div class="row">
+        <label for="newPerDay" class="small" style="flex:1">Cartões novos por dia</label>
+        <select id="newPerDay" style="width:auto"><option>10</option><option>15</option><option>20</option><option>30</option><option>50</option></select>
+      </div>
+      <div class="row">
+        <label for="dir" class="small" style="flex:1">Direção do vocabulário</label>
+        <select id="dir" style="width:auto"><option value="it">Italiano → Português</option><option value="pt">Português → Italiano</option><option value="mix">Misturado</option></select>
+      </div>
+      <p class="small muted">O progresso fica salvo na sua conta e neste aparelho.</p>
+    </div>
+  </section>
+</div>
+
+<div class="sheetback" id="sheetBack" hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shWord" hidden>
+  <div class="inner">
+    <div class="shhead">
+      <div><div class="shword" id="shWord"></div><div class="small muted" id="shLemma"></div></div>
+      <div class="row" style="gap:6px;flex-wrap:nowrap">
+        <button class="iconbtn" id="shSay" data-say="" aria-label="Ouvir pronúncia"><svg viewBox="0 0 24 24"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>
+        <button class="iconbtn star" id="shFav" aria-pressed="false" aria-label="Salvar nas minhas palavras"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg></button>
+        <button class="iconbtn" id="shClose" aria-label="Fechar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+    </div>
+    <div id="shBody" class="stack"></div>
+  </div>
+</div>
+
+<nav class="tabs" aria-label="Seções do app"><div class="in" role="tablist">
+  <button role="tab" data-tab="inicio" aria-selected="true"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Início</button>
+  <button role="tab" data-tab="curso" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M8 7h7M8 11h5"/></svg>Curso</button>
+  <button role="tab" data-tab="escrita" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>Escrita</button>
+  <button role="tab" data-tab="shadow" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M3 10v4M7 7v10M11 4v16M15 8v8M19 10v4"/></svg>Shadowing</button>
+  <button role="tab" data-tab="news" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 5h13v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v10a2 2 0 0 1-2 2"/><path d="M7 9h7M7 13h7M7 17h4"/></svg>Notícia</button>
+  <button role="tab" data-tab="cartoes" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="14" height="13" rx="2"/><path d="M7 7V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-2"/></svg>Cartões</button>
+</div></nav>
