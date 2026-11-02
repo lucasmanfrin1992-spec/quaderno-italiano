@@ -141,9 +141,9 @@ function renderTopic(){const t=CUR,c=tprog(t.id),idx=COURSE.indexOf(t),nxt=COURS
  const body=$("#cBody");
  if(CPART==="voc"){markSeen("voc");
   const vc=typeof renderVocabCtx==="function"?renderVocabCtx(t):null;
-  body.innerHTML=(vc?`<p class="muted small">${t.voc.length} palavras e expressões, em contexto. Toque em qualquer palavra italiana para ver o significado; o alto-falante pronuncia a palavra e o exemplo.</p>`+vc:`<p class="muted small">${t.voc.length} palavras e expressões. Toque numa palavra para ver exemplos; o alto-falante pronuncia.</p>
+  body.innerHTML=(vc?`<p class="muted small">${t.voc.length} palavras e expressões. Como no livro, o tópico começa por um diálogo em que elas aparecem; depois vêm os cartões, cada um com a frase do diálogo e um exemplo. Toque em qualquer palavra italiana para ver o significado.</p>`+vc:`<p class="muted small">${t.voc.length} palavras e expressões. Toque numa palavra para ver exemplos; o alto-falante pronuncia.</p>
   <div class="vgrid">${t.voc.map(v=>`<div class="vcell"><div><span class="it">${esc(v[0])}</span><span class="pt">${esc(v[1])}</span></div>${spkBtn(v[0])}</div>`).join("")}</div>`)+`
-  <button class="btn primary" data-part-go="gram">Ir para a gramática →</button>`}
+  <button class="btn primary" data-part-go="gram">Ir para a gramática →</button>`;if(vc&&typeof dlgWire==="function")dlgWire(body,DLG[t.id])}
  else if(CPART==="gram"){markSeen("gram");
   body.innerHTML=t.gram.map(g=>`<section class="gsec"><h3>${esc(g.h)}</h3>${g.html}</section>`).join("")+`<button class="btn primary" data-part-go="hist">Ler a história do tópico →</button>`}
  else if(CPART==="hist"){markSeen("hist");renderStory(body)}

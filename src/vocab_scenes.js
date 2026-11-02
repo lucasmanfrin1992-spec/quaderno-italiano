@@ -89,11 +89,14 @@ function vGender(w){return/^(il|lo|i|gli) /.test(w)?"gm":/^(la|le) /.test(w)?"gf
 function renderVocabCtx(t){const x=VX[t.id],mean={};t.voc.forEach(v=>mean[v[0]]=v[1]);
  if(!x)return null;
  const used=new Set();
+ const d=typeof DLG!=="undefined"?DLG[t.id]:null,dix=d?dlgIndex(d):{};
  let h=`<div class="vsit"><span class="vsite">📍</span><div><span class="label">A situação</span><p>${x.sit}</p></div></div>`;
+ if(d)h+=dlgHTML(d)+dlgQHTML(d)+`<div><span class="label">Agora as palavras, uma a uma</span><p class="small muted">Cada cartão mostra a frase do diálogo em que a palavra apareceu e mais um exemplo.</p></div>`;
  try{h+=x.scene()}catch(e){}
- h+=x.groups.map(g=>`<section class="vgrp"><h3>${esc(g.h)}</h3><div class="vcards">${g.items.map(([w,ic,ex,ep,pt])=>{used.add(w);return`<div class="vcard ${vGender(w)}"><div class="vic">${V.icon(ic)}</div><div class="vtx"><div class="vw"><span class="it">${esc(w)}</span><span class="vpt">${esc(pt||mean[w]||"")}</span></div>${ex?`<div class="vex"><span class="it">${esc(ex)}</span><small>${esc(ep||"")}</small></div>`:""}</div>${spkBtn(ex?w+". "+ex:w)}</div>`}).join("")}</div></section>`).join("");
+ h+=x.groups.map(g=>`<section class="vgrp"><h3>${esc(g.h)}</h3><div class="vcards">${g.items.map(([w,ic,ex,ep,pt])=>{used.add(w);return`<div class="vcard ${vGender(w)}"><div class="vic">${V.icon(ic)}</div><div class="vtx"><div class="vw"><span class="it">${esc(w)}</span><span class="vpt">${esc(pt||mean[w]||"")}</span></div>${dix[w]?(l=>`<div class="vdl"><span class="label">💬 no diálogo${l.who?" · "+esc(l.who):""}</span><span class="it">${l.it}</span><small>${esc(l.pt)}</small></div>`)(dlgLineFor(d,dix[w])):""}${ex?`<div class="vex"><span class="it">${esc(ex)}</span><small>${esc(ep||"")}</small></div>`:""}</div>${spkBtn(ex?w+". "+ex:w)}</div>`}).join("")}</div></section>`).join("");
  const rest=t.voc.filter(v=>!used.has(v[0]));
  if(rest.length)h+=`<section class="vgrp"><h3>Mais palavras</h3><div class="vgrid">${rest.map(v=>`<div class="vcell"><div><span class="it">${esc(v[0])}</span><span class="pt">${esc(v[1])}</span></div>${spkBtn(v[0])}</div>`).join("")}</div></section>`;
  if(x.useful&&x.useful.length)h+=`<section class="vgrp"><h3>Expressões úteis</h3><div class="vuse">${x.useful.map(([tt,l])=>`<div class="vub"><span class="label">${esc(tt)}</span>${l.map(p=>`<div class="exi"><div><i class="it">${esc(p[0])}</i><span>${esc(p[1])}</span></div>${spkBtn(p[0])}</div>`).join("")}</div>`).join("")}</div></section>`;
+ if(d)h+=dlgClozeHTML(d);
  if(x.tip)h+=`<div class="vtip"><span>💡</span><p>${x.tip}</p></div>`;
  return h}

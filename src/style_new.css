@@ -404,3 +404,25 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center;color:inherit}
  .vreg,.vlikes{grid-template-columns:1fr}.vcards{grid-template-columns:1fr}.vtkf{grid-template-columns:repeat(2,1fr)}
 }
 .vdseg.eve .w,.vdseg.night .w{color:#fff}.vdseg.morn .w{color:#1a1a1a}
+/* ---------- diálogo de abertura do vocabulário ---------- */
+.dlg{border-top:4px solid var(--saffron)}
+.dlines{display:flex;flex-direction:column;gap:12px}
+.stl.dl{gap:3px}
+.stl.dl.nar .it{font-style:italic;color:var(--muted)}
+.dwho{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.dwho.dc0{color:var(--cobalt)}.dwho.dc1{color:var(--fem)}.dwho.dc2{color:var(--ok)}.dwho.dc3{color:var(--saffron)}
+mark.vk{background:var(--cobalt-soft);color:inherit;border-radius:4px;padding:0 2px;box-shadow:inset 0 -2px 0 var(--cobalt)}
+mark.vk.gf{background:var(--fem-soft);box-shadow:inset 0 -2px 0 var(--fem)}
+mark.vk:not(.gm):not(.gf){background:var(--saffron-soft);box-shadow:inset 0 -2px 0 var(--saffron)}
+.vfq{display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px dashed var(--line)}
+.vfq .btn{padding:8px 14px}
+.vfq .btn.okb{background:var(--ok-soft);border-color:var(--ok);opacity:1}
+.vfq .btn.badb{background:var(--bad-soft);border-color:var(--bad);opacity:1}
+.okt{color:var(--ok)}
+.clz .blank.filled{min-width:0;padding:0 4px;color:var(--cobalt);font-weight:700}
+.vdl{border-top:1px dashed var(--line);padding-top:6px;font-size:.9rem;display:flex;flex-direction:column;gap:1px}
+.vdl .label{font-size:.64rem}
+.vdl .it{font-style:normal;color:var(--ink);display:block}
+.vdl .it b{color:var(--cobalt)}
+.vcard.gf .vdl .it b{color:var(--fem)}
+.vdl small{color:var(--muted)}
