@@ -1,6 +1,6 @@
 # Quaderno d'Italiano (PWA)
 
-App de estudo de italiano (Duolingo seções 1–3 + ponte A2): notícia do dia com glossário e questionário, calendário de leitura, gramática, vocabulário, exercícios e cartões com revisão espaçada no estilo Anki.
+App de estudo de italiano A1–A2: curso em 20 tópicos (vocabulário, gramática com infográficos e exercícios), escrita com correção no Claude, shadowing com podcasts por tópico, notícia do dia com glossário e questionário, e cartões com revisão espaçada no estilo Anki. Toque em qualquer palavra italiana para ver significado, exemplos e, nas preposições, como a forma se constrói.
 
 - `index.html` — o app inteiro (HTML, CSS e JS num arquivo).
 - `sw.js` — service worker: app offline; notícias da rede com cópia em cache.
