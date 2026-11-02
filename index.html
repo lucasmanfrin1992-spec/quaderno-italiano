@@ -168,6 +168,7 @@ button.w:hover{background-color:var(--cobalt-soft)}
 button.w:focus-visible{outline:2px solid var(--saffron);outline-offset:1px}
 button.w.fav{background-color:var(--saffron-soft);background-image:linear-gradient(var(--saffron),var(--saffron));background-size:100% 2px}
 button.w.on{background-color:var(--cobalt);color:var(--surface)}
+.npara.reading,.ntitle.reading{background:var(--saffron-soft);border-radius:6px;box-shadow:0 0 0 4px var(--saffron-soft)}
 .hint{font-size:.85rem;color:var(--muted);background:var(--paper);border-radius:8px;padding:8px 10px}
 .src{font-size:.82rem;color:var(--muted)}
 .src a{color:var(--cobalt)}
@@ -2039,7 +2040,7 @@ function spkBtn(t){return canSpeak?`<button class="spk" data-say="${esc(t)}" ari
 document.addEventListener("click",e=>{const b=e.target.closest("[data-say]");if(b){e.stopPropagation();speak(b.dataset.say)}});
 
 /* ============================ ABAS ============================ */
-function showTab(name){$$("[data-view]").forEach(v=>v.hidden=v.dataset.view!==name);$$("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===name));
+function showTab(name){if(name!=="news"&&typeof READ!=="undefined"&&READ.state!=="idle")stopReading();$$("[data-view]").forEach(v=>v.hidden=v.dataset.view!==name);$$("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===name));
  try{localStorage.setItem(KEY+".tab",name)}catch(e){}window.scrollTo(0,0);if(name==="cartoes")renderFlash();if(name==="inicio")renderHome();if(name==="news"){renderNews();if(!$("#ns-cal").hidden)renderCal();if(!$("#ns-favs").hidden)renderFavs()}}
 $$("nav.tabs button").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
 document.addEventListener("click",e=>{const g=e.target.closest("[data-goto]");if(g)showTab(g.dataset.goto)});
@@ -2662,12 +2663,22 @@ function refreshTokenMarks(){$$("button.w").forEach(b=>{const e=gloss(b.dataset.
 function findSentence(text,w){const parts=String(text).match(/[^.!?]+[.!?»"]*/g)||[text];const lw=w.toLowerCase();return(parts.find(p=>p.toLowerCase().includes(lw))||text).trim()}
 
 /* leitura em voz alta */
-let READING=false;
-function readAll(){if(!canSpeak||!NEWS.cur)return;speechSynthesis.cancel();if(READING){READING=false;updReadBtn();return}
- const texts=[NEWS.cur.title,...(NEWS.cur.paragraphs||[])];let i=0;READING=true;updReadBtn();
- const next=()=>{if(!READING||i>=texts.length){READING=false;updReadBtn();return}
-  try{const u=new SpeechSynthesisUtterance(texts[i++]);u.lang="it-IT";u.rate=.88;u.onend=next;u.onerror=()=>{READING=false;updReadBtn()};speechSynthesis.speak(u)}catch(e){READING=false;updReadBtn()}};next()}
-function updReadBtn(){const b=$("#readAll");if(b)b.innerHTML=(READING?'<svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>Parar leitura':SPK_SVG+"Ouvir a notícia")}
+let READ={state:"idle",tok:0,i:0,texts:[]};
+function hlPara(i){$$("#newsBox .npara,#newsBox .ntitle").forEach(p=>p.classList.remove("reading"));if(i==null||READ.state==="idle")return;const els=[$("#newsBox .ntitle"),...$$("#newsBox .npara")];if(els[i])els[i].classList.add("reading")}
+function speakFrom(i){const tok=++READ.tok;READ.i=i;
+ if(i>=READ.texts.length){READ.state="idle";updReadBtn();hlPara(null);return}
+ try{const u=new SpeechSynthesisUtterance(READ.texts[i]);u.lang="it-IT";u.rate=.88;
+  u.onend=()=>{if(tok!==READ.tok||READ.state!=="playing")return;speakFrom(i+1)};
+  u.onerror=()=>{if(tok!==READ.tok)return;READ.state="idle";updReadBtn();hlPara(null)};
+  hlPara(i);speechSynthesis.speak(u)}catch(e){READ.state="idle";updReadBtn()}}
+function readAll(){if(!canSpeak||!NEWS.cur)return;
+ if(READ.state==="playing"){READ.state="paused";READ.tok++;try{speechSynthesis.cancel()}catch(e){}updReadBtn();return}
+ if(READ.state==="paused"){READ.state="playing";updReadBtn();speakFrom(READ.i);return}
+ try{speechSynthesis.cancel()}catch(e){}
+ READ.texts=[NEWS.cur.title,...(NEWS.cur.paragraphs||[])];READ.state="playing";updReadBtn();speakFrom(0)}
+function stopReading(){READ.state="idle";READ.tok++;try{speechSynthesis.cancel()}catch(e){}updReadBtn();hlPara(null)}
+function updReadBtn(){const b=$("#readAll"),st=$("#readStop");if(b)b.innerHTML=READ.state==="playing"?'<svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>Pausar':READ.state==="paused"?'<svg viewBox="0 0 24 24"><path d="M7 5l12 7-12 7z"/></svg>Continuar':SPK_SVG+"Ouvir a notícia";
+ if(st)st.hidden=READ.state==="idle"}
 
 /* sub-abas */
 function setNS(v){$$("#newsSeg button").forEach(b=>{const on=b.dataset.ns===v;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
@@ -2693,19 +2704,19 @@ function renderNews(){const box=$("#newsBox"),n=NEWS.cur;NEWS.rendered=n;
   <div class="row" style="justify-content:space-between"><span class="label">${d===today()?"Notícia de hoje":"Notícia de "+fmtBR(d)}${n.topic?" · "+esc(n.topic):""}</span><span class="cefr">${esc(n.level||"A2")}</span></div>
   <h2 class="ntitle">${tok(n.title||"",-1)}</h2>
   ${n.titlePt?`<p class="ptpara" hidden>${esc(n.titlePt)}</p>`:""}
-  <div class="row">${canSpeak?`<button class="btn" id="readAll"></button>`:""}<button class="btn ghost" id="togglePt" aria-pressed="false">Mostrar tradução</button>${!isLatest&&NEWS.latest?`<button class="btn ghost" id="toLatest">Ir para a mais recente</button>`:""}</div>
+  <div class="row">${canSpeak?`<button class="btn" id="readAll"></button><button class="btn ghost" id="readStop" hidden><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>Parar</button>`:""}<button class="btn ghost" id="togglePt" aria-pressed="false">Mostrar tradução</button>${!isLatest&&NEWS.latest?`<button class="btn ghost" id="toLatest">Ir para a mais recente</button>`:""}</div>
   <p class="hint">Toque numa palavra para ouvir a pronúncia e ver significado, sinônimos e exemplo. Com a estrela, ela vai para a sua revisão.</p>
   ${paras}
   ${srcs?`<p class="src">Texto adaptado para o nível ${esc(n.level||"A2")} a partir de: ${srcs}</p>`:""}
  </article>`;
  updReadBtn();
- if($("#readAll"))$("#readAll").onclick=readAll;
+ if($("#readAll"))$("#readAll").onclick=readAll;if($("#readStop"))$("#readStop").onclick=stopReading;
  $("#togglePt").onclick=e=>{const on=e.currentTarget.getAttribute("aria-pressed")!=="true";e.currentTarget.setAttribute("aria-pressed",on);e.currentTarget.textContent=on?"Esconder tradução":"Mostrar tradução";$$("#newsBox .ptpara").forEach(p=>p.hidden=!on)};
  if($("#toLatest"))$("#toLatest").onclick=()=>openDate(NEWS.latest.date);
  renderQuiz()}
 $("#newsBox").addEventListener("click",e=>{const b=e.target.closest("button.w");if(b)openWord(b)});
 
-async function openDate(d){if(READING){READING=false;try{speechSynthesis.cancel()}catch(e){}}
+async function openDate(d){if(READ.state!=="idle")stopReading();
  NEWS.curDate=d;setNS("read");window.scrollTo(0,0);
  if(NEWS.cache[d]){NEWS.cur=NEWS.cache[d];renderNews();return}
  NEWS.cur=null;$("#newsBox").innerHTML=`<div class="card"><p class="muted">Carregando a notícia de ${fmtBR(d)}…</p></div>`;$("#quizBox").innerHTML="";
