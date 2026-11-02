@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-const V="quaderno-2026-11-02k";
+const V="quaderno-2026-11-02l";
 =======
 const V="quaderno-2026-11-02i";
 >>>>>>> 7ecc5a5 (Tema Nonna: paleta, Fraunces/Nunito, logo, botões e novos ícones do app)

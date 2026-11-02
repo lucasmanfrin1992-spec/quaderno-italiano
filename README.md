@@ -1,4 +1,6 @@
-# Quaderno d'Italiano (PWA)
+# Nonna Dice (PWA)
+
+Antigo *Quaderno d'Italiano*.
 
 App de estudo de italiano A1–A2: curso em 20 tópicos (vocabulário, gramática com infográficos e exercícios), escrita com checklist de autocorreção e texto-modelo, shadowing com podcasts por tópico, notícia do dia com glossário e questionário, e cartões com revisão espaçada no estilo Anki. Toque em qualquer palavra italiana para ver significado, exemplos e, nas preposições, como a forma se constrói.
 
