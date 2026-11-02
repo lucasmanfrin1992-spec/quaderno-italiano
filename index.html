@@ -2000,10 +2000,12 @@ const EX=[
 ];
 
 /* ============================ ESTADO ============================ */
-const PKEY="quaderno.profiles";
-let PROF={list:[],current:null};try{const r=localStorage.getItem(PKEY);if(r)PROF=Object.assign(PROF,JSON.parse(r))}catch(e){}
-if(!Array.isArray(PROF.list))PROF.list=[];
-const CURP=PROF.list.find(p=>p.id===PROF.current)||null;
+const PROFILES=[{id:"rafaela",name:"Rafaela",color:"#B4572E"},{id:"lucas",name:"Lucas",color:"#1E4E9E"},{id:"eder",name:"Éder",color:"#22744A"}];
+const RESET_TAG="2026-11-01c";
+try{if(localStorage.getItem("quaderno.reset")!==RESET_TAG){Object.keys(localStorage).filter(k=>k.startsWith("quaderno")).forEach(k=>localStorage.removeItem(k));localStorage.setItem("quaderno.reset",RESET_TAG)}}catch(e){}
+let CURID=null;try{CURID=localStorage.getItem("quaderno.current")}catch(e){}
+const CURP=PROFILES.find(p=>p.id===CURID)||null;
+let CHOSEN=false;try{CHOSEN=!!CURP&&sessionStorage.getItem("quaderno.chosen")===CURP.id}catch(e){}
 const KEY=CURP?"quaderno.v1:"+CURP.id:"quaderno.v1:__sem-perfil";
 const DECKS={fav:"Minhas palavras (das notícias)",vA1:"Vocabulário A1",vA2:"Vocabulário A2",verb:"Verbos (presente, passato, futuro)",frasi:"Frases de gramática"};
 function defState(){return{cards:{},settings:{decks:{fav:true,vA1:true,vA2:true,verb:true,frasi:true},newPerDay:20,dir:"mix"},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},best:{},favs:{},newsDone:{},updatedAt:0}}
@@ -2875,59 +2877,22 @@ document.addEventListener("visibilitychange",()=>{if(document.hidden&&syncDirty)
 })();
 
 /* ============================ PERFIS ============================ */
-const PCOLORS=["#1E4E9E","#B4572E","#22744A","#7A3E9D","#A07800","#1F7A8C","#B0281F","#4F5D75"];
-const LOCK_SVG='<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
-let PSTATE={view:"list",pid:null,edit:false,arm:null,msg:""};
-function saveProf(){try{localStorage.setItem(PKEY,JSON.stringify(PROF))}catch(e){}}
-async function hashPin(pin){try{const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("quaderno:"+pin));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}catch(e){return"plain:"+pin}}
-function pInitial(p){return esc((p.name||"?").trim().charAt(0).toUpperCase())}
+function pInitial(p){return esc(p.name.charAt(0).toUpperCase())}
 function profStats(p){try{const o=JSON.parse(localStorage.getItem("quaderno.v1:"+p.id)||"null");if(!o)return"Ainda sem progresso";
  const c=Object.keys(o.cards||{}).length,n=Object.keys(o.newsDone||{}).length,f=Object.keys(o.favs||{}).length;
  return`${c} cartões · ${n} notícias lidas · ${f} palavras salvas`}catch(e){return""}}
-function switchTo(id){try{saveLocal()}catch(e){}PROF.current=id;saveProf();location.reload()}
-function openProfiles(){PSTATE={view:PROF.list.length?"list":"new",pid:null,edit:false,arm:null,msg:""};renderProf();$("#profOv").hidden=false;document.body.style.overflow="hidden"}
+function chooseProfile(id){try{localStorage.setItem("quaderno.current",id);sessionStorage.setItem("quaderno.chosen",id)}catch(e){}
+ if(CURP&&CURP.id===id){closeProfiles();return}try{saveLocal()}catch(e){}location.reload()}
+function openProfiles(){renderProf();$("#profOv").hidden=false;document.body.style.overflow="hidden"}
 function closeProfiles(){$("#profOv").hidden=true;document.body.style.overflow=""}
-function renderProf(){const box=$("#profIn"),v=PSTATE.view;let h="";
- if(v==="list"){
-  h+=`<span class="label">Quaderno d'Italiano</span><h1 id="profTitle">Quem vai estudar?</h1>
-  <div class="plist">${PROF.list.map(p=>`<div class="prow"><button class="pcard${CURP&&p.id===CURP.id?" cur":""}" data-pid="${p.id}"><span class="pav" style="background:${p.color}">${pInitial(p)}</span><span class="pinfo"><b>${esc(p.name)}</b><small>${profStats(p)}</small></span>${p.pin?LOCK_SVG:""}</button>${PSTATE.edit?`<button class="pdel${PSTATE.arm===p.id?" arm":""}" data-del="${p.id}">${PSTATE.arm===p.id?"Apagar mesmo":"Apagar"}</button>`:""}</div>`).join("")}</div>
-  ${PSTATE.edit&&PSTATE.arm?`<p class="small" style="color:var(--bad)">Apagar remove o perfil e todo o progresso dele neste aparelho. Toque em "Apagar mesmo" para confirmar.</p>`:""}
-  <div class="row"><button class="btn primary" id="pNew">Adicionar perfil</button>${PROF.list.length?`<button class="btn ghost" id="pEdit">${PSTATE.edit?"Concluir":"Gerenciar perfis"}</button>`:""}${CURP?`<button class="btn ghost" id="pBack">Voltar</button>`:""}</div>
-  <p class="small muted">Cada perfil tem seu próprio progresso neste aparelho: cartões, palavras salvas, questionários e calendário. O PIN é opcional e serve para separar os perfis no dia a dia; não é uma senha forte.</p>`}
- else if(v==="pin"){const p=PROF.list.find(x=>x.id===PSTATE.pid);
-  h+=`<span class="label">Entrar no perfil</span><div class="row"><span class="pav" style="background:${p.color}">${pInitial(p)}</span><h1 id="profTitle">${esc(p.name)}</h1></div>
-  <form class="pform" id="pPinForm"><label for="pPin">PIN de 4 dígitos</label><input type="password" id="pPin" inputmode="numeric" autocomplete="off" maxlength="4" pattern="[0-9]*"><p class="pmsg" id="pMsg">${esc(PSTATE.msg)}</p>
-  <div class="row"><button class="btn primary" type="submit">Entrar</button><button class="btn ghost" type="button" id="pBackList">Outro perfil</button></div></form>`}
- else{
-  h+=`<span class="label">Quaderno d'Italiano</span><h1 id="profTitle">${PROF.list.length?"Novo perfil":"Crie seu perfil"}</h1>
-  ${PROF.list.length?"":`<p class="muted">Cada pessoa que estuda neste aparelho pode ter um perfil, com progresso separado.</p>`}
-  <form class="pform" id="pNewForm"><label for="pName">Nome</label><input type="text" id="pName" maxlength="24" autocomplete="off" placeholder="Ex.: Lucas">
-  <label for="pNewPin" style="margin-top:8px">PIN (opcional, 4 dígitos)</label><input type="password" id="pNewPin" inputmode="numeric" autocomplete="off" maxlength="4" pattern="[0-9]*" placeholder="Deixe vazio para entrar direto">
-  <p class="pmsg" id="pMsg">${esc(PSTATE.msg)}</p>
-  <div class="row"><button class="btn primary" type="submit">Criar perfil</button>${PROF.list.length?`<button class="btn ghost" type="button" id="pBackList">Cancelar</button>`:""}</div></form>`}
- box.innerHTML=h;
- $$("#profIn [data-pid]").forEach(b=>b.onclick=()=>{const p=PROF.list.find(x=>x.id===b.dataset.pid);if(!p)return;
-  if(CURP&&p.id===CURP.id){closeProfiles();return}if(p.pin){PSTATE={...PSTATE,view:"pin",pid:p.id,msg:""};renderProf();setTimeout(()=>$("#pPin").focus(),0)}else switchTo(p.id)});
- $$("#profIn [data-del]").forEach(b=>b.onclick=()=>{const id=b.dataset.del;if(PSTATE.arm!==id){PSTATE.arm=id;renderProf();return}
-  PROF.list=PROF.list.filter(x=>x.id!==id);["",".tab",".ns"].forEach(s=>{try{localStorage.removeItem("quaderno.v1:"+id+s)}catch(e){}});
-  if(PROF.current===id){PROF.current=null;saveProf();location.reload();return}saveProf();PSTATE.arm=null;renderProf()});
- if($("#pNew"))$("#pNew").onclick=()=>{PSTATE={...PSTATE,view:"new",msg:""};renderProf();setTimeout(()=>$("#pName").focus(),0)};
- if($("#pEdit"))$("#pEdit").onclick=()=>{PSTATE.edit=!PSTATE.edit;PSTATE.arm=null;renderProf()};
- if($("#pBack"))$("#pBack").onclick=closeProfiles;
- if($("#pBackList"))$("#pBackList").onclick=()=>{PSTATE={...PSTATE,view:"list",msg:""};renderProf()};
- if($("#pPinForm"))$("#pPinForm").onsubmit=async e=>{e.preventDefault();const p=PROF.list.find(x=>x.id===PSTATE.pid),pin=$("#pPin").value.trim();
-  if((await hashPin(pin))===p.pin)switchTo(p.id);else{PSTATE.msg="PIN incorreto. Tente de novo.";renderProf();setTimeout(()=>$("#pPin").focus(),0)}};
- if($("#pNewForm"))$("#pNewForm").onsubmit=async e=>{e.preventDefault();const name=$("#pName").value.trim(),pin=$("#pNewPin").value.trim();
-  if(!name){PSTATE.msg="Digite um nome para o perfil.";renderProf();return}
-  if(PROF.list.some(p=>p.name.toLowerCase()===name.toLowerCase())){PSTATE.msg="Já existe um perfil com esse nome.";renderProf();return}
-  if(pin&&!/^\d{4}$/.test(pin)){PSTATE.msg="O PIN precisa ter exatamente 4 números, ou fique vazio.";renderProf();$("#pName").value=name;return}
-  const id="p"+Date.now().toString(36);
-  if(!PROF.list.length){try{const old=localStorage.getItem("quaderno.v1");if(old){localStorage.setItem("quaderno.v1:"+id,old);localStorage.removeItem("quaderno.v1")}}catch(e){}}
-  PROF.list.push({id,name,pin:pin?await hashPin(pin):null,color:PCOLORS[PROF.list.length%PCOLORS.length],created:today()});switchTo(id)};
-}
+function renderProf(){
+ $("#profIn").innerHTML=`<span class="label">Quaderno d'Italiano</span><h1 id="profTitle">Quem vai estudar?</h1>
+ <div class="plist">${PROFILES.map(p=>`<button class="pcard${CURP&&p.id===CURP.id?" cur":""}" data-pid="${p.id}"><span class="pav" style="background:${p.color}">${pInitial(p)}</span><span class="pinfo"><b>${esc(p.name)}</b><small>${profStats(p)}</small></span></button>`).join("")}</div>
+ <p class="small muted">Cada um tem o próprio progresso neste aparelho: cartões, palavras salvas, questionários e calendário. A notícia do dia é a mesma para todos.</p>`;
+ $$("#profIn [data-pid]").forEach(b=>b.onclick=()=>chooseProfile(b.dataset.pid))}
 $("#profChip").onclick=openProfiles;
-if(CURP){$("#profChipName").textContent=CURP.name;$("#profChipAv").textContent=(CURP.name||"?").charAt(0).toUpperCase();$("#profChipAv").style.background=CURP.color}
-else openProfiles();
+if(CURP){$("#profChipName").textContent=CURP.name;$("#profChipAv").textContent=CURP.name.charAt(0).toUpperCase();$("#profChipAv").style.background=CURP.color}
+if(!CHOSEN)openProfiles();
 /* ============================ INÍCIO ============================ */
 syncFavCards();renderDecks();renderBoxes();renderHome();updateFavCount();
 try{const ns=localStorage.getItem(KEY+".ns");if(["read","cal","favs"].includes(ns))setNS(ns)}catch(e){}
