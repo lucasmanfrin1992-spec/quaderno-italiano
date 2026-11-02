@@ -2000,7 +2000,7 @@ const EX=[
 ];
 
 /* ============================ ESTADO ============================ */
-const PROFILES=[{id:"rafaela",name:"Rafaela",color:"#B4572E"},{id:"lucas",name:"Lucas",color:"#1E4E9E"},{id:"eder",name:"Éder",color:"#22744A"}];
+const PROFILES=[{id:"rafaela",name:"Rafaela",color:"#B4572E"},{id:"eder",name:"Éder",color:"#22744A"},{id:"lucas",name:"Lucas",color:"#1E4E9E"}];
 const RESET_TAG="2026-11-01c";
 try{if(localStorage.getItem("quaderno.reset")!==RESET_TAG){Object.keys(localStorage).filter(k=>k.startsWith("quaderno")).forEach(k=>localStorage.removeItem(k));localStorage.setItem("quaderno.reset",RESET_TAG)}}catch(e){}
 let CURID=null;try{CURID=localStorage.getItem("quaderno.current")}catch(e){}
@@ -2852,7 +2852,8 @@ document.addEventListener("visibilitychange",()=>{if(document.hidden&&syncDirty)
 
 /* ============================ PWA ============================ */
 (function(){
- if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").then(reg=>{
+ if("serviceWorker" in navigator){window.addEventListener("load",()=>{let reloaded=false;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(reloaded)return;reloaded=true;location.reload()});
+   navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(reg=>{reg.update().catch(()=>{});
    reg.addEventListener("updatefound",()=>{const w=reg.installing;w&&w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller){const b=$("#bkMsg");}})})}).catch(()=>{})})}
  const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
  let hidden=false;try{hidden=localStorage.getItem(KEY+".installHide")==="1"}catch(e){}
