@@ -189,12 +189,12 @@ function endEx(){const r=RUN,n=r.qs.length,pct=Math.round(r.score/n*100),c=S.cou
  $("#again").onclick=()=>{RUN={topic:t.id,qs:buildQs(t),i:0,score:0,wrong:[]};renderQ()};$("#toGram").onclick=()=>{CPART="gram";renderTopic()};if($("#goNext"))$("#goNext").onclick=()=>openTopic(nxt.id,"voc")}
 
 /* ============================ ESCRITA ============================ */
-let WLVL="A1",WCUR=null,WBUSY=false;
+let WLVL="A1",WCUR=null;
 $$("#wSeg button").forEach(b=>b.addEventListener("click",()=>{WLVL=b.dataset.wl;renderWriting()}));
 function wordCount(s){return(String(s).match(new RegExp("["+LET+"]+","g"))||[]).length}
 function renderWriting(){if(WCUR&&!$("#wTask").hidden)return;
  $$("#wSeg button").forEach(b=>{const on=b.dataset.wl===WLVL;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
- $("#wlist").innerHTML=WRITING.filter(w=>w.lvl===WLVL).map(w=>{const s=S.writing[w.id],r=s&&s.result;return`<button class="wcard" data-wopen="${w.id}"><div class="row"><span class="label">${w.kind==="frasi"?"Frases completas":"Texto"} · ${w.min}–${w.max} palavras</span><span class="pill ${r||(s&&s.sent)?"ok":"todo"}">${r?"nota "+r.nota+"/10":s&&s.sent?"enviado":"a fazer"}</span></div><h3>${esc(w.t)}</h3><p>${esc(w.task)}</p></button>`}).join("");
+ $("#wlist").innerHTML=WRITING.filter(w=>w.lvl===WLVL).map(w=>{const s=S.writing[w.id],dn=s&&(s.done||s.result||s.sent);return`<button class="wcard" data-wopen="${w.id}"><div class="row"><span class="label">${w.kind==="frasi"?"Frases completas":"Texto"} · ${w.min}–${w.max} palavras</span><span class="pill ${dn?"ok":"todo"}">${dn?"feito":"a fazer"}</span></div><h3>${esc(w.t)}</h3><p>${esc(w.task)}</p></button>`}).join("");
  $$("[data-wopen]").forEach(b=>b.onclick=()=>openWTask(b.dataset.wopen))}
 function draftKey(id){return KEY+".draft."+id}
 function getDraft(w){try{const d=localStorage.getItem(draftKey(w.id));if(d)return JSON.parse(d)}catch(e){}const s=S.writing[w.id];return s?{text:s.text||"",answers:s.answers||[]}:{text:"",answers:[]}}
@@ -210,66 +210,29 @@ function renderWTask(){const w=WCUR,d=getDraft(w),s=S.writing[w.id];const t=TOPI
  if(w.kind==="frasi")h+=w.qs.map((q,i)=>`<div class="wq"><label for="wa${i}"><span class="it">${esc(q)}</span></label><textarea id="wa${i}" class="short" spellcheck="false" lang="it">${esc(d.answers[i]||"")}</textarea></div>`).join("");
  else h+=`<div class="wq"><label for="wText">Seu texto</label><textarea id="wText" spellcheck="false" lang="it" placeholder="Scrivi qui…">${esc(d.text||"")}</textarea></div>`;
  h+=`<div class="wmeta"><span id="wCount"></span><span>O rascunho fica salvo enquanto você escreve.</span></div>
- <div class="row"><button class="btn primary" id="wSend">Terminei — corrigir com o Claude</button></div><p class="small muted" id="wMsg"></p><div id="wRes" class="stack" style="gap:14px"></div>`;
+ <div class="row"><button class="btn primary" id="wSend">Terminei — conferir</button></div><p class="small muted" id="wMsg"></p><div id="wRes" class="stack" style="gap:14px"></div>`;
  $("#wTask").innerHTML=h;tokenize($("#wTask"));$("#wBack").onclick=closeWTask;
  const upd=()=>{const tx=curText(w),n=wordCount(tx);$("#wCount").textContent=`${n} palavras · meta ${w.min}–${w.max}`;setDraft(w,{text:w.kind==="frasi"?"":tx,answers:w.kind==="frasi"?w.qs.map((q,i)=>$("#wa"+i).value):[]})};
  $$("#wTask textarea").forEach(a=>a.addEventListener("input",upd));upd();
- $("#wSend").onclick=()=>correctWriting(w);
- if(s&&s.result)renderWResult(w,s)}
-let SAMPLE_P=null;
-function hasClaude(){return!!(window.claude&&typeof window.claude.use==="function")}
-function claudeLink(q){return"https://claude.ai/new?q="+encodeURIComponent(q)}
-async function copyText(t,btn){try{await navigator.clipboard.writeText(t);if(btn)btn.textContent="Copiado!"}catch(e){if(btn)btn.textContent="Não consegui copiar"}}
-function wFallback(w,studentText,tx,answers,n){
- const q=`Sou brasileiro e estudo italiano (nível ${w.lvl}). Corrija meu texto como um professor: dê uma nota de 0 a 10, mostre o texto corrigido e liste cada erro (trecho errado → correção) com uma explicação curta em português. Termine com uma dica para o próximo texto.\n\nTarefa: ${w.task}\nFoco gramatical: ${w.focus}\n\nMeu texto:\n${studentText}`;
- S.writing[w.id]=Object.assign({},S.writing[w.id]||{},{text:w.kind==="frasi"?"":tx,answers,at:today(),words:n,sent:true});logInc("w");save();
- $("#wMsg").innerHTML=`<div class="card stack"><span class="label">Correção no Claude</span><p class="small">Aqui fora do Claude o app não consegue chamar a correção diretamente. Toque abaixo: o Claude abre com o seu texto e o pedido de correção já preenchidos.</p><div class="row"><a class="btn primary" href="${esc(claudeLink(q))}" target="_blank" rel="noopener">Abrir correção no Claude</a><button class="btn" id="wCopy">Copiar pedido</button></div><p class="small muted">Se o link não abrir com o texto, use “Copiar pedido” e cole numa conversa nova do Claude.</p></div>`;
- $("#wCopy").onclick=e=>copyText(q,e.currentTarget);renderHome()}
-function getSample(){if(!SAMPLE_P)SAMPLE_P=(window.claude&&typeof claude.use==="function")?claude.use("sample"):Promise.resolve(null);return SAMPLE_P}
-async function correctWriting(w){if(WBUSY)return;const tx=curText(w).trim(),n=wordCount(tx),msg=$("#wMsg");
- if(n<Math.min(8,w.min)){msg.textContent="Escreva um pouco mais antes de pedir a correção.";return}
- WBUSY=true;const b=$("#wSend");b.disabled=true;b.textContent="Corrigindo…";msg.textContent="O Claude está lendo o seu texto. Leva alguns segundos.";
- const answers=w.kind==="frasi"?w.qs.map((q,i)=>$("#wa"+i).value.trim()):[];
- const studentText=w.kind==="frasi"?w.qs.map((q,i)=>`${i+1}. Pergunta: ${q}\n   Resposta do aluno: ${answers[i]||"(sem resposta)"}`).join("\n"):tx;
- if(!hasClaude()){WBUSY=false;b.disabled=false;b.textContent="Terminei — corrigir com o Claude";wFallback(w,studentText,tx,answers,n);return}
- try{const sample=await getSample();if(!sample)throw{code:"not_granted"};
-  const r=await sample.json(`Você é um professor de italiano experiente corrigindo a produção escrita de um aluno brasileiro adulto, nível ${w.lvl} do QECR. Seja preciso, gentil e didático. Escreva todas as explicações em português do Brasil.
-
-Tarefa dada ao aluno: ${w.task}
-${w.kind==="frasi"?"O aluno devia responder cada pergunta com uma frase completa em italiano.":""}
-Foco gramatical do tópico: ${w.focus}
-Extensão pedida: ${w.min} a ${w.max} palavras. O aluno escreveu ${n} palavras.
-
-Texto do aluno:
-"""
-${studentText}
-"""
-
-Corrija todos os erros de gramática, ortografia (incluindo acentos), concordância, preposições, escolha de palavras e registro. Não reescreva o estilo do aluno além do necessário. Se a frase estiver correta, não invente erros.
-Responda somente com um objeto JSON neste formato:
-{"nota": número inteiro de 0 a 10,
- "resumo": "2 ou 3 frases em português avaliando o texto",
- "corrigido": "${w.kind==="frasi"?"as respostas corrigidas, uma por linha, numeradas":"o texto completo corrigido em italiano"}",
- "erros": [{"original":"trecho exato com erro","correcao":"trecho corrigido","explicacao":"regra em português, curta e clara","tipo":"gramática | ortografia | concordância | preposição | vocabulário | registro"}],
- "pontos_fortes": ["até 3 pontos positivos em português"],
- "dica": "uma dica concreta em português para o próximo texto",
- "cumpriu_tarefa": true ou false}`,{modelTier:"default"});
-  if(!r||typeof r!=="object"||r.corrigido==null)throw{code:"invalid_json"};
-  r.nota=Math.max(0,Math.min(10,Math.round(+r.nota||0)));r.erros=Array.isArray(r.erros)?r.erros:[];r.pontos_fortes=Array.isArray(r.pontos_fortes)?r.pontos_fortes:[];
-  const rec={text:w.kind==="frasi"?"":tx,answers,at:today(),words:n,result:r};S.writing[w.id]=rec;logInc("w");save();try{localStorage.removeItem(draftKey(w.id))}catch(e){}
-  msg.textContent="";renderWResult(w,rec);renderHome();$("#wRes").scrollIntoView({block:"start",behavior:"smooth"})}
- catch(e){const c=e&&e.code;
-  msg.textContent=["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed"].includes(c)?"A correção pelo Claude não está disponível nesta visualização. Abra o app no Claude com a sua conta.":c==="rate_limited"?"Muitas correções em pouco tempo. Tente de novo em alguns minutos.":"Não consegui corrigir agora. Seu texto continua salvo; tente de novo."}
- WBUSY=false;b.disabled=false;b.textContent="Terminei — corrigir com o Claude"}
-function renderWResult(w,rec){const r=rec.result;
- $("#wRes").innerHTML=`<div class="card stack"><span class="label">Correção · ${fmtBR(rec.at)}</span>
- <div class="grade"><b>${r.nota}</b><div><div class="small muted">nota de 0 a 10</div><div>${esc(r.resumo||"")}</div>${r.cumpriu_tarefa===false?`<div class="small" style="color:var(--bad)">O texto não cumpriu toda a tarefa pedida.</div>`:""}</div></div></div>
- <div class="stack" style="gap:8px"><span class="label">Texto corrigido</span><div class="corrtext it">${esc(r.corrigido||"")}</div>${spkBtn(r.corrigido||"")}</div>
- ${r.erros.length?`<div class="stack" style="gap:8px"><span class="label">${r.erros.length} ${r.erros.length===1?"correção":"correções"}</span><div class="errs">${r.erros.map(x=>`<div class="err"><span class="typ">${esc(x.tipo||"")}</span><div class="pair"><s>${esc(x.original||"")}</s><span class="op">→</span><span class="fix it">${esc(x.correcao||"")}</span></div><span class="why">${esc(x.explicacao||"")}</span></div>`).join("")}</div></div>`:`<div class="fb ok"><b>Nenhum erro encontrado.</b></div>`}
- ${r.pontos_fortes.length?`<div class="stack" style="gap:6px"><span class="label">Pontos fortes</span><ul class="tight">${r.pontos_fortes.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>`:""}
- ${r.dica?`<div class="tip"><span class="label">Para o próximo texto</span>${esc(r.dica)}</div>`:""}
- <details class="exs"><summary><span class="label">O que você escreveu</span></summary><div class="mytext" style="padding:10px 14px">${esc(rec.text||rec.answers.map((a,i)=>(i+1)+". "+a).join("\n"))}</div></details>`;
- tokenize($("#wRes"))}
+ $("#wSend").onclick=()=>selfCheck(w);
+ if(s&&s.done)renderWCheck(w,s)}
+function selfCheck(w){const tx=curText(w).trim(),n=wordCount(tx),msg=$("#wMsg");
+ if(n<Math.min(8,w.min)){msg.textContent="Escreva um pouco mais antes de terminar.";return}msg.textContent="";
+ const answers=w.kind==="frasi"?w.qs.map((q,i)=>$("#wa"+i).value.trim()):[];const prev=S.writing[w.id]||{};
+ S.writing[w.id]={text:w.kind==="frasi"?"":tx,answers,at:today(),words:n,done:true,checks:prev.checks||[]};if(!prev.done||prev.at!==today())logInc("w");save();
+ renderWCheck(w,S.writing[w.id]);renderHome();$("#wRes").scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})}
+function renderWCheck(w,rec){const m=WMODEL[w.id]||{model:"",check:[]},items=[...m.check,...WCHECK_ALL],ck=rec.checks||[];
+ const lenOk=rec.words>=w.min&&rec.words<=w.max*1.3;
+ const model=Array.isArray(m.model)?m.model.map((x,i)=>`<div class="exi"><div><span class="small muted">${esc(w.qs[i]||"")}</span><i class="it">${esc(x)}</i></div>${spkBtn(x)}</div>`).join(""):`<div class="corrtext it">${esc(m.model)}</div>${spkBtn(m.model)}`;
+ $("#wRes").innerHTML=`<div class="card stack"><span class="label">Autocorreção · ${fmtBR(rec.at)}</span>
+  <p class="small ${lenOk?"":"warnt"}">${rec.words} palavras ${lenOk?"— dentro da meta.":"— a meta era de "+w.min+" a "+w.max+"."}</p>
+  <p class="small">Releia o seu texto e marque cada item que você conferiu. Se algo não estiver certo, corrija acima e toque em “Terminei” de novo.</p>
+  <div class="checks">${items.map((it,i)=>`<label class="chk"><input type="checkbox" data-ck="${i}" ${ck.includes(i)?"checked":""}><span>${esc(it)}</span></label>`).join("")}</div>
+  <p class="small muted" id="ckCount"></p></div>
+ <div class="stack" style="gap:8px"><span class="label">Texto-modelo para comparar</span><p class="small muted">Não precisa ser igual: compare as estruturas, os artigos, as preposições e os tempos verbais. Toque nas palavras para ver o significado.</p>${model}</div>`;
+ tokenize($("#wRes"));
+ const upd=()=>{const c=$$("#wRes [data-ck]").filter(x=>x.checked).map(x=>+x.dataset.ck);rec.checks=c;save();$("#ckCount").textContent=c.length===items.length?"Tudo conferido. Ótimo trabalho!":`${c.length} de ${items.length} itens conferidos.`};
+ $$("#wRes [data-ck]").forEach(x=>x.onchange=upd);$("#ckCount").textContent=`${ck.length} de ${items.length} itens conferidos.`}
 
 /* ============================ CARTÕES (repetição espaçada) ============================ */
 const IV=[0,1,2,4,8,16,32,64];
@@ -347,8 +310,8 @@ function renderHome(){const {due,nw}=updateChips();$("#nDue").textContent=due;$(
  $("#todayTitle").textContent=due+nw?(due+nw)+" cartões te esperando":"Tudo em dia por hoje";
  const t=nextTopic(),c=tprog(t.id),doneN=COURSE.filter(x=>isDone(x.id)).length;
  $("#homeCourse").innerHTML=`<div class="row" style="justify-content:space-between"><span class="label">Curso · ${doneN}/${COURSE.length} tópicos</span><span class="cefr">${t.lvl}</span></div><h3>${esc(t.t)}</h3><p class="small muted">${esc(t.sub)}</p><div class="row"><button class="btn primary" data-goto="curso" data-topic="${t.id}" data-part="${c.voc?(c.gram?"ex":"gram"):"voc"}">${c.voc?"Continuar":"Começar"} tópico ${t.n}</button></div>`;
- const lastW=Object.entries(S.writing).filter(([k,v])=>v&&v.result).sort((a,b)=>(b[1].at||"").localeCompare(a[1].at||""))[0];const nextW=WRITING.find(w=>!(S.writing[w.id]&&S.writing[w.id].result)&&(isDone(w.topic)||w.topic===t.id))||WRITING.find(w=>!(S.writing[w.id]&&S.writing[w.id].result));
- $("#homeWriting").innerHTML=`<span class="label">Escrita</span>${lastW?`<p class="small">Última correção: <b>${esc((WRITING.find(w=>w.id===lastW[0])||{}).t||"")}</b> · nota ${lastW[1].result.nota}/10</p>`:`<p class="small muted">Escreva textos curtos e receba a correção do Claude.</p>`}${nextW?`<h3>${esc(nextW.t)}</h3><div class="row"><button class="btn" data-goto="escrita" data-wtask="${nextW.id}">Escrever agora</button></div>`:""}`;
+ const isW=w=>{const s=S.writing[w.id];return!!(s&&(s.done||s.result||s.sent))},doneW=WRITING.filter(isW).length;const nextW=WRITING.find(w=>!isW(w)&&(isDone(w.topic)||w.topic===t.id))||WRITING.find(w=>!isW(w));
+ $("#homeWriting").innerHTML=`<span class="label">Escrita · ${doneW}/${WRITING.length} temas</span><p class="small muted">Escreva, confira com o checklist e compare com o texto-modelo.</p>${nextW?`<h3>${esc(nextW.t)}</h3><div class="row"><button class="btn" data-goto="escrita" data-wtask="${nextW.id}">Escrever agora</button></div>`:""}`;
  const sp=PODS.find(p=>p.topic===t.id)||PODS[0],ss=S.shadow[sp.topic];
  $("#homeShadow").innerHTML=`<div class="row" style="justify-content:space-between"><span class="label">Shadowing · ${esc(TOPIC[sp.topic].lvl)} · tópico ${TOPIC[sp.topic].n}</span>${ss?`<span class="pill ok">${ss.n}×</span>`:""}</div><h3>${esc(sp.t)}</h3><p class="small muted">${esc(sp.sit)}</p><div class="row"><button class="btn" data-goto="shadow" data-pod="${sp.topic}">Praticar a pronúncia</button></div>`;
  renderGoal();renderHomeReview();renderHomeWeak();renderHomeNews()}

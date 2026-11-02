@@ -522,6 +522,7 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center;color:inherit}
 .prch .opt{display:flex;flex-direction:column;align-items:center;gap:2px;padding:16px 8px;font-size:1.25rem}
 @media (max-width:420px){.prr{grid-template-columns:auto 1fr;}.prr .op{display:none}}
 .blank{display:inline-block;min-width:60px;border-bottom:2px solid var(--saffron);margin:0 4px;vertical-align:baseline}
+.checks{display:flex;flex-direction:column;gap:6px}.chk{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--paper);font-size:.93rem;cursor:pointer}.chk input{margin-top:3px;flex:none;width:18px;height:18px;accent-color:var(--ok)}.warnt{color:var(--bad)}
 
 /* perfis */
 .pchip{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:var(--ink)}
@@ -606,12 +607,11 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center;color:inherit}
   <!-- ===================== ESCRITA ===================== -->
   <section class="view" id="v-escrita" data-view="escrita" hidden>
     <div id="wHome" class="stack" style="gap:16px">
-      <div class="stack" style="gap:6px"><h2>Escrita</h2><p class="muted small">Textos com correção do Claude, tradução de volta, diário de 3 frases e conversa com o Claude.</p></div>
-      <div class="seg seg4" id="wMode" role="tablist" aria-label="Tipo de escrita">
+      <div class="stack" style="gap:6px"><h2>Escrita</h2><p class="muted small">Temas para escrever com checklist e texto-modelo, tradução de volta e diário de 3 frases.</p></div>
+      <div class="seg" id="wMode" role="tablist" aria-label="Tipo de escrita">
         <button role="tab" data-wm="text" class="on" aria-selected="true">Textos</button>
         <button role="tab" data-wm="tr" aria-selected="false">Tradução</button>
         <button role="tab" data-wm="diary" aria-selected="false">Diário</button>
-        <button role="tab" data-wm="chat" aria-selected="false">Conversa</button>
       </div>
       <div id="wp-text" class="stack" style="gap:16px">
         <div class="seg seg2" id="wSeg" role="tablist" aria-label="Nível da escrita">
@@ -622,7 +622,6 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center;color:inherit}
       </div>
       <div id="wp-tr" class="stack" style="gap:16px" hidden></div>
       <div id="wp-diary" class="stack" style="gap:16px" hidden></div>
-      <div id="wp-chat" class="stack" style="gap:16px" hidden></div>
     </div>
     <div id="wTask" class="stack" style="gap:16px" hidden></div>
   </section>
@@ -1403,6 +1402,52 @@ const WRITING=[
 {id:"w-a2-10",lvl:"A2",kind:"testo",topic:"a2-10",t:"Una mail formale",task:"Escreva um e-mail formal (com Lei) para um engenheiro italiano pedindo o orçamento de uma obra e marcando uma vistoria. Use o condizionale para ser cortês.",min:80,max:150,useful:["Gentile ingegner…","Le scrivo per…","Potrebbe inviarmi…","Sarebbe possibile…","Cordiali saluti"],focus:"condizionale, registro formal"}
 ];
 
+/* ============================ ESCRITA: TEXTOS-MODELO E CHECKLISTS ============================ */
+// model: texto-modelo (string) ou respostas-modelo (array, nos temas de frases); check: itens de autocorreção do tema
+const WMODEL={
+"w-a1-1":{model:"Ciao! Mi chiamo Lucas e sono brasiliano. Sono di Curitiba, una città nel sud del Brasile. Ho trentaquattro anni e sono ingegnere. Adesso abito a Bologna, in Italia. Parlo portoghese, inglese e un po' d'italiano.",
+ check:["Usei essere para nacionalidade e origem: sono brasiliano, sono di…","Usei avere para a idade: ho … anni (não sono … anni)","O adjetivo de nacionalidade concorda comigo: brasiliano / brasiliana","Cidade com a: abito a Curitiba; país com in: in Brasile"]},
+"w-a1-2":{model:["Mi chiamo Lucas e ho trentaquattro anni.","Sono ingegnere, lavoro in un tribunale.","Nel mio zaino ci sono un computer, due quaderni e una penna.","Sì, ho un fratello e una sorella."],
+ check:["Cada resposta é uma frase completa, com verbo","Conferi o artigo de cada substantivo: il, lo, l', la, i, gli, le","Plural certo: -o → -i, -a → -e, -e → -i","Profissão depois de essere sem artigo: sono ingegnere"]},
+"w-a1-3":{model:"Il mio migliore amico si chiama Paulo. È alto e magro, ha i capelli castani e gli occhi verdi. È molto simpatico e divertente, ma un po' timido con le persone nuove. È anche intelligente e gentile: mi aiuta sempre.",
+ check:["Usei pelo menos cinco adjetivos","Cada adjetivo concorda com a pessoa (alto/alta, simpatico/simpatica)","Cabelo e olhos no plural: i capelli castani, gli occhi verdi","Usei avere para características físicas: ha i capelli…"]},
+"w-a1-4":{model:"La mattina mi sveglio alle sette. Prendo un caffè e vado in ufficio in autobus. Comincio a lavorare alle otto e mezza. All'una mangio con i colleghi. Il pomeriggio scrivo relazioni e rispondo alle mail. Finisco alle sei. La sera ceno a casa, leggo un po' e vado a letto alle undici.",
+ check:["Os verbos estão no presente e na pessoa certa (io: -o)","As horas estão certas: alle sette, all'una, alle otto e mezza","Usei palavras de sequência: la mattina, poi, il pomeriggio, la sera","Verbos -isc- e -care/-gare escritos certo (finisco, cerchi, paghi)"]},
+"w-a1-5":{model:"Ciao Marco! Ti va di uscire sabato sera? Io e Giulia andiamo al cinema a vedere una commedia. Il film comincia alle nove. Prima facciamo un aperitivo in piazza alle sette e mezza. Vieni con noi? Fammi sapere! A presto, Lucas",
+ check:["Comecei e terminei a mensagem com uma saudação (Ciao…, A presto)","Usei os irregulares certos: andiamo, facciamo, vieni","Disse onde, quando e a que horas","Fiz o convite com uma pergunta: Ti va di…? / Vieni con noi?"]},
+"w-a1-6":{model:"Abito in un appartamento al terzo piano. Ci sono due camere, un bagno, una cucina e un soggiorno. In soggiorno c'è un divano grande davanti alla televisione. In cucina ci sono un tavolo e quattro sedie. La mia camera è piccola ma luminosa: il letto è accanto alla finestra. La cosa che preferisco è il balcone.",
+ check:["Usei c'è com singular e ci sono com plural","Usei preposições de lugar: accanto a, davanti a, sopra, sotto","Andar com ordinal: al terzo piano","Os artigos dos móveis e cômodos estão certos"]},
+"w-a1-7":{model:["Abito a Curitiba, in Brasile.","Vado al lavoro in autobus, ma a volte vado a piedi.","Il fine settimana vado al mare o in montagna.","Studio italiano da un anno."],
+ check:["Cidade com a, país com in","Transporte com in (in autobus), mas a piedi","Duração até hoje com da + presente: studio italiano da…","Destinos fixos com a + artigo: al mare, al cinema"]},
+"w-a1-8":{model:"— Buongiorno! Vorrei un chilo di mele, per favore.\n— Ecco. Altro?\n— Sì, mezzo chilo di pomodori e un etto di formaggio.\n— Va bene. Nient'altro?\n— Anche del pane. Quanto costa tutto?\n— Sono otto euro e cinquanta.\n— Ecco a Lei. Grazie, buona giornata!",
+ check:["Pedi com educação: vorrei…, per favore","Quantidades com di: un chilo di, un etto di","Partitivo certo: del pane, delle mele","Perguntei o preço: quanto costa / quanto costano"]},
+"w-a1-9":{model:"La mia famiglia è piccola. Mio padre si chiama Carlos e mia madre si chiama Ana. Abitano a Curitiba. Mio padre è ingegnere come me e mia madre è insegnante. Ho una sorella, Mariana: ha trent'anni e lavora in banca. Il compleanno di mia madre è il dieci maggio.",
+ check:["Parente no singular sem artigo: mio padre, mia sorella","Parente no plural com artigo: i miei genitori","Possessivo concorda com a coisa/pessoa possuída","Datas: il dieci maggio (mês com minúscula)"]},
+"w-a1-10":{model:"Mi piace molto la cucina italiana, soprattutto la pasta. Mi piacciono anche i dolci, ma non mi piace il pesce. Nel tempo libero mi piace correre e ascoltare musica. Non mi piace svegliarmi presto, perché sono sempre stanco la mattina. Mi piacciono le città antiche, per esempio Firenze e Roma.",
+ check:["Singular ou verbo → piace; plural → piacciono","Expliquei por que, com perché","Usei também a negativa: non mi piace…","Reflexivos com o pronome certo: mi sveglio, mi alzo"]},
+"w-a2-1":{model:"Sabato mattina ho dormito fino alle nove. Poi ho fatto colazione e sono andato al mercato con la mia ragazza. Abbiamo comprato frutta e verdura. Il pomeriggio ho pulito la casa e ho letto un libro. Domenica siamo andati al parco e la sera abbiamo visto un film. È stato un fine settimana tranquillo.",
+ check:["Passato prossimo com avere na maioria dos verbos","Movimento (andare, uscire, tornare) com essere","Particípios irregulares certos: fatto, letto, visto, preso","Com essere o particípio concorda: andato/andata/andati"]},
+"w-a2-2":{model:"L'anno scorso sono andato in Italia con la mia ragazza. Siamo partiti da San Paolo e siamo arrivati a Roma dopo dodici ore di volo. Abbiamo dormito in un piccolo albergo vicino al Colosseo. Abbiamo visitato i Musei Vaticani e abbiamo mangiato benissimo. Poi siamo andati a Firenze in treno. Ci siamo divertiti moltissimo.",
+ check:["Partire, arrivare, andare, tornare com essere","Particípio com essere concorda com o sujeito (siamo partiti)","Reflexivos no passado com essere: ci siamo divertiti","Usei marcadores de tempo: l'anno scorso, poi, dopo"]},
+"w-a2-3":{model:["Sì, lo compro io, di solito al panificio vicino a casa.","Ne compro sei bottiglie ogni settimana.","La compro al mercato il sabato mattina.","Sì, l'ho già fatta martedì."],
+ check:["Objeto inteiro: lo, la, li, le antes do verbo","Quantidade: ne + número (ne compro sei)","No passado, lo/la viram l' e o particípio concorda (l'ho fatta)","Não repeti o substantivo depois de usar o pronome"]},
+"w-a2-4":{model:"Caro Marco,\ntanti auguri di buon compleanno! Spero che tu passi una giornata bellissima. Ti regalo un libro di cucina italiana, perché so che ti piace cucinare. Te lo porto sabato alla festa. Un abbraccio forte,\nLucas",
+ check:["Abri e fechei o cartão: Caro/Cara…, Un abbraccio","Pronome indireto certo: ti (a te), gli (a lui), le (a lei)","Se juntei dois pronomes: te lo, glielo","Expliquei por que escolhi o presente"]},
+"w-a2-5":{model:"Da bambino abitavo in una casa piccola vicino al mare. Ogni estate andavo in spiaggia con i miei cugini e giocavamo a calcio fino a sera. Mia nonna faceva sempre una torta buonissima. Un giorno, mentre giocavamo, è cominciato a piovere e siamo tornati a casa tutti bagnati. Mia nonna ha riso tantissimo!",
+ check:["Imperfetto para descrição e hábito: abitavo, andavo, faceva","Passato prossimo para o fato pontual: è cominciato, siamo tornati","Usei mentre para a ação em andamento","Formas irregulares do imperfetto: ero, facevo, dicevo, bevevo"]},
+"w-a2-6":{model:"Quest'estate andrò in Sicilia con la mia ragazza. Partiremo a luglio e resteremo due settimane. Visiteremo Palermo e Catania e faremo il bagno al mare ogni giorno. Se pioverà, andremo nei musei e mangeremo gli arancini. Sarà una vacanza bellissima!",
+ check:["Futuro com as terminações -ò, -ai, -à, -emo, -ete, -anno","Radicais irregulares: andrò, farò, sarò, verrò","Depois de se e quando, também futuro: se pioverà…","Acentos obrigatórios: andrò, sarà"]},
+"w-a2-7":{model:"La settimana scorsa cercavo una giacca per l'inverno. Sono andato in un negozio in centro dove c'erano i saldi. Ho provato una giacca blu, ma mi stava stretta, così ho preso una taglia più grande. Costava ottanta euro con lo sconto e ho pagato con la carta. Per tornare a casa ci sono voluti venti minuti.",
+ check:["Imperfetto para a situação (cercavo, mi stava) e passato prossimo para as ações","Usei volerci: ci vuole / ci vogliono (ci sono voluti)","Vocabulário de compras: taglia, sconto, saldi, pagare con la carta","Mi stava bene / stretto concorda com a peça de roupa"]},
+"w-a2-8":{model:"Pasta al pomodoro. Prendi una cipolla e tagliala piccola. Metti due cucchiai d'olio in una padella e aggiungi la cipolla. Dopo cinque minuti versa i pomodori e un po' di sale. Fai cuocere per venti minuti. Intanto cuoci la pasta in acqua bollente. Mescola tutto e servi caldo. Non dimenticare il basilico!",
+ check:["Imperativo de tu: -are → -a (taglia), -ere/-ire → -i (prendi, servi)","Negativo de tu: non + infinitivo (non dimenticare)","Pronome no fim do imperativo: tagliala, mescolali","Quantidades e tempos: due cucchiai, per venti minuti"]},
+"w-a2-9":{model:["Roma è più grande di Curitiba.","Preferisco il treno perché è meno stressante dell'aereo e posso guardare il paesaggio.","Oggi sto meglio di ieri: ieri avevo mal di testa.","Il miglior ristorante della mia città è una pizzeria vicino al centro."],
+ check:["più / meno … di com substantivos e nomes","Advérbio bene → meglio (sto meglio); adjetivo buono → migliore","di + artigo vira preposição articulada: dell'aereo, della città","Cada resposta compara duas coisas de verdade"]},
+"w-a2-10":{model:"Gentile ingegner Rossi,\nLe scrivo per chiederLe un preventivo per la ristrutturazione di un edificio a Bologna. Potrebbe inviarmi il preventivo entro venerdì? Inoltre, sarebbe possibile fissare un sopralluogo la settimana prossima? Resto in attesa di un Suo riscontro.\nCordiali saluti,\nLucas Manfrin",
+ check:["Tratamento formal do início ao fim: Lei, Le, Suo (com maiúscula)","Condizionale para pedidos: potrebbe, sarebbe, vorrei","Abertura e fechamento formais: Gentile…, Cordiali saluti","Vocabulário técnico: preventivo, sopralluogo, entro (prazo)"]}
+};
+const WCHECK_ALL=["Conferi os acentos: è (verbo), perché, città, più","Usei as expressões úteis do tema","Li o texto em voz alta uma vez antes de terminar"];
+
 /* ============================ SHADOWING: PODCASTS ============================ */
 // Cada podcast: topic, t (título), sit (situação em pt), sp: {A:nome, B:nome}, L: [[falante, italiano, português]]
 const PODS=[
@@ -1996,12 +2041,12 @@ function endEx(){const r=RUN,n=r.qs.length,pct=Math.round(r.score/n*100),c=S.cou
  $("#again").onclick=()=>{RUN={topic:t.id,qs:buildQs(t),i:0,score:0,wrong:[]};renderQ()};$("#toGram").onclick=()=>{CPART="gram";renderTopic()};if($("#goNext"))$("#goNext").onclick=()=>openTopic(nxt.id,"voc")}
 
 /* ============================ ESCRITA ============================ */
-let WLVL="A1",WCUR=null,WBUSY=false;
+let WLVL="A1",WCUR=null;
 $$("#wSeg button").forEach(b=>b.addEventListener("click",()=>{WLVL=b.dataset.wl;renderWriting()}));
 function wordCount(s){return(String(s).match(new RegExp("["+LET+"]+","g"))||[]).length}
 function renderWriting(){if(WCUR&&!$("#wTask").hidden)return;
  $$("#wSeg button").forEach(b=>{const on=b.dataset.wl===WLVL;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
- $("#wlist").innerHTML=WRITING.filter(w=>w.lvl===WLVL).map(w=>{const s=S.writing[w.id],r=s&&s.result;return`<button class="wcard" data-wopen="${w.id}"><div class="row"><span class="label">${w.kind==="frasi"?"Frases completas":"Texto"} · ${w.min}–${w.max} palavras</span><span class="pill ${r||(s&&s.sent)?"ok":"todo"}">${r?"nota "+r.nota+"/10":s&&s.sent?"enviado":"a fazer"}</span></div><h3>${esc(w.t)}</h3><p>${esc(w.task)}</p></button>`}).join("");
+ $("#wlist").innerHTML=WRITING.filter(w=>w.lvl===WLVL).map(w=>{const s=S.writing[w.id],dn=s&&(s.done||s.result||s.sent);return`<button class="wcard" data-wopen="${w.id}"><div class="row"><span class="label">${w.kind==="frasi"?"Frases completas":"Texto"} · ${w.min}–${w.max} palavras</span><span class="pill ${dn?"ok":"todo"}">${dn?"feito":"a fazer"}</span></div><h3>${esc(w.t)}</h3><p>${esc(w.task)}</p></button>`}).join("");
  $$("[data-wopen]").forEach(b=>b.onclick=()=>openWTask(b.dataset.wopen))}
 function draftKey(id){return KEY+".draft."+id}
 function getDraft(w){try{const d=localStorage.getItem(draftKey(w.id));if(d)return JSON.parse(d)}catch(e){}const s=S.writing[w.id];return s?{text:s.text||"",answers:s.answers||[]}:{text:"",answers:[]}}
@@ -2017,66 +2062,29 @@ function renderWTask(){const w=WCUR,d=getDraft(w),s=S.writing[w.id];const t=TOPI
  if(w.kind==="frasi")h+=w.qs.map((q,i)=>`<div class="wq"><label for="wa${i}"><span class="it">${esc(q)}</span></label><textarea id="wa${i}" class="short" spellcheck="false" lang="it">${esc(d.answers[i]||"")}</textarea></div>`).join("");
  else h+=`<div class="wq"><label for="wText">Seu texto</label><textarea id="wText" spellcheck="false" lang="it" placeholder="Scrivi qui…">${esc(d.text||"")}</textarea></div>`;
  h+=`<div class="wmeta"><span id="wCount"></span><span>O rascunho fica salvo enquanto você escreve.</span></div>
- <div class="row"><button class="btn primary" id="wSend">Terminei — corrigir com o Claude</button></div><p class="small muted" id="wMsg"></p><div id="wRes" class="stack" style="gap:14px"></div>`;
+ <div class="row"><button class="btn primary" id="wSend">Terminei — conferir</button></div><p class="small muted" id="wMsg"></p><div id="wRes" class="stack" style="gap:14px"></div>`;
  $("#wTask").innerHTML=h;tokenize($("#wTask"));$("#wBack").onclick=closeWTask;
  const upd=()=>{const tx=curText(w),n=wordCount(tx);$("#wCount").textContent=`${n} palavras · meta ${w.min}–${w.max}`;setDraft(w,{text:w.kind==="frasi"?"":tx,answers:w.kind==="frasi"?w.qs.map((q,i)=>$("#wa"+i).value):[]})};
  $$("#wTask textarea").forEach(a=>a.addEventListener("input",upd));upd();
- $("#wSend").onclick=()=>correctWriting(w);
- if(s&&s.result)renderWResult(w,s)}
-let SAMPLE_P=null;
-function hasClaude(){return!!(window.claude&&typeof window.claude.use==="function")}
-function claudeLink(q){return"https://claude.ai/new?q="+encodeURIComponent(q)}
-async function copyText(t,btn){try{await navigator.clipboard.writeText(t);if(btn)btn.textContent="Copiado!"}catch(e){if(btn)btn.textContent="Não consegui copiar"}}
-function wFallback(w,studentText,tx,answers,n){
- const q=`Sou brasileiro e estudo italiano (nível ${w.lvl}). Corrija meu texto como um professor: dê uma nota de 0 a 10, mostre o texto corrigido e liste cada erro (trecho errado → correção) com uma explicação curta em português. Termine com uma dica para o próximo texto.\n\nTarefa: ${w.task}\nFoco gramatical: ${w.focus}\n\nMeu texto:\n${studentText}`;
- S.writing[w.id]=Object.assign({},S.writing[w.id]||{},{text:w.kind==="frasi"?"":tx,answers,at:today(),words:n,sent:true});logInc("w");save();
- $("#wMsg").innerHTML=`<div class="card stack"><span class="label">Correção no Claude</span><p class="small">Aqui fora do Claude o app não consegue chamar a correção diretamente. Toque abaixo: o Claude abre com o seu texto e o pedido de correção já preenchidos.</p><div class="row"><a class="btn primary" href="${esc(claudeLink(q))}" target="_blank" rel="noopener">Abrir correção no Claude</a><button class="btn" id="wCopy">Copiar pedido</button></div><p class="small muted">Se o link não abrir com o texto, use “Copiar pedido” e cole numa conversa nova do Claude.</p></div>`;
- $("#wCopy").onclick=e=>copyText(q,e.currentTarget);renderHome()}
-function getSample(){if(!SAMPLE_P)SAMPLE_P=(window.claude&&typeof claude.use==="function")?claude.use("sample"):Promise.resolve(null);return SAMPLE_P}
-async function correctWriting(w){if(WBUSY)return;const tx=curText(w).trim(),n=wordCount(tx),msg=$("#wMsg");
- if(n<Math.min(8,w.min)){msg.textContent="Escreva um pouco mais antes de pedir a correção.";return}
- WBUSY=true;const b=$("#wSend");b.disabled=true;b.textContent="Corrigindo…";msg.textContent="O Claude está lendo o seu texto. Leva alguns segundos.";
- const answers=w.kind==="frasi"?w.qs.map((q,i)=>$("#wa"+i).value.trim()):[];
- const studentText=w.kind==="frasi"?w.qs.map((q,i)=>`${i+1}. Pergunta: ${q}\n   Resposta do aluno: ${answers[i]||"(sem resposta)"}`).join("\n"):tx;
- if(!hasClaude()){WBUSY=false;b.disabled=false;b.textContent="Terminei — corrigir com o Claude";wFallback(w,studentText,tx,answers,n);return}
- try{const sample=await getSample();if(!sample)throw{code:"not_granted"};
-  const r=await sample.json(`Você é um professor de italiano experiente corrigindo a produção escrita de um aluno brasileiro adulto, nível ${w.lvl} do QECR. Seja preciso, gentil e didático. Escreva todas as explicações em português do Brasil.
-
-Tarefa dada ao aluno: ${w.task}
-${w.kind==="frasi"?"O aluno devia responder cada pergunta com uma frase completa em italiano.":""}
-Foco gramatical do tópico: ${w.focus}
-Extensão pedida: ${w.min} a ${w.max} palavras. O aluno escreveu ${n} palavras.
-
-Texto do aluno:
-"""
-${studentText}
-"""
-
-Corrija todos os erros de gramática, ortografia (incluindo acentos), concordância, preposições, escolha de palavras e registro. Não reescreva o estilo do aluno além do necessário. Se a frase estiver correta, não invente erros.
-Responda somente com um objeto JSON neste formato:
-{"nota": número inteiro de 0 a 10,
- "resumo": "2 ou 3 frases em português avaliando o texto",
- "corrigido": "${w.kind==="frasi"?"as respostas corrigidas, uma por linha, numeradas":"o texto completo corrigido em italiano"}",
- "erros": [{"original":"trecho exato com erro","correcao":"trecho corrigido","explicacao":"regra em português, curta e clara","tipo":"gramática | ortografia | concordância | preposição | vocabulário | registro"}],
- "pontos_fortes": ["até 3 pontos positivos em português"],
- "dica": "uma dica concreta em português para o próximo texto",
- "cumpriu_tarefa": true ou false}`,{modelTier:"default"});
-  if(!r||typeof r!=="object"||r.corrigido==null)throw{code:"invalid_json"};
-  r.nota=Math.max(0,Math.min(10,Math.round(+r.nota||0)));r.erros=Array.isArray(r.erros)?r.erros:[];r.pontos_fortes=Array.isArray(r.pontos_fortes)?r.pontos_fortes:[];
-  const rec={text:w.kind==="frasi"?"":tx,answers,at:today(),words:n,result:r};S.writing[w.id]=rec;logInc("w");save();try{localStorage.removeItem(draftKey(w.id))}catch(e){}
-  msg.textContent="";renderWResult(w,rec);renderHome();$("#wRes").scrollIntoView({block:"start",behavior:"smooth"})}
- catch(e){const c=e&&e.code;
-  msg.textContent=["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed"].includes(c)?"A correção pelo Claude não está disponível nesta visualização. Abra o app no Claude com a sua conta.":c==="rate_limited"?"Muitas correções em pouco tempo. Tente de novo em alguns minutos.":"Não consegui corrigir agora. Seu texto continua salvo; tente de novo."}
- WBUSY=false;b.disabled=false;b.textContent="Terminei — corrigir com o Claude"}
-function renderWResult(w,rec){const r=rec.result;
- $("#wRes").innerHTML=`<div class="card stack"><span class="label">Correção · ${fmtBR(rec.at)}</span>
- <div class="grade"><b>${r.nota}</b><div><div class="small muted">nota de 0 a 10</div><div>${esc(r.resumo||"")}</div>${r.cumpriu_tarefa===false?`<div class="small" style="color:var(--bad)">O texto não cumpriu toda a tarefa pedida.</div>`:""}</div></div></div>
- <div class="stack" style="gap:8px"><span class="label">Texto corrigido</span><div class="corrtext it">${esc(r.corrigido||"")}</div>${spkBtn(r.corrigido||"")}</div>
- ${r.erros.length?`<div class="stack" style="gap:8px"><span class="label">${r.erros.length} ${r.erros.length===1?"correção":"correções"}</span><div class="errs">${r.erros.map(x=>`<div class="err"><span class="typ">${esc(x.tipo||"")}</span><div class="pair"><s>${esc(x.original||"")}</s><span class="op">→</span><span class="fix it">${esc(x.correcao||"")}</span></div><span class="why">${esc(x.explicacao||"")}</span></div>`).join("")}</div></div>`:`<div class="fb ok"><b>Nenhum erro encontrado.</b></div>`}
- ${r.pontos_fortes.length?`<div class="stack" style="gap:6px"><span class="label">Pontos fortes</span><ul class="tight">${r.pontos_fortes.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>`:""}
- ${r.dica?`<div class="tip"><span class="label">Para o próximo texto</span>${esc(r.dica)}</div>`:""}
- <details class="exs"><summary><span class="label">O que você escreveu</span></summary><div class="mytext" style="padding:10px 14px">${esc(rec.text||rec.answers.map((a,i)=>(i+1)+". "+a).join("\n"))}</div></details>`;
- tokenize($("#wRes"))}
+ $("#wSend").onclick=()=>selfCheck(w);
+ if(s&&s.done)renderWCheck(w,s)}
+function selfCheck(w){const tx=curText(w).trim(),n=wordCount(tx),msg=$("#wMsg");
+ if(n<Math.min(8,w.min)){msg.textContent="Escreva um pouco mais antes de terminar.";return}msg.textContent="";
+ const answers=w.kind==="frasi"?w.qs.map((q,i)=>$("#wa"+i).value.trim()):[];const prev=S.writing[w.id]||{};
+ S.writing[w.id]={text:w.kind==="frasi"?"":tx,answers,at:today(),words:n,done:true,checks:prev.checks||[]};if(!prev.done||prev.at!==today())logInc("w");save();
+ renderWCheck(w,S.writing[w.id]);renderHome();$("#wRes").scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})}
+function renderWCheck(w,rec){const m=WMODEL[w.id]||{model:"",check:[]},items=[...m.check,...WCHECK_ALL],ck=rec.checks||[];
+ const lenOk=rec.words>=w.min&&rec.words<=w.max*1.3;
+ const model=Array.isArray(m.model)?m.model.map((x,i)=>`<div class="exi"><div><span class="small muted">${esc(w.qs[i]||"")}</span><i class="it">${esc(x)}</i></div>${spkBtn(x)}</div>`).join(""):`<div class="corrtext it">${esc(m.model)}</div>${spkBtn(m.model)}`;
+ $("#wRes").innerHTML=`<div class="card stack"><span class="label">Autocorreção · ${fmtBR(rec.at)}</span>
+  <p class="small ${lenOk?"":"warnt"}">${rec.words} palavras ${lenOk?"— dentro da meta.":"— a meta era de "+w.min+" a "+w.max+"."}</p>
+  <p class="small">Releia o seu texto e marque cada item que você conferiu. Se algo não estiver certo, corrija acima e toque em “Terminei” de novo.</p>
+  <div class="checks">${items.map((it,i)=>`<label class="chk"><input type="checkbox" data-ck="${i}" ${ck.includes(i)?"checked":""}><span>${esc(it)}</span></label>`).join("")}</div>
+  <p class="small muted" id="ckCount"></p></div>
+ <div class="stack" style="gap:8px"><span class="label">Texto-modelo para comparar</span><p class="small muted">Não precisa ser igual: compare as estruturas, os artigos, as preposições e os tempos verbais. Toque nas palavras para ver o significado.</p>${model}</div>`;
+ tokenize($("#wRes"));
+ const upd=()=>{const c=$$("#wRes [data-ck]").filter(x=>x.checked).map(x=>+x.dataset.ck);rec.checks=c;save();$("#ckCount").textContent=c.length===items.length?"Tudo conferido. Ótimo trabalho!":`${c.length} de ${items.length} itens conferidos.`};
+ $$("#wRes [data-ck]").forEach(x=>x.onchange=upd);$("#ckCount").textContent=`${ck.length} de ${items.length} itens conferidos.`}
 
 /* ============================ CARTÕES (repetição espaçada) ============================ */
 const IV=[0,1,2,4,8,16,32,64];
@@ -2154,8 +2162,8 @@ function renderHome(){const {due,nw}=updateChips();$("#nDue").textContent=due;$(
  $("#todayTitle").textContent=due+nw?(due+nw)+" cartões te esperando":"Tudo em dia por hoje";
  const t=nextTopic(),c=tprog(t.id),doneN=COURSE.filter(x=>isDone(x.id)).length;
  $("#homeCourse").innerHTML=`<div class="row" style="justify-content:space-between"><span class="label">Curso · ${doneN}/${COURSE.length} tópicos</span><span class="cefr">${t.lvl}</span></div><h3>${esc(t.t)}</h3><p class="small muted">${esc(t.sub)}</p><div class="row"><button class="btn primary" data-goto="curso" data-topic="${t.id}" data-part="${c.voc?(c.gram?"ex":"gram"):"voc"}">${c.voc?"Continuar":"Começar"} tópico ${t.n}</button></div>`;
- const lastW=Object.entries(S.writing).filter(([k,v])=>v&&v.result).sort((a,b)=>(b[1].at||"").localeCompare(a[1].at||""))[0];const nextW=WRITING.find(w=>!(S.writing[w.id]&&S.writing[w.id].result)&&(isDone(w.topic)||w.topic===t.id))||WRITING.find(w=>!(S.writing[w.id]&&S.writing[w.id].result));
- $("#homeWriting").innerHTML=`<span class="label">Escrita</span>${lastW?`<p class="small">Última correção: <b>${esc((WRITING.find(w=>w.id===lastW[0])||{}).t||"")}</b> · nota ${lastW[1].result.nota}/10</p>`:`<p class="small muted">Escreva textos curtos e receba a correção do Claude.</p>`}${nextW?`<h3>${esc(nextW.t)}</h3><div class="row"><button class="btn" data-goto="escrita" data-wtask="${nextW.id}">Escrever agora</button></div>`:""}`;
+ const isW=w=>{const s=S.writing[w.id];return!!(s&&(s.done||s.result||s.sent))},doneW=WRITING.filter(isW).length;const nextW=WRITING.find(w=>!isW(w)&&(isDone(w.topic)||w.topic===t.id))||WRITING.find(w=>!isW(w));
+ $("#homeWriting").innerHTML=`<span class="label">Escrita · ${doneW}/${WRITING.length} temas</span><p class="small muted">Escreva, confira com o checklist e compare com o texto-modelo.</p>${nextW?`<h3>${esc(nextW.t)}</h3><div class="row"><button class="btn" data-goto="escrita" data-wtask="${nextW.id}">Escrever agora</button></div>`:""}`;
  const sp=PODS.find(p=>p.topic===t.id)||PODS[0],ss=S.shadow[sp.topic];
  $("#homeShadow").innerHTML=`<div class="row" style="justify-content:space-between"><span class="label">Shadowing · ${esc(TOPIC[sp.topic].lvl)} · tópico ${TOPIC[sp.topic].n}</span>${ss?`<span class="pill ok">${ss.n}×</span>`:""}</div><h3>${esc(sp.t)}</h3><p class="small muted">${esc(sp.sit)}</p><div class="row"><button class="btn" data-goto="shadow" data-pod="${sp.topic}">Praticar a pronúncia</button></div>`;
  renderGoal();renderHomeReview();renderHomeWeak();renderHomeNews()}
@@ -2395,7 +2403,7 @@ function endFocus(){const r=RUN,n=r.qs.length,pct=Math.round(r.score/n*100);logI
 let WMODE="text";
 $$("#wMode button").forEach(b=>b.addEventListener("click",()=>{WMODE=b.dataset.wm;renderWMode()}));
 function renderWMode(){$$("#wMode button").forEach(b=>{const on=b.dataset.wm===WMODE;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
- ["text","tr","diary","chat"].forEach(k=>$("#wp-"+k).hidden=k!==WMODE);if(WMODE==="tr")renderTrHome();if(WMODE==="diary")renderDiary();if(WMODE==="chat")renderChatHome()}
+ ["text","tr","diary"].forEach(k=>$("#wp-"+k).hidden=k!==WMODE);if(WMODE==="tr")renderTrHome();if(WMODE==="diary")renderDiary()}
 /* tradução de volta */
 let TR=null;
 function trPool(tid){const a=[];const p=PODS.find(x=>x.topic===tid);if(p)p.L.forEach(l=>a.push([l[2],l[1]]));const st=STORIES[tid];if(st)st.p.forEach(l=>a.push([l[1],l[0]]));return a.filter(x=>x[1].length<110&&x[1].split(/\s+/).length>=4)}
@@ -2415,56 +2423,15 @@ function renderTr(){const box=$("#wp-tr"),it=TR.items[TR.i],t=TOPIC[TR.tid];
    const tid=TR.tid;$("#trAgain").onclick=()=>{TR={tid,items:shuffle(trPool(tid)).slice(0,6),i:0,scores:[]};renderTr()};$("#trHome").onclick=()=>{TR=null;renderTrHome()}}}}
 /* diário de 3 frases */
 function curTopic(){return nextTopic()}
-function renderDiary(){const box=$("#wp-diary"),t=curTopic(),d=(S.diary||{})[today()],hist=Object.entries(S.diary||{}).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,7);
+function renderDiary(){const box=$("#wp-diary"),t=curTopic(),d=(S.diary||{})[today()],hist=Object.entries(S.diary||{}).filter(([dt])=>dt!==today()).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,7);
  box.innerHTML=`<div class="card stack"><span class="label">Diário · ${fmtBR(today())}</span><h3>Três frases sobre o seu dia</h3><p class="small">Use a gramática do seu tópico atual: <b>${esc(t.t)}</b> (${esc(t.sub)}).</p>
  ${[0,1,2].map(i=>`<input type="text" id="dy${i}" lang="it" spellcheck="false" placeholder="Frase ${i+1}" value="${esc(d&&d.lines?d.lines[i]||"":"")}">`).join("")}
- <div class="row"><button class="btn primary" id="dySend">Salvar e corrigir</button></div><p class="small muted" id="dyMsg"></p><div id="dyRes"></div></div>
- ${hist.length?`<div class="stack" style="gap:8px"><span class="label">Últimos dias</span>${hist.map(([dt,v])=>`<details class="exs"><summary><span class="label">${fmtBR(dt)}${v.result?" · nota "+v.result.nota+"/10":""}</span></summary><div class="mytext it" style="padding:10px 14px">${esc((v.result&&v.result.corrigido)||v.lines.join("\n"))}</div></details>`).join("")}</div>`:""}`;
- tokenize(box);if(d&&d.result)showDiaryRes(d);
- $("#dySend").onclick=async()=>{const lines=[0,1,2].map(i=>$("#dy"+i).value.trim()).filter(Boolean);if(lines.length<1){$("#dyMsg").textContent="Escreva pelo menos uma frase.";return}
-  S.diary=S.diary||{};S.diary[today()]={lines,at:today()};logInc("w");save();
-  const q=`Sou brasileiro e estudo italiano (nível ${t.lvl}). Corrija estas frases do meu diário. Foco gramatical: ${t.sub}.\n\n${lines.map((l,i)=>(i+1)+". "+l).join("\n")}`;
-  if(!hasClaude()){$("#dyMsg").innerHTML=`Salvo. Para a correção: <a class="btn small" href="${esc(claudeLink(q+"\n\nMostre as frases corrigidas e explique cada erro em português, curto."))}" target="_blank" rel="noopener">Corrigir no Claude</a>`;return}
-  const b=$("#dySend");b.disabled=true;b.textContent="Corrigindo…";
-  try{const sample=await getSample();if(!sample)throw{code:"not_granted"};
-   const r=await sample.json(q+`\n\nResponda somente com JSON: {"nota":0-10,"corrigido":"as frases corrigidas, uma por linha","erros":[{"original":"","correcao":"","explicacao":"em português, curta"}],"dica":"uma dica em português"}`,{modelTier:"default"});
-   if(!r||r.corrigido==null)throw{code:"invalid_json"};r.erros=Array.isArray(r.erros)?r.erros:[];S.diary[today()].result=r;save();renderDiary()}
-  catch(e){$("#dyMsg").textContent="Não consegui corrigir agora. As frases ficaram salvas.";b.disabled=false;b.textContent="Salvar e corrigir"}}}
-function showDiaryRes(d){const r=d.result;$("#dyRes").innerHTML=`<div class="stack" style="gap:8px"><div class="grade"><b>${r.nota}</b><span class="small muted">nota de 0 a 10</span></div><div class="corrtext it">${esc(r.corrigido)}</div>${r.erros.map(x=>`<div class="err"><div class="pair"><s>${esc(x.original||"")}</s><span class="op">→</span><span class="fix it">${esc(x.correcao||"")}</span></div><span class="why">${esc(x.explicacao||"")}</span></div>`).join("")}${r.dica?`<div class="tip"><span class="label">Dica</span>${esc(r.dica)}</div>`:""}</div>`;tokenize($("#dyRes"))}
-/* conversa com o Claude */
-let CHAT=null;
-function renderChatHome(){if(CHAT){renderChat();return}const box=$("#wp-chat");
- box.innerHTML=`<div class="card stack"><span class="label">Conversa com o Claude</span><p class="small">Uma situação por tópico. O Claude faz o outro papel, responde em italiano simples e aponta seus erros a cada fala. No fim, você recebe um resumo.</p>${hasClaude()?"":`<p class="small muted">Fora do Claude, a conversa abre numa conversa nova do Claude com tudo já explicado.</p>`}</div>
- <div class="tlist">${PODS.map(p=>{const t=TOPIC[p.topic],r=(S.chats||{})[p.topic];return`<button class="tcard${opened(p.topic)?"":" dim"}" data-chat="${p.topic}"><span class="tn">${t.n}</span><div><h3>${esc(p.t)}</h3><p>${t.lvl} · ${esc(p.sit)}</p></div><span class="pill ${r?"ok":""}">${r?r.n+"×":"novo"}</span></button>`}).join("")}</div>`;
- $$("[data-chat]").forEach(b=>b.onclick=()=>startChat(b.dataset.chat))}
-function chatSetup(p){const t=TOPIC[p.topic];return`Vamos fazer uma encenação para eu praticar italiano (sou brasileiro, nível ${t.lvl}).
-Situação: ${p.sit}
-Você é ${p.sp.A}. Eu sou ${p.sp.B}.
-Use frases curtas e simples, vocabulário de nível ${t.lvl}, e pratique: ${t.sub}.
-Fale só em italiano no papel. Depois de cada fala minha, se eu errar algo, acrescente uma correção curta em português.`}
-function startChat(tid){const p=PODS.find(x=>x.topic===tid);if(!p)return;
- if(!hasClaude()){window.open(claudeLink(chatSetup(p)+"\nComece você a conversa.\nQuando eu escrever FINE, faça um resumo dos meus erros em português."),"_blank","noopener");S.chats=S.chats||{};const r=S.chats[tid]=S.chats[tid]||{n:0};r.n++;r.last=today();logInc("w");save();renderChatHome();return}
- CHAT={tid,p,msgs:[{role:"assistant",content:p.L[0][1],fix:""}],busy:false,ended:false};renderChat();window.scrollTo(0,0)}
-function renderChat(){const box=$("#wp-chat"),c=CHAT;
- box.innerHTML=`<button class="back" id="chBack">← Situações</button><div class="tophead"><span class="label">${esc(TOPIC[c.tid].lvl)} · ${esc(c.p.sp.A)} × você (${esc(c.p.sp.B)})</span><h2>${esc(c.p.t)}</h2><p class="muted small">${esc(c.p.sit)}</p></div>
- <div class="chat" id="chLog">${c.msgs.map(m=>`<div class="bub ${m.role==="user"?"me":"bot"}"><span class="it">${esc(m.content)}</span>${m.role==="assistant"?spkBtn(m.content):""}${m.fix?`<span class="bfix">${esc(m.fix)}</span>`:""}</div>`).join("")}${c.busy?`<div class="bub bot"><span class="muted">…</span></div>`:""}</div>
- ${c.ended?`<div class="card stack" id="chSum">${c.summary?`<span class="label">Resumo</span><p>${esc(c.summary)}</p>`:`<p class="muted">Preparando o resumo…</p>`}</div><button class="btn" id="chNew">Outra situação</button>`
- :`<form id="chForm" class="fillrow"><input type="text" id="chIn" lang="it" spellcheck="false" placeholder="Rispondi in italiano…" autocomplete="off"><button class="btn primary" type="submit" ${c.busy?"disabled":""}>Enviar</button></form><div class="row"><button class="btn ghost small" id="chEnd" ${c.msgs.length<3?"disabled":""}>Terminar e ver o resumo</button></div><p class="small muted" id="chMsg"></p>`}`;
- tokenize($("#chLog"));$("#chBack").onclick=()=>{CHAT=null;renderChatHome()};
- const lg=$("#chLog");lg.scrollTop=lg.scrollHeight;
- if($("#chNew"))$("#chNew").onclick=()=>{CHAT=null;renderChatHome()};
- if($("#chForm")){$("#chIn").focus({preventScroll:true});$("#chForm").onsubmit=e=>{e.preventDefault();const v=$("#chIn").value.trim();if(!v||c.busy)return;c.msgs.push({role:"user",content:v});chatTurn()};$("#chEnd").onclick=chatEnd}}
-async function chatTurn(){const c=CHAT;c.busy=true;renderChat();
- const msgs=[{role:"user",content:chatSetup(c.p)+"\nComece."},...c.msgs.map(m=>({role:m.role,content:m.content}))];
- msgs[msgs.length-1]={role:"user",content:msgs[msgs.length-1].content+`\n\n[Responda somente com JSON: {"fix":"correção curta em português da minha última fala, ou vazio se estiver certa","reply":"sua próxima fala em italiano, no papel de ${c.p.sp.A}, 1 ou 2 frases"}]`};
- try{const sample=await getSample();if(!sample)throw{code:"not_granted"};const r=await sample.json(msgs,{modelTier:"default",cache:false});
-  if(!r||!r.reply)throw{code:"invalid_json"};c.msgs[c.msgs.length-1].fix=r.fix||"";c.msgs.push({role:"assistant",content:r.reply});speak(r.reply)}
- catch(e){c.msgs.pop();c.busy=false;renderChat();$("#chMsg").textContent=e&&e.code==="rate_limited"?"Muitas mensagens em pouco tempo. Espere um pouco.":"Não consegui responder agora. Tente de novo.";return}
- c.busy=false;renderChat()}
-async function chatEnd(){const c=CHAT;c.ended=true;renderChat();S.chats=S.chats||{};const r=S.chats[c.tid]=S.chats[c.tid]||{n:0};r.n++;r.last=today();logInc("w");save();
- const fixes=c.msgs.filter(m=>m.role==="user").map(m=>`- ${m.content}${m.fix?" (correção: "+m.fix+")":""}`).join("\n");
- try{const sample=await getSample();const t=await sample(`Resuma em português, em 3 a 5 frases, como foi esta conversa de um aluno brasileiro de italiano (nível ${TOPIC[c.tid].lvl}). Diga o que ele fez bem, os erros que mais se repetiram e uma frase útil para memorizar.\n\nFalas do aluno:\n${fixes}`,{modelTier:"default"});c.summary=t.text}
- catch(e){c.summary="Não consegui gerar o resumo agora."}renderChat()}
+ <div class="row"><button class="btn primary" id="dySend">Salvar</button></div><p class="small muted" id="dyMsg"></p>
+ <div class="tip"><span class="label">Antes de salvar, confira</span>Cada frase tem verbo conjugado na pessoa certa? Os artigos e adjetivos concordam? Os acentos estão no lugar (è, perché, più)? Tem alguma palavra que você não sabia? Toque nela em qualquer parte do app ou procure no WordReference.</div></div>
+ ${hist.length?`<div class="stack" style="gap:8px"><span class="label">Dias anteriores</span>${hist.map(([dt,v])=>`<details class="exs"><summary><span class="label">${fmtBR(dt)}</span></summary><div class="mytext it" style="padding:10px 14px">${esc(v.lines.join("\n"))}</div></details>`).join("")}</div>`:""}`;
+ tokenize(box);
+ $("#dySend").onclick=()=>{const lines=[0,1,2].map(i=>$("#dy"+i).value.trim()).filter(Boolean);if(!lines.length){$("#dyMsg").textContent="Escreva pelo menos uma frase.";return}
+  S.diary=S.diary||{};const first=!S.diary[today()];S.diary[today()]={lines,at:today()};if(first)logInc("w");save();$("#dyMsg").textContent=lines.length===3?"Salvo. Até amanhã!":"Salvo. Tente chegar a 3 frases."}}
 /* ---------- 7. Pronúncia: pares mínimos e ditado ---------- */
 let SMODE="pod";
 $$("#sMode button").forEach(b=>b.addEventListener("click",()=>{SMODE=b.dataset.sm;renderSMode()}));
@@ -2532,8 +2499,7 @@ function verbBlock(vf,surface){const x=vf.find(z=>z.tk!=="inf")||vf[0],v=x.v;
  const others=vf.filter(z=>z.v===v&&z.tk!==x.tk&&z.i>=0).map(z=>TLAB[z.tk]+" ("+P[z.i]+")");
  return`<p class="small">Forma de ${label} · <b>${TLAB[x.tk]}</b> · ${esc(who)}${others.length?` · também ${esc(others.join(", "))}`:""}</p>${miniConj(v,x.tk,vf.filter(z=>z.v===v&&z.tk===x.tk).map(z=>z.i))}`}
 function miniConj(v,tk,mark){const f=TENSES[tk].f(v),m=[].concat(mark);return`<div class="stack" style="gap:6px"><span class="label">${TENSES[tk].n} de ${esc(v.inf)}</span><div class="cjmini">${f.map((x,i)=>`<span><em>${P[i]}</em><b class="${m.includes(i)?"me":""}" style="font-weight:${m.includes(i)?700:500}">${esc(x)}</b></span>`).join("")}</div></div>`}
-function extLinks(){const w=SH.surface,q=`Estudo italiano (nível A1–A2). Explique em português a palavra "${w}" nesta frase: "${SH.sentence}". Diga a forma de dicionário, a classe gramatical, o significado, como se forma (se for preposição articulada, verbo conjugado, plural etc.) e dê 2 exemplos simples.`;
- return`<div class="row"><a class="btn small" href="https://www.wordreference.com/itpt/${encodeURIComponent(w.toLowerCase())}" target="_blank" rel="noopener">WordReference</a><a class="btn small" href="${esc(claudeLink(q))}" target="_blank" rel="noopener">Perguntar ao Claude</a></div>`}
+function extLinks(){return`<div class="row"><a class="btn small" href="https://www.wordreference.com/itpt/${encodeURIComponent(SH.surface.toLowerCase())}" target="_blank" rel="noopener">Ver no WordReference</a></div>`}
 function renderSheet(){const e=SH.entry,fk=e?favKeyOf(e,SH.k):null,isFav=!!(fk&&S.favs[fk]&&e.meaning);
  $("#shWord").textContent=SH.surface;
  const lem=e&&e.lemma&&e.lemma.toLowerCase()!==SH.surface.toLowerCase()?"forma de “"+e.lemma+"”":"";
@@ -2553,34 +2519,17 @@ function renderSheet(){const e=SH.entry,fk=e?favKeyOf(e,SH.k):null,isFav=!!(fk&&
   if(e.phrases&&e.phrases.length)h+=`<div class="stack" style="gap:6px"><span class="label">Expressões do curso</span><div class="exl">${e.phrases.map(p=>`<div class="exi"><div><i class="it">${esc(p.it)}</i><span>${esc(p.pt)}</span></div>${spkBtn(p.it)}</div>`).join("")}</div></div>`;
   if(e.topic&&TOPIC[e.topic])h+=`<p class="small muted">Do vocabulário de <b>${esc(TOPIC[e.topic].lvl)} · ${esc(TOPIC[e.topic].t)}</b>.</p>`;
   if(e.meaning)h+=`<p class="favline small">${isFav?"★ Salva nas minhas palavras. Ela aparece nos cartões de revisão.":"Toque na estrela para revisar esta palavra nos cartões."}</p>`;
-  if(SH.src!=="ai"&&SH.src!=="news")h+=hasClaude()?`<button class="btn ghost small" id="shAsk">Explicar melhor com o Claude</button><p class="small muted" id="shAskMsg"></p>`:extLinks()}
- else h+=`<p class="muted">Esta palavra ainda não está no dicionário do curso.</p>`+(hasClaude()?`<button class="btn primary" id="shAsk">Perguntar ao Claude</button><p class="small muted" id="shAskMsg"></p>`:extLinks());
+ }
+ else h+=`<p class="muted">Esta palavra ainda não está no dicionário do curso.</p>`+extLinks();
  if(SH.sentence&&SH.sentence.toLowerCase()!==SH.surface.toLowerCase())h+=`<div class="stack" style="gap:6px"><span class="label">Onde aparece</span><div class="exi"><div><i class="it">${esc(SH.sentence)}</i></div>${spkBtn(SH.sentence)}</div></div>`;
  if(SH.sentence&&SH.sentence.split(/\s+/).length>2){const sid=sentCardId(SH.sentence,SH.surface),sv=!!(S.sents||{})[sid];h+=`<button class="btn small${sv?" ghost":""}" id="shSent">${sv?"★ Frase salva nos cartões (tocar para remover)":"Salvar a frase nos cartões"}</button>`}
  $("#shBody").innerHTML=h;tokenize($("#shBody"));
  if($("#shSent"))$("#shSent").onclick=()=>{saveSentence(SH.sentence,SH.surface,SH.entry&&SH.entry.meaning);renderSheet();renderDecks();renderHome()};
- if($("#shAsk"))$("#shAsk").onclick=askClaude}
+}
 $("#shClose").onclick=()=>showSheet(false);
 $("#sheetBack").onclick=()=>showSheet(false);
 $("#shFav").onclick=toggleFav;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#sheet").hidden)showSheet(false)});
-async function askClaude(){const b=$("#shAsk"),msg=$("#shAskMsg"),k=SH.k,surface=SH.surface,sentence=SH.sentence,had=SH.entry;b.disabled=true;b.textContent="Consultando…";msg.textContent="";
- try{const sample=await getSample();if(!sample)throw{code:"not_granted"};
-  const r=await sample.json(`Você é um dicionário e professor de italiano para um estudante brasileiro de nível A1–A2.
-Palavra: "${surface}"
-Frase em que aparece: "${sentence}"
-Se for preposição (simples ou articulada), artigo ou pronome, explique como a forma é construída (ex.: nella = in + la) e quando se usa.
-Se for verbo conjugado, diga o infinitivo, o tempo e a pessoa.
-Responda somente com um objeto JSON neste formato:
-{"lemma":"forma de dicionário em italiano","pos":"classe gramatical em português","meaning":"significado em português neste contexto","note":"explicação curta da forma (tempo verbal, plural, formação etc.) em português","how":["até 3 regras de uso, curtas, em português"],"synonyms":["até 3 sinônimos em italiano, se houver"],"example":"uma frase nova e simples em italiano","examplePt":"tradução da frase"}`,{modelTier:"quick",cache:{gcTime:86400000}});
-  if(!r||typeof r!=="object"||!r.meaning)throw{code:"invalid_json"};
-  r.synonyms=Array.isArray(r.synonyms)?r.synonyms.map(String).slice(0,4):[];r.how=Array.isArray(r.how)?r.how.map(x=>esc(String(x))).slice(0,3):[];
-  AI_CACHE[k]=r;saveAI();if(typeof NEWS!=="undefined")NEWS.extra[k]=r;
-  if(SH&&SH.k===k){SH.entry=had?Object.assign({},had,{note:r.note||had.note,how:(had.how||[]).concat(r.how),synonyms:r.synonyms,example:r.example,examplePt:r.examplePt}):r;SH.src="ai";renderSheet()}if(typeof refreshTokenMarks==="function")refreshTokenMarks()}
- catch(e){const c=e&&e.code;b.disabled=false;b.textContent="Perguntar ao Claude";
-  if(["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed"].includes(c)){b.hidden=true;msg.textContent="A consulta ao Claude não está disponível aqui."}
-  else if(c==="rate_limited")msg.textContent="Muitas consultas em pouco tempo. Tente de novo em alguns minutos.";
-  else msg.textContent="Não deu certo desta vez. Toque para tentar de novo."}}
 function toggleFav(){const e=SH&&SH.entry;if(!e||!e.meaning)return;const key=favKeyOf(e,SH.k);
  if(S.favs[key]){delete S.favs[key];removeFavCard(key)}
  else{const ex=e.example?[e.example,e.examplePt||""]:((e.found||[])[0]||(e.examples||[])[0]||["",""]);

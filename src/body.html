@@ -51,12 +51,11 @@
   <!-- ===================== ESCRITA ===================== -->
   <section class="view" id="v-escrita" data-view="escrita" hidden>
     <div id="wHome" class="stack" style="gap:16px">
-      <div class="stack" style="gap:6px"><h2>Escrita</h2><p class="muted small">Textos com correção do Claude, tradução de volta, diário de 3 frases e conversa com o Claude.</p></div>
-      <div class="seg seg4" id="wMode" role="tablist" aria-label="Tipo de escrita">
+      <div class="stack" style="gap:6px"><h2>Escrita</h2><p class="muted small">Temas para escrever com checklist e texto-modelo, tradução de volta e diário de 3 frases.</p></div>
+      <div class="seg" id="wMode" role="tablist" aria-label="Tipo de escrita">
         <button role="tab" data-wm="text" class="on" aria-selected="true">Textos</button>
         <button role="tab" data-wm="tr" aria-selected="false">Tradução</button>
         <button role="tab" data-wm="diary" aria-selected="false">Diário</button>
-        <button role="tab" data-wm="chat" aria-selected="false">Conversa</button>
       </div>
       <div id="wp-text" class="stack" style="gap:16px">
         <div class="seg seg2" id="wSeg" role="tablist" aria-label="Nível da escrita">
@@ -67,7 +66,6 @@
       </div>
       <div id="wp-tr" class="stack" style="gap:16px" hidden></div>
       <div id="wp-diary" class="stack" style="gap:16px" hidden></div>
-      <div id="wp-chat" class="stack" style="gap:16px" hidden></div>
     </div>
     <div id="wTask" class="stack" style="gap:16px" hidden></div>
   </section>

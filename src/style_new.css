@@ -242,3 +242,4 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center;color:inherit}
 .prch .opt{display:flex;flex-direction:column;align-items:center;gap:2px;padding:16px 8px;font-size:1.25rem}
 @media (max-width:420px){.prr{grid-template-columns:auto 1fr;}.prr .op{display:none}}
 .blank{display:inline-block;min-width:60px;border-bottom:2px solid var(--saffron);margin:0 4px;vertical-align:baseline}
+.checks{display:flex;flex-direction:column;gap:6px}.chk{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--paper);font-size:.93rem;cursor:pointer}.chk input{margin-top:3px;flex:none;width:18px;height:18px;accent-color:var(--ok)}.warnt{color:var(--bad)}

@@ -88,7 +88,7 @@ function endFocus(){const r=RUN,n=r.qs.length,pct=Math.round(r.score/n*100);logI
 let WMODE="text";
 $$("#wMode button").forEach(b=>b.addEventListener("click",()=>{WMODE=b.dataset.wm;renderWMode()}));
 function renderWMode(){$$("#wMode button").forEach(b=>{const on=b.dataset.wm===WMODE;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
- ["text","tr","diary","chat"].forEach(k=>$("#wp-"+k).hidden=k!==WMODE);if(WMODE==="tr")renderTrHome();if(WMODE==="diary")renderDiary();if(WMODE==="chat")renderChatHome()}
+ ["text","tr","diary"].forEach(k=>$("#wp-"+k).hidden=k!==WMODE);if(WMODE==="tr")renderTrHome();if(WMODE==="diary")renderDiary()}
 /* tradução de volta */
 let TR=null;
 function trPool(tid){const a=[];const p=PODS.find(x=>x.topic===tid);if(p)p.L.forEach(l=>a.push([l[2],l[1]]));const st=STORIES[tid];if(st)st.p.forEach(l=>a.push([l[1],l[0]]));return a.filter(x=>x[1].length<110&&x[1].split(/\s+/).length>=4)}
@@ -108,56 +108,15 @@ function renderTr(){const box=$("#wp-tr"),it=TR.items[TR.i],t=TOPIC[TR.tid];
    const tid=TR.tid;$("#trAgain").onclick=()=>{TR={tid,items:shuffle(trPool(tid)).slice(0,6),i:0,scores:[]};renderTr()};$("#trHome").onclick=()=>{TR=null;renderTrHome()}}}}
 /* diário de 3 frases */
 function curTopic(){return nextTopic()}
-function renderDiary(){const box=$("#wp-diary"),t=curTopic(),d=(S.diary||{})[today()],hist=Object.entries(S.diary||{}).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,7);
+function renderDiary(){const box=$("#wp-diary"),t=curTopic(),d=(S.diary||{})[today()],hist=Object.entries(S.diary||{}).filter(([dt])=>dt!==today()).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,7);
  box.innerHTML=`<div class="card stack"><span class="label">Diário · ${fmtBR(today())}</span><h3>Três frases sobre o seu dia</h3><p class="small">Use a gramática do seu tópico atual: <b>${esc(t.t)}</b> (${esc(t.sub)}).</p>
  ${[0,1,2].map(i=>`<input type="text" id="dy${i}" lang="it" spellcheck="false" placeholder="Frase ${i+1}" value="${esc(d&&d.lines?d.lines[i]||"":"")}">`).join("")}
- <div class="row"><button class="btn primary" id="dySend">Salvar e corrigir</button></div><p class="small muted" id="dyMsg"></p><div id="dyRes"></div></div>
- ${hist.length?`<div class="stack" style="gap:8px"><span class="label">Últimos dias</span>${hist.map(([dt,v])=>`<details class="exs"><summary><span class="label">${fmtBR(dt)}${v.result?" · nota "+v.result.nota+"/10":""}</span></summary><div class="mytext it" style="padding:10px 14px">${esc((v.result&&v.result.corrigido)||v.lines.join("\n"))}</div></details>`).join("")}</div>`:""}`;
- tokenize(box);if(d&&d.result)showDiaryRes(d);
- $("#dySend").onclick=async()=>{const lines=[0,1,2].map(i=>$("#dy"+i).value.trim()).filter(Boolean);if(lines.length<1){$("#dyMsg").textContent="Escreva pelo menos uma frase.";return}
-  S.diary=S.diary||{};S.diary[today()]={lines,at:today()};logInc("w");save();
-  const q=`Sou brasileiro e estudo italiano (nível ${t.lvl}). Corrija estas frases do meu diário. Foco gramatical: ${t.sub}.\n\n${lines.map((l,i)=>(i+1)+". "+l).join("\n")}`;
-  if(!hasClaude()){$("#dyMsg").innerHTML=`Salvo. Para a correção: <a class="btn small" href="${esc(claudeLink(q+"\n\nMostre as frases corrigidas e explique cada erro em português, curto."))}" target="_blank" rel="noopener">Corrigir no Claude</a>`;return}
-  const b=$("#dySend");b.disabled=true;b.textContent="Corrigindo…";
-  try{const sample=await getSample();if(!sample)throw{code:"not_granted"};
-   const r=await sample.json(q+`\n\nResponda somente com JSON: {"nota":0-10,"corrigido":"as frases corrigidas, uma por linha","erros":[{"original":"","correcao":"","explicacao":"em português, curta"}],"dica":"uma dica em português"}`,{modelTier:"default"});
-   if(!r||r.corrigido==null)throw{code:"invalid_json"};r.erros=Array.isArray(r.erros)?r.erros:[];S.diary[today()].result=r;save();renderDiary()}
-  catch(e){$("#dyMsg").textContent="Não consegui corrigir agora. As frases ficaram salvas.";b.disabled=false;b.textContent="Salvar e corrigir"}}}
-function showDiaryRes(d){const r=d.result;$("#dyRes").innerHTML=`<div class="stack" style="gap:8px"><div class="grade"><b>${r.nota}</b><span class="small muted">nota de 0 a 10</span></div><div class="corrtext it">${esc(r.corrigido)}</div>${r.erros.map(x=>`<div class="err"><div class="pair"><s>${esc(x.original||"")}</s><span class="op">→</span><span class="fix it">${esc(x.correcao||"")}</span></div><span class="why">${esc(x.explicacao||"")}</span></div>`).join("")}${r.dica?`<div class="tip"><span class="label">Dica</span>${esc(r.dica)}</div>`:""}</div>`;tokenize($("#dyRes"))}
-/* conversa com o Claude */
-let CHAT=null;
-function renderChatHome(){if(CHAT){renderChat();return}const box=$("#wp-chat");
- box.innerHTML=`<div class="card stack"><span class="label">Conversa com o Claude</span><p class="small">Uma situação por tópico. O Claude faz o outro papel, responde em italiano simples e aponta seus erros a cada fala. No fim, você recebe um resumo.</p>${hasClaude()?"":`<p class="small muted">Fora do Claude, a conversa abre numa conversa nova do Claude com tudo já explicado.</p>`}</div>
- <div class="tlist">${PODS.map(p=>{const t=TOPIC[p.topic],r=(S.chats||{})[p.topic];return`<button class="tcard${opened(p.topic)?"":" dim"}" data-chat="${p.topic}"><span class="tn">${t.n}</span><div><h3>${esc(p.t)}</h3><p>${t.lvl} · ${esc(p.sit)}</p></div><span class="pill ${r?"ok":""}">${r?r.n+"×":"novo"}</span></button>`}).join("")}</div>`;
- $$("[data-chat]").forEach(b=>b.onclick=()=>startChat(b.dataset.chat))}
-function chatSetup(p){const t=TOPIC[p.topic];return`Vamos fazer uma encenação para eu praticar italiano (sou brasileiro, nível ${t.lvl}).
-Situação: ${p.sit}
-Você é ${p.sp.A}. Eu sou ${p.sp.B}.
-Use frases curtas e simples, vocabulário de nível ${t.lvl}, e pratique: ${t.sub}.
-Fale só em italiano no papel. Depois de cada fala minha, se eu errar algo, acrescente uma correção curta em português.`}
-function startChat(tid){const p=PODS.find(x=>x.topic===tid);if(!p)return;
- if(!hasClaude()){window.open(claudeLink(chatSetup(p)+"\nComece você a conversa.\nQuando eu escrever FINE, faça um resumo dos meus erros em português."),"_blank","noopener");S.chats=S.chats||{};const r=S.chats[tid]=S.chats[tid]||{n:0};r.n++;r.last=today();logInc("w");save();renderChatHome();return}
- CHAT={tid,p,msgs:[{role:"assistant",content:p.L[0][1],fix:""}],busy:false,ended:false};renderChat();window.scrollTo(0,0)}
-function renderChat(){const box=$("#wp-chat"),c=CHAT;
- box.innerHTML=`<button class="back" id="chBack">← Situações</button><div class="tophead"><span class="label">${esc(TOPIC[c.tid].lvl)} · ${esc(c.p.sp.A)} × você (${esc(c.p.sp.B)})</span><h2>${esc(c.p.t)}</h2><p class="muted small">${esc(c.p.sit)}</p></div>
- <div class="chat" id="chLog">${c.msgs.map(m=>`<div class="bub ${m.role==="user"?"me":"bot"}"><span class="it">${esc(m.content)}</span>${m.role==="assistant"?spkBtn(m.content):""}${m.fix?`<span class="bfix">${esc(m.fix)}</span>`:""}</div>`).join("")}${c.busy?`<div class="bub bot"><span class="muted">…</span></div>`:""}</div>
- ${c.ended?`<div class="card stack" id="chSum">${c.summary?`<span class="label">Resumo</span><p>${esc(c.summary)}</p>`:`<p class="muted">Preparando o resumo…</p>`}</div><button class="btn" id="chNew">Outra situação</button>`
- :`<form id="chForm" class="fillrow"><input type="text" id="chIn" lang="it" spellcheck="false" placeholder="Rispondi in italiano…" autocomplete="off"><button class="btn primary" type="submit" ${c.busy?"disabled":""}>Enviar</button></form><div class="row"><button class="btn ghost small" id="chEnd" ${c.msgs.length<3?"disabled":""}>Terminar e ver o resumo</button></div><p class="small muted" id="chMsg"></p>`}`;
- tokenize($("#chLog"));$("#chBack").onclick=()=>{CHAT=null;renderChatHome()};
- const lg=$("#chLog");lg.scrollTop=lg.scrollHeight;
- if($("#chNew"))$("#chNew").onclick=()=>{CHAT=null;renderChatHome()};
- if($("#chForm")){$("#chIn").focus({preventScroll:true});$("#chForm").onsubmit=e=>{e.preventDefault();const v=$("#chIn").value.trim();if(!v||c.busy)return;c.msgs.push({role:"user",content:v});chatTurn()};$("#chEnd").onclick=chatEnd}}
-async function chatTurn(){const c=CHAT;c.busy=true;renderChat();
- const msgs=[{role:"user",content:chatSetup(c.p)+"\nComece."},...c.msgs.map(m=>({role:m.role,content:m.content}))];
- msgs[msgs.length-1]={role:"user",content:msgs[msgs.length-1].content+`\n\n[Responda somente com JSON: {"fix":"correção curta em português da minha última fala, ou vazio se estiver certa","reply":"sua próxima fala em italiano, no papel de ${c.p.sp.A}, 1 ou 2 frases"}]`};
- try{const sample=await getSample();if(!sample)throw{code:"not_granted"};const r=await sample.json(msgs,{modelTier:"default",cache:false});
-  if(!r||!r.reply)throw{code:"invalid_json"};c.msgs[c.msgs.length-1].fix=r.fix||"";c.msgs.push({role:"assistant",content:r.reply});speak(r.reply)}
- catch(e){c.msgs.pop();c.busy=false;renderChat();$("#chMsg").textContent=e&&e.code==="rate_limited"?"Muitas mensagens em pouco tempo. Espere um pouco.":"Não consegui responder agora. Tente de novo.";return}
- c.busy=false;renderChat()}
-async function chatEnd(){const c=CHAT;c.ended=true;renderChat();S.chats=S.chats||{};const r=S.chats[c.tid]=S.chats[c.tid]||{n:0};r.n++;r.last=today();logInc("w");save();
- const fixes=c.msgs.filter(m=>m.role==="user").map(m=>`- ${m.content}${m.fix?" (correção: "+m.fix+")":""}`).join("\n");
- try{const sample=await getSample();const t=await sample(`Resuma em português, em 3 a 5 frases, como foi esta conversa de um aluno brasileiro de italiano (nível ${TOPIC[c.tid].lvl}). Diga o que ele fez bem, os erros que mais se repetiram e uma frase útil para memorizar.\n\nFalas do aluno:\n${fixes}`,{modelTier:"default"});c.summary=t.text}
- catch(e){c.summary="Não consegui gerar o resumo agora."}renderChat()}
+ <div class="row"><button class="btn primary" id="dySend">Salvar</button></div><p class="small muted" id="dyMsg"></p>
+ <div class="tip"><span class="label">Antes de salvar, confira</span>Cada frase tem verbo conjugado na pessoa certa? Os artigos e adjetivos concordam? Os acentos estão no lugar (è, perché, più)? Tem alguma palavra que você não sabia? Toque nela em qualquer parte do app ou procure no WordReference.</div></div>
+ ${hist.length?`<div class="stack" style="gap:8px"><span class="label">Dias anteriores</span>${hist.map(([dt,v])=>`<details class="exs"><summary><span class="label">${fmtBR(dt)}</span></summary><div class="mytext it" style="padding:10px 14px">${esc(v.lines.join("\n"))}</div></details>`).join("")}</div>`:""}`;
+ tokenize(box);
+ $("#dySend").onclick=()=>{const lines=[0,1,2].map(i=>$("#dy"+i).value.trim()).filter(Boolean);if(!lines.length){$("#dyMsg").textContent="Escreva pelo menos uma frase.";return}
+  S.diary=S.diary||{};const first=!S.diary[today()];S.diary[today()]={lines,at:today()};if(first)logInc("w");save();$("#dyMsg").textContent=lines.length===3?"Salvo. Até amanhã!":"Salvo. Tente chegar a 3 frases."}}
 /* ---------- 7. Pronúncia: pares mínimos e ditado ---------- */
 let SMODE="pod";
 $$("#sMode button").forEach(b=>b.addEventListener("click",()=>{SMODE=b.dataset.sm;renderSMode()}));
