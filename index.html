@@ -1,0 +1,2859 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1E4E9E">
+<meta name="description" content="Estudo de italiano: notícia do dia, gramática, vocabulário, exercícios e cartões de revisão.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Quaderno">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px)}body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Quaderno d'Italiano</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: caderno de estudo mobile-first — uma coluna de leitura, barra de abas fixa embaixo, faixa de azulejo (maiolica) como assinatura */
+:root{
+  --paper:#F4F7FB; --surface:#FFFFFF; --ink:#16213A; --muted:#5A6684; --line:#D8E0EC;
+  --cobalt:#1E4E9E; --cobalt-soft:#E3EBF8; --saffron:#D99A12; --saffron-soft:#FBF0D6;
+  --ok:#22744A; --ok-soft:#E1F2E8; --bad:#B0281F; --bad-soft:#FBE4E1;
+  --display:"Young Serif", Georgia, "Times New Roman", serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --r:12px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0D1424; --surface:#151F36; --ink:#E6ECF6; --muted:#9AA7C2; --line:#28344F;
+  --cobalt:#86A9EE; --cobalt-soft:#1C2B4D; --saffron:#F0B947; --saffron-soft:#3A2F14;
+  --ok:#62C48F; --ok-soft:#143326; --bad:#F08B80; --bad-soft:#3D1A17; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0D1424; --surface:#151F36; --ink:#E6ECF6; --muted:#9AA7C2; --line:#28344F;
+  --cobalt:#86A9EE; --cobalt-soft:#1C2B4D; --saffron:#F0B947; --saffron-soft:#3A2F14;
+  --ok:#62C48F; --ok-soft:#143326; --bad:#F08B80; --bad-soft:#3D1A17; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:0 calc(84px + env(safe-area-inset-bottom, 0px))}
+.wrap{max-width:760px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;line-height:1.2;margin:0}
+h2{font-size:1.55rem} h3{font-size:1.2rem}
+p{margin:0}
+.label{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.it{font-style:italic;color:var(--cobalt)}
+b,strong{font-weight:700}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--saffron);outline-offset:2px}
+
+/* header */
+header.top{padding-block:20px 12px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.top h1{font-size:1.8rem}
+header.top h1 span{color:var(--cobalt)}
+.streak{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:.75rem;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--surface);white-space:nowrap}
+.chip.hot{background:var(--saffron-soft);border-color:var(--saffron);color:var(--ink)}
+.tiles{height:10px;border-radius:3px;margin-bottom:20px;
+  background:conic-gradient(from 45deg at 50% 50%, var(--cobalt) 0 25%, transparent 0 50%, var(--saffron) 0 75%, transparent 0) 0 0/20px 10px, var(--cobalt-soft)}
+
+/* nav */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);
+  padding-left:max(8px, env(safe-area-inset-left, 0px));padding-right:max(8px, env(safe-area-inset-right, 0px));
+  padding-bottom:env(safe-area-inset-bottom, 0px)}
+nav.tabs .in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}
+nav.tabs button{background:none;border:0;padding:10px 1px 9px;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted);font-size:.66rem;font-weight:600;min-width:0;white-space:nowrap}
+nav.tabs button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav.tabs button[aria-selected="true"]{color:var(--cobalt)}
+nav.tabs button[aria-selected="true"] svg{stroke-width:2.2}
+
+.view{display:flex;flex-direction:column;gap:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.stack{display:flex;flex-direction:column;gap:12px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.muted{color:var(--muted)}
+.small{font-size:.88rem}
+
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 16px;font-weight:600}
+.btn.primary{background:var(--cobalt);border-color:var(--cobalt);color:var(--surface)}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.5;cursor:default}
+
+/* hoje */
+.today{background:var(--cobalt);color:var(--surface);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.today .label{color:var(--surface);opacity:.75}
+.today h2{font-size:1.7rem}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.nums div{background:rgba(255,255,255,.12);border-radius:10px;padding:10px}
+.nums b{display:block;font-family:var(--display);font-weight:400;font-size:1.6rem;font-variant-numeric:tabular-nums}
+.nums span{font-size:.78rem;opacity:.85}
+.today .btn{background:var(--saffron);border-color:var(--saffron);color:#1a1405;align-self:flex-start}
+
+/* sections */
+details.sec{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+details.sec>summary{list-style:none;padding:16px 18px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;cursor:pointer}
+details.sec>summary::-webkit-details-marker{display:none}
+.secnum{font-family:var(--display);font-size:1.6rem;color:var(--cobalt);width:42px;height:42px;border-radius:10px;background:var(--cobalt-soft);display:grid;place-items:center}
+.sectitle{min-width:0}
+.sectitle h3{font-size:1.1rem}
+.cefr{font-family:var(--mono);font-size:.72rem;padding:3px 8px;border-radius:6px;background:var(--saffron-soft);color:var(--ink);border:1px solid var(--saffron)}
+.secbody{padding:0 18px 18px;display:flex;flex-direction:column;gap:16px}
+ol.units{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:4px 16px;counter-reset:u}
+ol.units li{counter-increment:u;font-size:.92rem;padding:3px 0;border-bottom:1px dashed var(--line);display:flex;gap:8px}
+ol.units li::before{content:counter(u);font-family:var(--mono);font-size:.75rem;color:var(--muted);min-width:20px;padding-top:2px}
+.phr{display:grid;gap:6px}
+.phr div{display:grid;grid-template-columns:1fr;gap:0;padding:8px 10px;border-radius:8px;background:var(--paper)}
+.phr i{color:var(--cobalt);font-style:italic}
+.phr span{font-size:.86rem;color:var(--muted)}
+ul.tight{margin:0;padding-left:20px;display:grid;gap:4px}
+
+/* grammar */
+.gnav{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.gnav button{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-weight:600;font-size:.88rem}
+.gnav button.on{background:var(--cobalt);color:var(--surface);border-color:var(--cobalt)}
+article.gram{display:flex;flex-direction:column;gap:16px}
+article.gram h2{display:flex;gap:10px;align-items:baseline}
+article.gram h3{margin-top:6px;color:var(--cobalt)}
+article.gram h3[id]{scroll-margin-top:16px}
+article.gram p,article.gram li{max-width:66ch}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.92rem;font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--paper)}
+td.wrap{white-space:normal;min-width:180px}
+tr:last-child td{border-bottom:0}
+td em{color:var(--cobalt);font-style:normal;font-weight:600}
+.tip{border-left:4px solid var(--saffron);background:var(--saffron-soft);padding:12px 14px;border-radius:0 10px 10px 0}
+.tip .label{color:var(--ink);opacity:.8;display:block;margin-bottom:4px}
+.trap{border-left:4px solid var(--bad);background:var(--bad-soft);padding:12px 14px;border-radius:0 10px 10px 0}
+.trap .label{color:var(--bad);display:block;margin-bottom:4px}
+.ex{display:grid;gap:6px}
+.ex div{padding:8px 12px;border-radius:8px;background:var(--surface);border:1px solid var(--line)}
+.ex i{color:var(--cobalt)}
+.ex span{display:block;font-size:.86rem;color:var(--muted)}
+.uses{display:grid;gap:10px}
+.use{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.use h4{margin:0 0 6px;font-family:var(--display);font-weight:400;font-size:1.25rem;color:var(--cobalt)}
+.use ul{margin:0;padding-left:18px;display:grid;gap:3px;font-size:.94rem}
+hr.sep{border:0;border-top:1px solid var(--line);margin:8px 0}
+
+.exs{border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.exs>summary{list-style:none;cursor:pointer;padding:10px 14px;display:flex;justify-content:space-between;align-items:center}
+.exs>summary::-webkit-details-marker{display:none}
+.exs>summary::after{content:"−";font-family:var(--mono);color:var(--muted)}
+.exs:not([open])>summary::after{content:"+"}
+.exn{font-family:var(--mono);font-size:.72rem;color:var(--muted);margin-left:auto;margin-right:10px}
+.exlist{border-top:1px solid var(--line)}
+.exrow{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:9px 14px;border-bottom:1px dashed var(--line)}
+.exrow:last-child{border-bottom:0}
+.exrow>div{min-width:0}
+.exrow i{font-style:normal;color:var(--ink);display:block}
+.exrow i b{color:var(--cobalt)}
+.exrow span{display:block;font-size:.86rem;color:var(--muted)}
+/* notícias */
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--cobalt-soft);padding:4px;border-radius:12px}
+.seg button{border:0;background:transparent;border-radius:9px;padding:9px 4px;font-weight:600;font-size:.86rem;color:var(--muted)}
+.seg button.on{background:var(--surface);color:var(--cobalt)}
+.cnt{font-family:var(--mono);font-size:.68rem;background:var(--saffron-soft);border:1px solid var(--saffron);border-radius:999px;padding:0 6px;margin-left:4px;color:var(--ink)}
+.cnt:empty{display:none}
+article.news{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.ntitle{font-size:1.55rem;line-height:1.3}
+.npara{font-size:1.1rem;line-height:1.9;max-width:66ch}
+.ptpara{font-size:.93rem;color:var(--muted);border-left:3px solid var(--saffron);padding-left:10px;max-width:66ch}
+button.w{all:unset;cursor:pointer;border-radius:4px;padding:0 1px;transition:background .15s}
+button.w.g{background-image:linear-gradient(var(--line),var(--line));background-size:100% 1px;background-position:0 100%;background-repeat:no-repeat}
+button.w:hover{background-color:var(--cobalt-soft)}
+button.w:focus-visible{outline:2px solid var(--saffron);outline-offset:1px}
+button.w.fav{background-color:var(--saffron-soft);background-image:linear-gradient(var(--saffron),var(--saffron));background-size:100% 2px}
+button.w.on{background-color:var(--cobalt);color:var(--surface)}
+.hint{font-size:.85rem;color:var(--muted);background:var(--paper);border-radius:8px;padding:8px 10px}
+.src{font-size:.82rem;color:var(--muted)}
+.src a{color:var(--cobalt)}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-3px;margin-right:6px}
+.qz{display:flex;flex-direction:column;gap:10px;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.qz .qn{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.qz .qq{font-weight:600;font-size:1.05rem}
+.sheetback{position:fixed;inset:0;background:rgba(8,14,30,.45);z-index:40}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--surface);border-top:1px solid var(--line);border-radius:18px 18px 0 0;max-height:82vh;overflow:auto;
+  padding-top:18px;padding-left:max(18px, env(safe-area-inset-left, 0px));padding-right:max(18px, env(safe-area-inset-right, 0px));padding-bottom:calc(20px + env(safe-area-inset-bottom, 0px));box-shadow:0 -10px 30px rgba(0,0,0,.2)}
+@media (min-width:720px){.sheet{left:50%;right:auto;bottom:auto;top:50%;transform:translate(-50%,-50%);width:min(560px,92vw);border-radius:16px;border:1px solid var(--line)}}
+.sheet .inner{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.shhead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.shhead>div:first-child{min-width:0}
+.shword{font-family:var(--display);font-size:1.9rem;line-height:1.1;overflow-wrap:anywhere}
+.shmean{font-size:1.15rem;font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chipb{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:5px 12px;font-size:.92rem;font-style:italic}
+.exrow.boxed{border:1px solid var(--line);border-radius:10px;background:var(--paper)}
+.favline{color:var(--muted)}
+.iconbtn{border:1px solid var(--line);background:var(--paper);border-radius:10px;width:40px;height:40px;display:grid;place-items:center;flex:none}
+.iconbtn svg{width:20px;height:20px;stroke:var(--ink);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.iconbtn:disabled{opacity:.4;cursor:default}
+.iconbtn.on{background:var(--saffron-soft);border-color:var(--saffron)}
+.iconbtn.on svg{fill:var(--saffron);stroke:var(--saffron)}
+.calhead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+
+.calgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.calgrid .dow{font-family:var(--mono);font-size:.66rem;color:var(--muted);text-align:center;padding:4px 0;text-transform:uppercase}
+.day{aspect-ratio:1;max-width:100%;border-radius:10px;border:1px solid transparent;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;font-variant-numeric:tabular-nums;font-size:.92rem;gap:0;padding:0;min-width:0}
+.day small{font-family:var(--mono);font-size:.6rem;line-height:1.2;min-height:.75rem}
+.day:disabled{color:var(--muted);opacity:.55;cursor:default}
+.day.has{border-color:var(--cobalt);background:var(--cobalt-soft)}
+.day.done{background:var(--ok-soft);border-color:var(--ok);color:var(--ink);font-weight:600}
+.day.has,.day.missed{color:var(--ink)}
+.day.done small{color:var(--ok);font-weight:600}
+.day.missed{background:var(--bad-soft);border-color:var(--bad)}
+.day.missed small{color:var(--bad)}
+.day.today{box-shadow:0 0 0 2px var(--saffron)}
+.legend{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:.8rem;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:5px;border:1px solid}
+.lg-done{background:var(--ok-soft);border-color:var(--ok)!important}
+.lg-missed{background:var(--bad-soft);border-color:var(--bad)!important}
+.lg-has{background:var(--cobalt-soft);border-color:var(--cobalt)!important}
+.lg-today{border:2px solid var(--saffron)!important}
+.stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stats3 div{background:var(--paper);border-radius:10px;padding:10px;min-width:0}
+.stats3 b{display:block;font-family:var(--display);font-weight:400;font-size:1.5rem;font-variant-numeric:tabular-nums}
+.favrow .w span.syn{font-style:italic}
+.favrow .lvl{display:inline-block;margin-top:4px}
+.pill{font-family:var(--mono);font-size:.72rem;padding:3px 9px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+.pill.ok{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.pill.todo{background:var(--saffron-soft);border-color:var(--saffron);color:var(--ink)}
+#homeNews{display:flex;flex-direction:column;gap:10px}
+/* vocab */
+.filters{display:grid;grid-template-columns:1fr;gap:8px}
+@media (min-width:560px){.filters{grid-template-columns:2fr 1fr 1fr}}
+input[type=search],input[type=text],select{width:100%;font:inherit;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.vlist{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.vrow{display:grid;grid-template-columns:1fr auto;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);align-items:center}
+.vrow:last-child{border-bottom:0}
+.vrow .w{min-width:0}
+.vrow .w i{font-style:normal;font-weight:600;color:var(--ink)}
+.vrow .w span{display:block;font-size:.88rem;color:var(--muted)}
+.vgroup{padding:8px 14px;background:var(--paper);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:8px}
+.lvl{font-family:var(--mono);font-size:.68rem;padding:2px 6px;border-radius:5px;border:1px solid var(--line);color:var(--muted)}
+.lvl.A2{border-color:var(--saffron);color:var(--ink);background:var(--saffron-soft)}
+.spk{border:1px solid var(--line);background:var(--paper);border-radius:8px;width:34px;height:34px;display:grid;place-items:center}
+.spk svg{width:16px;height:16px;stroke:var(--cobalt);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* exercises */
+.topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.topic{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px}
+.topic b{font-family:var(--display);font-weight:400;font-size:1.1rem}
+.topic span{font-size:.8rem;color:var(--muted)}
+.progress{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--cobalt);transition:width .3s}
+.q{font-family:var(--display);font-size:1.35rem;line-height:1.35}
+.q .blank{display:inline-block;min-width:60px;border-bottom:2px solid var(--saffron);margin:0 4px}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:12px 14px;font-weight:500}
+.opt.right{background:var(--ok-soft);border-color:var(--ok)}
+.opt.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.fb{border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.fb.ok{background:var(--ok-soft);border:1px solid var(--ok)}
+.fb.no{background:var(--bad-soft);border:1px solid var(--bad)}
+.fb b{font-weight:700}
+.conjmini{font-size:.86rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:2px 12px;margin-top:4px}
+
+/* flashcards */
+.flash{min-height:260px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:14px;justify-content:center;align-items:center;text-align:center;position:relative}
+.flash .deck{position:absolute;top:12px;left:14px}
+.flash .spk{position:absolute;top:10px;right:10px}
+.flash .front{font-family:var(--display);font-size:1.9rem;line-height:1.25;max-width:100%;overflow-wrap:anywhere}
+.flash .back{font-size:1.15rem;border-top:1px dashed var(--line);padding-top:14px;width:100%;overflow-wrap:anywhere}
+.flash .back .note{font-size:.86rem;color:var(--muted);margin-top:6px}
+.rate{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.rate button{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 4px;display:flex;flex-direction:column;align-items:center;font-weight:700;font-size:.9rem}
+.rate button span{font-family:var(--mono);font-size:.68rem;font-weight:500;color:var(--muted)}
+.rate .r0{border-color:var(--bad);color:var(--bad)}
+.rate .r3{border-color:var(--ok);color:var(--ok)}
+.decks{display:grid;gap:8px}
+.decks label{display:flex;gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--paper)}
+.decks label span{flex:1}
+.decks label em{font-style:normal;font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+.boxes{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;align-items:end;height:70px}
+.boxes div{background:var(--cobalt);border-radius:4px 4px 0 0;min-height:3px;opacity:.85}
+.boxlbl{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;font-family:var(--mono);font-size:.65rem;color:var(--muted);text-align:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="label">Duolingo seções 1–3 · A1 → A2</div>
+      <h1>Quaderno <span>d'Italiano</span></h1>
+    </div>
+    <div class="streak">
+      <span class="chip hot" id="chipStreak">0 dias seguidos</span>
+      <span class="chip" id="chipDue">0 para hoje</span>
+    </div>
+  </header>
+  <div class="tiles" aria-hidden="true"></div>
+
+  <!-- ===================== INÍCIO ===================== -->
+  <section class="view" id="v-inicio" data-view="inicio">
+    <div class="today">
+      <div class="label">Revisão de hoje</div>
+      <h2 id="todayTitle">Seus cartões de hoje</h2>
+      <div class="nums">
+        <div><b id="nDue">0</b><span>para revisar</span></div>
+        <div><b id="nNew">0</b><span>novos hoje</span></div>
+        <div><b id="nLearned">0</b><span>já estudados</span></div>
+      </div>
+      <button class="btn" data-goto="cartoes">Começar revisão</button>
+    </div>
+
+    <div class="card stack" id="installCard" hidden>
+      <div class="row" style="justify-content:space-between"><h3>Instalar no celular</h3><button class="spk" id="installHide" aria-label="Fechar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <p class="small muted" id="installText">Instale o Quaderno para abrir em tela cheia e estudar mesmo sem internet.</p>
+      <button class="btn primary" id="installBtn" hidden>Instalar app</button>
+    </div>
+    <div class="card" id="homeNews"><span class="label">Notícia do dia</span><p class="muted small">Carregando…</p></div>
+
+    <div class="stack">
+      <h2>Mapa do curso</h2>
+      <p class="muted small">Unidades oficiais do curso de italiano do Duolingo (versão de fev/2026). A gramática listada é a que esses temas exigem e o que você precisa dominar em cada seção; o Duolingo não publica uma lista exata de gramática por unidade.</p>
+    </div>
+
+    <details class="sec" open>
+      <summary><div class="secnum">1</div><div class="sectitle"><h3>Introdução</h3><div class="muted small">10 unidades · frases essenciais</div></div><span class="cefr">Intro</span></summary>
+      <div class="secbody">
+        <ol class="units">
+          <li>Pedir no café</li><li>Cumprimentar e se despedir</li><li>Dizer de onde você é</li><li>Falar dos parentes</li><li>Descrever personalidades</li><li>Nomear lugares próximos</li><li>Dizer o que você estuda</li><li>Pedir frutas na feira</li><li>Pedir um chapéu ou vestido</li><li>Pedir direções</li>
+        </ol>
+        <div class="stack">
+          <div class="label">Gramática da seção</div>
+          <ul class="tight">
+            <li><b>Gênero e número:</b> -o masculino, -a feminino, -e pode ser os dois. Plural: -o→-i, -a→-e, -e→-i (<span class="it">il libro → i libri, la mela → le mele</span>).</li>
+            <li><b>Artigos</b> definidos (<span class="it">il, lo, l', la, i, gli, le</span>) e indefinidos (<span class="it">un, uno, una, un'</span>).</li>
+            <li><b>Essere e avere</b> no presente: <span class="it">sono di Curitiba, ho una domanda</span>.</li>
+            <li><b>C'è / ci sono</b> (há/existe) e <b>dov'è?</b> (onde fica?).</li>
+            <li><b>Questo / quello</b> (este / aquele) e <b>possessivos</b> básicos: <span class="it">questo cappello, quella gonna, mio padre</span>.</li>
+            <li><b>Interrogativos:</b> <span class="it">chi, che cosa, dove, quanto, quale</span> — ver Gramática › Básico A1.</li>
+            <li><b>Vorrei</b> (eu gostaria) para pedir com educação.</li>
+            <li><b>Concordância de adjetivos:</b> <span class="it">un ragazzo simpatico, una ragazza simpatica</span>.</li>
+          </ul>
+        </div>
+        <div class="phr">
+          <div><i>Vorrei un caffè e un cornetto, per favore.</i><span>Eu gostaria de um café e um croissant, por favor.</span></div>
+          <div><i>Di dove sei? — Sono di Curitiba, in Brasile.</i><span>De onde você é? — Sou de Curitiba, no Brasil.</span></div>
+          <div><i>Scusi, dov'è la stazione? — Sempre dritto, poi a destra.</i><span>Com licença, onde fica a estação? — Sempre reto, depois à direita.</span></div>
+          <div><i>Quanto costano le mele? — Due euro al chilo.</i><span>Quanto custam as maçãs? — Dois euros o quilo.</span></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary><div class="secnum">2</div><div class="sectitle"><h3>Interações básicas</h3><div class="muted small">30 unidades · vida cotidiana</div></div><span class="cefr">A1</span></summary>
+      <div class="secbody">
+        <ol class="units">
+          <li>Pedir comida e bebida</li><li>Encontrar peças de roupa</li><li>Receber convidados em casa</li><li>Cumprimentar novos colegas de classe</li><li>Descrever profissões</li><li>Descrever onde você mora</li><li>Hobbies e interesses</li><li>Perguntar como alguém se sente</li><li>Falar dos seus hobbies</li><li>Perguntar sobre a cidade</li><li>Comprar roupas</li><li>Relatar um problema</li><li>Falar de lugares próximos</li><li>Comemorar um aniversário</li><li>Discutir tarefas de trabalho</li><li>Falar de casamentos</li><li>Suas coisas favoritas</li><li>Pedir direções</li><li>Ingredientes de confeitaria</li><li>Características e pertences</li><li>Descrever seu quarto</li><li>Planejar um passeio</li><li>Contar planos de viagem</li><li>O que te dá medo</li><li>Planejar uma viagem de trabalho</li><li>Planos de fim de semana</li><li>Falar da família</li><li>Viagem para a Suíça</li><li>Matérias escolares</li><li>Tarefas domésticas</li>
+        </ol>
+        <div class="stack">
+          <div class="label">Gramática da seção</div>
+          <ul class="tight">
+            <li><b>Presente regular</b> em -are, -ere, -ire, incluindo o grupo <b>-isc-</b> (<span class="it">capisco, finisco</span>) — ver Gramática › Presente.</li>
+            <li><b>Irregulares de alta frequência:</b> <span class="it">andare, fare, venire, stare, uscire, dire, bere</span>.</li>
+            <li><b>Verbos modais</b> + infinitivo: <span class="it">posso, voglio, devo</span> (<span class="it">devo lavorare domani</span>).</li>
+            <li><b>Possessivos</b> com artigo: <span class="it">il mio libro, la mia casa</span> — mas família no singular sem artigo: <span class="it">mia madre</span>.</li>
+            <li><b>Piacere:</b> <span class="it">mi piace il calcio / mi piacciono i film</span>.</li>
+            <li><b>Preposições articuladas</b> (<span class="it">al, nel, dal, sul, del</span>) para lugares e horários.</li>
+            <li><b>Avere idiomático:</b> <span class="it">ho fame, ho paura, ho fretta</span>.</li>
+            <li><b>Planos:</b> presente com valor de futuro (<span class="it">sabato vado al mare</span>) e primeiro contato com o futuro.</li>
+          </ul>
+        </div>
+        <div class="phr">
+          <div><i>Che lavoro fa? — Sono ingegnere, lavoro in un tribunale.</i><span>O que o senhor faz? — Sou engenheiro, trabalho em um tribunal.</span></div>
+          <div><i>Nel tempo libero mi piace correre e leggere.</i><span>No tempo livre eu gosto de correr e ler.</span></div>
+          <div><i>Scusi, la doccia non funziona.</i><span>Com licença, o chuveiro não funciona.</span></div>
+          <div><i>Il fine settimana vado in montagna con mia sorella.</i><span>No fim de semana vou para a montanha com minha irmã.</span></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary><div class="secnum">3</div><div class="sectitle"><h3>Conversas fundamentais</h3><div class="muted small">30 unidades · mais estruturas</div></div><span class="cefr">A1</span></summary>
+      <div class="secbody">
+        <ol class="units">
+          <li>Descrever seu bairro</li><li>Perguntar preços de alimentos</li><li>Falar de roupas novas</li><li>Esportes favoritos</li><li>Planejar uma festa</li><li>Pedir permissão para sair</li><li>Produtos de beleza</li><li>Responder a um convite</li><li>Dizer onde as coisas estão</li><li>Apresentar parentes</li><li>Pedir ajuda urgente</li><li>Descrever sua casa</li><li>Cumprimentar colegas de trabalho</li><li>Tarefas de projeto</li><li>Ambientes de aprendizado</li><li>Comprar ingredientes</li><li>Receitas e ingredientes</li><li>Confirmar planos de chegada</li><li>Enviar correspondência</li><li>Hábitos diários</li><li>Convidar amigos para a festa</li><li>Outras culturas</li><li>Participar de eventos</li><li>Férias na praia</li><li>Comprar lembranças</li><li>Apresentar outras pessoas</li><li>Descrever aparência</li><li>Pedir um médico</li><li>Descrever seus brinquedos</li><li>Sua banda favorita</li>
+        </ol>
+        <div class="stack">
+          <div class="label">Gramática da seção</div>
+          <ul class="tight">
+            <li><b>Verbos reflexivos</b> para a rotina: <span class="it">mi sveglio, mi alzo, mi vesto</span>.</li>
+            <li><b>Passato prossimo</b> com avere e essere: <span class="it">ho comprato, sono arrivato</span> — ver Gramática.</li>
+            <li><b>Futuro simples</b> para planos e confirmações: <span class="it">arriverò alle otto</span>.</li>
+            <li><b>Preposições de lugar:</b> <span class="it">sopra, sotto, accanto a, davanti a, dietro, tra</span>.</li>
+            <li><b>Pedir permissão e convidar:</b> <span class="it">posso uscire? / ti va di venire? / volentieri!</span></li>
+            <li><b>Apresentar pessoas:</b> <span class="it">ti presento / Le presento</span> e registro formal.</li>
+            <li><b>Imperativo básico</b> em urgências: <span class="it">aiuto! chiamate un medico!</span></li>
+          </ul>
+        </div>
+        <div class="phr">
+          <div><i>Mamma, posso uscire stasera? — Sì, ma torna prima di mezzanotte.</i><span>Mãe, posso sair hoje à noite? — Sim, mas volte antes da meia-noite.</span></div>
+          <div><i>Buongiorno a tutti! Oggi abbiamo una riunione sul progetto.</i><span>Bom dia a todos! Hoje temos uma reunião sobre o projeto.</span></div>
+          <div><i>Arriverò alla stazione alle nove. Mi vieni a prendere?</i><span>Chegarei à estação às nove. Você vem me buscar?</span></div>
+          <div><i>Ieri ho spedito un pacco a mio fratello.</i><span>Ontem enviei um pacote para meu irmão.</span></div>
+          <div><i>Le presento mia cugina, Giulia.</i><span>Apresento-lhe minha prima, Giulia.</span></div>
+        </div>
+      </div>
+    </details>
+
+    <div class="card stack">
+      <div class="row" style="justify-content:space-between"><h3>Ponte para o A2</h3><span class="cefr">Seção 4</span></div>
+      <p class="small">A seção 4 do Duolingo (60 unidades, A2) trata de banco, trabalho remoto, saúde, lembranças de infância e prazos. O vocabulário A2 deste app cobre esses temas, com um bloco extra de italiano de escritório e de engenharia (<span class="it">sopralluogo, cantiere, preventivo, scadenza</span>).</p>
+    </div>
+  </section>
+
+  <!-- ===================== NOTÍCIA ===================== -->
+  <section class="view" id="v-news" data-view="news" hidden>
+    <div class="seg" id="newsSeg" role="tablist" aria-label="Notícia">
+      <button role="tab" data-ns="read" class="on" aria-selected="true">Notícia</button>
+      <button role="tab" data-ns="cal" aria-selected="false">Calendário</button>
+      <button role="tab" data-ns="favs" aria-selected="false">Minhas palavras<span class="cnt" id="favCount"></span></button>
+    </div>
+    <div id="ns-read" class="stack" style="gap:20px">
+      <div id="newsBox"><div class="card stack"><span class="label">Notícia do dia</span><p class="muted small">Carregando…</p></div></div>
+      <div id="quizBox"></div>
+    </div>
+    <div id="ns-cal" hidden><div class="card stack" id="calBox"></div></div>
+    <div id="ns-favs" class="stack" hidden><div id="favBox" class="stack"></div></div>
+  </section>
+
+  <!-- ===================== GRAMÁTICA ===================== -->
+  <section class="view" id="v-gramatica" data-view="gramatica" hidden>
+    <div class="gnav" id="gnav">
+      <button data-g="g-base" class="on">Básico A1</button>
+      <button data-g="g-prep">Preposições</button>
+      <button data-g="g-pres">Presente</button>
+      <button data-g="g-pass">Passato prossimo</button>
+      <button data-g="g-fut">Futuro</button>
+      <button data-g="g-a2">Ponte A2</button>
+    </div>
+
+    <!-- BÁSICO A1 -->
+    <article class="gram" id="g-base">
+      <h2>Básico A1 <span class="label">grammatica di base</span></h2>
+      <p>Esta é a gramática que o Duolingo apresenta nas Seções 1 a 3, aos poucos e sem explicar muito: artigos, gênero e plural, <span class="it">questo/quello</span>, possessivos, adjetivos, perguntas e negação. Escolha um tópico:</p>
+      <div class="gnav">
+        <button data-jump="b-pron">Pronomes</button><button data-jump="b-art">Artigos</button><button data-jump="b-plur">Gênero e plural</button><button data-jump="b-dem">Questo / quello</button><button data-jump="b-poss">Possessivos</button><button data-jump="b-adj">Adjetivos</button><button data-jump="b-ce">C'è / ecco</button><button data-jump="b-int">Perguntas</button><button data-jump="b-neg">Negação</button><button data-jump="b-part">Partitivo e quantidade</button>
+      </div>
+
+      <h3 id="b-pron">Pronomes sujeito</h3>
+      <div class="tbl"><table>
+        <tr><th>Italiano</th><th>Português</th><th>Observação</th></tr>
+        <tr><td><em>io</em></td><td>eu</td><td class="wrap">minúsculo, ao contrário do inglês "I"</td></tr>
+        <tr><td><em>tu</em></td><td>você (informal)</td><td class="wrap">amigos, família, colegas próximos</td></tr>
+        <tr><td><em>lui / lei</em></td><td>ele / ela</td><td class="wrap">verbo na 3ª pessoa</td></tr>
+        <tr><td><em>Lei</em></td><td>o senhor / a senhora</td><td class="wrap">formal, também verbo na 3ª pessoa: <span class="it">Lei è ingegnere?</span></td></tr>
+        <tr><td><em>noi</em></td><td>nós</td><td></td></tr>
+        <tr><td><em>voi</em></td><td>vocês</td><td class="wrap">plural de tu, usado também como plural formal no dia a dia</td></tr>
+        <tr><td><em>loro</em></td><td>eles / elas</td><td></td></tr>
+      </table></div>
+      <p>Como no português, o pronome costuma cair porque o verbo já mostra a pessoa: <span class="it">Sono Lucas. Lavoro a Curitiba.</span> Use o pronome só para dar ênfase ou contrastar: <span class="it">Io lavoro, tu dormi!</span></p>
+
+      <div data-ex="g-base:0"></div>
+      <h3 id="b-art">Artigos definidos e indefinidos</h3>
+      <div class="tbl"><table>
+        <tr><th>Tipo de palavra</th><th>Definido sing.</th><th>Definido pl.</th><th>Indefinido</th><th>Exemplo</th></tr>
+        <tr><td class="wrap">masc. + consoante</td><td><em>il</em></td><td><em>i</em></td><td><em>un</em></td><td>il libro, i libri, un libro</td></tr>
+        <tr><td class="wrap">masc. + s+consoante, z, gn, ps, y</td><td><em>lo</em></td><td><em>gli</em></td><td><em>uno</em></td><td>lo zaino, gli zaini, uno studente</td></tr>
+        <tr><td class="wrap">masc. + vogal</td><td><em>l'</em></td><td><em>gli</em></td><td><em>un</em></td><td>l'amico, gli amici, un amico</td></tr>
+        <tr><td class="wrap">fem. + consoante</td><td><em>la</em></td><td><em>le</em></td><td><em>una</em></td><td>la casa, le case, una casa</td></tr>
+        <tr><td class="wrap">fem. + vogal</td><td><em>l'</em></td><td><em>le</em></td><td><em>un'</em></td><td>l'amica, le amiche, un'amica</td></tr>
+      </table></div>
+      <div class="tip"><span class="label">Repare</span><b>un amico</b> (masculino) não leva apóstrofo; <b>un'amica</b> (feminino) leva. O apóstrofo marca que o <span class="it">a</span> de <span class="it">una</span> caiu.</div>
+      <ul class="tight">
+        <li>O italiano usa artigo com possessivos (<span class="it">la mia casa</span>), idiomas (<span class="it">studio l'italiano</span>) e títulos (<span class="it">il dottor Rossi</span>), mas não ao falar diretamente com a pessoa: <span class="it">Buongiorno, dottor Rossi</span>.</li>
+        <li>Profissão depois de essere vai sem artigo: <span class="it">sono ingegnere</span> (não "sono un ingegnere", embora se ouça).</li>
+      </ul>
+
+      <div data-ex="g-base:1"></div>
+      <h3 id="b-plur">Gênero e plural dos substantivos</h3>
+      <div class="tbl"><table>
+        <tr><th>Singular</th><th>Plural</th><th>Exemplo</th></tr>
+        <tr><td>-o (masc.)</td><td><em>-i</em></td><td>il ragazzo → i ragazzi</td></tr>
+        <tr><td>-a (fem.)</td><td><em>-e</em></td><td>la ragazza → le ragazze</td></tr>
+        <tr><td>-e (masc. ou fem.)</td><td><em>-i</em></td><td>il padre → i padri · la chiave → le chiavi</td></tr>
+        <tr><td>-ca / -ga</td><td><em>-che / -ghe</em></td><td>l'amica → le amiche · la riga → le righe</td></tr>
+        <tr><td>-co / -go</td><td><em>-chi / -ghi</em> (geralmente)</td><td>il parco → i parchi · il lago → i laghi (exceção: amico → amici, medico → medici)</td></tr>
+        <tr><td>-cia / -gia</td><td><em>-ce / -ge</em> ou -cie / -gie</td><td>l'arancia → le arance · la camicia → le camicie</td></tr>
+        <tr><td class="wrap">acento final, palavra estrangeira, abreviação</td><td><em>não muda</em></td><td>la città → le città · il caffè → i caffè · il bar → i bar · la foto → le foto</td></tr>
+      </table></div>
+      <div class="trap"><span class="label">Exceções que o Duolingo usa</span>
+        <ul class="tight">
+          <li>Masculinos em <b>-a</b>: <span class="it">il problema, il programma, il sistema, il cinema</span> (plural <span class="it">i problemi</span>).</li>
+          <li>Femininos em <b>-o</b>: <span class="it">la mano (le mani), la foto, la radio, la moto, la bici</span>.</li>
+          <li>Plurais irregulares: <span class="it">l'uomo → gli uomini, l'uovo → le uova, il braccio → le braccia, il dito → le dita</span>.</li>
+        </ul>
+      </div>
+
+      <div data-ex="g-base:2"></div>
+      <h3 id="b-dem">Questo e quello (este / aquele)</h3>
+      <p><b>Questo</b> = este, isto (perto de quem fala). <b>Quello</b> = aquele, aquilo (longe). Ambos concordam em gênero e número.</p>
+      <div class="tbl"><table>
+        <tr><th></th><th>Masc. sing.</th><th>Fem. sing.</th><th>Masc. pl.</th><th>Fem. pl.</th></tr>
+        <tr><td><em>questo</em></td><td>questo (quest')</td><td>questa (quest')</td><td>questi</td><td>queste</td></tr>
+      </table></div>
+      <div class="ex">
+        <div><i>Questo caffè è buonissimo. Questa è la mia collega.</i><span>Este café está ótimo. Esta é minha colega.</span></div>
+        <div><i>Quest'anno vado in Italia.</i><span>Este ano vou para a Itália. (quest' antes de vogal)</span></div>
+      </div>
+      <p><b>Quello antes de um substantivo muda como o artigo definido</b>: pegue o artigo que a palavra usaria e cole em <span class="it">que-</span>.</p>
+      <div class="tbl"><table>
+        <tr><th>Artigo</th><th>Forma de quello</th><th>Exemplo</th></tr>
+        <tr><td>il</td><td><em>quel</em></td><td>quel libro</td></tr>
+        <tr><td>lo</td><td><em>quello</em></td><td>quello studente</td></tr>
+        <tr><td>l'</td><td><em>quell'</em></td><td>quell'ufficio, quell'amica</td></tr>
+        <tr><td>la</td><td><em>quella</em></td><td>quella casa</td></tr>
+        <tr><td>i</td><td><em>quei</em></td><td>quei libri</td></tr>
+        <tr><td>gli</td><td><em>quegli</em></td><td>quegli studenti, quegli uffici</td></tr>
+        <tr><td>le</td><td><em>quelle</em></td><td>quelle case</td></tr>
+      </table></div>
+      <p><b>Sozinho (pronome)</b>, quello tem só quatro formas: <span class="it">quello, quella, quelli, quelle</span>. <span class="it">Quale vuoi? — Quello rosso.</span> (Qual você quer? — Aquele vermelho.)</p>
+      <div class="tip"><span class="label">Mesma lógica</span><b>bello</b> antes do substantivo segue quello: <span class="it">un bel ragazzo, un bello zaino, un bell'ufficio, i bei giorni, begli occhi</span>. <b>buono</b> segue o artigo indefinido: <span class="it">un buon caffè, una buona idea, un buon amico</span>.</div>
+      <p class="small muted">Para "isto aqui / aquilo lá": <span class="it">questo qui, quello lì / là</span>. "O que é isso?" = <span class="it">Che cos'è questo?</span></p>
+
+      <div data-ex="g-base:3"></div>
+      <h3 id="b-poss">Possessivos</h3>
+      <div class="tbl"><table>
+        <tr><th>Dono</th><th>Masc. sing.</th><th>Fem. sing.</th><th>Masc. pl.</th><th>Fem. pl.</th></tr>
+        <tr><td>io</td><td>il mio</td><td>la mia</td><td>i miei</td><td>le mie</td></tr>
+        <tr><td>tu</td><td>il tuo</td><td>la tua</td><td>i tuoi</td><td>le tue</td></tr>
+        <tr><td>lui/lei/Lei</td><td>il suo (Suo)</td><td>la sua (Sua)</td><td>i suoi</td><td>le sue</td></tr>
+        <tr><td>noi</td><td>il nostro</td><td>la nostra</td><td>i nostri</td><td>le nostre</td></tr>
+        <tr><td>voi</td><td>il vostro</td><td>la vostra</td><td>i vostri</td><td>le vostre</td></tr>
+        <tr><td>loro</td><td>il loro</td><td>la loro</td><td>i loro</td><td>le loro</td></tr>
+      </table></div>
+      <ul class="tight">
+        <li>O possessivo concorda com a <b>coisa possuída</b>, não com o dono: <span class="it">Marco e la sua macchina, Anna e il suo libro</span>.</li>
+        <li><b>Suo</b> serve para ele, ela e o senhor (formal, às vezes com maiúscula): <span class="it">Ecco il Suo caffè</span>.</li>
+        <li><b>Loro</b> nunca muda: <span class="it">la loro casa, i loro figli</span>.</li>
+      </ul>
+      <div class="trap"><span class="label">Regra da família</span>Com parente <b>no singular e sem adjetivo</b>, cai o artigo: <span class="it">mia madre, tuo fratello, sua moglie</span>. O artigo volta no plural (<span class="it">i miei fratelli</span>), com <b>loro</b> (<span class="it">la loro madre</span>), com adjetivo ou diminutivo (<span class="it">la mia sorellina, il mio caro padre</span>) e com <span class="it">mamma/papà</span> (<span class="it">la mia mamma</span>).</div>
+
+      <div data-ex="g-base:4"></div>
+      <h3 id="b-adj">Adjetivos</h3>
+      <div class="tbl"><table>
+        <tr><th>Classe</th><th>Masc. sing.</th><th>Fem. sing.</th><th>Masc. pl.</th><th>Fem. pl.</th></tr>
+        <tr><td>em -o</td><td>alto</td><td>alta</td><td>alti</td><td>alte</td></tr>
+        <tr><td>em -e</td><td>gentile</td><td>gentile</td><td>gentili</td><td>gentili</td></tr>
+      </table></div>
+      <ul class="tight">
+        <li>Normalmente vêm <b>depois</b> do substantivo: <span class="it">una casa grande, un collega simpatico</span>.</li>
+        <li>Alguns curtos vêm antes: <span class="it">bello, buono, grande, piccolo, nuovo, vecchio, giovane</span>.</li>
+        <li>Grupo misto (masc. + fem.) fica no masculino plural: <span class="it">Marco e Anna sono stanchi</span>.</li>
+        <li>Superlativo absoluto com <b>-issimo</b>: <span class="it">bellissimo, buonissimo, grandissimo</span> (= muito bonito...).</li>
+        <li>Cores <span class="it">blu, rosa, viola, beige</span> não mudam: <span class="it">le scarpe blu</span>.</li>
+      </ul>
+
+      <div data-ex="g-base:5"></div>
+      <h3 id="b-ce">C'è / ci sono · ecco</h3>
+      <div class="ex">
+        <div><i>C'è una farmacia qui vicino? — Sì, ci sono due farmacie.</i><span>Tem / há uma farmácia aqui perto? — Sim, há duas farmácias. (c'è + singular, ci sono + plural)</span></div>
+        <div><i>Non c'è problema.</i><span>Não tem problema.</span></div>
+        <div><i>Ecco il conto! Ecco la mia casa.</i><span>Aqui está a conta! Eis minha casa. (ecco = aqui está, olha)</span></div>
+        <div><i>Dov'è il bagno? — Eccolo!</i><span>Onde fica o banheiro? — Aqui está! (ecco + lo/la/li/le)</span></div>
+      </div>
+      <div class="tip"><span class="label">Diferença</span><b>c'è</b> diz que algo existe num lugar; <b>è</b> diz onde está algo já conhecido: <span class="it">C'è un bar in piazza</span> × <span class="it">Il bar è in piazza</span>.</div>
+
+      <div data-ex="g-base:6"></div>
+      <h3 id="b-int">Palavras interrogativas</h3>
+      <div class="tbl"><table>
+        <tr><th>Italiano</th><th>Português</th><th>Exemplo</th></tr>
+        <tr><td><em>chi</em></td><td>quem</td><td>Chi è? Con chi lavori?</td></tr>
+        <tr><td><em>che cosa / cosa / che</em></td><td>o quê</td><td>Che cosa fai? Cosa vuoi?</td></tr>
+        <tr><td><em>dove</em></td><td>onde</td><td>Dove abiti? Dov'è la stazione?</td></tr>
+        <tr><td><em>di dove</em></td><td>de onde (origem)</td><td>Di dove sei?</td></tr>
+        <tr><td><em>quando</em></td><td>quando</td><td>Quando parti?</td></tr>
+        <tr><td><em>come</em></td><td>como</td><td>Come stai? Come ti chiami?</td></tr>
+        <tr><td><em>perché</em></td><td>por quê / porque</td><td>Perché studi l'italiano? — Perché...</td></tr>
+        <tr><td><em>quanto/a/i/e</em></td><td>quanto(s)</td><td>Quanto costa? Quanti anni hai?</td></tr>
+        <tr><td><em>quale / quali</em></td><td>qual / quais</td><td>Qual è il tuo numero? Quali libri?</td></tr>
+        <tr><td><em>che + subst.</em></td><td>que (tipo de)</td><td>Che lavoro fai? Che ore sono?</td></tr>
+      </table></div>
+      <div class="trap"><span class="label">Escrita</span><b>Qual è</b> nunca leva apóstrofo (não é "qual'è"). <b>Perché</b> leva acento agudo. Em pergunta sim/não, a ordem não muda; só a entonação sobe: <span class="it">Sei italiano?</span></div>
+
+      <div data-ex="g-base:7"></div>
+      <h3 id="b-neg">Negação</h3>
+      <p><b>Non</b> vai sempre antes do verbo (e antes dos pronomes): <span class="it">Non lavoro oggi. Non lo so.</span> Ao contrário do inglês, o italiano usa <b>dupla negação</b>, como o português:</p>
+      <div class="tbl"><table>
+        <tr><th>Estrutura</th><th>Significado</th><th>Exemplo</th></tr>
+        <tr><td><em>non... mai</em></td><td>nunca</td><td>Non bevo mai caffè.</td></tr>
+        <tr><td><em>non... niente / nulla</em></td><td>nada</td><td>Non capisco niente.</td></tr>
+        <tr><td><em>non... nessuno</em></td><td>ninguém</td><td>Non conosco nessuno qui.</td></tr>
+        <tr><td><em>non... più</em></td><td>não mais</td><td>Non abito più a Roma.</td></tr>
+        <tr><td><em>non... ancora</em></td><td>ainda não</td><td>Non sono ancora pronto.</td></tr>
+        <tr><td><em>non... neanche</em></td><td>nem / também não</td><td>Non lo so neanche io.</td></tr>
+      </table></div>
+
+      <div data-ex="g-base:8"></div>
+      <h3 id="b-part">Partitivo e quantidades</h3>
+      <p>O <b>partitivo</b> (<span class="it">di + artigo</span>) indica uma quantidade indefinida, como "um pouco de" ou "alguns": <span class="it">Vorrei del pane, della frutta, dei pomodori, delle mele.</span> Na negação ele some: <span class="it">Non ho pane.</span> Alternativa simples: <span class="it">un po' di pane</span>.</p>
+      <div class="tbl"><table>
+        <tr><th>Palavra</th><th>Como adjetivo (concorda)</th><th>Como advérbio (não muda)</th></tr>
+        <tr><td><em>molto</em></td><td>molti amici, molta gente</td><td>è molto bello</td></tr>
+        <tr><td><em>tanto</em></td><td>tante grazie, tanti auguri</td><td>mi piace tanto</td></tr>
+        <tr><td><em>poco</em></td><td>pochi soldi, poca acqua</td><td>dorme poco</td></tr>
+        <tr><td><em>troppo</em></td><td>troppe persone</td><td>costa troppo</td></tr>
+        <tr><td><em>tutto</em></td><td>tutto il giorno, tutti i giorni (todo dia)</td><td>—</td></tr>
+        <tr><td><em>ogni</em></td><td>ogni giorno (não muda, sempre singular)</td><td>—</td></tr>
+      </table></div>
+      <div class="tip"><span class="label">Quantidades na feira</span><span class="it">un chilo di mele, mezzo chilo di uva, un etto di prosciutto (100 g), una bottiglia d'acqua, un pacco di pasta</span>.</div>
+      <div data-ex="g-base:9"></div>
+      <button class="btn primary" data-practice="base">Praticar o básico</button>
+    </article>
+
+    <!-- PREPOSIÇÕES -->
+    <article class="gram" id="g-prep" hidden>
+      <h2>Preposições <span class="label">preposizioni</span></h2>
+      <p>As preposições são o ponto onde o português mais atrapalha. São nove simples: <b>di, a, da, in, con, su, per, tra/fra</b>. Cinco delas (<b>di, a, da, in, su</b>) se juntam com o artigo definido e viram <b>preposições articuladas</b>, exatamente como "de + o = do" e "em + a = na" em português.</p>
+
+      <h3>Antes: os artigos definidos</h3>
+      <div class="tbl"><table>
+        <tr><th>Artigo</th><th>Quando usar</th><th>Exemplo</th></tr>
+        <tr><td><em>il / i</em></td><td class="wrap">masculino diante de consoante comum</td><td>il libro → i libri</td></tr>
+        <tr><td><em>lo / gli</em></td><td class="wrap">masculino diante de s+consoante, z, gn, ps, y</td><td>lo studente → gli studenti</td></tr>
+        <tr><td><em>l' / gli</em></td><td class="wrap">masculino diante de vogal</td><td>l'ufficio → gli uffici</td></tr>
+        <tr><td><em>la / le</em></td><td class="wrap">feminino diante de consoante</td><td>la casa → le case</td></tr>
+        <tr><td><em>l' / le</em></td><td class="wrap">feminino diante de vogal</td><td>l'azienda → le aziende</td></tr>
+      </table></div>
+
+      <div data-ex="g-prep:0"></div>
+      <h3>Tabela das preposições articuladas</h3>
+      <div class="tbl"><table>
+        <tr><th></th><th>il</th><th>lo</th><th>l'</th><th>la</th><th>i</th><th>gli</th><th>le</th></tr>
+        <tr><th>di</th><td>del</td><td>dello</td><td>dell'</td><td>della</td><td>dei</td><td>degli</td><td>delle</td></tr>
+        <tr><th>a</th><td>al</td><td>allo</td><td>all'</td><td>alla</td><td>ai</td><td>agli</td><td>alle</td></tr>
+        <tr><th>da</th><td>dal</td><td>dallo</td><td>dall'</td><td>dalla</td><td>dai</td><td>dagli</td><td>dalle</td></tr>
+        <tr><th>in</th><td>nel</td><td>nello</td><td>nell'</td><td>nella</td><td>nei</td><td>negli</td><td>nelle</td></tr>
+        <tr><th>su</th><td>sul</td><td>sullo</td><td>sull'</td><td>sulla</td><td>sui</td><td>sugli</td><td>sulle</td></tr>
+      </table></div>
+      <div class="tip"><span class="label">Regra prática</span><b>in</b> vira <b>ne-</b> (nel, nella). <b>Con, per, tra</b> normalmente não se juntam: <span class="it">con il collega, per la riunione, tra le due</span>.</div>
+
+      <div data-ex="g-prep:1"></div>
+      <h3>Cada preposição e seus usos</h3>
+      <div class="uses">
+        <div class="use"><h4>di</h4><ul>
+          <li><b>Posse:</b> <span class="it">la macchina di Marco</span> (o carro do Marco)</li>
+          <li><b>Origem com essere:</b> <span class="it">sono di Curitiba</span> (sou de Curitiba)</li>
+          <li><b>Assunto/conteúdo:</b> <span class="it">un corso d'italiano, un libro di storia</span></li>
+          <li><b>Material:</b> <span class="it">un tavolo di legno</span> (mesa de madeira)</li>
+          <li><b>Partitivo</b> ("um pouco de", "alguns"): <span class="it">vorrei del pane, compro delle mele</span></li>
+          <li><b>Comparação:</b> <span class="it">Roma è più grande di Firenze</span></li>
+          <li><b>Partes do dia/estações:</b> <span class="it">di mattina, di sera, d'estate</span></li>
+        </ul></div>
+        <div class="use"><h4>a</h4><ul>
+          <li><b>Cidade</b> (estar ou ir): <span class="it">vivo a Curitiba, vado a Roma</span></li>
+          <li><b>Destino fixo:</b> <span class="it">a casa, a scuola, a letto, al cinema, al mare, al bar</span></li>
+          <li><b>Objeto indireto:</b> <span class="it">scrivo una mail al capo</span></li>
+          <li><b>Hora:</b> <span class="it">la riunione è alle tre, a mezzogiorno</span></li>
+          <li><b>Modo:</b> <span class="it">a piedi, fatto a mano</span></li>
+          <li><b>Verbo + a + infinitivo:</b> <span class="it">vado a mangiare, comincio a lavorare, riesco a finire</span></li>
+        </ul></div>
+        <div class="use"><h4>da</h4><ul>
+          <li><b>Procedência:</b> <span class="it">vengo da Milano, il treno da Roma</span></li>
+          <li><b>Casa ou local de uma pessoa:</b> <span class="it">vado da Marco, sono dal medico, dal parrucchiere</span></li>
+          <li><b>Desde / há (com o presente):</b> <span class="it">lavoro qui da un anno</span> (trabalho aqui há um ano)</li>
+          <li><b>Finalidade/característica:</b> <span class="it">occhiali da sole, scarpe da ginnastica</span></li>
+          <li><b>Coisa a fazer:</b> <span class="it">ho molto da fare, niente da dire</span></li>
+          <li><b>"Quando eu era":</b> <span class="it">da bambino giocavo a calcio</span></li>
+          <li><b>Agente da passiva:</b> <span class="it">il progetto è firmato dall'ingegnere</span></li>
+        </ul></div>
+        <div class="use"><h4>in</h4><ul>
+          <li><b>País, região, continente:</b> <span class="it">in Italia, in Brasile, in Toscana, in Europa</span></li>
+          <li><b>Transporte:</b> <span class="it">in treno, in macchina, in aereo, in autobus</span> (mas <span class="it">a piedi</span>)</li>
+          <li><b>Lugares fixos</b> (muitos em -ia/-eria): <span class="it">in ufficio, in banca, in farmacia, in biblioteca, in centro, in cucina, in montagna</span></li>
+          <li><b>Meses, estações, anos:</b> <span class="it">in agosto, in estate, nel 2025</span></li>
+          <li><b>Tempo gasto:</b> <span class="it">finisco la relazione in un'ora</span></li>
+        </ul></div>
+        <div class="use"><h4>su</h4><ul>
+          <li><b>Sobre / em cima:</b> <span class="it">il telefono è sul tavolo</span></li>
+          <li><b>Tema:</b> <span class="it">una riunione sul progetto, un articolo sull'ambiente</span></li>
+          <li><b>Aproximação:</b> <span class="it">un uomo sui quarant'anni</span></li>
+          <li><b>Proporção:</b> <span class="it">tre persone su dieci</span></li>
+        </ul></div>
+        <div class="use"><h4>con · per · tra/fra</h4><ul>
+          <li><b>con</b> = com (companhia, instrumento, modo): <span class="it">parlo con il cliente, con piacere</span></li>
+          <li><b>per</b> = para/por: destino de partida (<span class="it">parto per Roma</span>), duração (<span class="it">ho lavorato per tre ore</span>), finalidade (<span class="it">è per te</span>), opinião (<span class="it">per me va bene</span>)</li>
+          <li><b>tra/fra</b> (idênticas) = entre (<span class="it">tra Roma e Napoli</span>) e <b>daqui a</b> (<span class="it">tra due giorni, fra un'ora</span>)</li>
+        </ul></div>
+      </div>
+
+      <div data-ex="g-prep:2"></div>
+      <h3>Preposições de lugar (Seção 3)</h3>
+      <div class="tbl"><table>
+        <tr><th>Italiano</th><th>Português</th><th>Exemplo</th></tr>
+        <tr><td><em>sopra</em></td><td>em cima de</td><td>sopra l'armadio</td></tr>
+        <tr><td><em>sotto</em></td><td>embaixo de</td><td>sotto il letto</td></tr>
+        <tr><td><em>davanti a</em></td><td>na frente de</td><td>davanti alla stazione</td></tr>
+        <tr><td><em>dietro (a)</em></td><td>atrás de</td><td>dietro la casa</td></tr>
+        <tr><td><em>accanto a</em></td><td>ao lado de</td><td>accanto alla banca</td></tr>
+        <tr><td><em>di fronte a</em></td><td>em frente a (do outro lado)</td><td>di fronte al tribunale</td></tr>
+        <tr><td><em>vicino a</em></td><td>perto de</td><td>vicino al centro</td></tr>
+        <tr><td><em>lontano da</em></td><td>longe de</td><td>lontano dall'ufficio</td></tr>
+        <tr><td><em>dentro / fuori</em></td><td>dentro / fora</td><td>dentro la borsa</td></tr>
+      </table></div>
+
+      <div class="trap"><span class="label">Armadilhas do português</span>
+        <ul class="tight">
+          <li>"Vou <u>ao</u> Brasil" → <span class="it">vado <b>in</b> Brasile</span> (país = in)</li>
+          <li>"Estou <u>em</u> Roma" → <span class="it">sono <b>a</b> Roma</span> (cidade = a)</li>
+          <li>"Vou <u>ao</u> médico" → <span class="it">vado <b>dal</b> medico</span> (pessoa = da)</li>
+          <li>"Estudo italiano <u>há</u> dois anos" → <span class="it">studio italiano <b>da</b> due anni</span> (presente, não passado!)</li>
+          <li>"<u>Daqui a</u> uma semana" → <span class="it"><b>tra</b> una settimana</span></li>
+          <li>"<u>De</u> carro" → <span class="it"><b>in</b> macchina</span> · "<u>a</u> pé" → <span class="it"><b>a</b> piedi</span></li>
+          <li>"Dois anos <u>atrás</u>" → <span class="it">due anni <b>fa</b></span> (fa vem depois)</li>
+        </ul>
+      </div>
+      <div data-ex="g-prep:3"></div>
+      <button class="btn primary" data-practice="prep">Praticar preposições</button>
+    </article>
+
+    <!-- PRESENTE -->
+    <article class="gram" id="g-pres" hidden>
+      <h2>Presente <span class="label">presente indicativo</span></h2>
+      <p>O presente italiano funciona quase igual ao português: ações habituais, verdades, o que está acontecendo e, na fala, até o futuro próximo. Os verbos se dividem em três grupos pelo infinitivo: <b>-are</b>, <b>-ere</b> e <b>-ire</b>. Como no português, o pronome sujeito normalmente cai: <span class="it">lavoro</span> já significa "eu trabalho".</p>
+
+      <h3>Verbos regulares</h3>
+      <div class="tbl"><table>
+        <tr><th>Pessoa</th><th>parlare</th><th>prendere</th><th>dormire</th><th>finire (-isc-)</th></tr>
+        <tr><td>io</td><td>parl<em>o</em></td><td>prend<em>o</em></td><td>dorm<em>o</em></td><td>fin<em>isco</em></td></tr>
+        <tr><td>tu</td><td>parl<em>i</em></td><td>prend<em>i</em></td><td>dorm<em>i</em></td><td>fin<em>isci</em></td></tr>
+        <tr><td>lui/lei/Lei</td><td>parl<em>a</em></td><td>prend<em>e</em></td><td>dorm<em>e</em></td><td>fin<em>isce</em></td></tr>
+        <tr><td>noi</td><td>parl<em>iamo</em></td><td>prend<em>iamo</em></td><td>dorm<em>iamo</em></td><td>fin<em>iamo</em></td></tr>
+        <tr><td>voi</td><td>parl<em>ate</em></td><td>prend<em>ete</em></td><td>dorm<em>ite</em></td><td>fin<em>ite</em></td></tr>
+        <tr><td>loro</td><td>parl<em>ano</em></td><td>prend<em>ono</em></td><td>dorm<em>ono</em></td><td>fin<em>iscono</em></td></tr>
+      </table></div>
+      <div class="tip"><span class="label">Grupo -isc-</span>Muitos verbos em -ire inserem <b>-isc-</b> em io, tu, lui e loro: <span class="it">capire (capisco), preferire, pulire, spedire, costruire, restituire</span>. Noi e voi ficam normais (<span class="it">capiamo, capite</span>). O dicionário indica quais são.</div>
+      <div class="tip"><span class="label">Ortografia</span><b>-care/-gare</b> ganham <b>h</b> antes de i para manter o som: <span class="it">cercare → cerchi, cerchiamo; pagare → paghi, paghiamo</span>. <b>-ciare/-giare/-iare</b> não dobram o i: <span class="it">mangiare → mangi, mangiamo; studiare → studi</span>.</div>
+      <p class="small muted">Atenção à tônica em <b>loro</b>: <span class="it">PAR-la-no, PREN-do-no</span> — a sílaba forte é a mesma do io, nunca o final.</p>
+
+      <div data-ex="g-pres:0"></div>
+      <h3>Irregulares que você mais vai usar</h3>
+      <div class="tbl"><table>
+        <tr><th>Verbo</th><th>io</th><th>tu</th><th>lui/lei</th><th>noi</th><th>voi</th><th>loro</th></tr>
+        <tr><td><em>essere</em> ser/estar</td><td>sono</td><td>sei</td><td>è</td><td>siamo</td><td>siete</td><td>sono</td></tr>
+        <tr><td><em>avere</em> ter</td><td>ho</td><td>hai</td><td>ha</td><td>abbiamo</td><td>avete</td><td>hanno</td></tr>
+        <tr><td><em>andare</em> ir</td><td>vado</td><td>vai</td><td>va</td><td>andiamo</td><td>andate</td><td>vanno</td></tr>
+        <tr><td><em>fare</em> fazer</td><td>faccio</td><td>fai</td><td>fa</td><td>facciamo</td><td>fate</td><td>fanno</td></tr>
+        <tr><td><em>venire</em> vir</td><td>vengo</td><td>vieni</td><td>viene</td><td>veniamo</td><td>venite</td><td>vengono</td></tr>
+        <tr><td><em>stare</em> estar/ficar</td><td>sto</td><td>stai</td><td>sta</td><td>stiamo</td><td>state</td><td>stanno</td></tr>
+        <tr><td><em>dire</em> dizer</td><td>dico</td><td>dici</td><td>dice</td><td>diciamo</td><td>dite</td><td>dicono</td></tr>
+        <tr><td><em>uscire</em> sair</td><td>esco</td><td>esci</td><td>esce</td><td>usciamo</td><td>uscite</td><td>escono</td></tr>
+        <tr><td><em>dare</em> dar</td><td>do</td><td>dai</td><td>dà</td><td>diamo</td><td>date</td><td>danno</td></tr>
+        <tr><td><em>bere</em> beber</td><td>bevo</td><td>bevi</td><td>beve</td><td>beviamo</td><td>bevete</td><td>bevono</td></tr>
+        <tr><td><em>rimanere</em> ficar</td><td>rimango</td><td>rimani</td><td>rimane</td><td>rimaniamo</td><td>rimanete</td><td>rimangono</td></tr>
+        <tr><td><em>sapere</em> saber</td><td>so</td><td>sai</td><td>sa</td><td>sappiamo</td><td>sapete</td><td>sanno</td></tr>
+      </table></div>
+
+      <div data-ex="g-pres:1"></div>
+      <h3>Verbos modais: potere, volere, dovere</h3>
+      <div class="tbl"><table>
+        <tr><th>Pessoa</th><th>potere (poder)</th><th>volere (querer)</th><th>dovere (dever/ter que)</th></tr>
+        <tr><td>io</td><td>posso</td><td>voglio</td><td>devo</td></tr>
+        <tr><td>tu</td><td>puoi</td><td>vuoi</td><td>devi</td></tr>
+        <tr><td>lui/lei/Lei</td><td>può</td><td>vuole</td><td>deve</td></tr>
+        <tr><td>noi</td><td>possiamo</td><td>vogliamo</td><td>dobbiamo</td></tr>
+        <tr><td>voi</td><td>potete</td><td>volete</td><td>dovete</td></tr>
+        <tr><td>loro</td><td>possono</td><td>vogliono</td><td>devono</td></tr>
+      </table></div>
+      <p>Seguidos direto de infinitivo, sem preposição: <span class="it">posso entrare? devo finire il verbale, vogliamo cominciare</span>. Em pedidos educados, troque <span class="it">voglio</span> por <span class="it">vorrei</span>.</p>
+
+      <div data-ex="g-pres:2"></div>
+      <h3>Reflexivos (rotina — Seção 3)</h3>
+      <div class="tbl"><table>
+        <tr><th>Pessoa</th><th>alzarsi (levantar-se)</th><th>chiamarsi (chamar-se)</th></tr>
+        <tr><td>io</td><td><em>mi</em> alzo</td><td><em>mi</em> chiamo</td></tr>
+        <tr><td>tu</td><td><em>ti</em> alzi</td><td><em>ti</em> chiami</td></tr>
+        <tr><td>lui/lei/Lei</td><td><em>si</em> alza</td><td><em>si</em> chiama</td></tr>
+        <tr><td>noi</td><td><em>ci</em> alziamo</td><td><em>ci</em> chiamiamo</td></tr>
+        <tr><td>voi</td><td><em>vi</em> alzate</td><td><em>vi</em> chiamate</td></tr>
+        <tr><td>loro</td><td><em>si</em> alzano</td><td><em>si</em> chiamano</td></tr>
+      </table></div>
+      <div class="ex">
+        <div><i>Di solito mi sveglio alle sei, mi faccio la doccia e mi vesto.</i><span>Geralmente acordo às seis, tomo banho e me visto.</span></div>
+      </div>
+
+      <div data-ex="g-pres:3"></div>
+      <h3>Piacere: o "gostar" ao contrário</h3>
+      <p>Em italiano a coisa de que se gosta é o sujeito: "o café me agrada". Por isso o verbo concorda com a coisa, não com a pessoa.</p>
+      <div class="ex">
+        <div><i>Mi piace il caffè. / Mi piacciono i dolci.</i><span>Gosto de café. / Gosto de doces. (singular → piace, plural → piacciono)</span></div>
+        <div><i>Ti piace lavorare qui? — Sì, mi piace molto.</i><span>Com infinitivo, sempre piace.</span></div>
+        <div><i>A Marco piace il calcio. Le piace l'Italia?</i><span>A pessoa vem com a: a Marco, ai miei genitori; formal: Le piace?</span></div>
+      </div>
+
+      <div data-ex="g-pres:4"></div>
+      <h3>Usos especiais do presente</h3>
+      <ul class="tight">
+        <li><b>Futuro próximo com marcador:</b> <span class="it">domani parto per Milano</span>.</li>
+        <li><b>Duração até agora com da:</b> <span class="it">abito a Curitiba da dieci anni</span> — em português usamos "há", em italiano o verbo fica no presente.</li>
+        <li><b>Ação em andamento:</b> <span class="it">stare + gerúndio</span> → <span class="it">sto lavorando, sto scrivendo, sto dormendo</span> (-are → -ando; -ere/-ire → -endo).</li>
+      </ul>
+      <div data-ex="g-pres:5"></div>
+      <button class="btn primary" data-practice="pres">Praticar o presente</button>
+    </article>
+
+    <!-- PASSATO PROSSIMO -->
+    <article class="gram" id="g-pass" hidden>
+      <h2>Passato prossimo <span class="label">passado composto</span></h2>
+      <p>É o passado do dia a dia: corresponde ao nosso <b>pretérito perfeito</b> ("comi", "fui", "trabalhei"). Apesar de ser composto, <b>não</b> equivale ao "tenho comido" do português. Forma-se com <b>avere</b> ou <b>essere</b> no presente + <b>particípio passado</b>.</p>
+      <div class="ex">
+        <div><i>Ieri ho lavorato fino alle otto.</i><span>Ontem trabalhei até as oito.</span></div>
+        <div><i>La settimana scorsa sono andato a Roma.</i><span>Semana passada fui a Roma.</span></div>
+      </div>
+
+      <h3>1. O particípio</h3>
+      <div class="tbl"><table>
+        <tr><th>Infinitivo</th><th>Terminação</th><th>Exemplos</th></tr>
+        <tr><td>-are</td><td><em>-ato</em></td><td>parlato, lavorato, mangiato, comprato</td></tr>
+        <tr><td>-ere</td><td><em>-uto</em></td><td>avuto, venduto, potuto, conosciuto</td></tr>
+        <tr><td>-ire</td><td><em>-ito</em></td><td>dormito, finito, capito, partito</td></tr>
+      </table></div>
+
+      <div data-ex="g-pass:0"></div>
+      <h3>Particípios irregulares (decore estes)</h3>
+      <div class="tbl"><table>
+        <tr><th>Verbo</th><th>Particípio</th><th>Verbo</th><th>Particípio</th></tr>
+        <tr><td>fare</td><td><em>fatto</em></td><td>essere / stare</td><td><em>stato</em></td></tr>
+        <tr><td>dire</td><td><em>detto</em></td><td>venire</td><td><em>venuto</em></td></tr>
+        <tr><td>vedere</td><td><em>visto</em></td><td>nascere</td><td><em>nato</em></td></tr>
+        <tr><td>prendere</td><td><em>preso</em></td><td>morire</td><td><em>morto</em></td></tr>
+        <tr><td>mettere</td><td><em>messo</em></td><td>rimanere</td><td><em>rimasto</em></td></tr>
+        <tr><td>scrivere</td><td><em>scritto</em></td><td>bere</td><td><em>bevuto</em></td></tr>
+        <tr><td>leggere</td><td><em>letto</em></td><td>vivere</td><td><em>vissuto</em></td></tr>
+        <tr><td>aprire</td><td><em>aperto</em></td><td>scegliere</td><td><em>scelto</em></td></tr>
+        <tr><td>chiudere</td><td><em>chiuso</em></td><td>perdere</td><td><em>perso</em></td></tr>
+        <tr><td>chiedere</td><td><em>chiesto</em></td><td>rispondere</td><td><em>risposto</em></td></tr>
+        <tr><td>decidere</td><td><em>deciso</em></td><td>spendere</td><td><em>speso</em></td></tr>
+        <tr><td>correre</td><td><em>corso</em></td><td>scendere</td><td><em>sceso</em></td></tr>
+        <tr><td>offrire</td><td><em>offerto</em></td><td>succedere</td><td><em>successo</em></td></tr>
+        <tr><td>rompere</td><td><em>rotto</em></td><td>vincere</td><td><em>vinto</em></td></tr>
+        <tr><td>accendere</td><td><em>acceso</em></td><td>spegnere</td><td><em>spento</em></td></tr>
+        <tr><td>tradurre</td><td><em>tradotto</em></td><td>piacere</td><td><em>piaciuto</em></td></tr>
+      </table></div>
+
+      <div data-ex="g-pass:1"></div>
+      <h3>2. Avere ou essere?</h3>
+      <div class="uses">
+        <div class="use"><h4>avere — a maioria</h4><ul>
+          <li>Todos os verbos com objeto direto: <span class="it">ho mangiato una pizza, ho scritto la mail, ho visto il film</span></li>
+          <li>Vários intransitivos de atividade: <span class="it">ho dormito, ho lavorato, ho camminato, ho viaggiato, ho riso</span></li>
+          <li>O particípio <b>não muda</b>: <span class="it">Maria ha mangiato, loro hanno lavorato</span></li>
+        </ul></div>
+        <div class="use"><h4>essere — movimento, mudança, estado</h4><ul>
+          <li>Movimento de A para B: <span class="it">andare, venire, arrivare, partire, entrare, uscire, tornare, salire, scendere, cadere</span></li>
+          <li>Estado ou mudança: <span class="it">essere, stare, restare, rimanere, diventare, nascere, morire, crescere</span></li>
+          <li>Outros: <span class="it">succedere, piacere, costare, durare, sembrare, mancare</span></li>
+          <li>Todos os <b>reflexivos</b>: <span class="it">mi sono alzato, ci siamo divertiti</span></li>
+          <li>O particípio <b>concorda</b> com o sujeito como adjetivo: <span class="it">Marco è andato, Maria è andata, siamo andati, le ragazze sono uscite</span></li>
+        </ul></div>
+      </div>
+
+      <div data-ex="g-pass:2"></div>
+      <h3>Conjugação completa nos dois casos</h3>
+      <div class="tbl"><table>
+        <tr><th>Pessoa</th><th>lavorare (avere)</th><th>andare (essere)</th><th>alzarsi (reflexivo)</th></tr>
+        <tr><td>io</td><td>ho lavorato</td><td>sono andato/a</td><td>mi sono alzato/a</td></tr>
+        <tr><td>tu</td><td>hai lavorato</td><td>sei andato/a</td><td>ti sei alzato/a</td></tr>
+        <tr><td>lui/lei/Lei</td><td>ha lavorato</td><td>è andato/a</td><td>si è alzato/a</td></tr>
+        <tr><td>noi</td><td>abbiamo lavorato</td><td>siamo andati/e</td><td>ci siamo alzati/e</td></tr>
+        <tr><td>voi</td><td>avete lavorato</td><td>siete andati/e</td><td>vi siete alzati/e</td></tr>
+        <tr><td>loro</td><td>hanno lavorato</td><td>sono andati/e</td><td>si sono alzati/e</td></tr>
+      </table></div>
+      <div class="tip"><span class="label">Teste rápido</span>Pergunte "o quê?" depois do verbo. Se houver resposta (comi <u>o quê</u>? uma pizza) → <b>avere</b>. Se o verbo indica ir/vir ou mudar de estado → <b>essere</b>. Dica extra: verbos com essere em italiano costumam ser os que em francês também usam être.</div>
+
+      <div data-ex="g-pass:3"></div>
+      <h3>3. Posição de advérbios e negação</h3>
+      <div class="ex">
+        <div><i>Non ho ancora finito la relazione.</i><span>Ainda não terminei o relatório. (non antes do auxiliar; ancora entre auxiliar e particípio)</span></div>
+        <div><i>Ho già mandato la mail.</i><span>Já mandei o e-mail.</span></div>
+        <div><i>Sono appena arrivato.</i><span>Acabei de chegar. (appena = acabar de)</span></div>
+        <div><i>Sei mai stato in Sicilia?</i><span>Você já esteve na Sicília? (mai em pergunta = alguma vez)</span></div>
+        <div><i>Non ho mai visto la neve.</i><span>Nunca vi neve.</span></div>
+      </div>
+
+      <div data-ex="g-pass:4"></div>
+      <h3>Marcadores de tempo</h3>
+      <p><span class="it">ieri, ieri sera, l'altro ieri, stamattina, la settimana scorsa, il mese scorso, l'anno scorso, due giorni fa, un'ora fa, nel 2020, poco fa</span></p>
+
+      <div class="trap"><span class="label">Cuidado</span>
+        <ul class="tight">
+          <li><b>"Fa"</b> = atrás, sempre depois do tempo: <span class="it">tre anni fa</span>.</li>
+          <li>Com <b>pronome objeto</b> + avere, o particípio concorda (A2): <span class="it">la mail? L'ho letta</span>.</li>
+          <li><b>Passato prossimo × imperfetto:</b> o primeiro é a ação concluída ("fui"), o imperfetto é descrição ou hábito ("ia", "era"). <span class="it">Ieri pioveva quando sono uscito</span> — chovia quando saí. O imperfetto é tema do A2 (veja Ponte A2).</li>
+        </ul>
+      </div>
+      <div data-ex="g-pass:5"></div>
+      <button class="btn primary" data-practice="pass">Praticar o passato prossimo</button>
+    </article>
+
+    <!-- FUTURO -->
+    <article class="gram" id="g-fut" hidden>
+      <h2>Futuro simples <span class="label">futuro semplice</span></h2>
+      <p>Usado para planos, previsões e promessas, e também para fazer <b>suposições</b> sobre o presente. A boa notícia: as terminações são iguais para os três grupos.</p>
+
+      <h3>Formação</h3>
+      <p>Tire o <b>-e</b> final do infinitivo e acrescente as terminações. Nos verbos em <b>-are</b>, o <b>a</b> vira <b>e</b>: <span class="it">parlare → parler-</span>.</p>
+      <div class="tbl"><table>
+        <tr><th>Pessoa</th><th>Terminação</th><th>parlare</th><th>prendere</th><th>dormire</th></tr>
+        <tr><td>io</td><td><em>-ò</em></td><td>parlerò</td><td>prenderò</td><td>dormirò</td></tr>
+        <tr><td>tu</td><td><em>-ai</em></td><td>parlerai</td><td>prenderai</td><td>dormirai</td></tr>
+        <tr><td>lui/lei/Lei</td><td><em>-à</em></td><td>parlerà</td><td>prenderà</td><td>dormirà</td></tr>
+        <tr><td>noi</td><td><em>-emo</em></td><td>parleremo</td><td>prenderemo</td><td>dormiremo</td></tr>
+        <tr><td>voi</td><td><em>-ete</em></td><td>parlerete</td><td>prenderete</td><td>dormirete</td></tr>
+        <tr><td>loro</td><td><em>-anno</em></td><td>parleranno</td><td>prenderanno</td><td>dormiranno</td></tr>
+      </table></div>
+      <div class="tip"><span class="label">Ortografia</span><b>-care/-gare</b> ganham h: <span class="it">cercherò, pagherò</span>. <b>-ciare/-giare</b> perdem o i: <span class="it">mangerò, comincerò, viaggerò</span>. O acento em <b>-ò</b> e <b>-à</b> é obrigatório na escrita.</div>
+
+      <div data-ex="g-fut:0"></div>
+      <h3>Radicais irregulares</h3>
+      <p>As terminações continuam as mesmas; só o radical muda.</p>
+      <div class="tbl"><table>
+        <tr><th>Infinitivo</th><th>Radical</th><th>io</th><th>Infinitivo</th><th>Radical</th><th>io</th></tr>
+        <tr><td>essere</td><td><em>sar-</em></td><td>sarò</td><td>venire</td><td><em>verr-</em></td><td>verrò</td></tr>
+        <tr><td>avere</td><td><em>avr-</em></td><td>avrò</td><td>volere</td><td><em>vorr-</em></td><td>vorrò</td></tr>
+        <tr><td>andare</td><td><em>andr-</em></td><td>andrò</td><td>bere</td><td><em>berr-</em></td><td>berrò</td></tr>
+        <tr><td>fare</td><td><em>far-</em></td><td>farò</td><td>rimanere</td><td><em>rimarr-</em></td><td>rimarrò</td></tr>
+        <tr><td>dare</td><td><em>dar-</em></td><td>darò</td><td>tenere</td><td><em>terr-</em></td><td>terrò</td></tr>
+        <tr><td>stare</td><td><em>star-</em></td><td>starò</td><td>potere</td><td><em>potr-</em></td><td>potrò</td></tr>
+        <tr><td>dire</td><td><em>dir-</em></td><td>dirò</td><td>dovere</td><td><em>dovr-</em></td><td>dovrò</td></tr>
+        <tr><td>vedere</td><td><em>vedr-</em></td><td>vedrò</td><td>sapere</td><td><em>sapr-</em></td><td>saprò</td></tr>
+        <tr><td>vivere</td><td><em>vivr-</em></td><td>vivrò</td><td>cadere</td><td><em>cadr-</em></td><td>cadrò</td></tr>
+      </table></div>
+      <p class="small muted">Padrão para memorizar: muitos perdem a vogal (<span class="it">andare → andr-, potere → potr-</span>); os de "rr" são venire, volere, bere, rimanere, tenere.</p>
+
+      <div data-ex="g-fut:1"></div>
+      <h3>Usos</h3>
+      <div class="ex">
+        <div><i>La settimana prossima andrò a Milano per lavoro.</i><span>Plano ou previsão.</span></div>
+        <div><i>Ti prometto che finirò il progetto entro venerdì.</i><span>Promessa (entro = até, como prazo).</span></div>
+        <div><i>Dov'è Marco? — Non so, sarà in ufficio.</i><span>Suposição sobre o presente: "deve estar no escritório".</span></div>
+        <div><i>Che ore sono? — Saranno le dieci.</i><span>"Devem ser umas dez horas."</span></div>
+      </div>
+
+      <div class="trap"><span class="label">Grande diferença do português</span>
+        Depois de <b>quando</b> e <b>se</b> referindo ao futuro, o português usa o futuro do subjuntivo ("quando eu chegar", "se eu puder"). O italiano usa o <b>futuro normal</b>:
+        <div class="ex" style="margin-top:8px">
+          <div><i>Quando arriverò a Roma, ti chiamerò.</i><span>Quando eu chegar a Roma, te ligo.</span></div>
+          <div><i>Se potrò, verrò alla riunione.</i><span>Se eu puder, irei à reunião. (na fala também: Se posso, vengo.)</span></div>
+        </div>
+      </div>
+
+      <div data-ex="g-fut:2"></div>
+      <h3>Futuro anteriore (prévia)</h3>
+      <p>Ação futura que acontece antes de outra: <b>avere/essere no futuro + particípio</b>. <span class="it">Quando avrò finito il verbale, te lo manderò</span> — quando eu tiver terminado a ata, te mando.</p>
+
+      <div data-ex="g-fut:3"></div>
+      <h3>Na conversa</h3>
+      <p>No dia a dia o italiano usa muito o <b>presente</b> no lugar do futuro quando há um marcador de tempo: <span class="it">domani vado a Roma</span>. O futuro soa mais formal, mais incerto ou mais distante: ótimo para e-mails de trabalho.</p>
+      <p><b>Marcadores:</b> <span class="it">domani, dopodomani, tra/fra una settimana, la settimana prossima, il mese prossimo, l'anno prossimo, presto, un giorno, entro venerdì</span></p>
+      <div data-ex="g-fut:4"></div>
+      <button class="btn primary" data-practice="fut">Praticar o futuro</button>
+    </article>
+
+    <!-- PONTE A2 -->
+    <article class="gram" id="g-a2" hidden>
+      <h2>Ponte para o A2</h2>
+      <p>Estes são os pontos que a Seção 4 (A2) do Duolingo cobra e que completam o que você viu até aqui.</p>
+      <h3>Imperfetto: descrições e hábitos no passado</h3>
+      <div class="tbl"><table>
+        <tr><th>Pessoa</th><th>parlare</th><th>avere</th><th>essere (irregular)</th><th>fare</th></tr>
+        <tr><td>io</td><td>parlavo</td><td>avevo</td><td>ero</td><td>facevo</td></tr>
+        <tr><td>tu</td><td>parlavi</td><td>avevi</td><td>eri</td><td>facevi</td></tr>
+        <tr><td>lui/lei</td><td>parlava</td><td>aveva</td><td>era</td><td>faceva</td></tr>
+        <tr><td>noi</td><td>parlavamo</td><td>avevamo</td><td>eravamo</td><td>facevamo</td></tr>
+        <tr><td>voi</td><td>parlavate</td><td>avevate</td><td>eravate</td><td>facevate</td></tr>
+        <tr><td>loro</td><td>parlavano</td><td>avevano</td><td>erano</td><td>facevano</td></tr>
+      </table></div>
+      <div class="ex"><div><i>Da bambino abitavo a Curitiba e andavo a scuola a piedi.</i><span>Quando criança eu morava em Curitiba e ia à escola a pé.</span></div></div>
+      <div data-ex="g-a2:0"></div>
+      <h3>Condizionale: pedidos educados</h3>
+      <p>Mesmo radical do futuro + <b>-ei, -esti, -ebbe, -emmo, -este, -ebbero</b>: <span class="it">vorrei, potrei, dovrei, sarebbe, avrei</span>. <span class="it">Potrebbe mandarmi il preventivo?</span> — O senhor poderia me enviar o orçamento?</p>
+      <div data-ex="g-a2:1"></div>
+      <h3>Pronomes objeto direto e indireto</h3>
+      <div class="tbl"><table>
+        <tr><th>Direto</th><th>Indireto</th><th>Exemplo</th></tr>
+        <tr><td>mi, ti, lo, la, ci, vi, li, le</td><td>mi, ti, gli, le (Le), ci, vi, gli</td><td class="wrap"><span class="it">Il verbale? Lo mando domani. — Gli scrivo una mail.</span></td></tr>
+      </table></div>
+      <div data-ex="g-a2:2"></div>
+      <h3>Ci e ne</h3>
+      <ul class="tight">
+        <li><b>ci</b> = lá/nisso: <span class="it">Vai a Roma? Sì, ci vado domani.</span> · <span class="it">ci vuole un'ora</span> (leva uma hora).</li>
+        <li><b>ne</b> = disso/dele (quantidade): <span class="it">Quanti progetti hai? Ne ho tre.</span></li>
+      </ul>
+      <div data-ex="g-a2:3"></div>
+      <h3>Comparativos</h3>
+      <p><span class="it">più ... di / meno ... di / così ... come</span>. Irregulares: <span class="it">migliore</span> (melhor), <span class="it">peggiore</span> (pior), <span class="it">meglio / peggio</span> (advérbios).</p>
+    <div data-ex="g-a2:4"></div>
+      </article>
+  </section>
+
+  <!-- ===================== VOCABULÁRIO ===================== -->
+  <section class="view" id="v-vocab" data-view="vocab" hidden>
+    <div class="stack">
+      <h2>Vocabulário</h2>
+      <p class="muted small" id="vcount"></p>
+    </div>
+    <div class="filters">
+      <input type="search" id="vq" placeholder="Buscar em italiano ou português" aria-label="Buscar palavra">
+      <select id="vlvl" aria-label="Nível"><option value="">A1 + A2</option><option value="A1">Só A1</option><option value="A2">Só A2</option></select>
+      <select id="vtheme" aria-label="Tema"><option value="">Todos os temas</option></select>
+    </div>
+    <div class="vlist" id="vlist"></div>
+  </section>
+
+  <!-- ===================== EXERCÍCIOS ===================== -->
+  <section class="view" id="v-exerc" data-view="exerc" hidden>
+    <div id="exHome" class="stack">
+      <h2>Exercícios</h2>
+      <p class="muted small">Rodadas de 10 questões com correção e explicação na hora. Conjugação e vocabulário são gerados de novo a cada rodada.</p>
+      <div class="topics" id="topics"></div>
+    </div>
+    <div id="exRun" class="stack" hidden></div>
+  </section>
+
+  <!-- ===================== CARTÕES ===================== -->
+  <section class="view" id="v-cartoes" data-view="cartoes" hidden>
+    <div class="row" style="justify-content:space-between">
+      <h2>Cartões do dia</h2>
+      <span class="chip" id="sessInfo"></span>
+    </div>
+    <div id="flashArea" class="stack"></div>
+
+    <div class="card stack">
+      <h3>Seu progresso</h3>
+      <div class="boxes" id="boxes"></div>
+      <div class="boxlbl"><span>hoje</span><span>1d</span><span>2–3d</span><span>4–7d</span><span>8–15d</span><span>16–31d</span><span>1–2m</span><span>2m+</span></div>
+      <p class="small muted">Revisão espaçada no estilo do Anki: cada cartão tem seu intervalo e sua facilidade. Bom multiplica o intervalo, Fácil aumenta mais e deixa o cartão mais leve, Difícil cresce pouco e Errei faz o cartão voltar na mesma sessão. As barras mostram quantos cartões estão em cada faixa de intervalo.</p>
+    </div>
+
+    <div class="card stack">
+      <h3>Configurar</h3>
+      <div class="decks" id="decks"></div>
+      <div class="row">
+        <label for="newPerDay" class="small" style="flex:1">Cartões novos por dia</label>
+        <select id="newPerDay" style="width:auto"><option>10</option><option>15</option><option>20</option><option>30</option><option>50</option></select>
+      </div>
+      <div class="row">
+        <label for="dir" class="small" style="flex:1">Direção do vocabulário</label>
+        <select id="dir" style="width:auto"><option value="it">Italiano → Português</option><option value="pt">Português → Italiano</option><option value="mix">Misturado</option></select>
+      </div>
+      
+    </div>
+
+    <div class="card stack">
+      <h3>Backup do progresso</h3>
+      <p class="small muted">Seu progresso fica salvo neste aparelho. Para levá-lo a outro celular ou computador, exporte aqui e importe lá.</p>
+      <div class="row"><button class="btn" id="bkExport">Exportar progresso</button><label class="btn" for="bkFile" style="cursor:pointer">Importar progresso</label><input type="file" id="bkFile" accept="application/json,.json" hidden></div>
+      <p class="small" id="bkMsg" role="status"></p>
+    </div>
+  </section>
+</div>
+
+<div class="sheetback" id="sheetBack" hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shWord" hidden>
+  <div class="inner">
+    <div class="shhead">
+      <div><div class="shword" id="shWord"></div><div class="small muted" id="shLemma"></div></div>
+      <div class="row" style="gap:6px;flex-wrap:nowrap">
+        <button class="iconbtn" id="shSay" data-say="" aria-label="Ouvir pronúncia"><svg viewBox="0 0 24 24"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>
+        <button class="iconbtn star" id="shFav" aria-pressed="false" aria-label="Salvar nas minhas palavras"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg></button>
+        <button class="iconbtn" id="shClose" aria-label="Fechar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+    </div>
+    <div id="shBody" class="stack"></div>
+  </div>
+</div>
+
+<nav class="tabs" aria-label="Seções do app"><div class="in" role="tablist">
+  <button role="tab" data-tab="inicio" aria-selected="true"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Início</button>
+  <button role="tab" data-tab="news" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 5h13v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v10a2 2 0 0 1-2 2"/><path d="M7 9h7M7 13h7M7 17h4"/></svg>Notícia</button>
+  <button role="tab" data-tab="gramatica" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M8 7h7M8 11h5"/></svg>Gramática</button>
+  <button role="tab" data-tab="vocab" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h13"/></svg>Vocab.</button>
+  <button role="tab" data-tab="exerc" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg>Exercícios</button>
+  <button role="tab" data-tab="cartoes" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="14" height="13" rx="2"/><path d="M7 7V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-2"/></svg>Cartões</button>
+</div></nav>
+
+<script>
+/* ============================ DADOS: VOCABULÁRIO ============================ */
+const VOCAB_RAW = `
+#Saudações e cortesia|A1
+ciao=oi / tchau
+buongiorno=bom dia
+buonasera=boa noite (ao chegar)
+buonanotte=boa noite (ao dormir)
+arrivederci=até logo
+arrivederLa=até logo (formal)
+a presto=até breve
+a dopo=até mais tarde
+a domani=até amanhã
+per favore=por favor
+grazie=obrigado
+prego=de nada / fique à vontade
+scusa=desculpa (informal)
+scusi=com licença (formal)
+mi dispiace=sinto muito
+piacere=prazer
+come stai?=como você está?
+come sta?=como o senhor está?
+bene=bem
+male=mal
+così così=mais ou menos
+benvenuto=bem-vindo
+va bene=está bem
+certo=claro / certo
+volentieri=com prazer
+#No café e à mesa|A1
+il caffè=o café
+il cornetto=o croissant
+l'acqua=a água
+il tè=o chá
+il latte=o leite
+lo zucchero=o açúcar
+il succo=o suco
+la birra=a cerveja
+il vino=o vinho
+il panino=o sanduíche
+il gelato=o sorvete
+il conto=a conta
+il cameriere=o garçom
+vorrei=eu gostaria
+prendo=vou querer (eu pego)
+quanto costa?=quanto custa?
+la colazione=o café da manhã
+il pranzo=o almoço
+la cena=o jantar
+il bicchiere=o copo
+la tazza=a xícara
+la forchetta=o garfo
+il coltello=a faca
+il cucchiaio=a colher
+il piatto=o prato
+il tavolo=a mesa
+la bottiglia=a garrafa
+#Feira e ingredientes|A1
+la mela=a maçã
+l'arancia=a laranja
+la fragola=o morango
+l'uva=a uva
+il limone=o limão
+la pera=a pera
+il pomodoro=o tomate
+la patata=a batata
+la cipolla=a cebola
+l'aglio=o alho
+l'insalata=a salada / alface
+la carne=a carne
+il pollo=o frango
+il pesce=o peixe
+il formaggio=o queijo
+il pane=o pão
+il riso=o arroz
+l'uovo (le uova)=o ovo (os ovos)
+il burro=a manteiga
+l'olio=o azeite / óleo
+il sale=o sal
+il pepe=a pimenta-do-reino
+la farina=a farinha
+la verdura=a verdura
+la frutta=a fruta
+il chilo=o quilo
+un etto=cem gramas
+maturo=maduro
+fresco=fresco
+il mercato=a feira / o mercado
+la ricetta=a receita
+la torta=o bolo / a torta
+il lievito=o fermento
+#Família|A1
+la famiglia=a família
+il padre=o pai
+la madre=a mãe
+i genitori=os pais
+il figlio=o filho
+la figlia=a filha
+il fratello=o irmão
+la sorella=a irmã
+il marito=o marido
+la moglie=a esposa
+il nonno=o avô
+la nonna=a avó
+lo zio=o tio
+la zia=a tia
+il cugino=o primo
+la cugina=a prima
+il nipote=o neto / o sobrinho
+il suocero=o sogro
+il fidanzato=o namorado / noivo
+il bambino=o menino / a criança
+sposato=casado
+i parenti=os parentes (falso cognato: não são os pais!)
+#Personalidade e aparência|A1
+simpatico=simpático
+antipatico=antipático
+gentile=gentil
+bravo=bom / competente (não é "bravo")
+timido=tímido
+allegro=alegre
+serio=sério
+pigro=preguiçoso
+intelligente=inteligente
+divertente=divertido
+noioso=chato / entediante
+generoso=generoso
+alto=alto
+basso=baixo
+giovane=jovem
+vecchio=velho
+bello=bonito
+brutto=feio
+magro=magro
+grasso=gordo
+i capelli=o cabelo
+biondo=loiro
+castano=castanho
+gli occhi=os olhos
+la barba=a barba
+gli occhiali=os óculos
+#Cores|A1
+rosso=vermelho
+blu=azul
+azzurro=azul-claro
+verde=verde
+giallo=amarelo
+nero=preto
+bianco=branco
+grigio=cinza
+marrone=marrom
+rosa=rosa
+arancione=laranja (cor)
+viola=roxo
+#Cidade e lugares|A1
+la città=a cidade
+il quartiere=o bairro
+la strada=a rua / estrada
+la piazza=a praça
+il negozio=a loja
+la banca=o banco
+la farmacia=a farmácia
+l'ospedale=o hospital
+la stazione=a estação
+la fermata=o ponto (de ônibus)
+l'autobus=o ônibus
+la metropolitana=o metrô
+il treno=o trem
+l'aeroporto=o aeroporto
+il museo=o museu
+la chiesa=a igreja
+il parco=o parque
+la biblioteca=a biblioteca
+la libreria=a livraria (falso cognato!)
+l'albergo=o hotel
+l'ufficio postale=os correios
+la spiaggia=a praia
+il ponte=a ponte
+vicino=perto
+lontano=longe
+il tribunale=o tribunal
+#Direções e posição|A1
+a destra=à direita
+a sinistra=à esquerda
+dritto=reto / em frente
+girare=virar
+l'incrocio=o cruzamento
+il semaforo=o semáforo
+dov'è...?=onde fica...?
+davanti a=na frente de
+dietro=atrás
+accanto a=ao lado de
+di fronte a=em frente a (do outro lado)
+sopra=em cima de
+sotto=embaixo de
+dentro=dentro
+fuori=fora
+tra=entre
+all'angolo=na esquina
+attraversare=atravessar
+#Escola e estudo|A1
+studiare=estudar
+la scuola=a escola
+l'università=a universidade
+la lezione=a aula
+il corso=o curso
+lo studente=o estudante
+l'insegnante=o professor (escola)
+il compito=a tarefa / o dever
+l'esame=a prova / o exame
+il libro=o livro
+il quaderno=o caderno
+la penna=a caneta
+la matita=o lápis
+la materia=a matéria
+la matematica=a matemática
+la storia=a história
+imparare=aprender
+insegnare=ensinar
+la laurea=o diploma de graduação
+#Roupas e compras|A1
+il vestito=o vestido / o terno
+la camicia=a camisa
+la maglietta=a camiseta
+la gonna=a saia
+i pantaloni=a calça
+le scarpe=os sapatos
+il cappello=o chapéu
+il cappotto=o casaco
+la giacca=o paletó / a jaqueta
+la cravatta=a gravata
+la borsa=a bolsa
+la taglia=o tamanho (roupa)
+il numero=o número (calçado)
+provare=experimentar / provar
+stretto=apertado
+largo=largo / folgado
+il camerino=o provador
+lo sconto=o desconto
+i saldi=a liquidação
+la cintura=o cinto
+i calzini=as meias
+caro=caro
+economico=barato
+#Trabalho e profissões|A1
+il lavoro=o trabalho
+lavorare=trabalhar
+l'ufficio=o escritório
+il collega=o colega
+il capo=o chefe
+la riunione=a reunião
+il progetto=o projeto
+l'ingegnere=o engenheiro
+l'avvocato=o advogado
+il medico=o médico
+l'infermiere=o enfermeiro
+il cuoco=o cozinheiro
+il commesso=o vendedor (de loja)
+l'impiegato=o funcionário
+l'azienda=a empresa
+il cliente=o cliente
+lo stipendio=o salário
+la mail=o e-mail
+il colloquio=a entrevista
+il turno=o turno
+la pausa=a pausa / o intervalo
+il viaggio di lavoro=a viagem de trabalho
+#Casa|A1
+la casa=a casa
+l'appartamento=o apartamento
+la camera da letto=o quarto
+il bagno=o banheiro
+la cucina=a cozinha
+il soggiorno=a sala de estar
+la finestra=a janela
+la porta=a porta
+il letto=a cama
+il divano=o sofá
+la sedia=a cadeira
+l'armadio=o armário / guarda-roupa
+la lampada=a luminária
+il frigorifero=a geladeira
+la doccia=o chuveiro
+il piano=o andar
+l'ascensore=o elevador
+le scale=a escada
+il giardino=o jardim
+la chiave=a chave
+l'affitto=o aluguel
+#Tarefas domésticas|A1
+pulire=limpar
+lavare i piatti=lavar a louça
+fare il bucato=lavar roupa
+stirare=passar roupa
+cucinare=cozinhar
+apparecchiare la tavola=pôr a mesa
+buttare la spazzatura=jogar o lixo fora
+passare l'aspirapolvere=passar o aspirador
+fare la spesa=fazer compras (mercado)
+rifare il letto=arrumar a cama
+mettere in ordine=arrumar / organizar
+#Hobbies, esporte e música|A1
+il tempo libero=o tempo livre
+leggere=ler
+scrivere=escrever
+cantare=cantar
+ballare=dançar
+suonare la chitarra=tocar violão
+disegnare=desenhar
+dipingere=pintar
+il calcio=o futebol
+la pallavolo=o vôlei
+il nuoto=a natação
+correre=correr
+andare in bici=andar de bicicleta
+la palestra=a academia
+la partita=a partida / o jogo
+la squadra=o time
+vincere=vencer
+perdere=perder
+giocare=jogar / brincar
+ascoltare musica=ouvir música
+il gruppo=a banda / o grupo
+il concerto=o show
+la canzone=a canção
+il giocattolo=o brinquedo
+il pallone=a bola
+#Sentimentos|A1
+felice=feliz
+triste=triste
+stanco=cansado
+arrabbiato=bravo / irritado
+contento=contente
+preoccupato=preocupado
+nervoso=nervoso
+annoiato=entediado
+spaventato=assustado
+avere paura=ter medo
+avere fame=ter fome
+avere sete=ter sede
+avere sonno=ter sono
+avere fretta=ter pressa
+avere caldo=sentir calor
+avere freddo=sentir frio
+#Clima e estações|A1
+fa caldo=está calor
+fa freddo=está frio
+fa bel tempo=o tempo está bom
+piove=está chovendo
+nevica=está nevando
+c'è il sole=está fazendo sol
+c'è vento=está ventando
+nuvoloso=nublado
+la pioggia=a chuva
+la neve=a neve
+la primavera=a primavera
+l'estate=o verão
+l'autunno=o outono
+l'inverno=o inverno
+l'ombrello=o guarda-chuva
+#Tempo e frequência|A1
+oggi=hoje
+domani=amanhã
+ieri=ontem
+dopodomani=depois de amanhã
+la settimana=a semana
+il mese=o mês
+l'anno=o ano
+il fine settimana=o fim de semana
+la mattina=a manhã
+il pomeriggio=a tarde
+la sera=a noite (início)
+la notte=a noite / madrugada
+adesso=agora
+presto=cedo / logo
+tardi=tarde
+sempre=sempre
+spesso=frequentemente
+a volte=às vezes
+mai=nunca
+ogni giorno=todo dia
+che ore sono?=que horas são?
+sono le tre=são três horas
+mezzogiorno=meio-dia
+mezzanotte=meia-noite
+lunedì=segunda-feira
+martedì=terça-feira
+mercoledì=quarta-feira
+giovedì=quinta-feira
+venerdì=sexta-feira
+sabato=sábado
+domenica=domingo
+#Números|A1
+uno, due, tre=um, dois, três
+quattro, cinque, sei=quatro, cinco, seis
+sette, otto, nove, dieci=sete, oito, nove, dez
+undici=onze
+dodici=doze
+venti=vinte
+ventuno=vinte e um
+ventotto=vinte e oito
+trenta=trinta
+trentadue=trinta e dois
+quaranta=quarenta
+cinquanta=cinquenta
+sessanta=sessenta
+settanta=setenta
+ottanta=oitenta
+novanta=noventa
+cento=cem
+mille=mil
+primo=primeiro
+secondo=segundo
+#Viagem|A1
+il viaggio=a viagem
+viaggiare=viajar
+la valigia=a mala
+il biglietto=o bilhete / a passagem
+il passaporto=o passaporte
+la prenotazione=a reserva
+prenotare=reservar
+l'arrivo=a chegada
+la partenza=a partida
+il volo=o voo
+il binario=a plataforma (trem)
+in ritardo=atrasado
+in anticipo=adiantado
+la vacanza=as férias
+il mare=o mar
+la montagna=a montanha
+il lago=o lago
+la Svizzera=a Suíça
+il ricordo=a lembrança / o souvenir
+la cartolina=o cartão-postal
+#Festas e convites|A1
+la festa=a festa
+il compleanno=o aniversário
+tanti auguri=parabéns / felicidades
+il regalo=o presente
+il matrimonio=o casamento
+gli sposi=os noivos
+l'invito=o convite
+invitare=convidar
+festeggiare=comemorar
+ti va di...?=você está a fim de...?
+purtroppo non posso=infelizmente não posso
+gli invitati=os convidados
+la candelina=a velinha
+#Correio|A1
+la lettera=a carta
+il pacco=o pacote
+il francobollo=o selo
+la busta=o envelope
+spedire=enviar (pelo correio)
+l'indirizzo=o endereço
+il codice postale=o CEP
+il postino=o carteiro
+#Rotina diária|A1
+svegliarsi=acordar
+alzarsi=levantar-se
+lavarsi=lavar-se
+vestirsi=vestir-se
+fare la doccia=tomar banho
+fare colazione=tomar café da manhã
+tornare a casa=voltar para casa
+addormentarsi=pegar no sono
+di solito=geralmente
+prima=antes / primeiro
+poi=depois / então
+dopo=depois
+infine=por fim
+#Corpo, saúde e urgência|A1
+la testa=a cabeça
+il braccio=o braço
+la mano=a mão
+la gamba=a perna
+il piede=o pé
+la pancia=a barriga
+la schiena=as costas
+il dente=o dente
+la gola=a garganta
+mi fa male...=me dói...
+ho mal di testa=estou com dor de cabeça
+la febbre=a febre
+il raffreddore=o resfriado
+la tosse=a tosse
+la medicina=o remédio
+aiuto!=socorro!
+il pronto soccorso=o pronto-socorro
+l'ambulanza=a ambulância
+#Beleza e higiene|A1
+il sapone=o sabonete
+lo shampoo=o xampu
+il profumo=o perfume
+la crema=o creme
+lo specchio=o espelho
+il pettine=o pente
+il trucco=a maquiagem
+lo spazzolino=a escova de dentes
+#Verbos essenciais|A1
+essere=ser / estar
+avere=ter
+fare=fazer
+andare=ir
+venire=vir
+stare=estar / ficar
+parlare=falar
+mangiare=comer
+bere=beber
+dormire=dormir
+capire=entender
+finire=terminar
+prendere=pegar / tomar
+volere=querer
+potere=poder
+dovere=dever / ter que
+sapere=saber
+conoscere=conhecer
+vedere=ver
+uscire=sair
+dire=dizer
+dare=dar
+mettere=colocar / vestir
+aprire=abrir
+chiudere=fechar
+aspettare=esperar
+cercare=procurar
+trovare=encontrar
+comprare=comprar
+pagare=pagar
+chiedere=pedir / perguntar
+rispondere=responder
+abitare=morar
+vivere=viver
+piacere=agradar (gostar)
+arrivare=chegar
+partire=partir / viajar
+tornare=voltar
+entrare=entrar
+rimanere=ficar / permanecer
+#Palavras de ligação|A1
+e=e
+ma=mas
+o=ou
+perché=porque / por quê
+quando=quando
+dove=onde
+come=como
+chi=quem
+che cosa=o quê
+quanto=quanto
+quale=qual
+anche=também
+molto=muito
+poco=pouco
+troppo=demais
+già=já
+ancora=ainda / de novo
+solo=só
+insieme=juntos
+qui=aqui
+lì=ali
+#Escritório e engenharia|A2
+la scadenza=o prazo
+il verbale=a ata
+l'ordine del giorno=a pauta
+la relazione=o relatório
+il preventivo=o orçamento
+il contratto=o contrato
+la firma=a assinatura
+firmare=assinar
+allegare=anexar
+l'allegato=o anexo
+inoltrare=encaminhar
+in copia=em cópia
+rimandare=adiar
+fissare un appuntamento=marcar um compromisso
+il responsabile=o responsável
+la sede=a sede
+le ferie=as férias (do trabalho)
+lo smart working=o trabalho remoto
+assumere=contratar
+licenziare=demitir
+la promozione=a promoção
+il cantiere=o canteiro de obras
+il sopralluogo=a vistoria
+il progetto esecutivo=o projeto executivo
+l'appalto=a contratação de obra / licitação
+il capitolato=o caderno de encargos
+la manutenzione=a manutenção
+l'impianto elettrico=a instalação elétrica
+cordiali saluti=cordialmente
+distinti saluti=atenciosamente
+gentile dottore=prezado doutor
+in attesa di un Suo riscontro=no aguardo de seu retorno
+#Banco e dinheiro|A2
+il conto corrente=a conta corrente
+il bancomat=o caixa eletrônico
+prelevare=sacar
+versare=depositar
+la carta di credito=o cartão de crédito
+i contanti=o dinheiro vivo
+il resto=o troco
+risparmiare=economizar
+spendere=gastar
+il prestito=o empréstimo
+la ricevuta=o recibo
+lo scontrino=o cupom fiscal
+le bollette=as contas (luz, água)
+#Tecnologia|A2
+lo schermo=a tela
+la tastiera=o teclado
+scaricare=baixar
+caricare=carregar / enviar arquivo
+accedere=fazer login / acessar
+il collegamento=o link / a conexão
+la rete=a rede
+aggiornare=atualizar
+salvare=salvar
+la stampante=a impressora
+non funziona=não funciona
+il caricabatterie=o carregador
+#Moradia|A2
+il mutuo=o financiamento imobiliário
+l'agenzia immobiliare=a imobiliária
+trasferirsi=mudar-se
+il vicino di casa=o vizinho
+il trasloco=a mudança
+arredato=mobiliado
+il condominio=o condomínio
+#Saúde|A2
+il sintomo=o sintoma
+la pressione=a pressão
+la visita=a consulta
+l'allergia=a alergia
+guarire=sarar
+ammalarsi=adoecer
+stare meglio=melhorar
+il dolore=a dor
+la salute=a saúde
+la ricetta medica=a receita médica
+#Natureza e paisagem|A2
+il paesaggio=a paisagem
+la collina=a colina
+la campagna=o campo / interior
+il bosco=o bosque
+il fiume=o rio
+il cielo=o céu
+il tramonto=o pôr do sol
+l'ambiente=o meio ambiente
+riciclare=reciclar
+la tenda=a barraca
+#Memórias e infância|A2
+da bambino=quando criança
+ricordare=lembrar
+crescere=crescer
+raccontare=contar (uma história)
+una volta=uma vez / antigamente
+un tempo=antigamente
+l'infanzia=a infância
+#Opinião e conectivos|A2
+secondo me=na minha opinião
+penso che=acho que
+sono d'accordo=concordo
+non sono d'accordo=discordo
+però=porém
+quindi=portanto
+allora=então
+invece=em vez disso / já (contraste)
+comunque=de qualquer forma
+inoltre=além disso
+mentre=enquanto
+siccome=como (causal)
+anzi=aliás / pelo contrário
+magari=talvez / tomara
+insomma=enfim
+purtroppo=infelizmente
+per fortuna=felizmente
+ormai=a esta altura
+finalmente=finalmente
+davvero=de verdade
+#Verbos A2|A2
+succedere=acontecer
+decidere=decidir
+scegliere=escolher
+riuscire a=conseguir
+provare a=tentar
+smettere di=parar de
+cominciare a=começar a
+continuare a=continuar a
+dimenticare=esquecer
+ricordarsi=lembrar-se
+sperare=ter esperança / esperar
+preoccuparsi=preocupar-se
+arrabbiarsi=irritar-se
+divertirsi=divertir-se
+lamentarsi=reclamar
+occuparsi di=cuidar de / tratar de
+avere bisogno di=precisar de
+avere voglia di=ter vontade de
+mancare=faltar / sentir falta
+servire=servir / ser necessário
+bastare=bastar
+spiegare=explicar
+mostrare=mostrar
+prestare=emprestar
+restituire=devolver
+promettere=prometer
+consigliare=aconselhar
+organizzare=organizar
+risolvere=resolver
+controllare=verificar
+consegnare=entregar
+#Expressões do dia a dia|A2
+in bocca al lupo=boa sorte
+crepi!=resposta a "in bocca al lupo"
+non vedo l'ora=mal posso esperar
+ci vuole un'ora=leva uma hora
+dare una mano=dar uma mão
+avere ragione=ter razão
+avere torto=estar errado
+fare finta=fingir
+meno male=ainda bem
+che peccato=que pena
+dai!=vamos! / ah, vá!
+boh=sei lá
+fare due passi=dar uma volta
+#Tempo (A2)|A2
+due anni fa=dois anos atrás
+da tre anni=há três anos (até hoje)
+tra un mese=daqui a um mês
+la settimana scorsa=a semana passada
+il mese prossimo=o mês que vem
+entro venerdì=até sexta (prazo)
+nel frattempo=enquanto isso
+prima o poi=mais cedo ou mais tarde
+recentemente=recentemente
+`;
+const VOCAB=[]; const THEMES=[];
+(function(){let t="",l="A1";VOCAB_RAW.trim().split("\n").forEach(line=>{line=line.trim();if(!line)return;
+ if(line[0]==="#"){const p=line.slice(1).split("|");t=p[0];l=p[1];THEMES.push({t,l});return}
+ const i=line.indexOf("=");VOCAB.push({it:line.slice(0,i).trim(),pt:line.slice(i+1).trim(),theme:t,level:l});});})();
+
+/* ============================ DADOS: VERBOS ============================ */
+const P=["io","tu","lui/lei","noi","voi","loro"];
+const IRR_PRES={essere:"sono sei è siamo siete sono",avere:"ho hai ha abbiamo avete hanno",andare:"vado vai va andiamo andate vanno",fare:"faccio fai fa facciamo fate fanno",venire:"vengo vieni viene veniamo venite vengono",stare:"sto stai sta stiamo state stanno",dire:"dico dici dice diciamo dite dicono",uscire:"esco esci esce usciamo uscite escono",potere:"posso puoi può possiamo potete possono",volere:"voglio vuoi vuole vogliamo volete vogliono",dovere:"devo devi deve dobbiamo dovete devono",sapere:"so sai sa sappiamo sapete sanno",dare:"do dai dà diamo date danno",bere:"bevo bevi beve beviamo bevete bevono",rimanere:"rimango rimani rimane rimaniamo rimanete rimangono"};
+const IRR_FUT={essere:"sar",avere:"avr",andare:"andr",fare:"far",dare:"dar",stare:"star",venire:"verr",volere:"vorr",potere:"potr",dovere:"dovr",sapere:"sapr",vedere:"vedr",vivere:"vivr",bere:"berr",rimanere:"rimarr",dire:"dir"};
+const VERBS=[
+ ["essere","ser/estar","stato","e"],["avere","ter","avuto","a"],["andare","ir","andato","e"],["fare","fazer","fatto","a"],["venire","vir","venuto","e"],["stare","estar/ficar","stato","e"],["dire","dizer","detto","a"],["uscire","sair","uscito","e"],["potere","poder","potuto","a"],["volere","querer","voluto","a"],["dovere","dever","dovuto","a"],["sapere","saber","saputo","a"],["dare","dar","dato","a"],["bere","beber","bevuto","a"],["rimanere","ficar","rimasto","e"],
+ ["parlare","falar","","a"],["lavorare","trabalhar","","a"],["mangiare","comer","","a"],["cercare","procurar","","a"],["pagare","pagar","","a"],["studiare","estudar","","a"],["cominciare","começar","","a"],["comprare","comprar","","a"],["aspettare","esperar","","a"],["prendere","pegar","preso","a"],["vedere","ver","visto","a"],["scrivere","escrever","scritto","a"],["leggere","ler","letto","a"],["mettere","colocar","messo","a"],["chiudere","fechar","chiuso","a"],["vivere","viver","vissuto","a"],["dormire","dormir","","a"],["aprire","abrir","aperto","a"],["finire","terminar","","a",1],["capire","entender","","a",1],["pulire","limpar","","a",1],["partire","partir","","e"],["arrivare","chegar","","e"],["tornare","voltar","","e"]
+].map(v=>({inf:v[0],pt:v[1],pp:v[2]||regPP(v[0]),aux:v[3],isc:!!v[4]}));
+function regPP(inf){const s=inf.slice(0,-3),e=inf.slice(-3);return s+(e==="are"?"ato":e==="ere"?"uto":"ito")}
+function join(stem,end,isAre){if(isAre&&/[cg]$/.test(stem)&&/^[ie]/.test(end))stem+="h";if(/i$/.test(stem)&&/^i/.test(end))end=end.slice(1);return stem+end}
+function pres(v){if(IRR_PRES[v.inf])return IRR_PRES[v.inf].split(" ");const s=v.inf.slice(0,-3),e=v.inf.slice(-3);
+ let E=e==="are"?["o","i","a","iamo","ate","ano"]:e==="ere"?["o","i","e","iamo","ete","ono"]:v.isc?["isco","isci","isce","iamo","ite","iscono"]:["o","i","e","iamo","ite","ono"];
+ return E.map(x=>join(s,x,e==="are"))}
+function fut(v){const E=["ò","ai","à","emo","ete","anno"];let st;if(IRR_FUT[v.inf])st=IRR_FUT[v.inf];else{const s=v.inf.slice(0,-3),e=v.inf.slice(-3);
+ if(e==="ire")st=s+"ir";else if(e==="ere")st=s+"er";else if(/(ci|gi)$/.test(s))st=s.slice(0,-1)+"er";else st=join(s,"er",true)}return E.map(x=>st+x)}
+function pass(v){const A=v.aux==="a"?["ho","hai","ha","abbiamo","avete","hanno"]:["sono","sei","è","siamo","siete","sono"];
+ return A.map((a,i)=>a+" "+(v.aux==="e"?v.pp.slice(0,-1)+(i<3?"o":"i"):v.pp))}
+const TENSES={pres:{n:"presente",f:pres},pass:{n:"passato prossimo",f:pass},fut:{n:"futuro",f:fut}};
+
+/* ============================ DADOS: EXERCÍCIOS ============================ */
+// tipo f = completar; m = múltipla escolha (1ª opção é a correta)
+const EX=[
+// BÁSICO A1
+["base","f","___ libro è molto interessante. (este)","questo","Questo + substantivo masculino singular."],
+["base","f","___ ragazze sono mie colleghe. (estas)","queste","Feminino plural: queste."],
+["base","f","Vedi ___ palazzo? (aquele)","quel","Quello antes de palavra com il vira quel (il palazzo → quel palazzo)."],
+["base","f","Chi sono ___ studenti? (aqueles)","quegli","Studenti usa gli → quegli."],
+["base","f","Mi piace ___ ufficio. (aquele)","quell'","Ufficio usa l' → quell'."],
+["base","f","Vorrei ___ scarpe nere. (aquelas)","quelle","Le scarpe → quelle scarpe."],
+["base","f","___ madre è di Curitiba. (minha)","mia","Parente no singular sem adjetivo: sem artigo → mia madre."],
+["base","f","Questa è ___ casa. (minha)","la mia","Coisa (não parente): artigo + possessivo → la mia casa."],
+["base","f","___ fratelli abitano a Roma. (meus)","i miei","Parente no plural volta o artigo: i miei fratelli."],
+["base","f","Marco e ___ moglie. (sua)","sua","Possessivo concorda com moglie (fem.); parente singular sem artigo."],
+["base","f","Anna e ___ libro. (seu, dela)","il suo","Concorda com libro (masc.), não com Anna: il suo libro."],
+["base","f","Dove sono ___ chiavi? (minhas)","le mie","Chiavi é feminino plural → le mie."],
+["base","f","___ amica di Lucas è italiana. (uma)","un'","Feminino antes de vogal: un'amica (com apóstrofo)."],
+["base","f","Ho ___ zaino nuovo. (um)","uno","Masculino antes de z: uno zaino."],
+["base","f","Ho ___ amico a Milano. (um)","un","Masculino antes de vogal: un amico (sem apóstrofo)."],
+["base","f","___ studenti sono in aula. (os)","gli","Masculino plural de lo studente: gli studenti."],
+["base","f","Il plurale di 'la città' è: le ___","città","Palavras com acento final não mudam no plural."],
+["base","f","Il plurale di 'l'amica' è: le ___","amiche","-ca → -che no plural."],
+["base","f","Il plurale di 'il parco' è: i ___","parchi","-co → -chi (mantém o som de k)."],
+["base","f","___ una farmacia qui vicino? (há)","c'è","Singular: c'è. Plural: ci sono."],
+["base","f","In ufficio ___ dieci persone. (há)","ci sono","Plural: ci sono."],
+["base","f","___ è il tuo numero di telefono? (qual)","qual","Qual è, sem apóstrofo."],
+["base","f","___ sei? — Sono di Curitiba. (de onde)","di dove","Origem: di dove sei?"],
+["base","f","Non bevo ___ caffè la sera. (nunca)","mai","Non... mai = nunca."],
+["base","f","Non conosco ___ qui. (ninguém)","nessuno","Non... nessuno = ninguém."],
+["base","f","Non abito ___ a Roma. (mais)","più","Non... più = não mais."],
+["base","f","Vorrei ___ mele, per favore. (algumas)","delle","Partitivo: di + le = delle."],
+["base","f","Marco e Anna sono ___ (stanco).","stanchi","Grupo misto → masculino plural: stanchi."],
+["base","m","È un ___ ragazzo.","bel|bello|bell'|bella","Bello antes do substantivo segue quello: il ragazzo → bel ragazzo."],
+["base","m","È un ___ caffè!","buon|buono|buona|buon'","Buono segue o indefinido: un caffè → un buon caffè."],
+["base","m","Ho ___ amici a Roma.","molti|molto|molte|molta","Molto como adjetivo concorda: amici (masc. pl.) → molti."],
+["base","m","Il plurale di 'il problema' è:","i problemi|le probleme|i problema|le problemi","Problema é masculino: i problemi."],
+["base","m","___ la loro casa.","Ecco|C'è|Ci sono|È","Ecco = aqui está / eis."],
+["base","m","Le scarpe sono ___.","blu|blue|bli|blui","Blu é invariável."],
+// PREPOSIÇÕES
+["prep","f","Vivo ___ Curitiba.","a","Cidade leva a: vivo a Curitiba, vado a Roma."],
+["prep","f","Lavoro ___ Brasile.","in","País leva in: in Brasile, in Italia."],
+["prep","f","Domani vado ___ medico.","dal","Ir à casa ou ao consultório de alguém: da + artigo → dal medico."],
+["prep","f","Studio italiano ___ due anni.","da","Ação que começou no passado e continua: presente + da (há dois anos)."],
+["prep","f","Il telefono è ___ tavolo.","sul","Em cima de: su + il = sul."],
+["prep","f","La riunione è ___ tre.","alle","Hora: a + le = alle tre."],
+["prep","f","Vado in ufficio ___ macchina.","in","Meios de transporte: in macchina, in treno. Exceção: a piedi."],
+["prep","f","Stasera torno ___ casa presto.","a","Destino fixo: a casa, a scuola, a letto."],
+["prep","f","Sono ___ Curitiba, ma abito a Roma.","di","Origem com essere: sono di + cidade."],
+["prep","f","Domani parto ___ Milano.","per","Partire per = partir rumo a um destino."],
+["prep","f","Questo treno viene ___ Napoli.","da","Procedência: venire da."],
+["prep","f","Ci vediamo ___ una settimana.","tra/fra","Daqui a: tra ou fra + tempo."],
+["prep","f","Vado al lavoro ___ piedi.","a","Expressão fixa: a piedi."],
+["prep","f","È il computer ___ ingegnere.","dell'","Posse: di + l' = dell' (ingegnere começa com vogal)."],
+["prep","f","Abito ___ centro.","in","Expressão fixa: in centro."],
+["prep","f","Metto il latte ___ frigorifero.","nel","Dentro de: in + il = nel."],
+["prep","f","Parlo ___ i colleghi ogni mattina.","con","Companhia: con."],
+["prep","f","Andiamo in vacanza ___ agosto.","in","Meses: in agosto, in maggio."],
+["prep","f","Ho una domanda ___ progetto.","sul","Assunto/tema: su + il = sul progetto."],
+["prep","f","Due anni ___ ho cominciato a lavorare qui.","fa","Tempo atrás: quantidade + fa."],
+["prep","m","Questi sono occhiali ___ sole.","da|di|per|a","Finalidade/tipo de objeto: da sole, da ginnastica."],
+["prep","m","Vado ___ Italia l'anno prossimo.","in|a|da|nel","País sem adjetivo: in Italia (não 'a Italia')."],
+["prep","m","Il libro ___ ragazzi è sul tavolo.","dei|di|degli|delle","di + i = dei (ragazzi usa o artigo i)."],
+["prep","m","Scrivo una mail ___ studenti.","agli|ai|alli|a","a + gli = agli (studenti começa com s+consoante)."],
+["prep","m","Ho molto ___ fare oggi.","da|di|a|per","Coisa a fazer: avere molto da fare."],
+// PRESENTE
+["pres","f","Io ___ (lavorare) in un tribunale.","lavoro","-are, io → -o."],
+["pres","f","Tu ___ (capire) l'italiano?","capisci","Capire é do grupo -isc-: capisco, capisci, capisce."],
+["pres","f","Noi ___ (andare) in ufficio in autobus.","andiamo","Andare: vado, vai, va, andiamo, andate, vanno."],
+["pres","f","Loro ___ (fare) colazione al bar.","fanno","Fare: faccio, fai, fa, facciamo, fate, fanno."],
+["pres","f","Lei ___ (venire) alla riunione?","viene","Venire: vengo, vieni, viene..."],
+["pres","f","Oggi non ___ (potere, io).","posso","Potere: posso, puoi, può..."],
+["pres","f","Voi ___ (volere) un caffè?","volete","Volere: voglio, vuoi, vuole, vogliamo, volete, vogliono."],
+["pres","f","Marco ___ (uscire) dall'ufficio alle sei.","esce","Uscire: esco, esci, esce, usciamo, uscite, escono."],
+["pres","f","Noi ___ (cercare) un appartamento.","cerchiamo","-care ganha h antes de i: cerchiamo."],
+["pres","f","Tu ___ (pagare) con la carta?","paghi","-gare ganha h antes de i: paghi."],
+["pres","f","Io ___ (chiamarsi) Lucas.","mi chiamo","Reflexivo: mi chiamo, ti chiami, si chiama."],
+["pres","f","I bambini ___ (dormire).","dormono","-ire, loro → -ono."],
+["pres","f","Io ___ (sapere) parlare inglese.","so","Sapere: so, sai, sa, sappiamo, sapete, sanno."],
+["pres","f","Che cosa ___ (dire, tu)?","dici","Dire: dico, dici, dice..."],
+["pres","f","Loro ___ (dovere) finire il progetto.","devono","Dovere: devo, devi, deve, dobbiamo, dovete, devono."],
+["pres","f","Noi ___ (mangiare) alle otto.","mangiamo","-giare não dobra o i: mangiamo."],
+["pres","f","Di solito io mi ___ (svegliarsi) alle sei.","sveglio","Reflexivo, io: mi sveglio."],
+["pres","m","Mi ___ i tuoi occhiali.","piacciono|piace|piaci|piacio","Plural (gli occhiali) → piacciono."],
+["pres","m","Ti ___ lavorare qui?","piace|piacciono|piaci|piacete","Com infinitivo usa-se sempre piace."],
+["pres","m","Abito a Curitiba ___ 2010.","dal|da|nel|dal'","Desde um ano: da + il = dal 2010, verbo no presente."],
+["pres","m","In questo momento ___ scrivendo una mail.","sto|sono|ho|faccio","Ação em andamento: stare + gerúndio."],
+// PASSATO
+["pass","f","Ieri io ___ (lavorare) fino alle otto.","ho lavorato","Lavorare usa avere: ho lavorato."],
+["pass","f","Maria ___ (andare) a Roma.","è andata","Movimento → essere; concorda com Maria (feminino)."],
+["pass","f","Noi ___ (mangiare) una pizza.","abbiamo mangiato","Tem objeto direto → avere."],
+["pass","f","I clienti ___ (arrivare) tardi.","sono arrivati","Arrivare → essere; masculino plural: -i."],
+["pass","f","Io ___ (fare) i compiti.","ho fatto","Fare → fatto (irregular)."],
+["pass","f","Tu ___ (vedere) il film?","hai visto","Vedere → visto (irregular)."],
+["pass","f","Lucas ___ (nascere) a Curitiba.","è nato","Nascere → essere + nato."],
+["pass","f","Stamattina mi ___ (alzarsi) presto.","sono alzato/sono alzata","Reflexivos usam sempre essere: mi sono alzato/a."],
+["pass","f","Le ragazze ___ (uscire) alle dieci.","sono uscite","Uscire → essere; feminino plural: -e."],
+["pass","f","Ho ___ (scrivere) una mail al capo.","scritto","Scrivere → scritto."],
+["pass","f","Abbiamo ___ (prendere) il treno delle sette.","preso","Prendere → preso."],
+["pass","f","Chi ha ___ (aprire) la finestra?","aperto","Aprire → aperto."],
+["pass","f","Siete mai ___ (essere) in Italia?","stati","Essere → stato; voi masculino → stati."],
+["pass","f","Il film mi è ___ (piacere) molto.","piaciuto","Piacere usa essere: è piaciuto."],
+["pass","f","Ho ___ (leggere) la relazione.","letto","Leggere → letto."],
+["pass","f","Ieri sera ___ (rimanere, io) in ufficio.","sono rimasto/sono rimasta","Rimanere → essere + rimasto/a."],
+["pass","m","Ieri ___ dormito male.","ho|sono|è|hanno","Dormire usa avere."],
+["pass","m","La riunione ___ durata due ore.","è|ha|hai|sono","Durare usa essere."],
+["pass","m","Non ho ___ finito la relazione.","ancora|già|mai|fa","Non... ancora = ainda não."],
+["pass","m","Un anno ___ ho cominciato a lavorare al TJPR.","fa|da|tra|per","Tempo atrás: un anno fa."],
+["pass","m","Ci siamo ___ molto alla festa.","divertiti|divertito|divertuto|divertite","Reflexivo com noi (grupo misto) → divertiti."],
+["pass","m","Ieri ___ in banca.","sono andato|ho andato|sono andare|ho andato a","Andare → essere."],
+// FUTURO
+["fut","f","Domani io ___ (lavorare) da casa.","lavorerò","-are vira -er-: lavorerò."],
+["fut","f","La settimana prossima noi ___ (andare) a Milano.","andremo","Radical irregular andr-."],
+["fut","f","Tu ___ (essere) alla riunione?","sarai","Essere → sar-."],
+["fut","f","Loro ___ (avere) tempo domani.","avranno","Avere → avr-."],
+["fut","f","Io ___ (fare) il possibile.","farò","Fare → far-."],
+["fut","f","Lei ___ (venire) con noi?","verrà","Venire → verr-."],
+["fut","f","Quando ___ (arrivare, io) a Roma, ti chiamerò.","arriverò","Após quando com sentido futuro, o italiano usa o futuro."],
+["fut","f","Noi ___ (pagare) il conto.","pagheremo","-gare ganha h: pagheremo."],
+["fut","f","Io ___ (mangiare) più verdura.","mangerò","-giare perde o i: mangerò."],
+["fut","f","Voi ___ (potere) venire?","potrete","Potere → potr-."],
+["fut","f","Domani ___ (dovere, io) consegnare il progetto.","dovrò","Dovere → dovr-."],
+["fut","f","Tra un mese ___ (sapere, io) parlare meglio.","saprò","Sapere → sapr-."],
+["fut","f","Che ore sono? ___ (essere) le dieci.","saranno","Futuro de suposição: saranno le dieci = devem ser dez horas."],
+["fut","f","Loro ___ (bere) solo acqua.","berranno","Bere → berr-."],
+["fut","f","Io ___ (rimanere) a Roma tre giorni.","rimarrò","Rimanere → rimarr-."],
+["fut","f","Noi ___ (cercare) una soluzione.","cercheremo","-care ganha h: cercheremo."],
+["fut","f","Se ___ (avere, io) tempo, ti aiuterò.","avrò","Após se com sentido futuro: futuro."],
+["fut","m","Dov'è Marco? Non so, ___ in ufficio.","sarà|è stato|era|sarò","Suposição sobre o presente: sarà."],
+["fut","m","Quando avrò finito, ___.","uscirò|esco|sono uscito|uscivo","Futuro anteriore + futuro."],
+["fut","m","Domani noi ___ in montagna.","andremo|anderemo|andaremo|andiamo stati","Andare → andr- (não 'anderemo')."],
+["fut","m","Io ___ un caffè dopo la riunione.","prenderò|prendrò|prenderei|prendarò","Prendere é regular: prender-ò."],
+["fut","m","Finirò la relazione ___ venerdì.","entro|da|fa|tra","Prazo final: entro (até)."]
+];
+
+/* ============================ ESTADO ============================ */
+const KEY="quaderno.v1";
+const DECKS={fav:"Minhas palavras (das notícias)",vA1:"Vocabulário A1",vA2:"Vocabulário A2",verb:"Verbos (presente, passato, futuro)",frasi:"Frases de gramática"};
+function defState(){return{cards:{},settings:{decks:{fav:true,vA1:true,vA2:true,verb:true,frasi:true},newPerDay:20,dir:"mix"},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},best:{},favs:{},newsDone:{},updatedAt:0}}
+function hydrate(o){const d=defState();S=Object.assign(d,o);S.settings=Object.assign(defState().settings,o.settings||{});S.settings.decks=Object.assign(defState().settings.decks,(o.settings||{}).decks||{});S.favs=S.favs||{};S.newsDone=S.newsDone||{};S.cards=S.cards||{}}
+let S=defState();
+let DB=null,UID=null,stateRef=null,syncT=null,syncing=false,syncDirty=false,syncRetried=false;
+try{const raw=localStorage.getItem(KEY);if(raw)hydrate(JSON.parse(raw))}catch(e){}
+function saveLocal(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function save(){S.updatedAt=Date.now();saveLocal();scheduleSync()}
+function scheduleSync(){if(!stateRef)return;syncDirty=true;clearTimeout(syncT);syncT=setTimeout(flushSync,1500)}
+async function flushSync(){if(syncing||!syncDirty||!stateRef)return;syncing=true;syncDirty=false;
+ try{await stateRef.set(JSON.parse(JSON.stringify(S)));syncRetried=false}
+ catch(e){if(e&&e.code==="unavailable"&&!syncRetried){syncRetried=true;syncDirty=true;setTimeout(flushSync,2000+Math.random()*2000)}}
+ syncing=false;if(syncDirty&&!syncRetried)scheduleSync()}
+function fmt(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function today(){return fmt(new Date())}
+function addDays(n){const d=new Date();d.setDate(d.getDate()+n);return fmt(d)}
+function rollDay(){if(S.daily.date!==today()){S.daily={date:today(),newDone:0,reviewed:0};saveLocal()}}
+rollDay();
+
+/* ============================ UTIL ============================ */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.random()*a.length|0];
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[’`]/g,"'").replace(/\s+/g," ").trim();
+const canSpeak="speechSynthesis" in window;
+function speak(t){if(!canSpeak)return;try{const u=new SpeechSynthesisUtterance(t.replace(/\(.*?\)/g,"").replace(/\.\.\./g,""));u.lang="it-IT";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+const SPK_SVG='<svg viewBox="0 0 24 24"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+function spkBtn(t){return canSpeak?`<button class="spk" data-say="${esc(t)}" aria-label="Ouvir pronúncia">${SPK_SVG}</button>`:""}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-say]");if(b){e.stopPropagation();speak(b.dataset.say)}});
+
+/* ============================ ABAS ============================ */
+function showTab(name){$$("[data-view]").forEach(v=>v.hidden=v.dataset.view!==name);$$("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===name));
+ try{localStorage.setItem(KEY+".tab",name)}catch(e){}window.scrollTo(0,0);if(name==="cartoes")renderFlash();if(name==="inicio")renderHome();if(name==="news"){renderNews();if(!$("#ns-cal").hidden)renderCal();if(!$("#ns-favs").hidden)renderFavs()}}
+$$("nav.tabs button").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
+document.addEventListener("click",e=>{const g=e.target.closest("[data-goto]");if(g)showTab(g.dataset.goto)});
+$$("#gnav button").forEach(b=>b.addEventListener("click",()=>{$$("#gnav button").forEach(x=>x.classList.toggle("on",x===b));$$("article.gram").forEach(a=>a.hidden=a.id!==b.dataset.g);window.scrollTo(0,0)}));
+$$("[data-jump]").forEach(b=>b.addEventListener("click",()=>{const t=document.getElementById(b.dataset.jump);if(t)t.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"})}));
+$$("[data-practice]").forEach(b=>b.addEventListener("click",()=>{showTab("exerc");startEx(b.dataset.practice)}));
+
+/* ============================ VOCABULÁRIO ============================ */
+THEMES.forEach(t=>{const o=document.createElement("option");o.value=t.t;o.textContent=t.t+" ("+t.l+")";$("#vtheme").appendChild(o)});
+function renderVocab(){const q=norm($("#vq").value),lv=$("#vlvl").value,th=$("#vtheme").value;
+ const list=VOCAB.filter(v=>(!lv||v.level===lv)&&(!th||v.theme===th)&&(!q||norm(v.it).includes(q)||norm(v.pt).includes(q)));
+ $("#vcount").textContent=list.length+" de "+VOCAB.length+" palavras e expressões · "+THEMES.length+" temas";
+ let html="",cur="";list.forEach(v=>{if(v.theme!==cur){cur=v.theme;html+=`<div class="vgroup"><span class="label">${esc(cur)}</span><span class="lvl ${v.level}">${v.level}</span></div>`}
+  html+=`<div class="vrow"><div class="w"><i>${esc(v.it)}</i><span>${esc(v.pt)}</span></div>${spkBtn(v.it)}</div>`});
+ $("#vlist").innerHTML=html||`<div class="vrow"><div class="w"><span>Nenhuma palavra encontrada. Tente outra busca ou limpe os filtros.</span></div></div>`}
+["input","change"].forEach(ev=>{$("#vq").addEventListener(ev,renderVocab);$("#vlvl").addEventListener(ev,renderVocab);$("#vtheme").addEventListener(ev,renderVocab)});
+renderVocab();
+
+/* ============================ EXERCÍCIOS ============================ */
+const TOPICS=[{id:"base",n:"Básico A1",d:"questo/quello, possessivos, artigos, plural"},{id:"prep",n:"Preposições",d:"a, da, in, di, su… e articuladas"},{id:"pres",n:"Presente",d:"regulares, irregulares, reflexivos"},{id:"pass",n:"Passato prossimo",d:"avere × essere, particípios"},{id:"fut",n:"Futuro",d:"radicais irregulares e usos"},{id:"conj",n:"Conjugação",d:"gerada: 3 tempos, 39 verbos"},{id:"vocab",n:"Vocabulário",d:"gerado do banco A1–A2"}];
+function renderTopics(){$("#topics").innerHTML=TOPICS.map(t=>{const b=S.best[t.id];return`<button class="topic" data-topic="${t.id}"><b>${t.n}</b><span>${t.d}</span><span class="label">${b!=null?"melhor: "+b+"/10":"ainda não feito"}</span></button>`}).join("");
+ $$("[data-topic]").forEach(b=>b.addEventListener("click",()=>startEx(b.dataset.topic)))}
+renderTopics();
+function genConj(){const v=pick(VERBS),tk=pick(Object.keys(TENSES)),i=Math.random()*6|0,forms=TENSES[tk].f(v);
+ let ans=forms[i];if(v.aux==="e"&&tk==="pass")ans=ans+"/"+ans.replace(/o$/,"a").replace(/i$/,"e");
+ return{type:"f",q:`<span class="label">${TENSES[tk].n}</span><br>${P[i]} ___ (${v.inf})`,a:ans,exp:`<b>${v.inf}</b> (${v.pt}) no ${TENSES[tk].n}${tk==="pass"?" — auxiliar "+(v.aux==="a"?"avere":"essere"):""}:<div class="conjmini">${forms.map((f,k)=>`<span>${P[k]} <b>${esc(f)}</b></span>`).join("")}</div>`}}
+function genVocab(){const v=pick(VOCAB);const same=VOCAB.filter(x=>x.theme===v.theme&&x.it!==v.it);const pool=same.length>=3?same:VOCAB.filter(x=>x.it!==v.it);
+ const wrong=shuffle(pool).slice(0,3);const toIt=Math.random()<.5;
+ return toIt?{type:"m",q:`Como se diz <b>“${esc(v.pt)}”</b>?`,opts:[v.it,...wrong.map(w=>w.it)],a:v.it,exp:`<b>${esc(v.it)}</b> = ${esc(v.pt)} · tema: ${esc(v.theme)}`,say:v.it}
+  :{type:"m",q:`O que significa <b>“${esc(v.it)}”</b>?`,opts:[v.pt,...wrong.map(w=>w.pt)],a:v.pt,exp:`<b>${esc(v.it)}</b> = ${esc(v.pt)} · tema: ${esc(v.theme)}`,say:v.it}}
+let RUN=null;
+function startEx(topic){let qs;
+ if(topic==="conj")qs=Array.from({length:10},genConj);
+ else if(topic==="vocab")qs=Array.from({length:10},genVocab);
+ else qs=shuffle(EX.filter(e=>e[0]===topic)).slice(0,10).map(e=>e[1]==="m"?{type:"m",q:e[2],opts:e[3].split("|"),a:e[3].split("|")[0],exp:e[4]}:{type:"f",q:e[2],a:e[3],exp:e[4]});
+ qs.forEach(q=>{if(q.type==="m")q.opts=shuffle(q.opts)});
+ RUN={topic,qs,i:0,score:0,wrong:[]};$("#exHome").hidden=true;$("#exRun").hidden=false;renderQ();window.scrollTo(0,0)}
+function blankify(s){return s.replace("___",'<span class="blank">&nbsp;</span>')}
+function renderQ(){const r=RUN,q=r.qs[r.i],tn=TOPICS.find(t=>t.id===r.topic).n;
+ let h=`<div class="row" style="justify-content:space-between"><span class="label">${tn} · ${r.i+1}/10</span><button class="btn ghost small" id="exQuit">Sair</button></div>
+ <div class="progress"><i style="width:${r.i*10}%"></i></div><div class="card stack"><div class="q">${blankify(q.q)}</div>`;
+ if(q.type==="m")h+=`<div class="opts">${q.opts.map((o,k)=>`<button class="opt" data-k="${k}">${esc(o)}</button>`).join("")}</div>`;
+ else h+=`<form id="fForm" class="stack"><input type="text" id="fIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Digite a resposta"><button class="btn primary" type="submit">Verificar</button></form>`;
+ h+=`<div id="fb"></div></div>`;$("#exRun").innerHTML=h;
+ $("#exQuit").onclick=()=>{$("#exRun").hidden=true;$("#exHome").hidden=false;renderTopics()};
+ if(q.type==="m")$$(".opt").forEach(b=>b.onclick=()=>{const ok=q.opts[+b.dataset.k]===q.a;$$(".opt").forEach(x=>{x.disabled=true;if(q.opts[+x.dataset.k]===q.a)x.classList.add("right")});if(!ok)b.classList.add("wrong");feedback(ok,q)});
+ else{const inp=$("#fIn");inp.focus({preventScroll:true});$("#fForm").onsubmit=e=>{e.preventDefault();if(!inp.value.trim())return;const answers=q.a.split("/");const u=norm(inp.value);
+  const okN=answers.some(a=>norm(a)===u);const exact=answers.some(a=>a.toLowerCase().trim()===inp.value.toLowerCase().trim().replace(/[’`]/g,"'"));inp.disabled=true;$("#fForm button").disabled=true;feedback(okN,q,okN&&!exact)}}}
+function feedback(ok,q,accentNote){const r=RUN;if(ok)r.score++;else r.wrong.push(q);
+ $("#fb").innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${ok?"Certo!":"Resposta: "+esc(q.a.split("/").join(" ou "))}</b>${accentNote?`<span>Atenção à grafia/acento: <b>${esc(q.a.split("/")[0])}</b></span>`:""}<div>${q.exp}</div>${q.say?spkBtn(q.say):""}</div>
+ <button class="btn primary" id="nextQ" style="margin-top:12px">${r.i<9?"Próxima":"Ver resultado"}</button>`;
+ $("#nextQ").onclick=()=>{r.i++;r.i<r.qs.length?renderQ():endEx()};$("#nextQ").focus({preventScroll:true})}
+function endEx(){const r=RUN;if(S.best[r.topic]==null||r.score>S.best[r.topic])S.best[r.topic]=r.score;save();
+ const msg=r.score>=9?"Excelente.":r.score>=7?"Muito bom.":r.score>=5?"No caminho. Revise a explicação dos erros.":"Vale reler a gramática antes de repetir.";
+ $("#exRun").innerHTML=`<div class="card stack"><span class="label">Resultado</span><h2>${r.score}/10</h2><p>${msg}</p>
+ ${r.wrong.length?`<div class="stack"><div class="label">Para revisar</div>${r.wrong.map(q=>`<div class="fb no"><div>${blankify(q.q)}</div><b>${esc(q.a.split("/").join(" ou "))}</b></div>`).join("")}</div>`:""}
+ <div class="row"><button class="btn primary" id="again">Nova rodada</button><button class="btn" id="back">Outros temas</button></div></div>`;
+ $("#again").onclick=()=>startEx(r.topic);$("#back").onclick=()=>{$("#exRun").hidden=true;$("#exHome").hidden=false;renderTopics()}}
+
+/* ============================ CARTÕES (repetição espaçada) ============================ */
+const IV=[0,1,2,4,8,16,32,64];
+const CARDS={},ORDER={fav:[],vA1:[],vA2:[],verb:[],frasi:[]};
+VOCAB.forEach(v=>{const id="v:"+v.it,d=v.level==="A1"?"vA1":"vA2";CARDS[id]={deck:d,v};ORDER[d].push(id)});
+VERBS.forEach(v=>Object.keys(TENSES).forEach(tk=>{const f=TENSES[tk].f(v);P.forEach((p,i)=>{const id=`c:${v.inf}:${tk}:${i}`;CARDS[id]={deck:"verb",front:`${p} · ${v.inf}`,sub:TENSES[tk].n,back:f[i]+(v.aux==="e"&&tk==="pass"?" (fem.: "+f[i].replace(/o$/,"a").replace(/i$/,"e")+")":""),note:`${v.inf} = ${v.pt}`,say:p.split("/")[0]+" "+f[i]};ORDER.verb.push(id)})}));
+ORDER.verb=interleaveVerb(ORDER.verb);
+EX.filter(e=>e[1]==="f").forEach((e,k)=>{const id="f:"+k;CARDS[id]={deck:"frasi",front:e[2],sub:TOPICS.find(t=>t.id===e[0]).n,back:e[3].split("/").join(" ou "),note:e[4],say:e[2].replace(/\(.*?\)/,"").replace("___",e[3].split("/")[0])};ORDER.frasi.push(id)});
+function interleaveVerb(a){// presente primeiro, depois passato, depois futuro
+ return [...a.filter(x=>x.includes(":pres:")),...a.filter(x=>x.includes(":pass:")),...a.filter(x=>x.includes(":fut:"))]}
+let SESSION=null;
+function enabledDecks(){return Object.keys(DECKS).filter(d=>S.settings.decks[d])}
+function dueIds(){const t=today();return Object.keys(S.cards).filter(id=>CARDS[id]&&S.settings.decks[CARDS[id].deck]&&S.cards[id].due<=t)}
+function newIds(n){const out=[],lists=enabledDecks().filter(d=>d!=="fav").map(d=>ORDER[d].filter(id=>!S.cards[id]));let k=0;
+ while(out.length<n&&lists.some(l=>l.length)){const l=lists[k%lists.length];if(l.length)out.push(l.shift());k++}return out}
+function newLeft(){return Math.max(0,S.settings.newPerDay-S.daily.newDone)}
+function buildSession(){rollDay();const due=shuffle(dueIds()),nw=[...newFavIds(),...newIds(newLeft())];const q=[];let i=0,j=0;
+ while(i<due.length||j<nw.length){if(i<due.length)q.push(due[i++]);if(i<due.length)q.push(due[i++]);if(j<nw.length)q.push(nw[j++])}
+ SESSION={queue:q,total:q.length,done:0,shown:false,dirFlip:null}}
+function cardFace(id){const c=CARDS[id];if(c.fav){const f=c.fav,bits=[];if(f.synonyms&&f.synonyms.length)bits.push("Sinônimos: "+f.synonyms.join(", "));if(f.example)bits.push("Ex.: "+f.example+(f.examplePt?" ("+f.examplePt+")":""));
+  return{front:f.lemma,sub:"da notícia de "+fmtBR(f.date||today()),back:f.meaning,note:bits.join(" · "),say:f.lemma,sayFront:true}}
+ if(c.v){let dir=S.settings.dir;if(dir==="mix"){if(SESSION.dirFlip===null)SESSION.dirFlip=Math.random()<.5;dir=SESSION.dirFlip?"pt":"it"}
+  return dir==="it"?{front:c.v.it,sub:c.v.theme,back:c.v.pt,say:c.v.it,sayFront:true}:{front:c.v.pt,sub:c.v.theme,back:c.v.it,say:c.v.it,sayFront:false}}
+ return{front:c.front,sub:c.sub,back:c.back,note:c.note,say:c.say,sayFront:false}}
+function sched(st,r){let ef=2.5,ivl=0,reps=0,lapses=0;
+ if(st){if(st.ivl!=null){ef=st.ef||2.5;ivl=st.ivl;reps=st.reps||0;lapses=st.lapses||0}else if(st.b!=null){ivl=IV[st.b]||0;reps=st.b}}
+ if(r===0){reps=0;lapses++;ef=Math.max(1.3,ef-.2);ivl=0}
+ else if(r===1){ivl=reps===0?1:Math.max(ivl+1,Math.round(ivl*1.2));ef=Math.max(1.3,ef-.15);reps++}
+ else if(r===2){ivl=reps===0?1:reps===1?3:Math.max(ivl+1,Math.round(ivl*ef));reps++}
+ else{ivl=reps===0?4:reps===1?5:Math.max(ivl+2,Math.round(ivl*ef*1.3));ef+=.15;reps++}
+ ivl=Math.min(ivl,3650);return{ef:Math.round(ef*100)/100,ivl,reps,lapses,due:addDays(ivl)}}
+function fmtIvl(d){return d<1?"agora":d<30?d+"d":d<365?Math.round(d/30)+"m":(Math.round(d/36.5)/10)+"a"}
+function intervalLabel(id,r){return fmtIvl(sched(S.cards[id],r).ivl)}
+function renderFlash(){if(!SESSION||SESSION.queue.length===0&&SESSION.total===0)buildSession();
+ while(SESSION.queue.length&&!CARDS[SESSION.queue[0]])SESSION.queue.shift();
+ const s=SESSION,area=$("#flashArea");updateChips();
+ $("#sessInfo").textContent=s.queue.length?`${s.done}/${s.total} feitos`:"";
+ if(!s.queue.length){const nextDue=Object.values(S.cards).map(c=>c.due).filter(d=>d>today()).sort()[0];
+  area.innerHTML=`<div class="flash"><span class="label">Sessão concluída</span><div class="front">${s.total?"Ótimo trabalho!":"Nada pendente agora"}</div>
+  <p class="muted">${s.total?`Você revisou ${s.total} cartões hoje.`:"Todos os cartões de hoje já foram feitos."} ${nextDue?"Próxima revisão: "+nextDue.split("-").reverse().join("/")+".":""}</p>
+  <button class="btn" id="more">Estudar mais 10 novos</button></div>`;
+  $("#more").onclick=()=>{S.settings.newPerDay+=0;const extra=newIds(10);SESSION={queue:extra,total:extra.length,done:0,shown:false,dirFlip:null,extra:true};renderFlash()};renderBoxes();return}
+ const id=s.queue[0],f=cardFace(id),c=CARDS[id],isNew=!S.cards[id];
+ area.innerHTML=`<div class="flash"><span class="deck label">${esc(DECKS[c.deck].split(" (")[0])}${isNew?" · novo":""}</span>${spkBtn(f.say)}
+  <span class="label">${esc(f.sub||"")}</span><div class="front">${blankify(esc(f.front))}</div>
+  ${s.shown?`<div class="back"><b>${esc(f.back)}</b>${f.note?`<div class="note">${esc(f.note)}</div>`:""}</div>`:""}</div>
+  ${s.shown?`<div class="rate"><button class="r0" data-r="0">Errei<span>${intervalLabel(id,0)}</span></button><button data-r="1">Difícil<span>${intervalLabel(id,1)}</span></button><button data-r="2">Bom<span>${intervalLabel(id,2)}</span></button><button class="r3" data-r="3">Fácil<span>${intervalLabel(id,3)}</span></button></div>`
+  :`<button class="btn primary" id="reveal">Mostrar resposta</button>`}`;
+ if(s.shown)$$(".rate button").forEach(b=>b.onclick=()=>rate(+b.dataset.r));else{$("#reveal").onclick=()=>{s.shown=true;renderFlash();if(!f.sayFront)speak(f.say)};if(f.sayFront&&isNew)speak(f.say)}
+ renderBoxes()}
+function rate(r){const s=SESSION,id=s.queue.shift(),isNew=!S.cards[id];
+ if(isNew&&!s.extra&&CARDS[id]&&CARDS[id].deck!=="fav")S.daily.newDone++;
+ const st=sched(S.cards[id],r);
+ if(r===0)s.queue.splice(Math.min(3,s.queue.length),0,id);else s.done++;
+ S.cards[id]=st;S.daily.reviewed++;
+ const t=today();if(S.streak.last!==t){S.streak.count=S.streak.last===addDays(-1)?S.streak.count+1:1;S.streak.last=t}
+ save();s.shown=false;s.dirFlip=null;renderFlash()}
+document.addEventListener("keydown",e=>{if($("#v-cartoes").hidden||!SESSION||!SESSION.queue.length||e.target.matches("input,select"))return;
+ if(!SESSION.shown&&(e.key===" "||e.key==="Enter")){e.preventDefault();$("#reveal")&&$("#reveal").click()}else if(SESSION.shown&&"1234".includes(e.key))rate(+e.key-1)});
+function ivlOf(c){return c.ivl!=null?c.ivl:(IV[c.b]||0)}
+function renderBoxes(){const cnt=[0,0,0,0,0,0,0,0],lim=[0,1,3,7,15,31,63,1e9];Object.values(S.cards).forEach(c=>{const v=ivlOf(c);cnt[lim.findIndex(l=>v<=l)]++});const mx=Math.max(1,...cnt);
+ $("#boxes").innerHTML=cnt.map(n=>`<div style="height:${Math.max(4,n/mx*100)}%" title="${n} cartões"></div>`).join("")}
+function renderDecks(){$("#decks").innerHTML=Object.entries(DECKS).map(([k,n])=>`<label for="dk-${k}"><input type="checkbox" id="dk-${k}" data-deck="${k}" ${S.settings.decks[k]?"checked":""}><span>${n}</span><em>${ORDER[k].length}</em></label>`).join("");
+ $$("[data-deck]").forEach(cb=>cb.onchange=()=>{S.settings.decks[cb.dataset.deck]=cb.checked;save();SESSION=null;renderFlash()});
+ $("#newPerDay").value=String(S.settings.newPerDay);$("#dir").value=S.settings.dir}
+$("#newPerDay").onchange=e=>{S.settings.newPerDay=+e.target.value;save();SESSION=null;renderFlash()};
+$("#dir").onchange=e=>{S.settings.dir=e.target.value;save();renderFlash()};
+function updateChips(){rollDay();const due=dueIds().length,nw=newFavIds().length+Math.min(newLeft(),newIds(newLeft()).length);
+ $("#chipStreak").textContent=(S.streak.last===today()||S.streak.last===addDays(-1)?S.streak.count:0)+" dias seguidos";
+ $("#chipDue").textContent=(due+nw)+" para hoje";return{due,nw}}
+function renderHome(){const {due,nw}=updateChips();$("#nDue").textContent=due;$("#nNew").textContent=nw;$("#nLearned").textContent=Object.keys(S.cards).length;
+ $("#todayTitle").textContent=due+nw?(due+nw)+" cartões te esperando":"Tudo em dia por hoje";renderHomeNews()}
+
+/* ============================ EXEMPLOS DA GRAMÁTICA ============================ */
+// chave = id do artigo : índice da subseção (h3). Formato: "italiano || português". **x** = destaque.
+const GEX={
+"g-base:0":[
+"**Io** sono brasiliano, **lei** è italiana. || Eu sou brasileiro, ela é italiana.",
+"E **tu**, di dove sei? || E você, de onde é? (pronome para contrastar)",
+"**Lei** è il nuovo ingegnere? || O senhor é o novo engenheiro? (formal)",
+"**Noi** lavoriamo in tribunale. **Voi** dove lavorate? || Nós trabalhamos no tribunal. E vocês, onde trabalham?",
+"**Loro** non parlano italiano. || Eles não falam italiano.",
+"Pago **io**! || Eu pago! (ênfase: pronome depois do verbo)",
+"Anche **io** ho fame. || Eu também estou com fome.",
+"Chi è? — Sono **io**. || Quem é? — Sou eu.",
+"Sono stanco. || Estou cansado. (sem pronome: o verbo já indica 'io')"],
+"g-base:1":[
+"**Il** caffè è pronto. || O café está pronto.",
+"**Lo** zucchero è sul tavolo. || O açúcar está na mesa. (lo antes de z)",
+"**L'**acqua è fredda. || A água está fria.",
+"**Gli** zii arrivano domani. || Os tios chegam amanhã.",
+"Ho **uno** zaino e **una** borsa. || Tenho uma mochila e uma bolsa.",
+"Cerco **un'**agenzia immobiliare. || Procuro uma imobiliária.",
+"**Gli** occhiali sono nuovi. || Os óculos são novos.",
+"**Le** finestre sono aperte. || As janelas estão abertas.",
+"Studio **l'**italiano da un anno. || Estudo italiano há um ano. (idioma com artigo)",
+"Mio padre è medico. || Meu pai é médico. (profissão depois de essere, sem artigo)",
+"**Il** dottor Rossi arriva alle dieci. — Buongiorno, dottor Rossi! || O doutor Rossi chega às dez. — Bom dia, doutor Rossi! (sem artigo ao chamar)"],
+"g-base:2":[
+"un ragazzo → due **ragazzi** || um rapaz → dois rapazes",
+"una pizza → tre **pizze** || uma pizza → três pizzas",
+"un ristorante → molti **ristoranti** || um restaurante → muitos restaurantes",
+"una lezione → due **lezioni** || uma aula → duas aulas",
+"un'amica → tante **amiche** || uma amiga → muitas amigas (-ca → -che)",
+"un amico → molti **amici** || um amigo → muitos amigos (exceção: -ci)",
+"il parco → i **parchi** || o parque → os parques (-co → -chi)",
+"un caffè → due **caffè** || um café → dois cafés (acento final: não muda)",
+"una città → molte **città** || uma cidade → muitas cidades",
+"un uomo → due **uomini** || um homem → dois homens (irregular)",
+"un uovo → sei **uova** || um ovo → seis ovos (irregular, vira feminino)",
+"il problema → i **problemi** || o problema → os problemas (masculino em -a)",
+"la mano → le **mani** || a mão → as mãos (feminino em -o)",
+"la foto → le **foto** || a foto → as fotos (abreviação de fotografia)",
+"il bar → i **bar** || o bar → os bares (palavra estrangeira)"],
+"g-base:3":[
+"**Questo** è mio fratello. || Este é meu irmão.",
+"**Questa** sera esco con i colleghi. || Esta noite saio com os colegas.",
+"**Questi** documenti sono per Lei. || Estes documentos são para o senhor.",
+"**Queste** scarpe sono troppo strette. || Estes sapatos estão apertados demais.",
+"Chi è **quel** signore? || Quem é aquele senhor? (il signore → quel)",
+"**Quello** zaino è di Marco. || Aquela mochila é do Marco. (lo zaino → quello)",
+"**Quell'**edificio è il tribunale. || Aquele edifício é o tribunal. (l'edificio → quell')",
+"**Quella** ragazza è mia cugina. || Aquela moça é minha prima.",
+"**Quei** pantaloni costano troppo. || Aquelas calças custam demais. (i pantaloni → quei)",
+"**Quegli** studenti sono stranieri. || Aqueles estudantes são estrangeiros. (gli studenti → quegli)",
+"**Quelle** case sono molto vecchie. || Aquelas casas são muito velhas.",
+"Preferisci questo o **quello**? || Você prefere este ou aquele? (pronome: forma cheia)",
+"Che **bel** tempo! Che **bella** giornata! || Que tempo bom! Que dia bonito!",
+"È un **buon** ristorante e una **buona** pizzeria. || É um bom restaurante e uma boa pizzaria."],
+"g-base:4":[
+"**Il mio** ufficio è al terzo piano. || Meu escritório fica no terceiro andar.",
+"**La tua** idea è ottima. || Sua ideia é ótima.",
+"Signora, dov'è **la Sua** valigia? || Senhora, onde está sua mala? (formal)",
+"**Mio** padre è ingegnere come me. || Meu pai é engenheiro como eu. (parente singular: sem artigo)",
+"**I miei** genitori abitano a Curitiba. || Meus pais moram em Curitiba. (plural: com artigo)",
+"**Sua** sorella lavora in banca. || A irmã dele (ou dela) trabalha no banco.",
+"**Il nostro** progetto è quasi finito. || Nosso projeto está quase terminado.",
+"**La vostra** casa è bellissima. || A casa de vocês é lindíssima.",
+"**Il loro** figlio studia a Bologna. || O filho deles estuda em Bolonha. (loro: sempre com artigo)",
+"**La mia** sorellina ha dieci anni. || Minha irmãzinha tem dez anos. (diminutivo: com artigo)",
+"Questo libro è **mio**. || Este livro é meu. (depois de essere, sem artigo)",
+"Stasera viene **un mio** collega. || Hoje à noite vem um colega meu."],
+"g-base:5":[
+"Ho una casa **piccola** ma **comoda**. || Tenho uma casa pequena mas confortável.",
+"I miei colleghi sono **simpatici**. || Meus colegas são simpáticos. (simpatico → simpatici)",
+"Le ragazze sono **gentili**. || As moças são gentis. (adjetivo em -e: -i no plural)",
+"È un problema **difficile**. || É um problema difícil.",
+"Abbiamo una **nuova** collega. || Temos uma nova colega. (nuovo pode vir antes)",
+"Firenze è una città **bellissima**. || Florença é uma cidade lindíssima.",
+"Questo caffè è **buonissimo**! || Este café está ótimo!",
+"Ho una giacca **blu** e due camicie **bianche**. || Tenho um paletó azul e duas camisas brancas. (blu não muda)",
+"Marco e Giulia sono **italiani**. || Marco e Giulia são italianos. (grupo misto: masculino)",
+"È una persona **molto seria**. || É uma pessoa muito séria.",
+"Un **grande** uomo / un uomo **grande** || Um grande homem (importante) / um homem grande (tamanho)"],
+"g-base:6":[
+"**C'è** un supermercato qui vicino? || Tem um supermercado aqui perto?",
+"In questa città **ci sono** molti musei. || Nesta cidade há muitos museus.",
+"**Non c'è** latte in frigo. || Não tem leite na geladeira.",
+"Quante persone **ci sono** alla riunione? — **Ci sono** otto persone. || Quantas pessoas há na reunião? — Há oito pessoas.",
+"**C'è** Marco? — No, oggi non **c'è**. || O Marco está? — Não, hoje não está.",
+"**Ecco** il tuo caffè! || Aqui está o seu café!",
+"**Ecco** perché sono stanco. || É por isso que estou cansado.",
+"Dove sono le chiavi? — **Eccole**! || Onde estão as chaves? — Aqui estão!",
+"**Ecco** a Lei, signore. || Aqui está, senhor.",
+"**C'era** molta gente. || Havia muita gente. (passado de c'è — A2)"],
+"g-base:7":[
+"**Chi** è il responsabile del progetto? || Quem é o responsável pelo projeto?",
+"**Che cosa** fai stasera? || O que você vai fazer hoje à noite?",
+"**Dove** lavori? || Onde você trabalha?",
+"**Quando** arriva il treno? || Quando chega o trem?",
+"**Come** si dice \"prazo\" in italiano? — Si dice \"scadenza\". || Como se diz \"prazo\" em italiano? — Diz-se \"scadenza\".",
+"**Perché** non vieni? — **Perché** ho molto lavoro. || Por que você não vem? — Porque tenho muito trabalho.",
+"**Quanto** costa questa giacca? || Quanto custa este paletó?",
+"**Quanti** anni hai? — Ho trentadue anni. || Quantos anos você tem? — Tenho trinta e dois anos.",
+"**Quale** preferisci, il rosso o il blu? || Qual você prefere, o vermelho ou o azul?",
+"**Qual è** il tuo indirizzo? || Qual é o seu endereço?",
+"**Che** lavoro fa Lei? || Qual é a profissão do senhor?",
+"**A che ora** comincia la riunione? || A que horas começa a reunião?",
+"**Con chi** vai in vacanza? || Com quem você vai de férias?",
+"**Di chi** è questo telefono? || De quem é este telefone?"],
+"g-base:8":[
+"**Non** parlo tedesco. || Não falo alemão.",
+"**Non** lo so. || Não sei.",
+"**Non** ho **mai** visto Venezia. || Nunca vi Veneza.",
+"**Non** c'è **niente** da mangiare. || Não tem nada para comer.",
+"**Non** c'è **nessuno** in ufficio. || Não tem ninguém no escritório.",
+"**Non** fumo **più**. || Não fumo mais.",
+"**Non** ho **ancora** mangiato. || Ainda não comi.",
+"**Nessuno** è perfetto. || Ninguém é perfeito. (antes do verbo: sem non)",
+"**Niente** è impossibile. || Nada é impossível.",
+"**Non** mi piace **né** il tè **né** il caffè. || Não gosto nem de chá nem de café.",
+"Non ho fame. — **Neanch'io**! || Não estou com fome. — Eu também não!"],
+"g-base:9":[
+"Vorrei **del** formaggio, per favore. || Eu queria um pouco de queijo, por favor.",
+"Ho comprato **della** frutta e **delle** verdure. || Comprei frutas e verduras.",
+"Ci sono **degli** studenti in biblioteca. || Há alguns estudantes na biblioteca.",
+"Mi dai **un po' d'**acqua? || Você me dá um pouco de água?",
+"Non ho soldi. || Não tenho dinheiro. (negação: sem partitivo)",
+"Ho **molti** amici in Italia. || Tenho muitos amigos na Itália.",
+"C'è **molta** gente in piazza. || Há muita gente na praça.",
+"**Tutti i** giorni vado in ufficio in autobus. || Todos os dias vou ao escritório de ônibus.",
+"Lavoro **tutto il** giorno. || Trabalho o dia todo.",
+"**Ogni** settimana faccio la spesa. || Toda semana faço compras.",
+"Mi piace **tanto**! || Gosto tanto!",
+"Ho **pochi** giorni di ferie. || Tenho poucos dias de férias.",
+"Costa **troppo**. || Custa demais.",
+"Vorrei **mezzo chilo di** pomodori e **un etto di** prosciutto. || Queria meio quilo de tomates e cem gramas de presunto."],
+
+"g-prep:0":[
+"**il** treno → **i** treni || o trem → os trens",
+"**lo** stadio → **gli** stadi || o estádio → os estádios (s + consoante)",
+"**lo** psicologo, **lo** yogurt, **lo** gnocco || o psicólogo, o iogurte, o nhoque",
+"**l'**orario → **gli** orari || o horário → os horários",
+"**la** stazione → **le** stazioni || a estação → as estações",
+"**l'**estate → **le** estati || o verão → os verões (estate é feminino)"],
+"g-prep:1":[
+"Il libro è **nel** cassetto. || O livro está na gaveta.",
+"Vado **al** cinema con gli amici. || Vou ao cinema com os amigos.",
+"Torno **dall'**ufficio alle sei. || Volto do escritório às seis.",
+"Il gatto dorme **sul** divano. || O gato dorme no sofá.",
+"Le chiavi sono **nella** borsa. || As chaves estão na bolsa.",
+"Il prezzo **dei** biglietti è alto. || O preço dos ingressos é alto.",
+"Scrivo **agli** studenti. || Escrevo aos estudantes.",
+"Vengo **dalla** Germania. || Venho da Alemanha.",
+"Metto i documenti **sulla** scrivania. || Coloco os documentos na escrivaninha.",
+"La finestra **della** cucina è rotta. || A janela da cozinha está quebrada.",
+"Andiamo **allo** stadio domenica. || Vamos ao estádio domingo.",
+"Ho parlato **con il** direttore. || Falei com o diretor. (con não se junta)",
+"**Negli** Stati Uniti e **nei** paesi europei || Nos Estados Unidos e nos países europeus"],
+"g-prep:2":[
+"Questa è la macchina **di** mia sorella. || Este é o carro da minha irmã. (posse)",
+"Sono **di** Curitiba ma abito **a** San Paolo. || Sou de Curitiba mas moro em São Paulo.",
+"Ho un appuntamento **dal** dentista **alle** quattro. || Tenho consulta no dentista às quatro.",
+"Lavoro **in** tribunale **da** un anno. || Trabalho no tribunal há um ano.",
+"Vado **in** Italia **in** aereo **in** agosto. || Vou à Itália de avião em agosto.",
+"Domani parto **per** Roma. || Amanhã parto para Roma.",
+"Ci vediamo **tra** dieci minuti. || A gente se vê daqui a dez minutos.",
+"Ho studiato **per** tre ore. || Estudei por três horas.",
+"Questo regalo è **per** te. || Este presente é para você.",
+"Torno a casa **a** piedi. || Volto para casa a pé.",
+"Il treno **da** Milano è in ritardo. || O trem vindo de Milão está atrasado.",
+"Un corso **d'**italiano, un libro **di** storia || Um curso de italiano, um livro de história",
+"Una tazza **da** caffè / una tazza **di** caffè || Uma xícara de café (tipo de xícara) / uma xícara com café",
+"Comincio **a** lavorare alle otto. || Começo a trabalhar às oito.",
+"Ho molto **da** fare oggi. || Tenho muito o que fazer hoje.",
+"**Per** me va bene. || Para mim está bom.",
+"Parlo **con** il cliente **al** telefono. || Falo com o cliente ao telefone.",
+"**Da** bambino giocavo a calcio. || Quando criança eu jogava futebol.",
+"Abito **in** via Garibaldi, **in** centro. || Moro na rua Garibaldi, no centro.",
+"Un signore **sui** sessant'anni || Um senhor de uns sessenta anos",
+"Il progetto è stato approvato **dal** giudice. || O projeto foi aprovado pelo juiz. (agente)",
+"Roma è più grande **di** Milano. || Roma é maior que Milão. (comparação)"],
+"g-prep:3":[
+"Il gatto è **sotto** il letto. || O gato está embaixo da cama.",
+"La lampada è **sopra** il tavolo. || A luminária está sobre a mesa.",
+"La farmacia è **accanto alla** banca. || A farmácia fica ao lado do banco.",
+"Ci vediamo **davanti al** cinema. || A gente se encontra na frente do cinema.",
+"Il parcheggio è **dietro** l'edificio. || O estacionamento fica atrás do edifício.",
+"Il bar è **di fronte alla** stazione. || O bar fica em frente à estação.",
+"Abito **vicino al** centro. || Moro perto do centro.",
+"L'aeroporto è **lontano dalla** città. || O aeroporto fica longe da cidade.",
+"Le chiavi sono **dentro** la borsa. || As chaves estão dentro da bolsa.",
+"Ti aspetto **fuori**. || Te espero lá fora.",
+"La banca è **tra** il bar e la farmacia. || O banco fica entre o bar e a farmácia.",
+"**In fondo alla** strada, a destra. || No fim da rua, à direita.",
+"Il bagno è **al** primo piano. || O banheiro fica no primeiro andar."],
+
+"g-pres:0":[
+"**Parlo** italiano e portoghese. || Falo italiano e português.",
+"**Abiti** a Curitiba? || Você mora em Curitiba?",
+"Marco **lavora** in banca. || Marco trabalha no banco.",
+"**Prendiamo** un caffè? || Vamos tomar um café?",
+"**Scrivete** molte mail al giorno? || Vocês escrevem muitos e-mails por dia?",
+"I miei figli **dormono** poco. || Meus filhos dormem pouco.",
+"**Capisco** bene, ma **parlo** male. || Entendo bem, mas falo mal.",
+"**Finisco** di lavorare alle sei. || Termino de trabalhar às seis.",
+"Lei **preferisce** il tè o il caffè? || O senhor prefere chá ou café?",
+"**Pulisco** la casa il sabato. || Limpo a casa aos sábados.",
+"**Cerchiamo** un nuovo collaboratore. || Procuramos um novo colaborador.",
+"Tu **paghi** sempre con la carta. || Você sempre paga com cartão.",
+"**Mangiamo** insieme? || Vamos comer juntos?",
+"Gli studenti **leggono** in biblioteca. || Os estudantes leem na biblioteca.",
+"**Apro** la finestra, fa caldo. || Vou abrir a janela, está calor."],
+"g-pres:1":[
+"**Sono** ingegnere e **ho** trentadue anni. || Sou engenheiro e tenho trinta e dois anos.",
+"Come **stai**? — **Sto** bene, grazie. || Como você está? — Estou bem, obrigado.",
+"Stasera **vado** al cinema. **Vieni** con me? || Hoje à noite vou ao cinema. Vem comigo?",
+"Che cosa **fai** nel fine settimana? — **Faccio** sport. || O que você faz no fim de semana? — Pratico esporte.",
+"**Esco** dal lavoro alle cinque. || Saio do trabalho às cinco.",
+"Loro **vanno** in vacanza in agosto. || Eles saem de férias em agosto.",
+"Non **so** dov'è la stazione. || Não sei onde fica a estação.",
+"Mi **dai** il tuo numero? || Você me dá o seu número?",
+"**Bevo** un bicchiere d'acqua. || Bebo um copo d'água.",
+"Stasera **rimango** a casa. || Hoje à noite fico em casa.",
+"Che cosa **dice** il capo? || O que o chefe diz?",
+"**Veniamo** da Curitiba. || Viemos de Curitiba. (= somos de lá)",
+"Oggi **fa** freddo! || Hoje está frio! (fare para o clima)",
+"**Facciamo** una pausa? || Vamos fazer uma pausa?"],
+"g-pres:2":[
+"**Posso** entrare? || Posso entrar?",
+"**Può** ripetere, per favore? || O senhor pode repetir, por favor?",
+"**Devo** finire la relazione entro domani. || Tenho que terminar o relatório até amanhã.",
+"**Vuoi** un caffè? — Sì, grazie. || Você quer um café? — Sim, obrigado.",
+"Non **possiamo** venire stasera. || Não podemos vir hoje à noite.",
+"**Dobbiamo** parlare del progetto. || Precisamos falar sobre o projeto.",
+"I bambini **vogliono** giocare. || As crianças querem brincar.",
+"**Vorrei** prenotare un tavolo per due. || Gostaria de reservar uma mesa para dois.",
+"**Sai** nuotare? — Sì, **so** nuotare. || Você sabe nadar? — Sim, sei nadar.",
+"Non **posso** uscire, **devo** lavorare. || Não posso sair, tenho que trabalhar.",
+"**Potrebbe** aiutarmi? || O senhor poderia me ajudar? (condicional, mais educado)",
+"Mi **deve** dieci euro. || Ele me deve dez euros. (dovere = dever dinheiro)"],
+"g-pres:3":[
+"Come **ti chiami**? — **Mi chiamo** Lucas. || Como você se chama? — Me chamo Lucas.",
+"**Mi sveglio** alle sei e **mi alzo** subito. || Acordo às seis e me levanto logo.",
+"Marco **si fa** la barba ogni mattina. || Marco faz a barba toda manhã.",
+"**Ci vediamo** domani! || A gente se vê amanhã!",
+"A che ora **vi alzate**? || A que horas vocês se levantam?",
+"I bambini **si lavano** i denti. || As crianças escovam os dentes.",
+"**Mi vesto** in fretta. || Me visto com pressa.",
+"**Ci divertiamo** molto alle feste. || Nos divertimos muito nas festas.",
+"**Si sente** bene, signora? || A senhora está se sentindo bem?",
+"**Mi annoio** nelle riunioni lunghe. || Fico entediado nas reuniões longas.",
+"La sera **mi rilasso** davanti alla TV. || À noite relaxo em frente à TV.",
+"**Mi trovo** bene a Curitiba. || Gosto de viver em Curitiba. (trovarsi bene)"],
+"g-pres:4":[
+"**Mi piace** la pizza. || Gosto de pizza.",
+"**Mi piacciono** le lasagne. || Gosto de lasanha. (plural)",
+"**Ti piace** il tuo lavoro? || Você gosta do seu trabalho?",
+"**Le piace** l'Italia, signor Rossi? || O senhor gosta da Itália, senhor Rossi?",
+"**Gli piace** giocare a calcio. || Ele gosta de jogar futebol. (gli = a lui)",
+"**Le piacciono** i fiori. || Ela gosta de flores. (le = a lei)",
+"**Ci piace** viaggiare. || Gostamos de viajar.",
+"**Vi piace** questa città? || Vocês gostam desta cidade?",
+"**A Marco** non **piace** il pesce. || Marco não gosta de peixe.",
+"**Ai miei genitori piacciono** i film italiani. || Meus pais gostam de filmes italianos.",
+"**Non mi piace** alzarmi presto. || Não gosto de acordar cedo.",
+"Mi piace il jazz. — **Anche a me!** / **A me no.** || Gosto de jazz. — Eu também! / Eu não."],
+"g-pres:5":[
+"**Domani parto** per Roma. || Amanhã parto para Roma. (futuro com presente)",
+"Stasera **mangiamo** fuori. || Hoje à noite vamos comer fora.",
+"**Lavoro** qui **da** sei mesi. || Trabalho aqui há seis meses.",
+"**Da quanto tempo** studi italiano? — **Da** due anni. || Há quanto tempo você estuda italiano? — Há dois anos.",
+"**Sto lavorando**, ti chiamo dopo. || Estou trabalhando, te ligo depois.",
+"Che cosa **stai facendo**? || O que você está fazendo?",
+"**Stiamo aspettando** il treno. || Estamos esperando o trem.",
+"Ti **aiuto** io! || Eu te ajudo! (oferta)",
+"**Ci vediamo** alle otto? || A gente se encontra às oito? (proposta)"],
+
+"g-pass:0":[
+"Ho **parlato** con il cliente. || Falei com o cliente.",
+"Abbiamo **comprato** una casa. || Compramos uma casa.",
+"Hai **venduto** la macchina? || Você vendeu o carro?",
+"Ho **avuto** una giornata lunga. || Tive um dia longo.",
+"Non ho **capito**, può ripetere? || Não entendi, o senhor pode repetir?",
+"Ho **finito** il lavoro. || Terminei o trabalho.",
+"Hai **dormito** bene? || Você dormiu bem?",
+"Ho **conosciuto** tua sorella. || Conheci sua irmã.",
+"Avete **ricevuto** la mia mail? || Vocês receberam meu e-mail?",
+"Ho **pulito** la cucina. || Limpei a cozinha."],
+"g-pass:1":[
+"Che cosa hai **fatto** ieri? || O que você fez ontem?",
+"Ho **visto** un film bellissimo. || Vi um filme lindíssimo.",
+"Mi hai **detto** la verità? || Você me disse a verdade?",
+"Ho **preso** l'autobus delle otto. || Peguei o ônibus das oito.",
+"Dove hai **messo** le chiavi? || Onde você colocou as chaves?",
+"Ho **scritto** una relazione di dieci pagine. || Escrevi um relatório de dez páginas.",
+"Hai **letto** il verbale? || Você leu a ata?",
+"Chi ha **aperto** la finestra? || Quem abriu a janela?",
+"Ho **chiuso** la porta a chiave. || Tranquei a porta.",
+"Ho **perso** il telefono! || Perdi o celular!",
+"Gli ho **chiesto** un favore. || Pedi um favor a ele.",
+"Abbiamo **deciso** di partire. || Decidimos partir.",
+"Ho **speso** troppo. || Gastei demais.",
+"Hai **risposto** alla mail del giudice? || Você respondeu ao e-mail do juiz?",
+"Ho **bevuto** troppo caffè. || Bebi café demais.",
+"Che cosa è **successo**? || O que aconteceu?",
+"Abbiamo **vinto** la partita! || Ganhamos a partida!"],
+"g-pass:2":[
+"**Ho** mangiato una pizza. / **Sono** andato in pizzeria. || Comi uma pizza. / Fui à pizzaria.",
+"Anna **è** arrivata alle nove. || Anna chegou às nove.",
+"I miei genitori **sono** partiti ieri. || Meus pais partiram ontem.",
+"**Ho** lavorato tutto il giorno. || Trabalhei o dia todo.",
+"**Sono** stato a Roma due volte. || Estive em Roma duas vezes.",
+"Giulia **è** nata nel 1995. || Giulia nasceu em 1995.",
+"**Siamo** rimasti a casa. || Ficamos em casa.",
+"Il film **è** durato tre ore. || O filme durou três horas.",
+"La cena **è** costata cinquanta euro. || O jantar custou cinquenta euros.",
+"**Ho** viaggiato molto quest'anno. || Viajei muito este ano.",
+"Le ragazze **si sono** divertite. || As moças se divertiram.",
+"Mi **è** piaciuto molto il concerto. || Gostei muito do show.",
+"Marco **è** diventato papà. || Marco virou pai.",
+"**Ho** cominciato il lavoro. / Il film **è** cominciato. || Comecei o trabalho. / O filme começou. (verbo com dois auxiliares)"],
+"g-pass:3":[
+"(io) **Sono** uscito presto. || Saí cedo.",
+"(tu) **Hai** finito? || Você terminou?",
+"(lei) **Si è** alzata tardi. || Ela se levantou tarde.",
+"(noi) **Abbiamo** visitato il museo. || Visitamos o museu.",
+"(voi) **Siete** tornati ieri? || Vocês voltaram ontem?",
+"(loro) **Hanno** firmato il contratto. || Eles assinaram o contrato.",
+"Signora, **è** andata al mercato? || Senhora, a senhora foi à feira? (Lei, feminino)",
+"Ingegnere, **ha** visto il progetto? || Engenheiro, o senhor viu o projeto?"],
+"g-pass:4":[
+"**Non** ho **ancora** ricevuto la risposta. || Ainda não recebi a resposta.",
+"Hai **già** mangiato? — Sì, ho **già** mangiato. || Você já comeu? — Sim, já comi.",
+"Sono **appena** tornato dalle ferie. || Acabei de voltar das férias.",
+"Sei **mai** stato a Napoli? — No, non ci sono **mai** stato. || Você já esteve em Nápoles? — Não, nunca estive.",
+"Ho **sempre** abitato a Curitiba. || Sempre morei em Curitiba.",
+"**Non** ho detto **niente**. || Não disse nada.",
+"**Non** ho visto **nessuno**. || Não vi ninguém. (nessuno depois do particípio)",
+"Ho dormito **bene**. || Dormi bem.",
+"Hai **finalmente** finito! || Você finalmente terminou!",
+"**Non** ho **più** visto Marco. || Não vi mais o Marco."],
+"g-pass:5":[
+"**Ieri** ho lavorato da casa. || Ontem trabalhei de casa.",
+"**Ieri sera** siamo andati al ristorante. || Ontem à noite fomos ao restaurante.",
+"**Stamattina** mi sono svegliato tardi. || Hoje de manhã acordei tarde.",
+"**La settimana scorsa** ho avuto tre riunioni. || Semana passada tive três reuniões.",
+"**L'anno scorso** sono andato in Italia. || Ano passado fui para a Itália.",
+"Ho comprato questa macchina **due anni fa**. || Comprei este carro dois anos atrás.",
+"**Poco fa** ha chiamato il capo. || Há pouco o chefe ligou.",
+"**Nel 2025** ho cominciato a lavorare al TJPR. || Em 2025 comecei a trabalhar no TJPR.",
+"**Sabato scorso** abbiamo festeggiato il compleanno di Anna. || Sábado passado comemoramos o aniversário da Anna.",
+"**L'altro ieri** ho incontrato Marco in centro. || Anteontem encontrei Marco no centro."],
+
+"g-fut:0":[
+"Domani **parlerò** con il direttore. || Amanhã falarei com o diretor.",
+"**Prenderai** il treno o l'aereo? || Você vai pegar o trem ou o avião?",
+"Il progetto **finirà** a dicembre. || O projeto terminará em dezembro.",
+"**Partiremo** alle sette. || Partiremos às sete.",
+"**Scriverete** voi il verbale? || Vocês vão escrever a ata?",
+"I clienti **arriveranno** domani. || Os clientes chegarão amanhã.",
+"**Cercherò** un appartamento in centro. || Vou procurar um apartamento no centro. (-care: h)",
+"**Pagheremo** con la carta. || Pagaremos com cartão. (-gare: h)",
+"**Mangerò** meno dolci. || Vou comer menos doces. (-giare: cai o i)",
+"**Comincerà** a piovere stasera. || Vai começar a chover hoje à noite.",
+"**Viaggerò** in Italia l'anno prossimo. || Viajarei para a Itália ano que vem.",
+"Sabato **dormirò** fino a tardi. || Sábado vou dormir até tarde."],
+"g-fut:1":[
+"**Sarò** in ufficio alle nove. || Estarei no escritório às nove.",
+"**Avrai** tempo domani? || Você terá tempo amanhã?",
+"In estate **andremo** al mare. || No verão iremos à praia.",
+"Che cosa **farai** dopo la laurea? || O que você vai fazer depois da formatura?",
+"Alla festa **verrà** anche Marco. || O Marco também virá à festa.",
+"**Vorranno** vedere il progetto. || Eles vão querer ver o projeto.",
+"**Potrò** aiutarti la settimana prossima. || Poderei te ajudar semana que vem.",
+"**Dovrete** firmare qui. || Vocês terão que assinar aqui.",
+"**Saprai** la risposta domani. || Você saberá a resposta amanhã.",
+"**Vedremo**! || Veremos!",
+"**Berremo** un bicchiere insieme. || Vamos tomar uma taça juntos.",
+"**Rimarrò** a Roma una settimana. || Ficarei em Roma uma semana.",
+"Domenica **starò** a casa tutto il giorno. || Domingo ficarei em casa o dia todo.",
+"Ti **darò** una risposta entro venerdì. || Te darei uma resposta até sexta.",
+"Un giorno **vivremo** in Italia? || Um dia moraremos na Itália?"],
+"g-fut:2":[
+"Domani **pioverà**. || Amanhã vai chover. (previsão)",
+"Ti **chiamerò** stasera, promesso. || Te ligo hoje à noite, prometo.",
+"Quando **finirai** l'università? || Quando você vai terminar a faculdade?",
+"Non so dov'è Anna, **sarà** a casa. || Não sei onde está Anna, deve estar em casa. (suposição)",
+"Quanti anni ha il professore? — **Avrà** cinquant'anni. || Quantos anos tem o professor? — Deve ter uns cinquenta.",
+"Suona il telefono. — **Sarà** Marco. || O telefone está tocando. — Deve ser o Marco.",
+"Quando **arriverai**, mandami un messaggio. || Quando você chegar, me manda uma mensagem.",
+"Se **farà** bel tempo, **andremo** al mare. || Se fizer tempo bom, iremos à praia.",
+"Appena **potrò**, ti **risponderò**. || Assim que eu puder, te respondo.",
+"**Sarà** vero? || Será verdade? (dúvida)",
+"Ci **vedremo** presto! || Nos veremos em breve!"],
+"g-fut:3":[
+"Quando **avrò finito** il lavoro, uscirò. || Quando eu tiver terminado o trabalho, sairei.",
+"Dopo che **saremo arrivati**, ti chiameremo. || Depois que tivermos chegado, te ligaremos.",
+"Appena **avrai letto** la mail, rispondimi. || Assim que tiver lido o e-mail, me responda.",
+"Marco **sarà già partito**. || O Marco já deve ter saído. (suposição sobre o passado)",
+"Entro venerdì **avremo consegnato** il progetto. || Até sexta teremos entregue o projeto."],
+"g-fut:4":[
+"**Domani vado** a Milano. / **Domani andrò** a Milano. || Amanhã vou a Milão. (fala) / Amanhã irei a Milão. (mais formal)",
+"**La settimana prossima comincio** il nuovo corso. || Semana que vem começo o novo curso.",
+"Le **invierò** il preventivo entro lunedì. || Enviarei o orçamento ao senhor até segunda. (e-mail formal)",
+"**Sarà** nostra cura informarLa. || Teremos o cuidado de informá-lo. (fórmula de e-mail)",
+"**Ci sentiamo** domani! || A gente se fala amanhã!",
+"Stasera **esco** con gli amici. || Hoje à noite saio com os amigos."],
+
+"g-a2:0":[
+"**Da bambino abitavo** in campagna. || Quando criança eu morava no interior.",
+"Ogni estate **andavamo** al mare. || Todo verão íamos à praia. (hábito)",
+"**Era** una bella giornata e il sole **splendeva**. || Era um dia bonito e o sol brilhava. (descrição)",
+"Mentre **lavoravo**, è suonato il telefono. || Enquanto eu trabalhava, o telefone tocou.",
+"**Avevo** vent'anni quando ho cominciato l'università. || Eu tinha vinte anos quando comecei a faculdade.",
+"Mio nonno **faceva** il muratore. || Meu avô era pedreiro.",
+"Quando **ero** piccolo, non mi **piacevano** le verdure. || Quando eu era pequeno, não gostava de verduras.",
+"Che cosa **facevi** ieri alle otto? — **Dormivo**. || O que você estava fazendo ontem às oito? — Dormindo."],
+"g-a2:1":[
+"**Vorrei** un'informazione, per favore. || Eu gostaria de uma informação, por favor.",
+"**Potrebbe** chiudere la finestra? || O senhor poderia fechar a janela?",
+"**Dovresti** riposare di più. || Você deveria descansar mais.",
+"**Sarebbe** possibile spostare la riunione? || Seria possível mudar a reunião?",
+"Mi **piacerebbe** vivere in Italia. || Eu gostaria de morar na Itália.",
+"**Andrei** volentieri, ma non posso. || Eu iria com prazer, mas não posso.",
+"**Avrebbe** un momento? || O senhor teria um momento?",
+"Al tuo posto, **accetterei**. || No seu lugar, eu aceitaria."],
+"g-a2:2":[
+"Conosci Marco? Sì, **lo** conosco. || Você conhece o Marco? Sim, conheço (ele).",
+"Hai visto Anna? No, non **l'**ho vista. || Você viu a Anna? Não, não a vi. (particípio concorda)",
+"Compri tu i biglietti? Sì, **li** compro io. || Você compra os ingressos? Sim, eu compro.",
+"Dove sono le chiavi? Non **le** trovo. || Onde estão as chaves? Não as encontro.",
+"**Ti** chiamo domani. || Te ligo amanhã.",
+"**Gli** ho scritto una mail. || Escrevi um e-mail para ele.",
+"**Le** ho mandato il documento. || Mandei o documento para ela / para o senhor.",
+"**Mi** puoi aiutare? / Puoi aiutar**mi**? || Você pode me ajudar? (duas posições possíveis)",
+"Il verbale? **Te lo** mando stasera. || A ata? Te mando hoje à noite. (pronomes combinados)"],
+"g-a2:3":[
+"Vai in ufficio domani? Sì, **ci** vado. || Você vai ao escritório amanhã? Sim, vou (lá).",
+"Sei mai stato a Roma? Sì, **ci** sono stato. || Você já esteve em Roma? Sim, estive (lá).",
+"Pensi al lavoro? Sì, **ci** penso sempre. || Você pensa no trabalho? Sim, penso sempre (nisso).",
+"**Ci vuole** mezz'ora per arrivare. || Leva meia hora para chegar.",
+"**Ci vogliono** due giorni. || Levam dois dias.",
+"Quanti fratelli hai? **Ne** ho due. || Quantos irmãos você tem? Tenho dois.",
+"Vuoi del caffè? Sì, **ne** voglio un po'. || Quer café? Sim, quero um pouco.",
+"Che **ne** pensi? || O que você acha (disso)?",
+"Non **ne** ho idea. || Não faço ideia.",
+"**Me ne** vado. || Vou embora."],
+"g-a2:4":[
+"Roma è **più** grande **di** Firenze. || Roma é maior que Florença.",
+"Il treno è **meno** caro **dell'**aereo. || O trem é mais barato que o avião.",
+"Marco è alto **come** suo padre. || Marco é tão alto quanto o pai.",
+"Questo ristorante è **migliore di** quello. || Este restaurante é melhor que aquele.",
+"Oggi sto **meglio**. || Hoje estou melhor.",
+"È **il più** bravo **della** classe. || É o melhor da turma.",
+"Parlo italiano **meglio di** prima. || Falo italiano melhor que antes.",
+"Il tempo oggi è **peggiore di** ieri. || O tempo hoje está pior que ontem.",
+"È **più** facile **che** difficile. || É mais fácil do que difícil. (dois adjetivos: che)",
+"Preferisco leggere **piuttosto che** guardare la TV. || Prefiro ler a ver TV."]
+};
+function renderGEX(){document.querySelectorAll("[data-ex]").forEach(el=>{const arr=GEX[el.dataset.ex];if(!arr){el.remove();return}
+ const rows=arr.map(s=>{const [it,pt]=s.split("||").map(x=>x.trim());const say=it.replace(/\*\*/g,"").replace(/\(.*?\)/g,"").replace(/→/g,",");
+  return`<div class="exrow"><div><i>${esc(it).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>")}</i><span>${esc(pt||"")}</span></div>${spkBtn(say)}</div>`}).join("");
+ el.outerHTML=`<details class="exs" open><summary><span class="label">Exemplos</span><span class="exn">${arr.length}</span></summary><div class="exlist">${rows}</div></details>`})}
+renderGEX();
+
+/* ============================ NOTÍCIAS DO DIA ============================ */
+const NEWS={latest:null,cur:null,curDate:null,index:{},cache:{},extra:{},state:"loading",calMonth:null,rendered:null};
+const MONTHS=["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+const fmtBR=d=>d.split("-").reverse().join("/");
+const pad2=n=>String(n).padStart(2,"0");
+const clone=o=>JSON.parse(JSON.stringify(o));
+const LET="A-Za-zÀ-ÖØ-öø-ÿ";
+const STAR_SVG='<svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>';
+const X_SVG='<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+
+function newsKey(w){return w.toLowerCase().replace(/’/g,"'")}
+function gloss(k){const g=(NEWS.cur&&NEWS.cur.glossary)||{};return g[k]||g[k.replace(/'$/,"")]||NEWS.extra[k]||null}
+function favKeyOf(e,k){return String((e&&e.lemma)||k).toLowerCase().trim()}
+function localEntry(k){const nk=norm(k.replace(/'$/,""));if(nk.length<2)return null;
+ const v=VOCAB.find(v=>norm(v.it).split(/[\s,()/.?!]+/).includes(nk));
+ return v?{lemma:v.it,meaning:v.pt,synonyms:[],pos:"",note:"Do vocabulário do app ("+v.theme+").",local:true}:null}
+
+/* texto → palavras clicáveis */
+function tok(text,pi){let out="",last=0;const re=new RegExp("["+LET+"]+['’]?","g");let m;
+ while((m=re.exec(text))){let w=m[0];const off=m.index;
+  if(/['’]$/.test(w)){const nx=text[off+w.length]||"";if(!new RegExp("["+LET+"]").test(nx)&&!/^po['’]$/i.test(w))w=w.slice(0,-1)}
+  const k=newsKey(w),e=gloss(k);let cls="w";if(e)cls+=" g";if(e&&S.favs[favKeyOf(e,k)])cls+=" fav";
+  out+=esc(text.slice(last,off))+`<button class="${cls}" data-w="${esc(k)}" data-p="${pi}">${esc(w)}</button>`;last=off+w.length;re.lastIndex=last}
+ return out+esc(text.slice(last))}
+function refreshTokenMarks(){$$("button.w").forEach(b=>{const e=gloss(b.dataset.w);b.classList.toggle("g",!!e);b.classList.toggle("fav",!!(e&&S.favs[favKeyOf(e,b.dataset.w)]))})}
+function findSentence(text,w){const parts=String(text).match(/[^.!?]+[.!?»"]*/g)||[text];const lw=w.toLowerCase();return(parts.find(p=>p.toLowerCase().includes(lw))||text).trim()}
+
+/* leitura em voz alta */
+let READING=false;
+function readAll(){if(!canSpeak||!NEWS.cur)return;speechSynthesis.cancel();if(READING){READING=false;updReadBtn();return}
+ const texts=[NEWS.cur.title,...(NEWS.cur.paragraphs||[])];let i=0;READING=true;updReadBtn();
+ const next=()=>{if(!READING||i>=texts.length){READING=false;updReadBtn();return}
+  try{const u=new SpeechSynthesisUtterance(texts[i++]);u.lang="it-IT";u.rate=.88;u.onend=next;u.onerror=()=>{READING=false;updReadBtn()};speechSynthesis.speak(u)}catch(e){READING=false;updReadBtn()}};next()}
+function updReadBtn(){const b=$("#readAll");if(b)b.innerHTML=(READING?'<svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>Parar leitura':SPK_SVG+"Ouvir a notícia")}
+
+/* sub-abas */
+function setNS(v){$$("#newsSeg button").forEach(b=>{const on=b.dataset.ns===v;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
+ ["read","cal","favs"].forEach(k=>$("#ns-"+k).hidden=k!==v);if(v==="cal")renderCal();if(v==="favs")renderFavs();
+ try{localStorage.setItem(KEY+".ns",v)}catch(e){}}
+$$("#newsSeg button").forEach(b=>b.addEventListener("click",()=>setNS(b.dataset.ns)));
+document.addEventListener("click",e=>{const g=e.target.closest("[data-ns-go]");if(g){setNS(g.dataset.nsGo);window.scrollTo(0,0)}});
+
+/* notícia */
+function newsMsg(){const m={loading:["Carregando a notícia…","Só um instante."],
+ slow:["A notícia está demorando","Verifique a conexão. Ela aparece aqui assim que chegar."],
+ nodb:["Notícias indisponíveis aqui","A notícia diária, o calendário e a sincronização funcionam quando o app é aberto no Claude, com a sua conta. O resto do app funciona normalmente."],
+ empty:["Ainda não há notícias","A notícia do dia é publicada toda manhã, por volta das 6h50."],
+ error:["Não consegui carregar as notícias","Tente reabrir o app daqui a pouco."],
+ offline:["Você está sem conexão","A notícia de hoje aparece assim que a internet voltar. As notícias que você já abriu continuam disponíveis."]}[NEWS.state]||["",""];
+ return`<div class="card stack emptynews"><span class="label">Notícia do dia</span><h3>${m[0]}</h3><p class="muted small">${m[1]}</p></div>`}
+function renderNews(){const box=$("#newsBox"),n=NEWS.cur;NEWS.rendered=n;
+ if(!n){box.innerHTML=newsMsg();$("#quizBox").innerHTML="";return}
+ const d=n.date,isLatest=NEWS.latest&&NEWS.latest.date===d;
+ const srcs=(n.sources||[]).filter(s=>s&&s.url).map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name||s.url)}</a>`).join(", ");
+ const paras=(n.paragraphs||[]).map((p,i)=>`<p class="npara">${tok(p,i)}</p>${n.paragraphsPt&&n.paragraphsPt[i]?`<p class="ptpara" hidden>${esc(n.paragraphsPt[i])}</p>`:""}`).join("");
+ box.innerHTML=`<article class="news">
+  <div class="row" style="justify-content:space-between"><span class="label">${d===today()?"Notícia de hoje":"Notícia de "+fmtBR(d)}${n.topic?" · "+esc(n.topic):""}</span><span class="cefr">${esc(n.level||"A2")}</span></div>
+  <h2 class="ntitle">${tok(n.title||"",-1)}</h2>
+  ${n.titlePt?`<p class="ptpara" hidden>${esc(n.titlePt)}</p>`:""}
+  <div class="row">${canSpeak?`<button class="btn" id="readAll"></button>`:""}<button class="btn ghost" id="togglePt" aria-pressed="false">Mostrar tradução</button>${!isLatest&&NEWS.latest?`<button class="btn ghost" id="toLatest">Ir para a mais recente</button>`:""}</div>
+  <p class="hint">Toque numa palavra para ouvir a pronúncia e ver significado, sinônimos e exemplo. Com a estrela, ela vai para a sua revisão.</p>
+  ${paras}
+  ${srcs?`<p class="src">Texto adaptado para o nível ${esc(n.level||"A2")} a partir de: ${srcs}</p>`:""}
+ </article>`;
+ updReadBtn();
+ if($("#readAll"))$("#readAll").onclick=readAll;
+ $("#togglePt").onclick=e=>{const on=e.currentTarget.getAttribute("aria-pressed")!=="true";e.currentTarget.setAttribute("aria-pressed",on);e.currentTarget.textContent=on?"Esconder tradução":"Mostrar tradução";$$("#newsBox .ptpara").forEach(p=>p.hidden=!on)};
+ if($("#toLatest"))$("#toLatest").onclick=()=>openDate(NEWS.latest.date);
+ renderQuiz()}
+$("#newsBox").addEventListener("click",e=>{const b=e.target.closest("button.w");if(b)openWord(b)});
+
+async function openDate(d){if(READING){READING=false;try{speechSynthesis.cancel()}catch(e){}}
+ NEWS.curDate=d;setNS("read");window.scrollTo(0,0);
+ if(NEWS.cache[d]){NEWS.cur=NEWS.cache[d];renderNews();return}
+ NEWS.cur=null;$("#newsBox").innerHTML=`<div class="card"><p class="muted">Carregando a notícia de ${fmtBR(d)}…</p></div>`;$("#quizBox").innerHTML="";
+ try{const n=await loadNews(d);if(NEWS.curDate!==d)return;NEWS.cur=n;renderNews()}
+ catch(e){$("#newsBox").innerHTML=`<div class="card"><p class="muted">${navigator.onLine===false?"Sem conexão: esta notícia ainda não foi baixada neste aparelho.":"Não consegui abrir essa notícia agora. Tente de novo em instantes."}</p></div>`}}
+
+/* painel da palavra */
+let SH=null,SAMPLE_P=null;
+function openWord(btn){$$("button.w.on").forEach(x=>x.classList.remove("on"));btn.classList.add("on");
+ const k=btn.dataset.w,pi=+btn.dataset.p,surface=btn.textContent,n=NEWS.cur;
+ const para=pi>=0?(n.paragraphs||[])[pi]||"":n.title||"";
+ SH={k,surface,sentence:findSentence(para,surface),entry:gloss(k)||localEntry(k),btn};
+ renderSheet();showSheet(true);speak(surface)}
+function showSheet(on){$("#sheet").hidden=!on;$("#sheetBack").hidden=!on;
+ if(on){setTimeout(()=>$("#shClose").focus({preventScroll:true}),0)}else{$$("button.w.on").forEach(x=>x.classList.remove("on"));if(SH&&SH.btn)SH.btn.focus({preventScroll:true})}}
+function renderSheet(){const e=SH.entry,fk=e?favKeyOf(e,SH.k):null,isFav=!!(fk&&S.favs[fk]);
+ $("#shWord").textContent=SH.surface;
+ const lem=e&&e.lemma&&e.lemma.toLowerCase()!==SH.surface.toLowerCase()?"forma de “"+e.lemma+"”":"";
+ $("#shLemma").textContent=[lem,e&&e.pos].filter(Boolean).join(" · ");
+ const fav=$("#shFav");fav.disabled=!e;fav.classList.toggle("on",isFav);fav.setAttribute("aria-pressed",isFav);
+ fav.setAttribute("aria-label",isFav?"Remover das minhas palavras":"Salvar nas minhas palavras");
+ $("#shSay").dataset.say=SH.surface;
+ let h="";
+ if(e){h+=`<div class="shmean">${esc(e.meaning||"")}</div>`;
+  if(e.note)h+=`<p class="small muted">${esc(e.note)}</p>`;
+  if(e.synonyms&&e.synonyms.length)h+=`<div class="stack" style="gap:6px"><span class="label">Sinônimos</span><div class="chips">${e.synonyms.map(s=>`<button class="chipb" data-say="${esc(s)}">${esc(s)}</button>`).join("")}</div></div>`;
+  if(e.example)h+=`<div class="stack" style="gap:6px"><span class="label">Exemplo de uso</span><div class="exrow boxed"><div><i>${esc(e.example)}</i><span>${esc(e.examplePt||"")}</span></div>${spkBtn(e.example)}</div></div>`;
+  h+=`<p class="favline small">${isFav?"★ Salva nas minhas palavras. Ela aparece nos cartões de revisão.":"Toque na estrela para revisar esta palavra nos cartões."}</p>`}
+ else h+=`<p class="muted">Esta palavra não está no glossário desta notícia nem no vocabulário do app.</p>`;
+ h+=`<div class="stack" style="gap:6px"><span class="label">Na notícia</span><div class="exrow boxed"><div><i>${esc(SH.sentence)}</i></div>${spkBtn(SH.sentence)}</div></div>`;
+ $("#shBody").innerHTML=h;
+ if($("#shAsk"))$("#shAsk").onclick=askClaude}
+$("#shClose").onclick=()=>showSheet(false);
+$("#sheetBack").onclick=()=>showSheet(false);
+$("#shFav").onclick=toggleFav;
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#sheet").hidden)showSheet(false)});
+
+async function askClaude(){const b=$("#shAsk"),msg=$("#shAskMsg"),k=SH.k,surface=SH.surface,sentence=SH.sentence;b.disabled=true;b.textContent="Consultando…";msg.textContent="";
+ try{if(!SAMPLE_P)SAMPLE_P=(window.claude&&typeof claude.use==="function")?claude.use("sample"):Promise.resolve(null);
+  const sample=await SAMPLE_P;if(!sample)throw{code:"not_granted"};
+  const r=await sample.json(`Você é um dicionário italiano–português para um estudante brasileiro de nível A2.
+Palavra: "${surface}"
+Frase em que aparece: "${sentence}"
+Responda somente com um objeto JSON neste formato:
+{"lemma":"forma de dicionário em italiano","pos":"classe gramatical em português (ex.: verbo, substantivo masculino)","meaning":"significado em português neste contexto","synonyms":["até 4 sinônimos em italiano"],"example":"uma frase nova e simples em italiano usando a palavra","examplePt":"tradução da frase","note":"se for forma flexionada, explique em português (ex.: verbo andare, passato prossimo, 3ª pessoa)"}`,{modelTier:"quick",cache:{gcTime:86400000}});
+  if(!r||typeof r!=="object"||!r.meaning)throw{code:"invalid_json"};
+  r.synonyms=Array.isArray(r.synonyms)?r.synonyms.map(String).slice(0,5):[];
+  NEWS.extra[k]=r;if(SH&&SH.k===k){SH.entry=r;renderSheet()}refreshTokenMarks()}
+ catch(e){const c=e&&e.code;b.disabled=false;b.textContent="Perguntar ao Claude";
+  if(["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed"].includes(c)){b.hidden=true;msg.textContent="A consulta ao Claude não está disponível aqui."}
+  else if(c==="rate_limited")msg.textContent="Muitas consultas em pouco tempo. Tente de novo em alguns minutos.";
+  else if(c==="session_expired")msg.textContent="Sua sessão expirou. Entre de novo no Claude e tente outra vez.";
+  else msg.textContent="Não deu certo desta vez. Toque para tentar de novo."}}
+
+function toggleFav(){const e=SH&&SH.entry;if(!e)return;const key=favKeyOf(e,SH.k);
+ if(S.favs[key]){delete S.favs[key];removeFavCard(key)}
+ else{S.favs[key]={lemma:e.lemma||SH.surface,surface:SH.surface,pos:e.pos||"",meaning:e.meaning||"",synonyms:(e.synonyms||[]).slice(0,5),example:e.example||"",examplePt:e.examplePt||"",context:SH.sentence,date:NEWS.cur?NEWS.cur.date:today(),added:today()};addFavCard(key)}
+ save();renderSheet();refreshTokenMarks();updateFavCount();renderDecks();renderHome()}
+
+/* cartões das palavras salvas */
+function addFavCard(k){const id="w:"+k;CARDS[id]={deck:"fav",fav:S.favs[k]};if(!ORDER.fav.includes(id))ORDER.fav.push(id)}
+function removeFavCard(k){const id="w:"+k;delete CARDS[id];ORDER.fav=ORDER.fav.filter(x=>x!==id);if(SESSION)SESSION.queue=SESSION.queue.filter(x=>x!==id)}
+function syncFavCards(){Object.keys(CARDS).forEach(id=>{if(id.startsWith("w:"))delete CARDS[id]});ORDER.fav=[];Object.keys(S.favs||{}).forEach(addFavCard)}
+function newFavIds(){return S.settings.decks.fav?ORDER.fav.filter(id=>!S.cards[id]):[]}
+function updateFavCount(){const n=Object.keys(S.favs).length;$("#favCount").textContent=n?String(n):""}
+
+/* questionário */
+const QZ={date:null,ans:{},order:{}};
+function renderQuiz(){const n=NEWS.cur,box=$("#quizBox");if(!n||!Array.isArray(n.quiz)||!n.quiz.length){box.innerHTML="";return}
+ if(QZ.date!==n.date){QZ.date=n.date;QZ.ans={};QZ.order={}}
+ const total=n.quiz.length,answered=Object.keys(QZ.ans).length,done=S.newsDone[n.date];
+ let h=`<div class="stack"><div class="row" style="justify-content:space-between"><h2>Questionário</h2><span class="chip">${answered}/${total} respondidas</span></div>`;
+ if(done&&answered===0)h+=`<div class="fb ok"><b>Concluído em ${fmtBR(done.at)} · ${done.score}/${done.total}</b><span>Este dia já está marcado como lido no calendário. Você pode responder de novo para treinar.</span></div>`;
+ else if(!done)h+=`<p class="muted small">Responda as ${total} perguntas para marcar o dia ${fmtBR(n.date)} como lido no calendário.</p>`;
+ n.quiz.forEach((q,i)=>{const opts=q.options||[];if(!QZ.order[i])QZ.order[i]=shuffle(opts.map((_,k)=>k));const a=QZ.ans[i];
+  h+=`<div class="qz"><span class="qn">Pergunta ${i+1} de ${total}</span><div class="qq">${esc(q.q)}</div><div class="opts">${QZ.order[i].map(k=>`<button class="opt${a!=null?(k===q.answer?" right":k===a?" wrong":""):""}" data-q="${i}" data-k="${k}" ${a!=null?"disabled":""}>${esc(opts[k])}</button>`).join("")}</div>${a!=null?`<div class="fb ${a===q.answer?"ok":"no"}"><b>${a===q.answer?"Certo!":"Resposta: "+esc(opts[q.answer])}</b><span>${esc(q.explanation||"")}</span></div>`:""}</div>`});
+ if(answered===total){const sc=n.quiz.filter((q,i)=>QZ.ans[i]===q.answer).length;
+  const msg=sc===total?"Perfeito! Você entendeu tudo.":sc>=total*.6?"Muito bem. Releia as explicações das que errou.":"Vale reler a notícia com a tradução e tentar de novo.";
+  h+=`<div class="card stack"><span class="label">Resultado · ${fmtBR(n.date)} marcado como lido</span><h2>${sc}/${total}</h2><p>${msg}</p><div class="row"><button class="btn primary" data-ns-go="cal">Ver calendário</button><button class="btn" id="qzRedo">Responder de novo</button></div></div>`}
+ box.innerHTML=h+"</div>";
+ $$("#quizBox .opt").forEach(b=>b.onclick=()=>answerQ(+b.dataset.q,+b.dataset.k));
+ if($("#qzRedo"))$("#qzRedo").onclick=()=>{QZ.ans={};QZ.order={};renderQuiz();$("#quizBox").scrollIntoView({block:"start"})}}
+function answerQ(i,k){const n=NEWS.cur;if(QZ.ans[i]!=null)return;QZ.ans[i]=k;
+ if(Object.keys(QZ.ans).length===n.quiz.length){const sc=n.quiz.filter((q,j)=>QZ.ans[j]===q.answer).length,prev=S.newsDone[n.date];
+  S.newsDone[n.date]={score:Math.max(sc,prev?prev.score:0),total:n.quiz.length,at:prev?prev.at:today()};save();renderHome()}
+ renderQuiz()}
+
+/* calendário */
+function newsStreak(){let d=new Date(),c=0;const t=fmt(d);if(!S.newsDone[t])d.setDate(d.getDate()-1);
+ while(S.newsDone[fmt(d)]){c++;d.setDate(d.getDate()-1)}return c}
+function renderCal(){const box=$("#calBox"),t=today(),cur=t.slice(0,7),base=NEWS.calMonth||cur,[y,m]=base.split("-").map(Number);
+ const startDow=(new Date(y,m-1,1).getDay()+6)%7,dim=new Date(y,m,0).getDate();
+ let cells=["seg","ter","qua","qui","sex","sáb","dom"].map(d=>`<span class="dow">${d}</span>`).join("");
+ for(let i=0;i<startDow;i++)cells+="<span></span>";
+ let monthNews=0,monthDone=0;
+ for(let d=1;d<=dim;d++){const ds=`${y}-${pad2(m)}-${pad2(d)}`,has=!!NEWS.index[ds],dn=S.newsDone[ds];let cls="day",sub="";
+  if(has)monthNews++;if(dn)monthDone++;
+  if(dn){cls+=" done";sub=`${dn.score}/${dn.total}`}else if(has&&ds<t){cls+=" missed";sub="×"}else if(has){cls+=" has";sub="•"}
+  if(ds===t)cls+=" today";
+  cells+=`<button class="${cls}" data-day="${ds}" ${has||dn?"":"disabled"} aria-label="${d} de ${MONTHS[m-1]}${dn?", lida, "+dn.score+" de "+dn.total:has?(ds<t?", não lida":", disponível"):""}">${d}<small>${sub}</small></button>`}
+ const prev=new Date(y,m-2,1),next=new Date(y,m,1),pk=fmt(prev).slice(0,7),nk=fmt(next).slice(0,7);
+ box.innerHTML=`<div class="stats3"><div><b>${Object.keys(S.newsDone).length}</b><span class="small muted">notícias lidas</span></div><div><b>${newsStreak()}</b><span class="small muted">dias seguidos</span></div><div><b>${monthDone}/${monthNews}</b><span class="small muted">neste mês</span></div></div>
+ <div class="calhead"><button class="iconbtn" id="calPrev" aria-label="Mês anterior"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><h3>${MONTHS[m-1][0].toUpperCase()+MONTHS[m-1].slice(1)} de ${y}</h3><button class="iconbtn" id="calNext" aria-label="Próximo mês" ${nk>cur?"disabled":""}><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div>
+ <div class="calgrid">${cells}</div>
+ <div class="legend"><span><i class="lg-done"></i>lida (acertos)</span><span><i class="lg-missed"></i>não lida</span><span><i class="lg-has"></i>disponível</span><span><i class="lg-today"></i>hoje</span></div>
+ <p class="small muted">Um dia fica marcado como lido quando você termina o questionário daquela notícia. Toque num dia para abrir a notícia.</p>`;
+ $("#calPrev").onclick=()=>{NEWS.calMonth=pk;renderCal()};$("#calNext").onclick=()=>{if(nk<=cur){NEWS.calMonth=nk;renderCal()}};
+ $$("#calBox [data-day]").forEach(b=>b.onclick=()=>openDate(b.dataset.day))}
+
+/* minhas palavras */
+function dueLabel(id){const st=S.cards[id];if(!st)return"nova";if(st.due<=today())return"revisar hoje";const d=Math.round((new Date(st.due+"T12:00")-new Date(today()+"T12:00"))/864e5);return d===1?"amanhã":"em "+d+" dias"}
+function renderFavs(){const box=$("#favBox"),keys=Object.keys(S.favs).sort((a,b)=>(S.favs[b].added||"").localeCompare(S.favs[a].added||"")||a.localeCompare(b));
+ if(!keys.length){box.innerHTML=`<div class="card stack"><h3>Nenhuma palavra salva ainda</h3><p class="muted small">Na notícia, toque numa palavra e depois na estrela. Ela entra aqui e nos cartões, com revisão espaçada no estilo do Anki: Errei, Difícil, Bom ou Fácil decidem quando ela volta.</p><button class="btn" data-ns-go="read">Ir para a notícia</button></div>`;return}
+ const ids=keys.map(k=>"w:"+k),dueN=ids.filter(id=>!S.cards[id]||S.cards[id].due<=today()).length;
+ box.innerHTML=`<div class="card row" style="justify-content:space-between"><div><b>${keys.length} ${keys.length===1?"palavra":"palavras"}</b><div class="small muted">${dueN} para revisar hoje</div></div><button class="btn primary" id="favReview" ${dueN?"":"disabled"}>Revisar estas palavras</button></div>
+ <div class="vlist">${keys.map(k=>{const f=S.favs[k];return`<div class="vrow favrow"><div class="w"><i>${esc(f.lemma)}</i><span>${esc(f.meaning)}</span>${f.synonyms&&f.synonyms.length?`<span class="syn">≈ ${esc(f.synonyms.join(", "))}</span>`:""}<span class="lvl">${dueLabel("w:"+k)}</span></div><div class="row" style="gap:6px;flex-wrap:nowrap">${spkBtn(f.lemma)}<button class="spk" data-unfav="${esc(k)}" aria-label="Remover ${esc(f.lemma)}">${X_SVG}</button></div></div>`}).join("")}</div>`;
+ $$("[data-unfav]").forEach(b=>b.onclick=()=>{const k=b.dataset.unfav;delete S.favs[k];removeFavCard(k);save();renderFavs();updateFavCount();refreshTokenMarks();renderDecks();renderHome()});
+ if($("#favReview"))$("#favReview").onclick=()=>{const q=shuffle(ids.filter(id=>CARDS[id]&&(!S.cards[id]||S.cards[id].due<=today())));SESSION={queue:q,total:q.length,done:0,shown:false,dirFlip:null,extra:true};showTab("cartoes")}}
+
+/* card na tela inicial */
+function renderHomeNews(){const el=$("#homeNews");if(!el)return;const n=NEWS.latest;
+ if(!n){el.innerHTML=NEWS.state==="loading"?`<span class="label">Notícia do dia</span><p class="muted small">Carregando…</p>`:`<span class="label">Notícia do dia</span><p class="muted small">${NEWS.state==="nodb"?"Disponível quando o app é aberto no Claude, com a sua conta.":NEWS.state==="offline"?"Sem conexão agora. A notícia aparece quando a internet voltar.":NEWS.state==="empty"?"A notícia do dia é publicada toda manhã, por volta das 6h50.":"Não foi possível carregar agora."}</p>`;return}
+ const done=S.newsDone[n.date];
+ el.innerHTML=`<div class="row" style="justify-content:space-between"><span class="label">${n.date===today()?"Notícia de hoje":"Última notícia · "+fmtBR(n.date)}</span><span class="pill ${done?"ok":"todo"}">${done?"Lida · "+done.score+"/"+done.total:"Não lida"}</span></div>
+ <h3>${esc(n.title||"")}</h3>${n.titlePt?`<p class="small muted">${esc(n.titlePt)}</p>`:""}
+ <div class="row"><button class="btn primary" data-goto="news">${done?"Abrir notícia":"Ler e responder"}</button></div>`}
+
+function renderNewsAll(){renderHomeNews();updateFavCount();
+ if(!$("#v-news").hidden){if(NEWS.rendered!==NEWS.cur||!NEWS.cur)renderNews();if(!$("#ns-cal").hidden)renderCal()}}
+
+/* PWA: notícias em arquivos estáticos (news/index.json + news/AAAA-MM-DD.json) */
+async function loadNews(d){if(NEWS.cache[d])return NEWS.cache[d];const r=await fetch("news/"+d+".json");if(!r.ok)throw new Error("http "+r.status);const n=await r.json();n.date=n.date||d;NEWS.cache[d]=n;return n}
+async function initCloud(){try{const r=await fetch("news/index.json",{cache:"no-cache"});if(!r.ok)throw 0;const idx=await r.json();
+  NEWS.index=idx.days||{};const dates=Object.keys(NEWS.index).sort();
+  if(!dates.length){NEWS.state="empty";renderNewsAll();return}
+  const last=dates[dates.length-1];const n=await loadNews(last);NEWS.latest=n;if(!NEWS.curDate||NEWS.curDate===last){NEWS.cur=n;NEWS.curDate=last}NEWS.state="ok"}
+ catch(e){NEWS.state=navigator.onLine===false?"offline":"error"}renderNewsAll()}
+window.addEventListener("online",()=>{if(NEWS.state!=="ok")initCloud()});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&NEWS.latest&&NEWS.latest.date!==today())initCloud()});
+function rerenderAll(){rollDay();syncFavCards();SESSION=null;renderDecks();renderBoxes();renderTopics();renderHome();renderNewsAll();
+ if(!$("#v-cartoes").hidden)renderFlash();if(!$("#v-news").hidden){renderNews();if(!$("#ns-favs").hidden)renderFavs()}}
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&syncDirty){clearTimeout(syncT);flushSync()}});
+
+
+/* ============================ PWA ============================ */
+(function(){
+ if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").then(reg=>{
+   reg.addEventListener("updatefound",()=>{const w=reg.installing;w&&w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller){const b=$("#bkMsg");}})})}).catch(()=>{})})}
+ const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+ let hidden=false;try{hidden=localStorage.getItem(KEY+".installHide")==="1"}catch(e){}
+ const card=$("#installCard"),btn=$("#installBtn");let deferred=null;
+ const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+ if(!standalone&&!hidden){
+  if(ios){$("#installText").innerHTML="No Safari, toque em <b>Compartilhar</b> e depois em <b>Adicionar à Tela de Início</b>. O app abre em tela cheia e funciona sem internet.";card.hidden=false}
+ }
+ window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e;if(!standalone&&!hidden){card.hidden=false;btn.hidden=false}});
+ btn.onclick=async()=>{if(!deferred)return;deferred.prompt();try{await deferred.userChoice}catch(e){}deferred=null;card.hidden=true};
+ window.addEventListener("appinstalled",()=>{card.hidden=true});
+ $("#installHide").onclick=()=>{card.hidden=true;try{localStorage.setItem(KEY+".installHide","1")}catch(e){}};
+ // backup
+ $("#bkExport").onclick=()=>{const blob=new Blob([JSON.stringify({app:"quaderno",exportedAt:new Date().toISOString(),state:S})],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="quaderno-progresso-"+today()+".json";document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);$("#bkMsg").textContent="Arquivo de backup gerado."};
+ $("#bkFile").onchange=async e=>{const f=e.target.files&&e.target.files[0];if(!f)return;
+  try{const o=JSON.parse(await f.text());const st=o&&o.state;if(!st||typeof st!=="object"||!st.settings)throw 0;
+   hydrate(st);save();rerenderAll();$("#bkMsg").textContent="Progresso importado: "+Object.keys(S.cards).length+" cartões estudados, "+Object.keys(S.favs).length+" palavras salvas."}
+  catch(err){$("#bkMsg").textContent="Este arquivo não é um backup do Quaderno. Escolha o arquivo exportado pelo app."}
+  e.target.value=""};
+})();
+/* ============================ INÍCIO ============================ */
+syncFavCards();renderDecks();renderBoxes();renderHome();updateFavCount();
+try{const ns=localStorage.getItem(KEY+".ns");if(["read","cal","favs"].includes(ns))setNS(ns)}catch(e){}
+initCloud();
+(function(){let start="inicio";const h=location.hash.slice(1);const valid=["inicio","news","gramatica","vocab","exerc","cartoes"];
+ if(valid.includes(h))start=h;else{try{const t=localStorage.getItem(KEY+".tab");if(valid.includes(t))start=t}catch(e){}}showTab(start)})();
+</script>
+
+</body>
+</html>
