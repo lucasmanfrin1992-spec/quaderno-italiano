@@ -222,6 +222,26 @@ button.w.on{background-color:var(--cobalt);color:var(--surface)}
 .pill.ok{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
 .pill.todo{background:var(--saffron-soft);border-color:var(--saffron);color:var(--ink)}
 #homeNews{display:flex;flex-direction:column;gap:10px}
+/* perfis */
+.pchip{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:var(--ink)}
+.pav{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%;color:#fff;font-family:var(--display);font-size:1.25rem;flex:none}
+.pav.sm{width:18px;height:18px;font-size:.66rem;font-family:var(--body);font-weight:700}
+.profov{position:fixed;inset:0;z-index:60;background:var(--paper);overflow:auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-top:calc(28px + env(safe-area-inset-top, 0px));padding-bottom:calc(28px + env(safe-area-inset-bottom, 0px))}
+.profin{max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.profin h1{font-size:2rem}
+.plist{display:flex;flex-direction:column;gap:8px}
+.prow{display:flex;gap:8px;align-items:stretch}
+.pcard{flex:1;min-width:0;display:flex;gap:12px;align-items:center;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.pcard.cur{border-color:var(--cobalt);box-shadow:inset 0 0 0 1px var(--cobalt)}
+.pinfo{display:flex;flex-direction:column;min-width:0;flex:1}
+.pinfo b{font-size:1.05rem;overflow-wrap:anywhere}
+.pinfo small{color:var(--muted);font-size:.82rem}
+.pcard svg{width:18px;height:18px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.pdel{border:1px solid var(--bad);color:var(--bad);background:var(--surface);border-radius:12px;padding:0 12px;font-weight:600;font-size:.85rem}
+.pdel.arm{background:var(--bad);color:var(--surface)}
+.pform{display:flex;flex-direction:column;gap:6px}
+.pform label{font-weight:600;font-size:.9rem}
+.pmsg{min-height:1.2em;color:var(--bad);font-size:.88rem}
 /* vocab */
 .filters{display:grid;grid-template-columns:1fr;gap:8px}
 @media (min-width:560px){.filters{grid-template-columns:2fr 1fr 1fr}}
@@ -291,6 +311,7 @@ input[type=search],input[type=text],select{width:100%;font:inherit;padding:10px 
     <div class="streak">
       <span class="chip hot" id="chipStreak">0 dias seguidos</span>
       <span class="chip" id="chipDue">0 para hoje</span>
+      <button class="chip pchip" id="profChip" aria-label="Trocar de perfil"><span class="pav sm" id="profChipAv"></span><span id="profChipName">Perfil</span></button>
     </div>
   </header>
   <div class="tiles" aria-hidden="true"></div>
@@ -1050,13 +1071,14 @@ input[type=search],input[type=text],select{width:100%;font:inherit;padding:10px 
 
     <div class="card stack">
       <h3>Backup do progresso</h3>
-      <p class="small muted">Seu progresso fica salvo neste aparelho. Para levá-lo a outro celular ou computador, exporte aqui e importe lá.</p>
+      <p class="small muted">O progresso deste perfil fica salvo neste aparelho. Para levá-lo a outro celular ou computador, exporte aqui e importe lá, dentro do mesmo perfil.</p>
       <div class="row"><button class="btn" id="bkExport">Exportar progresso</button><label class="btn" for="bkFile" style="cursor:pointer">Importar progresso</label><input type="file" id="bkFile" accept="application/json,.json" hidden></div>
       <p class="small" id="bkMsg" role="status"></p>
     </div>
   </section>
 </div>
 
+<div class="profov" id="profOv" role="dialog" aria-modal="true" aria-labelledby="profTitle" hidden><div class="profin" id="profIn"></div></div>
 <div class="sheetback" id="sheetBack" hidden></div>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shWord" hidden>
   <div class="inner">
@@ -1978,7 +2000,11 @@ const EX=[
 ];
 
 /* ============================ ESTADO ============================ */
-const KEY="quaderno.v1";
+const PKEY="quaderno.profiles";
+let PROF={list:[],current:null};try{const r=localStorage.getItem(PKEY);if(r)PROF=Object.assign(PROF,JSON.parse(r))}catch(e){}
+if(!Array.isArray(PROF.list))PROF.list=[];
+const CURP=PROF.list.find(p=>p.id===PROF.current)||null;
+const KEY=CURP?"quaderno.v1:"+CURP.id:"quaderno.v1:__sem-perfil";
 const DECKS={fav:"Minhas palavras (das notícias)",vA1:"Vocabulário A1",vA2:"Vocabulário A2",verb:"Verbos (presente, passato, futuro)",frasi:"Frases de gramática"};
 function defState(){return{cards:{},settings:{decks:{fav:true,vA1:true,vA2:true,verb:true,frasi:true},newPerDay:20,dir:"mix"},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},best:{},favs:{},newsDone:{},updatedAt:0}}
 function hydrate(o){const d=defState();S=Object.assign(d,o);S.settings=Object.assign(defState().settings,o.settings||{});S.settings.decks=Object.assign(defState().settings.decks,(o.settings||{}).decks||{});S.favs=S.favs||{};S.newsDone=S.newsDone||{};S.cards=S.cards||{}}
@@ -2839,7 +2865,7 @@ document.addEventListener("visibilitychange",()=>{if(document.hidden&&syncDirty)
  $("#installHide").onclick=()=>{card.hidden=true;try{localStorage.setItem(KEY+".installHide","1")}catch(e){}};
  // backup
  $("#bkExport").onclick=()=>{const blob=new Blob([JSON.stringify({app:"quaderno",exportedAt:new Date().toISOString(),state:S})],{type:"application/json"});
-  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="quaderno-progresso-"+today()+".json";document.body.appendChild(a);a.click();
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="quaderno-"+(CURP?CURP.name.toLowerCase().replace(/[^a-z0-9]+/g,"-"):"progresso")+"-"+today()+".json";document.body.appendChild(a);a.click();
   setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);$("#bkMsg").textContent="Arquivo de backup gerado."};
  $("#bkFile").onchange=async e=>{const f=e.target.files&&e.target.files[0];if(!f)return;
   try{const o=JSON.parse(await f.text());const st=o&&o.state;if(!st||typeof st!=="object"||!st.settings)throw 0;
@@ -2847,6 +2873,61 @@ document.addEventListener("visibilitychange",()=>{if(document.hidden&&syncDirty)
   catch(err){$("#bkMsg").textContent="Este arquivo não é um backup do Quaderno. Escolha o arquivo exportado pelo app."}
   e.target.value=""};
 })();
+
+/* ============================ PERFIS ============================ */
+const PCOLORS=["#1E4E9E","#B4572E","#22744A","#7A3E9D","#A07800","#1F7A8C","#B0281F","#4F5D75"];
+const LOCK_SVG='<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+let PSTATE={view:"list",pid:null,edit:false,arm:null,msg:""};
+function saveProf(){try{localStorage.setItem(PKEY,JSON.stringify(PROF))}catch(e){}}
+async function hashPin(pin){try{const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("quaderno:"+pin));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}catch(e){return"plain:"+pin}}
+function pInitial(p){return esc((p.name||"?").trim().charAt(0).toUpperCase())}
+function profStats(p){try{const o=JSON.parse(localStorage.getItem("quaderno.v1:"+p.id)||"null");if(!o)return"Ainda sem progresso";
+ const c=Object.keys(o.cards||{}).length,n=Object.keys(o.newsDone||{}).length,f=Object.keys(o.favs||{}).length;
+ return`${c} cartões · ${n} notícias lidas · ${f} palavras salvas`}catch(e){return""}}
+function switchTo(id){try{saveLocal()}catch(e){}PROF.current=id;saveProf();location.reload()}
+function openProfiles(){PSTATE={view:PROF.list.length?"list":"new",pid:null,edit:false,arm:null,msg:""};renderProf();$("#profOv").hidden=false;document.body.style.overflow="hidden"}
+function closeProfiles(){$("#profOv").hidden=true;document.body.style.overflow=""}
+function renderProf(){const box=$("#profIn"),v=PSTATE.view;let h="";
+ if(v==="list"){
+  h+=`<span class="label">Quaderno d'Italiano</span><h1 id="profTitle">Quem vai estudar?</h1>
+  <div class="plist">${PROF.list.map(p=>`<div class="prow"><button class="pcard${CURP&&p.id===CURP.id?" cur":""}" data-pid="${p.id}"><span class="pav" style="background:${p.color}">${pInitial(p)}</span><span class="pinfo"><b>${esc(p.name)}</b><small>${profStats(p)}</small></span>${p.pin?LOCK_SVG:""}</button>${PSTATE.edit?`<button class="pdel${PSTATE.arm===p.id?" arm":""}" data-del="${p.id}">${PSTATE.arm===p.id?"Apagar mesmo":"Apagar"}</button>`:""}</div>`).join("")}</div>
+  ${PSTATE.edit&&PSTATE.arm?`<p class="small" style="color:var(--bad)">Apagar remove o perfil e todo o progresso dele neste aparelho. Toque em "Apagar mesmo" para confirmar.</p>`:""}
+  <div class="row"><button class="btn primary" id="pNew">Adicionar perfil</button>${PROF.list.length?`<button class="btn ghost" id="pEdit">${PSTATE.edit?"Concluir":"Gerenciar perfis"}</button>`:""}${CURP?`<button class="btn ghost" id="pBack">Voltar</button>`:""}</div>
+  <p class="small muted">Cada perfil tem seu próprio progresso neste aparelho: cartões, palavras salvas, questionários e calendário. O PIN é opcional e serve para separar os perfis no dia a dia; não é uma senha forte.</p>`}
+ else if(v==="pin"){const p=PROF.list.find(x=>x.id===PSTATE.pid);
+  h+=`<span class="label">Entrar no perfil</span><div class="row"><span class="pav" style="background:${p.color}">${pInitial(p)}</span><h1 id="profTitle">${esc(p.name)}</h1></div>
+  <form class="pform" id="pPinForm"><label for="pPin">PIN de 4 dígitos</label><input type="password" id="pPin" inputmode="numeric" autocomplete="off" maxlength="4" pattern="[0-9]*"><p class="pmsg" id="pMsg">${esc(PSTATE.msg)}</p>
+  <div class="row"><button class="btn primary" type="submit">Entrar</button><button class="btn ghost" type="button" id="pBackList">Outro perfil</button></div></form>`}
+ else{
+  h+=`<span class="label">Quaderno d'Italiano</span><h1 id="profTitle">${PROF.list.length?"Novo perfil":"Crie seu perfil"}</h1>
+  ${PROF.list.length?"":`<p class="muted">Cada pessoa que estuda neste aparelho pode ter um perfil, com progresso separado.</p>`}
+  <form class="pform" id="pNewForm"><label for="pName">Nome</label><input type="text" id="pName" maxlength="24" autocomplete="off" placeholder="Ex.: Lucas">
+  <label for="pNewPin" style="margin-top:8px">PIN (opcional, 4 dígitos)</label><input type="password" id="pNewPin" inputmode="numeric" autocomplete="off" maxlength="4" pattern="[0-9]*" placeholder="Deixe vazio para entrar direto">
+  <p class="pmsg" id="pMsg">${esc(PSTATE.msg)}</p>
+  <div class="row"><button class="btn primary" type="submit">Criar perfil</button>${PROF.list.length?`<button class="btn ghost" type="button" id="pBackList">Cancelar</button>`:""}</div></form>`}
+ box.innerHTML=h;
+ $$("#profIn [data-pid]").forEach(b=>b.onclick=()=>{const p=PROF.list.find(x=>x.id===b.dataset.pid);if(!p)return;
+  if(CURP&&p.id===CURP.id){closeProfiles();return}if(p.pin){PSTATE={...PSTATE,view:"pin",pid:p.id,msg:""};renderProf();setTimeout(()=>$("#pPin").focus(),0)}else switchTo(p.id)});
+ $$("#profIn [data-del]").forEach(b=>b.onclick=()=>{const id=b.dataset.del;if(PSTATE.arm!==id){PSTATE.arm=id;renderProf();return}
+  PROF.list=PROF.list.filter(x=>x.id!==id);["",".tab",".ns"].forEach(s=>{try{localStorage.removeItem("quaderno.v1:"+id+s)}catch(e){}});
+  if(PROF.current===id){PROF.current=null;saveProf();location.reload();return}saveProf();PSTATE.arm=null;renderProf()});
+ if($("#pNew"))$("#pNew").onclick=()=>{PSTATE={...PSTATE,view:"new",msg:""};renderProf();setTimeout(()=>$("#pName").focus(),0)};
+ if($("#pEdit"))$("#pEdit").onclick=()=>{PSTATE.edit=!PSTATE.edit;PSTATE.arm=null;renderProf()};
+ if($("#pBack"))$("#pBack").onclick=closeProfiles;
+ if($("#pBackList"))$("#pBackList").onclick=()=>{PSTATE={...PSTATE,view:"list",msg:""};renderProf()};
+ if($("#pPinForm"))$("#pPinForm").onsubmit=async e=>{e.preventDefault();const p=PROF.list.find(x=>x.id===PSTATE.pid),pin=$("#pPin").value.trim();
+  if((await hashPin(pin))===p.pin)switchTo(p.id);else{PSTATE.msg="PIN incorreto. Tente de novo.";renderProf();setTimeout(()=>$("#pPin").focus(),0)}};
+ if($("#pNewForm"))$("#pNewForm").onsubmit=async e=>{e.preventDefault();const name=$("#pName").value.trim(),pin=$("#pNewPin").value.trim();
+  if(!name){PSTATE.msg="Digite um nome para o perfil.";renderProf();return}
+  if(PROF.list.some(p=>p.name.toLowerCase()===name.toLowerCase())){PSTATE.msg="Já existe um perfil com esse nome.";renderProf();return}
+  if(pin&&!/^\d{4}$/.test(pin)){PSTATE.msg="O PIN precisa ter exatamente 4 números, ou fique vazio.";renderProf();$("#pName").value=name;return}
+  const id="p"+Date.now().toString(36);
+  if(!PROF.list.length){try{const old=localStorage.getItem("quaderno.v1");if(old){localStorage.setItem("quaderno.v1:"+id,old);localStorage.removeItem("quaderno.v1")}}catch(e){}}
+  PROF.list.push({id,name,pin:pin?await hashPin(pin):null,color:PCOLORS[PROF.list.length%PCOLORS.length],created:today()});switchTo(id)};
+}
+$("#profChip").onclick=openProfiles;
+if(CURP){$("#profChipName").textContent=CURP.name;$("#profChipAv").textContent=(CURP.name||"?").charAt(0).toUpperCase();$("#profChipAv").style.background=CURP.color}
+else openProfiles();
 /* ============================ INÍCIO ============================ */
 syncFavCards();renderDecks();renderBoxes();renderHome();updateFavCount();
 try{const ns=localStorage.getItem(KEY+".ns");if(["read","cal","favs"].includes(ns))setNS(ns)}catch(e){}
