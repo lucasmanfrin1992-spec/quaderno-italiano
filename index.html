@@ -523,6 +523,167 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center;color:inherit}
 @media (max-width:420px){.prr{grid-template-columns:auto 1fr;}.prr .op{display:none}}
 .blank{display:inline-block;min-width:60px;border-bottom:2px solid var(--saffron);margin:0 4px;vertical-align:baseline}
 .checks{display:flex;flex-direction:column;gap:6px}.chk{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--paper);font-size:.93rem;cursor:pointer}.chk input{margin-top:3px;flex:none;width:18px;height:18px;accent-color:var(--ok)}.warnt{color:var(--bad)}
+/* ---------- vocabulário em contexto ---------- */
+:root{--fem:#C2552D;--fem-soft:#FBE6DC}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--fem:#F08B63;--fem-soft:#43251A}}
+:root[data-theme="dark"]{--fem:#F08B63;--fem-soft:#43251A}
+.gm,.gmtx{color:var(--cobalt)}.gf,.gftx{color:var(--fem)}
+.vsit{display:flex;gap:12px;align-items:flex-start;background:var(--saffron-soft);border-radius:14px;padding:12px 14px}
+.vsit p{margin:2px 0 0}.vsite{font-size:1.5rem;line-height:1}
+.vscene .igtag{background:var(--saffron);color:#1a1a1a}
+.vgrp{display:flex;flex-direction:column;gap:10px}
+.vgrp h3{color:var(--cobalt);margin:0}
+.vcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.vcard{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:start;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:12px;padding:10px 10px 10px 8px;min-width:0}
+.vcard.gm{border-left-color:var(--cobalt)}.vcard.gf{border-left-color:var(--fem)}
+.vic{width:52px;height:52px;border-radius:12px;background:var(--paper);display:grid;place-items:center;font-size:1.75rem;line-height:1}
+.vcard.gm .vic{background:var(--cobalt-soft)}.vcard.gf .vic{background:var(--fem-soft)}
+.vic .vflag{width:38px;height:auto;border-radius:3px;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.vnum{font-family:var(--display);font-size:1.15rem;color:var(--cobalt)}
+.vtx{min-width:0;display:flex;flex-direction:column;gap:6px}
+.vw .it{font-style:normal;font-weight:700;font-size:1.05rem;color:var(--ink)}
+.vcard.gm .vw .it{color:var(--cobalt)}.vcard.gf .vw .it{color:var(--fem)}
+.vpt{display:block;font-size:.85rem;color:var(--muted)}
+.vex{border-top:1px dashed var(--line);padding-top:6px;font-size:.9rem}
+.vex .it{font-style:italic;display:block}.vex small{color:var(--muted);display:block}
+.vuse{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.vub{background:var(--cobalt-soft);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.vub .exi{background:var(--surface)}
+.vtip{display:flex;gap:10px;background:var(--ok-soft);border-radius:12px;padding:12px 14px;align-items:flex-start}
+.vtip span{font-size:1.3rem;line-height:1}.vtip p{margin:0}
+/* cenas */
+.vday{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-radius:12px;overflow:hidden}
+.vdseg{padding:12px 10px;display:flex;flex-direction:column;gap:3px;color:#1a1a1a}
+.vdseg.morn{background:linear-gradient(135deg,#FFE7A8,#FFD27A)}.vdseg.eve{background:linear-gradient(135deg,#F7A779,#C9688A);color:#fff}.vdseg.night{background:linear-gradient(135deg,#334477,#1B2140);color:#fff}
+.vdseg small{opacity:.85;font-size:.75rem}.vdi{font-size:1.6rem}
+.vreg{display:grid;grid-template-columns:1fr 1fr;gap:8px}.vregc{border:1px dashed var(--line);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:3px}
+.vflags{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.vfl{display:flex;gap:10px;align-items:center;background:var(--paper);border-radius:10px;padding:8px}
+.vfl .vflag{width:40px;border-radius:3px;flex:none;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.vfl>div{display:flex;flex-direction:column;font-weight:600}
+.vtiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}
+.vtile{border-radius:12px;padding:10px 6px;text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center;font-weight:600;background:var(--paper)}
+.vtile.gm{background:var(--cobalt-soft);color:var(--cobalt)}.vtile.gf{background:var(--fem-soft);color:var(--fem)}
+.vti{font-size:2rem}
+.vleg{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;font-weight:600}
+.vppl{display:grid;grid-template-columns:minmax(0,220px) 1fr;gap:14px;align-items:center}
+.vpsvg{width:100%;height:auto;color:var(--ink)}
+.vpcols{display:grid;grid-template-columns:1fr 1fr;gap:10px}.vpcols ul{margin:4px 0 0;padding-left:18px;font-size:.92rem}
+.vsw{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}
+.vswc{display:flex;flex-direction:column;align-items:center;gap:3px;font-weight:600}
+.vswc i{width:44px;height:44px;border-radius:50%;box-shadow:0 0 0 1px var(--line) inset,0 1px 3px rgba(0,0,0,.15)}
+.vswc small{color:var(--muted);font-weight:400;font-size:.72rem}
+.vclks{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.vclkc{display:flex;flex-direction:column;align-items:center;gap:4px;font-weight:600;text-align:center}
+.vclkc small{font-family:var(--mono);color:var(--muted);font-weight:400}
+.vclk{width:84px;height:84px}.vcface{fill:var(--surface);stroke:var(--cobalt);stroke-width:3}.vctk{stroke:var(--muted);stroke-width:2}
+.vch line{stroke:var(--ink)}.vcm line{stroke:var(--saffron)}.vccen{fill:var(--ink)}
+.vweek{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.vwd{background:var(--cobalt-soft);border-radius:10px;padding:8px 3px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font-size:.72rem;min-width:0}
+.vwd b{font-size:.75rem;word-break:break-word}.vwd.we{background:var(--saffron-soft)}.vwi{font-size:1.5rem}
+.vfreq{display:flex;flex-direction:column;gap:6px}.vfr{display:grid;grid-template-columns:120px 1fr;gap:8px;align-items:center;font-weight:600}
+.vfb{height:12px;background:var(--line);border-radius:6px;overflow:hidden}.vfb i{display:block;height:100%;background:linear-gradient(90deg,var(--saffron),var(--ok))}
+.vplan{position:relative;display:grid;grid-template-columns:1.2fr 1fr;grid-template-areas:"cam bag" "sog cuc" "bal bal";gap:4px;background:var(--ink);padding:4px;border-radius:12px}
+.vroom{background:var(--surface);padding:12px 10px;display:flex;flex-direction:column;gap:3px;min-height:86px}
+.vroom.cam{grid-area:cam;background:var(--cobalt-soft)}.vroom.bag{grid-area:bag;background:#E2F3F5}.vroom.sog{grid-area:sog;background:var(--saffron-soft)}.vroom.cuc{grid-area:cuc;background:var(--fem-soft)}.vroom.bal{grid-area:bal;background:var(--ok-soft);min-height:52px;flex-direction:row;align-items:center;gap:10px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vroom.bag{background:#163238}}
+:root[data-theme="dark"] .vroom.bag{background:#163238}
+.vre{font-size:1.4rem}.vroom small{color:var(--muted)}
+.vwin{position:absolute;right:-6px;top:30%;font-size:1.2rem}
+.vmapw{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:12px;align-items:center}
+.vmap{width:100%;height:auto;border-radius:12px}
+.vmbg{fill:#E9F1E4}.vmst{stroke:#fff;stroke-width:14;fill:none}.vmpz{fill:#cfe3f5;stroke:#fff;stroke-width:3}
+.vmt{font-size:10px;fill:#333;font-family:var(--body)}.vmt.b{font-weight:700;fill:#C2552D}.vme{font-size:18px}
+.vmrt{stroke:#D99A12;stroke-width:3.5;stroke-dasharray:6 5;fill:none;stroke-linecap:round}.vmme{fill:#C2552D;stroke:#fff;stroke-width:2}
+.vsteps{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.vsteps li{display:flex;gap:8px;align-items:center;background:var(--paper);border-radius:10px;padding:7px 9px;font-size:.92rem}
+.vmenu{background:#26302B;color:#F4EFE3;border-radius:12px;padding:14px 16px;border:6px solid #8B5E3C;display:flex;flex-direction:column;gap:6px;max-width:460px}
+.vmh{font-family:var(--display);font-size:1.3rem;text-align:center;color:#F0C75E;margin-bottom:4px}
+.vmr{display:flex;gap:8px;align-items:baseline}.vmi{font-size:1.2rem}.vmd{flex:1;border-bottom:2px dotted rgba(244,239,227,.4)}
+.vmp{color:#F0C75E;font-family:var(--mono)}.vmk{min-width:86px;color:#F0C75E;text-transform:uppercase;font-size:.78rem;letter-spacing:.05em}
+.vmenu .w{color:inherit}
+.vqty,.vcont{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.vqc,.vcc{background:var(--paper);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:4px;align-items:center;text-align:center;font-size:.9rem}
+.vqe,.vce{font-size:1.5rem}.vce{font-size:2rem}
+.vrcpt{font-family:var(--mono);font-size:.8rem;background:#fff;color:#222;max-width:260px;padding:12px 14px;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.15);display:flex;flex-direction:column;gap:4px;align-self:center}
+.vrcpt>div{display:flex;justify-content:space-between;gap:8px}.vrcpt .vrh{justify-content:center;text-align:center;border-bottom:1px dashed #999;padding-bottom:6px}.vrcpt .tot{border-top:1px dashed #999;padding-top:6px;font-weight:700}
+.vrcpt .w{color:#222}
+.vtree{display:flex;flex-direction:column;align-items:center;gap:0}
+.vtr{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.vtl{width:2px;height:14px;background:var(--line)}
+.vtn{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:6px 10px;display:flex;flex-direction:column;align-items:center;font-size:.85rem;font-weight:600;min-width:78px}
+.vtn span:first-child{font-size:1.6rem}.vtn.me{background:var(--saffron-soft);border-color:var(--saffron)}
+.vmon{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}
+.vmo{border-radius:9px;padding:6px 2px;display:flex;flex-direction:column;align-items:center;font-size:.72rem;font-weight:600;min-width:0;word-break:break-word;text-align:center}
+.vmo span:first-child{font-size:1.3rem}
+.vmo.sw{background:#DDEBF7}.vmo.sp{background:#E1F2DD}.vmo.ss{background:#FCEFC7}.vmo.sa{background:#F6DFCC}
+.vleg .sw{color:#3b6fa8}.vleg .sp{color:#3f8a3a}.vleg .ss{color:#b58500}.vleg .sa{color:#b5602b}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vmo{color:#1a1a1a}:root:not([data-theme="light"]) .vmo .w{color:#1a1a1a}}
+:root[data-theme="dark"] .vmo,:root[data-theme="dark"] .vmo .w{color:#1a1a1a}
+.vlikes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vlk{background:var(--cobalt-soft);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px}.vlk.pl{background:var(--fem-soft)}
+.vlk>b{font-size:1.15rem}.vle{background:var(--surface);border-radius:8px;padding:5px 8px;font-size:.92rem}
+.vdiary{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.vdc{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 8px 10px;display:flex;flex-direction:column;gap:3px;align-items:center;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,.08);font-weight:600}
+.vdc:nth-child(odd){transform:rotate(-1.5deg)}.vdc:nth-child(even){transform:rotate(1.2deg)}
+.vde{font-size:2.2rem;background:var(--paper);width:100%;border-radius:4px;padding:8px 0}.vdc small{color:var(--muted);font-weight:400}
+.vtix{display:flex;flex-direction:column;gap:12px}
+.vtk{border:2px solid #A31F34;border-radius:12px;overflow:hidden;background:var(--surface);max-width:480px}
+.vtkh{background:#A31F34;color:#fff;display:flex;justify-content:space-between;gap:8px;padding:6px 12px;font-size:.82rem;flex-wrap:wrap}.vtkh .w{color:#fff}
+.vtkr{display:flex;align-items:center;gap:10px;padding:10px 12px}.vtkr small,.vtkf small{display:block;color:var(--muted);font-size:.7rem;font-family:var(--mono)}
+.vtka{font-size:1.4rem;color:#A31F34}
+.vtkf{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px dashed var(--line);padding:8px 12px;gap:6px;font-weight:700}
+.vbrd{background:#111827;color:#F9D648;border-radius:10px;padding:8px 10px;font-family:var(--mono);font-size:.78rem;overflow-x:auto}
+.vbh,.vbr{display:grid;grid-template-columns:62px 1fr 48px minmax(92px,auto) 30px;gap:6px;padding:4px 0;min-width:300px}
+.vbh{color:#9CA3AF;font-size:.66rem;text-transform:uppercase;border-bottom:1px solid #374151}
+.vbr .ok,.vbr .ok .w{color:#4ADE80}.vbr .late,.vbr .late .w{color:#F87171}.vbrd .w{color:inherit}
+.vrcpt .w,.vbrd .w{font:inherit}
+.vhol{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.vhc{background:var(--fem-soft);border-radius:12px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;font-size:.85rem}
+.vhe{font-size:2rem}.vhc b{font-size:.95rem}
+.vgive{display:grid;grid-template-columns:auto auto;gap:6px 14px;justify-content:start;font-size:.95rem;background:var(--paper);border-radius:10px;padding:10px 12px}
+.vgv2{color:var(--cobalt);font-weight:600}
+.vthen{display:flex;flex-direction:column;gap:6px}
+.vth,.vtr2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.vth span{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;color:var(--muted);padding:0 8px}
+.vtr2>div{display:flex;gap:8px;align-items:center;border-radius:10px;padding:8px 10px;font-size:.92rem}
+.vtr2>div:first-child{background:var(--saffron-soft);filter:saturate(.8)}.vtr2>div:last-child{background:var(--cobalt-soft)}
+.vtr2 span:first-child{font-size:1.3rem}
+.vfc{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.vfd{background:linear-gradient(180deg,var(--cobalt-soft),var(--surface));border:1px solid var(--line);border-radius:12px;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;font-size:.78rem;min-width:0}
+.vfe{font-size:1.8rem}.vfd b{font-family:var(--display);font-size:1.1rem}
+.vshop{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.vshc{position:relative;background:var(--paper);border-radius:12px;padding:16px 6px 10px;display:flex;flex-direction:column;align-items:center;gap:3px;font-weight:600;font-size:.88rem;text-align:center}
+.vshb{position:absolute;top:6px;right:6px;background:#D33A2C;color:#fff;font-size:.65rem;border-radius:5px;padding:1px 5px}
+.vshe{font-size:2rem}.vshp{font-size:.8rem}.vshp s{color:var(--muted)}.vshp b{color:#D33A2C}
+.vfit{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center}.vfit span{background:var(--paper);border-radius:10px;padding:8px 4px;font-size:.88rem}.vfit .ok{background:var(--ok-soft);font-weight:600}
+.vsize{display:flex;flex-wrap:wrap;gap:4px;align-items:center}.vsize span{border:1px solid var(--line);border-radius:6px;padding:3px 8px;font-family:var(--mono);font-size:.8rem}.vsize .label{border:0;padding-left:6px}
+.vsize .on{background:var(--cobalt);color:var(--surface);border-color:var(--cobalt)}
+.vtools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.vtl2{background:var(--paper);border-radius:10px;padding:8px 4px;display:flex;flex-direction:column;align-items:center;font-size:.82rem;font-weight:600;text-align:center}.vtl2 span:first-child{font-size:1.7rem}
+.vrec{margin:0;padding:0;list-style:none;counter-reset:r;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px}
+.vrec li{counter-increment:r;display:flex;gap:8px;align-items:center;background:var(--saffron-soft);border-radius:10px;padding:7px 10px;font-size:.9rem}
+.vrec li::before{content:counter(r);font-family:var(--display);color:var(--saffron);font-size:1.1rem}
+.vbody{display:grid;grid-template-columns:minmax(0,170px) 1fr;gap:16px;align-items:center}
+.vbsvg{width:100%;height:auto;max-height:280px}.vbfig *{fill:var(--cobalt-soft);stroke:var(--cobalt);stroke-width:.8}
+.vbdot{fill:var(--fem)}.vbn{font-size:4px;fill:#fff;font-weight:700;font-family:var(--mono)}
+.vblist{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:5px;font-weight:600}
+.vblist li::marker{color:var(--fem);font-family:var(--mono)}.vblist li.small::marker{content:""}
+.vmail{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:12px;align-items:start}
+.vmh2{grid-column:1/-1;display:flex;flex-direction:column;gap:3px;background:var(--paper);border-radius:10px 10px 0 0;padding:8px 12px;font-size:.85rem;border-bottom:1px solid var(--line)}
+.vmh2 small{color:var(--muted);font-family:var(--mono)}
+.vmb{counter-reset:m;display:flex;flex-direction:column;gap:6px}
+.vmb p{margin:0;padding:4px 8px 4px 30px;position:relative;border-left:3px solid var(--line)}
+.vmb p::before{content:attr(data-n);position:absolute;left:6px;top:4px;width:18px;height:18px;border-radius:50%;background:var(--cobalt);color:var(--surface);font-size:.7rem;display:grid;place-items:center;font-family:var(--mono)}
+.vmlab{margin:0;padding-left:20px;font-size:.85rem;color:var(--muted);display:flex;flex-direction:column;gap:9px}
+.vflow{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.vfs{background:var(--cobalt-soft);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;align-items:center;font-size:.85rem;font-weight:600}.vfs span:first-child{font-size:1.5rem}
+.vfa{color:var(--muted);font-size:1.2rem}
+@media (max-width:560px){
+ .vppl,.vmapw,.vbody,.vmail{grid-template-columns:1fr}.vppl svg{max-width:220px;justify-self:center}.vbody svg{max-width:150px;justify-self:center}
+ .vweek{grid-template-columns:repeat(4,minmax(0,1fr))}.vmon{grid-template-columns:repeat(4,minmax(0,1fr))}.vfc{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .vreg,.vlikes{grid-template-columns:1fr}.vcards{grid-template-columns:1fr}.vtkf{grid-template-columns:repeat(2,1fr)}
+}
+.vdseg.eve .w,.vdseg.night .w{color:#fff}.vdseg.morn .w{color:#1a1a1a}
 
 /* perfis */
 .pchip{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:var(--ink)}
@@ -1844,6 +2005,287 @@ q:[["Che cosa ha Lucas?","Il raffreddore.|Un braccio rotto.|Mal di schiena."],["
 q:[["Chi chiama Lucas?","La direttrice.|Giulia.|Marco."],["Dov'è il nuovo cantiere?","A Milano.|A Roma.|A Bologna."],["Quando comincia?","A marzo.|A dicembre.|Lunedì."],["Che cosa consiglia Giulia?","Di accettare.|Di rifiutare.|Di aspettare un anno."],["Lucas accetta?","Sì.|No.|Non ancora."]]}
 };
 
+/* ============================ CENAS VISUAIS DO VOCABULÁRIO ============================ */
+const VI=s=>`<span class="it">${IGX(s)}</span>`;
+const VFIG=(t,inner,note)=>`<figure class="ig vscene"><figcaption><span class="igtag">Cena</span>${t}</figcaption>${inner}${note?`<p class="ignote">${note}</p>`:""}</figure>`;
+const FLAGS={
+ it:'<rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#CE2B37"/>',
+ fr:'<rect width="10" height="20" fill="#0055A4"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#EF4135"/>',
+ de:'<rect width="30" height="7" fill="#111"/><rect y="6.6" width="30" height="7" fill="#DD0000"/><rect y="13.3" width="30" height="6.7" fill="#FFCE00"/>',
+ es:'<rect width="30" height="20" fill="#AA151B"/><rect y="5" width="30" height="10" fill="#F1BF00"/>',
+ br:'<rect width="30" height="20" fill="#009C3B"/><path d="M15 2.5L27.5 10L15 17.5L2.5 10z" fill="#FFDF00"/><circle cx="15" cy="10" r="4.4" fill="#002776"/>',
+ gb:'<rect width="30" height="20" fill="#012169"/><path d="M0 0L30 20M30 0L0 20" stroke="#fff" stroke-width="4"/><path d="M0 0L30 20M30 0L0 20" stroke="#C8102E" stroke-width="1.6"/><path d="M15 0V20M0 10H30" stroke="#fff" stroke-width="6"/><path d="M15 0V20M0 10H30" stroke="#C8102E" stroke-width="3.4"/>'};
+const V={
+ flag(c){return`<svg class="vflag" viewBox="0 0 30 20" aria-hidden="true">${FLAGS[c]||""}</svg>`},
+ icon(ic){if(!ic)return"";if(ic[0]==="#")return V.flag(ic.slice(1));if(/^\d+$/.test(ic))return`<span class="vnum">${ic}</span>`;return ic},
+ greetDay(){const seg=[["🌅","6h–13h","buongiorno","formal e informal","morn"],["🌆","16h–22h","buonasera","ao chegar e ao sair","eve"],["🌙","antes de dormir","buonanotte","só na despedida","night"]];
+  return VFIG("Que cumprimento usar em cada hora",`<div class="vday">${seg.map(s=>`<div class="vdseg ${s[4]}"><span class="vdi">${s[0]}</span><b>${VI(s[2])}</b><small>${s[1]} · ${s[3]}</small></div>`).join("")}</div>
+  <div class="vreg"><div class="vregc inf"><span class="label">Com amigos</span>${VI("Ciao!")} <span class="muted small">serve para chegar e para sair</span></div><div class="vregc frm"><span class="label">Com desconhecidos</span>${VI("Buongiorno! … Arrivederci!")}</div></div>`)},
+ flags(){const L=[["it","italiano","italiana"],["br","brasiliano","brasiliana"],["es","spagnolo","spagnola"],["de","tedesco","tedesca"],["gb","inglese","inglese"],["fr","francese","francese"]];
+  return VFIG("Nacionalidades: masculino e feminino",`<div class="vflags">${L.map(([c,m,f])=>`<div class="vfl${m===f?" inv":""}">${V.flag(c)}<div><span class="gmtx">${VI(m)}</span>${m===f?`<span class="muted small">igual no feminino</span>`:`<span class="gftx">${VI(f)}</span>`}</div></div>`).join("")}</div>`,"Terminou em <b>-o</b>: muda para <b>-a</b> no feminino. Terminou em <b>-e</b>: é igual para os dois.")},
+ genderTiles(list){const g=w=>/^(il|lo|i|gli) /.test(w)?"m":/^(la|le) /.test(w)?"f":/^l'/.test(w)?(/a$/.test(w)?"f":"m"):"";
+  return VFIG("Na mesa e na sala: masculino ou feminino?",`<div class="vtiles">${list.map(([w,ic])=>`<div class="vtile g${g(w)}"><span class="vti">${ic}</span>${VI(w)}</div>`).join("")}</div>
+  <div class="vleg"><span class="gm">■ masculino: il, lo, l'</span><span class="gf">■ feminino: la, l'</span></div>`)},
+ people(){const fig=(x,h,hair,shirt)=>{const top=150-h;return`<g transform="translate(${x} 0)"><rect x="-17" y="${top+34}" width="34" height="${h-62}" rx="10" fill="${shirt}"/><rect x="-14" y="${150-30}" width="11" height="30" rx="4" fill="#34495e"/><rect x="3" y="${150-30}" width="11" height="30" rx="4" fill="#34495e"/><circle cy="${top+18}" r="15" fill="#F1C9A0"/><path d="M-15 ${top+16}a15 15 0 0 1 30 0q-6-8-15-7t-15 7z" fill="${hair}"/><circle cx="-5" cy="${top+19}" r="1.8" fill="#2E8B57"/><circle cx="5" cy="${top+19}" r="1.8" fill="#2E8B57"/><path d="M-5 ${top+25}q5 4 10 0" stroke="#7a3b2e" stroke-width="1.5" fill="none"/></g>`};
+  return VFIG("Com'è? Duas descrições",`<div class="vppl"><svg viewBox="0 0 220 156" class="vpsvg" role="img" aria-label="Marco, alto, e Anna, baixa">${fig(60,140,"#5a3416","#1E4E9E")}${fig(160,106,"#E6C36A","#D33A2C")}<line x1="0" y1="151" x2="220" y2="151" stroke="currentColor" stroke-opacity=".25"/></svg>
+  <div class="vpcols"><div><b>Marco</b><ul><li>${VI("È alto e magro.")}</li><li>${VI("Ha i capelli castani.")}</li><li>${VI("Ha gli occhi verdi.")}</li><li>${VI("È simpatico e un po' timido.")}</li></ul></div><div><b>Anna</b><ul><li>${VI("È bassa e giovane.")}</li><li>${VI("Ha i capelli biondi.")}</li><li>${VI("Ha gli occhi verdi.")}</li><li>${VI("È allegra e divertente.")}</li></ul></div></div></div>`,"Aparência e personalidade com <b>essere</b>; cabelo e olhos com <b>avere</b>.")},
+ swatches(list){const inv=["verde","blu"];return VFIG("As cores",`<div class="vsw">${list.map(([w,c])=>`<div class="vswc"><i style="background:${c}"></i>${VI(w)}<small>${inv.includes(w)?(w==="blu"?"invariável":"-e: igual"):"-o / -a"}</small></div>`).join("")}</div>`)},
+ clock(h,m){const ha=((h%12)+m/60)*30,ma=m*6,hand=(a,l,w)=>`<line x1="0" y1="0" x2="${(Math.sin(a*Math.PI/180)*l).toFixed(1)}" y2="${(-Math.cos(a*Math.PI/180)*l).toFixed(1)}" stroke-width="${w}" stroke-linecap="round"/>`;
+  let t="";for(let i=0;i<12;i++){const a=i*30*Math.PI/180;t+=`<line x1="${(Math.sin(a)*33).toFixed(1)}" y1="${(-Math.cos(a)*33).toFixed(1)}" x2="${(Math.sin(a)*37).toFixed(1)}" y2="${(-Math.cos(a)*37).toFixed(1)}" class="vctk"/>`}
+  return`<svg viewBox="-42 -42 84 84" class="vclk" aria-hidden="true"><circle r="40" class="vcface"/>${t}<g class="vch">${hand(ha,20,4)}</g><g class="vcm">${hand(ma,30,2.5)}</g><circle r="3" class="vccen"/></svg>`},
+ clocks(list){return VFIG("Che ore sono?",`<div class="vclks">${list.map(([h,m,l])=>`<div class="vclkc">${V.clock(h,m)}${VI(l)}<small>${h}:${String(m).padStart(2,"0")}</small></div>`).join("")}</div>`)},
+ week(){const D=[["lunedì","🏋️","palestra"],["martedì","📚","corso"],["mercoledì","💼","riunione"],["giovedì","🍕","cena fuori"],["venerdì","🍻","esco con gli amici"],["sabato","🎬","cinema"],["domenica","👵","pranzo dai nonni"]];
+  return VFIG("La settimana di Lucas",`<div class="vweek">${D.map((d,i)=>`<div class="vwd${i>4?" we":""}"><b>${VI(d[0])}</b><span class="vwi">${d[1]}</span>${VI(d[2])}</div>`).join("")}</div>`,"<i class='it'>il fine settimana</i> = sábado e domingo (em laranja).")},
+ freq(){const R=[["sempre",100],["spesso",72],["qualche volta",40],["mai",4]];return VFIG("Com que frequência?",`<div class="vfreq">${R.map(r=>`<div class="vfr"><span class="it">${r[0]}</span><span class="vfb"><i style="width:${r[1]}%"></i></span></div>`).join("")}</div>`,"Com <i class='it'>mai</i> o verbo leva <i class='it'>non</i>: <i class='it'>non vado mai</i>.")},
+ plan(){const R=[["cam","la camera da letto","🛏️ 🚪","il letto · l'armadio"],["bag","il bagno","🛁 🚿",""],["sog","il soggiorno","🛋️ 📺","il divano"],["cuc","la cucina","🍳 🪑","il tavolo · la sedia"],["bal","il balcone","🌿 🌞",""]];
+  return VFIG("Planta do apartamento · via Mazzini 12, secondo piano",`<div class="vplan">${R.map(r=>`<div class="vroom ${r[0]}"><span class="vre">${r[2]}</span><b>${VI(r[1])}</b>${r[3]?`<small>${VI(r[3])}</small>`:""}</div>`).join("")}<span class="vwin" title="la finestra">🪟</span></div>`,"Il primo piano italiano é o primeiro <b>acima</b> do térreo (<i class='it'>piano terra</i>).")},
+ map(){return VFIG("Scusi, dov'è il museo?",`<div class="vmapw"><svg viewBox="0 0 320 210" class="vmap" role="img" aria-label="Mapa: da estação ao museu">
+  <rect width="320" height="210" class="vmbg"/><path d="M0 70H320M0 150H320M90 0V210M230 0V210" class="vmst"/>
+  <circle cx="160" cy="110" r="26" class="vmpz"/><text x="160" y="114" text-anchor="middle" class="vmt">⛲ piazza</text>
+  <text x="40" y="40" text-anchor="middle" class="vme">🚉</text><text x="40" y="58" text-anchor="middle" class="vmt">stazione</text>
+  <text x="160" y="40" text-anchor="middle" class="vme">🏦</text><text x="160" y="58" text-anchor="middle" class="vmt">banca</text>
+  <text x="275" y="110" text-anchor="middle" class="vme">🏛️</text><text x="275" y="128" text-anchor="middle" class="vmt">museo</text>
+  <text x="40" y="190" text-anchor="middle" class="vme">💊</text><text x="40" y="205" text-anchor="middle" class="vmt">farmacia</text>
+  <text x="160" y="185" text-anchor="middle" class="vme">🚏</text><text x="160" y="203" text-anchor="middle" class="vmt">fermata</text>
+  <text x="275" y="35" text-anchor="middle" class="vme">🏢</text><text x="275" y="53" text-anchor="middle" class="vmt">ufficio</text>
+  <path d="M40 70H90V110H134M186 110H262" class="vmrt"/><circle cx="40" cy="70" r="6" class="vmme"/><text x="6" y="88" class="vmt b">tu sei qui</text></svg>
+  <ol class="vsteps"><li><span>⬆️</span>${VI("Vada sempre dritto fino all'incrocio.")}</li><li><span>➡️</span>${VI("Giri a destra.")}</li><li><span>🚸</span>${VI("Attraversi la piazza.")}</li><li><span>🏛️</span>${VI("Il museo è lì, a destra. È vicino!")}</li></ol></div>`)},
+ menu(t,rows,course){return VFIG(course?"Il menù":"Listino prezzi",`<div class="vmenu"><div class="vmh">${IGX(t)}</div>${rows.map(r=>`<div class="vmr"><span class="vmi">${r[1]}</span>${course?`<b class="vmk">${VI(r[0])}</b>${VI(r[2])}`:`${VI(r[0])}<span class="vmd"></span><b class="vmp">€ ${r[2]}</b>`}</div>`).join("")}</div>`)},
+ qty(){const Q=[["un chilo di mele","⚖️","🍎🍎🍎🍎"],["un etto di prosciutto","🔹","🥓"],["una bottiglia di vino","🍾","🍷"],["un pacco di pasta","📦","🍝"],["un litro di latte","🥛","1 l"],["mezzo chilo di pomodori","⚖️","🍅🍅"]];
+  return VFIG("Quantidades: sempre com “di”",`<div class="vqty">${Q.map(q=>`<div class="vqc"><span class="vqe">${q[1]} ${q[2]}</span>${VI(q[0])}</div>`).join("")}</div>`,"<i class='it'>un etto</i> = 100 g · <i class='it'>mezzo chilo</i> = 500 g.")},
+ tree(){const n=(e,w,c)=>`<div class="vtn ${c||""}"><span>${e}</span>${VI(w)}</div>`;
+  return VFIG("La famiglia di Giulia",`<div class="vtree"><div class="vtr">${n("👴","il nonno")}${n("👵","la nonna")}</div><div class="vtl"></div><div class="vtr">${n("👨","il padre")}${n("👩","la madre")}${n("🧔","lo zio")}</div><div class="vtl"></div><div class="vtr">${n("👩","Giulia","me")}${n("🧑","il fratello")}${n("🧒","il cugino")}</div><div class="vtl"></div><div class="vtr">${n("🤵","il marito")}${n("👧","la figlia")}${n("👦","il figlio")}</div></div>`,"Com possessivo e parente no singular, sem artigo: <i class='it'>mio padre, mia sorella</i>. No plural, com artigo: <i class='it'>i miei genitori</i>.")},
+ months(){const M=[["gennaio","❄️","w"],["febbraio","🎭","w"],["marzo","🌱","p"],["aprile","🌷","p"],["maggio","🌸","p"],["giugno","☀️","s"],["luglio","🏖️","s"],["agosto","🌞","s"],["settembre","🍂","a"],["ottobre","🍁","a"],["novembre","🌫️","a"],["dicembre","🎄","w"]];
+  return VFIG("I mesi (estações do hemisfério norte)",`<div class="vmon">${M.map(m=>`<div class="vmo s${m[2]}"><span>${m[1]}</span>${VI(m[0])}</div>`).join("")}</div><div class="vleg"><span class="sw">■ inverno</span><span class="sp">■ primavera</span><span class="ss">■ estate</span><span class="sa">■ autunno</span></div>`,"Datas: <i class='it'>il cinque luglio</i>, mas <i class='it'>il primo maggio</i>. Meses sem maiúscula.")},
+ likes(){return VFIG("Mi piace ou mi piacciono?",`<div class="vlikes"><div class="vlk"><span class="label">uma coisa / verbo</span><b>${VI("mi piace")}</b><div class="vle">☕ ${VI("il caffè")}</div><div class="vle">🎵 ${VI("la musica")}</div><div class="vle">📖 ${VI("leggere")}</div></div><div class="vlk pl"><span class="label">várias coisas</span><b>${VI("mi piacciono")}</b><div class="vle">🎬 ${VI("i film italiani")}</div><div class="vle">🐶 ${VI("i cani")}</div><div class="vle">🍝 ${VI("le lasagne")}</div></div></div>`)},
+ past(){return VFIG("Quanto tempo atrás?",IG.tl([{at:.04,it:"l'anno scorso",pt:"2025"},{at:.2,it:"la settimana scorsa",pt:""},{at:.36,it:"due giorni fa",pt:""},{at:.46,it:"l'altro ieri",pt:""},{at:.55,it:"ieri sera",pt:""},{at:.6,it:"stamattina",pt:""}],["passato","oggi",""]))},
+ diary(list){return VFIG("Il fine settimana di Giulia",`<div class="vdiary">${list.map(d=>`<div class="vdc"><span class="vde">${d[1]}</span><small>${IGX(d[0])}</small>${VI(d[2])}</div>`).join("")}</div>`)},
+ ticket(){return VFIG("Bilhete e quadro de partidas",`<div class="vtix"><div class="vtk"><div class="vtkh"><span>🚆 Trenitalia · Regionale</span><b>${VI("andata e ritorno")}</b></div><div class="vtkr"><div><small>da</small><b>Bologna C.le</b></div><span class="vtka">→</span><div><small>a</small><b>Firenze S.M.N.</b></div></div><div class="vtkf"><span><small>partenza</small>09:15</span><span><small>binario</small>3</span><span><small>classe</small>2ª</span><span><small>prezzo</small>€ 9,90</span></div></div>
+  <div class="vbrd"><div class="vbh"><span>treno</span><span>destinazione</span><span>orario</span><span>stato</span><span>bin.</span></div>
+  <div class="vbr"><span>R 6421</span><span>Firenze</span><span>09:15</span><span class="ok">${VI("in orario")}</span><span>3</span></div>
+  <div class="vbr"><span>FR 9520</span><span>Milano</span><span>09:40</span><span class="late">${VI("in ritardo")} 10'</span><span>5</span></div>
+  <div class="vbr"><span>R 2213</span><span>Venezia</span><span>10:05</span><span class="ok">${VI("in orario")}</span><span>1</span></div></div></div>`,"Verbos de movimento formam o passado com <b>essere</b>: <i class='it'>sono partito, siamo arrivati</i>.")},
+ containers(){const C=[["la bottiglia","🍾","d'acqua"],["il barattolo","🫙","di pomodori"],["la scatola","📦","di biscotti"],["il vasetto","🍯","di marmellata"],["la lattina","🥫","di birra"],["il pacchetto","☕","di caffè"]];
+  return VFIG("Embalagens do supermercado",`<div class="vcont">${C.map(c=>`<div class="vcc"><span class="vce">${c[1]}</span><b>${VI(c[0])}</b>${VI(c[2])}</div>`).join("")}</div>
+  <div class="vrcpt"><div class="vrh">SUPERMERCATO CONAD<br><small>scontrino</small></div><div><span>${VI("latte fresco 1 l")}</span><span>1,59</span></div><div><span>${VI("pasta 500 g")}</span><span>0,99</span></div><div><span>${VI("caffè (in offerta)")}</span><span>2,49</span></div><div class="tot"><span>TOTALE</span><span>€ 5,07</span></div></div>`)},
+ holidays(){const H=[["🎂","il compleanno","Tanti auguri!"],["🎄","il Natale · 25/12","Buon Natale!"],["🎆","il Capodanno · 1/1","Buon anno!"],["🐣","la Pasqua","Buona Pasqua!"]];
+  return VFIG("Festas e votos",`<div class="vhol">${H.map(h=>`<div class="vhc"><span class="vhe">${h[0]}</span>${VI(h[1])}<b>${VI(h[2])}</b></div>`).join("")}</div>
+  <div class="vgive"><div>🎁 → 🧑 ${VI("Regalo un libro a Marco.")}</div><div class="vgv2">= ${VI("Gli regalo un libro.")}</div><div>💐 → 👩 ${VI("Mando i fiori a Giulia.")}</div><div class="vgv2">= ${VI("Le mando i fiori.")}</div></div>`)},
+ thenNow(){const R=[["🌾","Abitavo in campagna.","🏙️","Abito in città."],["⚽","Giocavo in strada.","💼","Lavoro in ufficio."],["🙈","Ero timido.","😄","Sono socievole."],["🚶","Andavo a scuola a piedi.","🚗","Vado al lavoro in macchina."]];
+  return VFIG("Allora e adesso",`<div class="vthen"><div class="vth"><span>🧒 ${IGX("da bambino")} · imperfetto</span><span>🧑 adesso · presente</span></div>${R.map(r=>`<div class="vtr2"><div><span>${r[0]}</span>${VI(r[1])}</div><div><span>${r[2]}</span>${VI(r[3])}</div></div>`).join("")}</div>`)},
+ forecast(){const F=[["oggi","☀️","fa caldo","31°"],["domani","⛅","nuvoloso","26°"],["dopodomani","🌧️","piove","19°"],["sabato","🌨️","nevica (in montagna)","-2°"],["domenica","🌤️","fa bel tempo","24°"]];
+  return VFIG("Le previsioni del tempo",`<div class="vfc">${F.map(f=>`<div class="vfd"><small>${VI(f[0])}</small><span class="vfe">${f[1]}</span><b>${f[3]}</b>${VI(f[2])}</div>`).join("")}</div>`,"Pergunta-chave: <i class='it'>Che tempo fa?</i> — <i class='it'>Fa caldo / fa freddo / piove / c'è il sole</i>.")},
+ clothes(){const C=[["la giacca","🧥","120","84"],["la camicia","👔","45","31"],["i pantaloni","👖","60","42"],["la gonna","👗","50","35"],["le scarpe","👞","90","63"]];
+  return VFIG("Saldi! −30%",`<div class="vshop">${C.map(c=>`<div class="vshc"><span class="vshb">−30%</span><span class="vshe">${c[1]}</span>${VI(c[0])}<span class="vshp"><s>€ ${c[2]}</s> <b>€ ${c[3]}</b></span></div>`).join("")}</div>
+  <div class="vfit"><span>🤏 ${VI("stretto")}</span><span class="ok">👌 ${VI("mi sta bene")}</span><span>↔️ ${VI("largo")}</span></div>
+  <div class="vsize"><span class="label">la taglia</span><span>44</span><span>46</span><span class="on">48</span><span>50</span><span>52</span><span class="label">il numero</span><span>40</span><span>41</span><span class="on">42</span><span>43</span></div>`)},
+ tools(){const T=[["la pentola","🍲"],["la padella","🍳"],["il cucchiaio","🥄"],["il coltello","🔪"]],S=[["♨️","Fai bollire l'acqua."],["🍝","Cuoci la pasta."],["🔪","Taglia i pomodori."],["🫗","Versa l'olio."],["➕","Aggiungi il sale."],["🥣","Mescola e assaggia!"]];
+  return VFIG("Na cozinha: uma receita",`<div class="vtools">${T.map(t=>`<div class="vtl2"><span>${t[1]}</span>${VI(t[0])}</div>`).join("")}</div><ol class="vrec">${S.map(s=>`<li><span>${s[0]}</span>${VI(s[1])}</li>`).join("")}</ol>`)},
+ body(){const L=[["la testa",50,9],["la gola",50,22],["il braccio",31,35],["lo stomaco",50,43],["la mano",23,57],["la gamba",40,72],["il piede",38,94]];
+  return VFIG("Il corpo",`<div class="vbody"><svg viewBox="0 0 100 100" class="vbsvg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Corpo humano"><g class="vbfig"><circle cx="50" cy="10" r="7"/><rect x="47" y="16" width="6" height="5"/><path d="M38 21h24l3 32H35z"/><path d="M38 22l-12 22-4 12 4 1 6-12 9-15z"/><path d="M62 22l12 22 4 12-4 1-6-12-9-15z"/><path d="M36 53h12l-1 38h-7zM52 53h12l-3 38h-7z"/><path d="M40 91h8v4H35zM54 91h7l5 4H54z"/></g>${L.map((l,i)=>`<circle cx="${l[1]}" cy="${l[2]}" r="3.4" class="vbdot"/><text x="${l[1]}" y="${l[2]+1.3}" text-anchor="middle" class="vbn">${i+1}</text>`).join("")}</svg>
+  <ol class="vblist">${L.map(l=>`<li>${VI(l[0])}</li>`).join("")}<li class="muted small">${VI("la schiena")} = as costas (atrás)</li></ol></div>`,"<i class='it'>Mi fa male la testa</i> · <i class='it'>mi fanno male i piedi</i>.")},
+ email(){return VFIG("Anatomia de um e-mail formal",`<div class="vmail"><div class="vmh2"><span><small>A:</small> m.rossi@studiorossi.it</span><span><small>Oggetto:</small> ${VI("Preventivo cantiere via Emilia")}</span><span>📎 preventivo.pdf</span></div>
+  <div class="vmb"><p data-n="1">${VI("Gentile dottor Rossi,")}</p><p data-n="2">${VI("Le scrivo per il sopralluogo di giovedì.")}</p><p data-n="3">${VI("Le allego il preventivo e la relazione tecnica.")}</p><p data-n="4">${VI("Resto a disposizione per qualsiasi chiarimento.")}</p><p data-n="5">${VI("Cordiali saluti,")}<br>${VI("Lucas Manfrin")}</p></div>
+  <ol class="vmlab"><li>saudação formal</li><li>motivo do e-mail</li><li>o anexo (<i class="it">allegare</i>)</li><li>fórmula de cortesia</li><li>despedida e assinatura</li></ol></div>`)},
+ site(){const S=[["🔍","il sopralluogo"],["🧮","il preventivo"],["📐","il progetto"],["🏗️","il cantiere"],["📄","la relazione"]];
+  return VFIG("Do sopralluogo ao relatório",`<div class="vflow">${S.map((s,i)=>`${i?'<span class="vfa">→</span>':""}<div class="vfs"><span>${s[0]}</span>${VI(s[1])}</div>`).join("")}</div><p class="small muted">⏰ ${VI("la scadenza")}: o prazo para entregar cada etapa.</p>`)}
+};
+
+/* ---------- render da aba Vocabulário ---------- */
+function vGender(w){return/^(il|lo|i|gli) /.test(w)?"gm":/^(la|le) /.test(w)?"gf":/^l'/.test(w)?(/a$/.test(w.split(" ")[0])?"gf":"gm"):""}
+function renderVocabCtx(t){const x=VX[t.id],mean={};t.voc.forEach(v=>mean[v[0]]=v[1]);
+ if(!x)return null;
+ const used=new Set();
+ let h=`<div class="vsit"><span class="vsite">📍</span><div><span class="label">A situação</span><p>${x.sit}</p></div></div>`;
+ try{h+=x.scene()}catch(e){}
+ h+=x.groups.map(g=>`<section class="vgrp"><h3>${esc(g.h)}</h3><div class="vcards">${g.items.map(([w,ic,ex,ep,pt])=>{used.add(w);return`<div class="vcard ${vGender(w)}"><div class="vic">${V.icon(ic)}</div><div class="vtx"><div class="vw"><span class="it">${esc(w)}</span><span class="vpt">${esc(pt||mean[w]||"")}</span></div>${ex?`<div class="vex"><span class="it">${esc(ex)}</span><small>${esc(ep||"")}</small></div>`:""}</div>${spkBtn(ex?w+". "+ex:w)}</div>`}).join("")}</div></section>`).join("");
+ const rest=t.voc.filter(v=>!used.has(v[0]));
+ if(rest.length)h+=`<section class="vgrp"><h3>Mais palavras</h3><div class="vgrid">${rest.map(v=>`<div class="vcell"><div><span class="it">${esc(v[0])}</span><span class="pt">${esc(v[1])}</span></div>${spkBtn(v[0])}</div>`).join("")}</div></section>`;
+ if(x.useful&&x.useful.length)h+=`<section class="vgrp"><h3>Expressões úteis</h3><div class="vuse">${x.useful.map(([tt,l])=>`<div class="vub"><span class="label">${esc(tt)}</span>${l.map(p=>`<div class="exi"><div><i class="it">${esc(p[0])}</i><span>${esc(p[1])}</span></div>${spkBtn(p[0])}</div>`).join("")}</div>`).join("")}</div></section>`;
+ if(x.tip)h+=`<div class="vtip"><span>💡</span><p>${x.tip}</p></div>`;
+ return h}
+
+/* ============================ VOCABULÁRIO EM CONTEXTO — A1 ============================ */
+// VX[tópico] = {sit: situação (pt), scene: (função visual), groups: [{h, items:[[it, ícone, exemplo it, exemplo pt]]}], useful: [[título, [[it,pt]...]]], tip}
+const VX={};
+VX["a1-1"]={sit:"Primeiro dia de curso em Bolonha: as pessoas se cumprimentam, dizem o nome e de onde são.",scene:()=>V.greetDay()+V.flags(),
+groups:[
+{h:"Cumprimentar e despedir-se",items:[["ciao","👋","Ciao Marco!","Oi, Marco!"],["buongiorno","🌅","Buongiorno, signora Rossi.","Bom dia, senhora Rossi."],["buonasera","🌆","Buonasera a tutti!","Boa noite a todos!"],["buonanotte","🌙","Buonanotte, a domani.","Boa noite, até amanhã."],["arrivederci","🚪","Arrivederci e grazie!","Até logo e obrigado!"],["a presto","🔜","Ciao, a presto!","Tchau, até breve!"]]},
+{h:"Apresentar-se",items:[["come stai?","🙂","Ciao Giulia, come stai?","Oi Giulia, como você está?"],["sto bene","👍","Sto bene, grazie.","Estou bem, obrigado."],["piacere","🤝","Piacere, sono Lucas.","Prazer, sou Lucas."],["mi chiamo","🪪","Mi chiamo Lucas Manfrin.","Me chamo Lucas Manfrin."],["di dove sei?","🗺️","Di dove sei, Marco?","De onde você é, Marco?"],["sono di Curitiba","📍","Sono di Curitiba, in Brasile.","Sou de Curitiba, no Brasil."]]},
+{h:"Nacionalidades",items:[["brasiliano","#br","Lucas è brasiliano.","Lucas é brasileiro."],["italiano","#it","Giulia è italiana.","Giulia é italiana."],["inglese","#gb","John è inglese.","John é inglês."],["francese","#fr","Claire è francese.","Claire é francesa."],["tedesco","#de","Hans è tedesco.","Hans é alemão."],["spagnolo","#es","Pilar è spagnola.","Pilar é espanhola."]]},
+{h:"Cortesia",items:[["grazie","🙏","Grazie mille!","Muito obrigado!"],["prego","😊","Grazie! — Prego!","Obrigado! — De nada!"],["scusa","😅","Scusa, sono in ritardo.","Desculpa, estou atrasado."]]},
+{h:"Números",items:[["zero","0","Zero tre nove…","Zero três nove…"],["uno","1","Ho un fratello, uno solo.","Tenho um irmão, só um."],["due","2","Due caffè, per favore.","Dois cafés, por favor."],["tre","3","Siamo in tre.","Somos três."],["dieci","10","Dieci studenti in classe.","Dez alunos na sala."],["venti","20","Ho venti euro.","Tenho vinte euros."]]}],
+useful:[["Formal (com desconhecidos)",[["Buongiorno, come sta?","Bom dia, como o senhor está?"],["Piacere di conoscerLa.","Prazer em conhecê-lo."],["Di dov'è?","De onde o senhor é?"]]],["Informal (amigos)",[["Ciao! Come va?","Oi! Tudo bem?"],["Piacere, io sono Giulia.","Prazer, eu sou Giulia."],["Di dove sei?","De onde você é?"]]]],
+tip:"<b>Buonasera</b> já se usa à tarde, a partir das 15–16h. <b>Buonanotte</b> só na hora de dormir ou de ir embora à noite."};
+
+VX["a1-2"]={sit:"Na sala de aula e no escritório: os objetos do dia a dia e as pessoas que estão ali.",scene:()=>V.genderTiles([["il libro","📕"],["la penna","🖊️"],["il quaderno","📓"],["la borsa","👜"],["lo zaino","🎒"],["la chiave","🔑"],["il telefono","📱"],["il computer","💻"],["l'amico","🧑"],["l'amica","👩"],["lo studente","🧑‍🎓"],["la città","🏙️"]]),
+groups:[
+{h:"Objetos",items:[["il libro","📕","Il libro è sul tavolo.","O livro está na mesa."],["la penna","🖊️","Hai una penna?","Você tem uma caneta?"],["il quaderno","📓","Scrivo nel quaderno.","Escrevo no caderno."],["la borsa","👜","La borsa è nera.","A bolsa é preta."],["lo zaino","🎒","Lo zaino è pesante.","A mochila está pesada."],["la chiave","🔑","Dov'è la chiave?","Onde está a chave?"],["il telefono","📱","Il telefono non funziona.","O telefone não funciona."],["il computer","💻","Il computer è nuovo.","O computador é novo."],["la città","🏙️","Bologna è una bella città.","Bolonha é uma cidade bonita."]]},
+{h:"Pessoas",items:[["l'amico","🧑","Marco è un amico.","Marco é um amigo."],["l'amica","👩","Giulia è un'amica.","Giulia é uma amiga."],["il ragazzo","👦","Il ragazzo si chiama Luca.","O rapaz se chama Luca."],["la ragazza","👧","La ragazza è di Roma.","A moça é de Roma."],["lo studente","🧑‍🎓","Lo studente è brasiliano.","O estudante é brasileiro."]]},
+{h:"Profissões",items:[["l'ingegnere","👷","Lucas fa l'ingegnere.","Lucas é engenheiro."],["il medico","🩺","Mio padre è medico.","Meu pai é médico."],["l'insegnante","🧑‍🏫","L'insegnante è gentile.","O professor é gentil."],["l'impiegato","💼","L'impiegato lavora in banca.","O funcionário trabalha no banco."]]},
+{h:"Idade",items:[["l'anno","📅","Un anno ha dodici mesi.","Um ano tem doze meses."],["quanti anni hai?","❓","Quanti anni hai, Sofia?","Quantos anos você tem, Sofia?"],["ho trent'anni","🎂","Ho trent'anni.","Tenho trinta anos."],["avere","✋","Abbiamo un problema.","Temos um problema."]]}],
+useful:[["Na sala de aula",[["Che cos'è questo? — È un quaderno.","O que é isto? — É um caderno."],["Come si dice “caneta” in italiano?","Como se diz “caneta” em italiano?"],["Mi presti la penna?","Você me empresta a caneta?"]]],["Profissão",[["Che lavoro fai? — Sono ingegnere.","Qual é o seu trabalho? — Sou engenheiro."],["Dove lavori? — In un ufficio.","Onde você trabalha? — Num escritório."]]]],
+tip:"Na figura, <b class='gm'>azul</b> = masculino e <b class='gf'>laranja</b> = feminino. Aprenda cada substantivo já com o artigo: <i class='it'>il libro, la penna, lo zaino</i>."};
+
+VX["a1-3"]={sit:"Como são as pessoas: aparência, cabelo, olhos, cores e personalidade.",scene:()=>V.people()+V.swatches([["rosso","#D33A2C"],["verde","#2E8B57"],["blu","#1E4E9E"],["nero","#1A1A1A"],["bianco","#FFFFFF"],["giallo","#F2C230"],["castano","#7B4A22"],["biondo","#E6C36A"]]),
+groups:[
+{h:"Aparência",items:[["alto","🧍","Marco è alto.","Marco é alto."],["basso","🧒","Mio fratello è basso.","Meu irmão é baixo."],["magro","🥢","Giulia è magra.","Giulia é magra."],["giovane","🧑","Il professore è giovane.","O professor é jovem."],["anziano","🧓","Il signore è anziano.","O senhor é idoso."],["bello","✨","Che bella ragazza!","Que moça bonita!"]]},
+{h:"Cabelo e olhos",items:[["i capelli","💇","Ha i capelli lunghi.","Tem cabelo comprido."],["gli occhi","👀","Ha gli occhi verdi.","Tem olhos verdes."],["biondo","👱","Ha i capelli biondi.","Tem cabelo loiro."],["castano","🟤","Ho i capelli castani.","Tenho cabelo castanho."]]},
+{h:"Personalidade",items:[["simpatico","😄","È un collega simpatico.","É um colega simpático."],["antipatico","😒","Il vicino è antipatico.","O vizinho é antipático."],["gentile","🤗","La signora è gentile.","A senhora é gentil."],["allegro","😁","È sempre allegra.","Está sempre alegre."],["timido","🙈","Paolo è un po' timido.","Paolo é um pouco tímido."],["serio","😐","La direttrice è seria.","A diretora é séria."],["divertente","🤣","Il film è divertente.","O filme é divertido."],["intelligente","🧠","È una ragazza intelligente.","É uma moça inteligente."]]},
+{h:"Cores",items:[["rosso","🟥","Una macchina rossa.","Um carro vermelho."],["verde","🟩","Gli occhi verdi.","Os olhos verdes."],["blu","🟦","Le scarpe blu.","Os sapatos azuis."],["nero","⬛","Un gatto nero.","Um gato preto."],["bianco","⬜","Una camicia bianca.","Uma camisa branca."],["giallo","🟨","Un fiore giallo.","Uma flor amarela."]]}],
+useful:[["Descrever alguém",[["Com'è? — È alto e simpatico.","Como ele é? — É alto e simpático."],["Ha i capelli castani e gli occhi azzurri.","Tem cabelo castanho e olhos azuis-claros."],["Di carattere è un po' timida.","De personalidade é um pouco tímida."]]]],
+tip:"Para cabelo e olhos usa-se <b>avere</b>: <i class='it'>ha i capelli neri</i>. Para o resto, <b>essere</b>: <i class='it'>è alto</i>. <i class='it'>Blu</i> não muda no feminino nem no plural."};
+
+VX["a1-4"]={sit:"Um dia de trabalho: o que se faz de manhã, à tarde e à noite, e a que horas.",scene:()=>V.clocks([[8,0,"sono le otto"],[1,0,"è l'una"],[8,30,"le otto e mezza"],[9,15,"le nove e un quarto"]])+IG.tl([{at:.05,it:"mi sveglio",pt:"7:00"},{at:.25,it:"comincio",pt:"8:30"},{at:.45,it:"pranzo",pt:"13:00"},{at:.7,it:"finisco",pt:"18:00"},{at:.92,it:"studio",pt:"21:00"}],["mattina","pomeriggio","sera"]),
+groups:[
+{h:"Horas e partes do dia",items:[["che ore sono?","⌚","Scusi, che ore sono?","Com licença, que horas são?"],["sono le otto","🕗","Sono le otto: è tardi!","São oito horas: está tarde!"],["è l'una","🕐","È l'una: andiamo a pranzo.","É uma hora: vamos almoçar."],["e mezza","🕣","Comincio alle otto e mezza.","Começo às oito e meia."],["e un quarto","🕘","Sono le nove e un quarto.","São nove e quinze."],["la mattina","🌅","La mattina bevo un caffè.","De manhã tomo um café."],["il pomeriggio","☀️","Il pomeriggio lavoro in ufficio.","À tarde trabalho no escritório."],["la sera","🌆","La sera leggo.","À noite leio."],["di solito","🔁","Di solito pranzo all'una.","Geralmente almoço à uma."]]},
+{h:"Verbos em -are",items:[["lavorare","💼","Lavoro in un tribunale.","Trabalho num tribunal."],["parlare","🗣️","Parlo italiano e inglese.","Falo italiano e inglês."],["abitare","🏠","Abito a Bologna.","Moro em Bolonha."],["studiare","📚","Studio la sera.","Estudo à noite."],["mangiare","🍝","Mangiamo alle otto.","Comemos às oito."],["cominciare","▶️","Il corso comincia lunedì.","O curso começa segunda."],["cercare","🔍","Cerco le chiavi.","Procuro as chaves."],["pagare","💳","Pago con la carta.","Pago com cartão."]]},
+{h:"Verbos em -ere",items:[["prendere","☕","Prendo un caffè.","Tomo um café."],["leggere","📖","Leggo il giornale.","Leio o jornal."],["scrivere","✍️","Scrivo una mail.","Escrevo um e-mail."],["vivere","🌍","Vivo in Italia.","Vivo na Itália."]]},
+{h:"Verbos em -ire",items:[["dormire","😴","Dormo otto ore.","Durmo oito horas."],["partire","🚆","Parto alle sette.","Parto às sete."],["aprire","🚪","Apro la finestra.","Abro a janela."],["capire","💡","Capisco l'italiano.","Entendo italiano."],["finire","🏁","Finisco alle sei.","Termino às seis."],["preferire","❤️","Preferisco il tè.","Prefiro chá."]]}],
+useful:[["Perguntar e dizer as horas",[["A che ora cominci? — Alle nove.","A que horas você começa? — Às nove."],["Che ore sono? — Sono le tre e dieci.","Que horas são? — São três e dez."],["È mezzogiorno / è mezzanotte.","É meio-dia / é meia-noite."]]]],
+tip:"Na hora usa-se o plural: <i class='it'>sono le otto</i>. A exceção é a uma: <i class='it'>è l'una</i>. Para dizer “às”: <i class='it'>alle otto, all'una</i>."};
+
+VX["a1-5"]={sit:"O tempo livre: o que você gosta de fazer, os dias da semana e como convidar ou recusar.",scene:()=>V.week()+V.freq(),
+groups:[
+{h:"Passatempos",items:[["il tempo libero","🕹️","Nel tempo libero leggo.","No tempo livre eu leio."],["andare al cinema","🎬","Andiamo al cinema sabato?","Vamos ao cinema no sábado?"],["fare sport","🏃","Faccio sport due volte a settimana.","Pratico esporte duas vezes por semana."],["giocare a calcio","⚽","Gioco a calcio con i colleghi.","Jogo futebol com os colegas."],["uscire con gli amici","🍻","Il venerdì esco con gli amici.","Na sexta saio com os amigos."],["leggere un libro","📖","La sera leggo un libro.","À noite leio um livro."],["ascoltare musica","🎧","Ascolto musica in autobus.","Ouço música no ônibus."],["la palestra","🏋️","Vado in palestra la mattina.","Vou à academia de manhã."],["la partita","🏟️","Guardiamo la partita?","Vamos assistir ao jogo?"]]},
+{h:"Convidar e responder",items:[["vieni con noi?","🙋","Andiamo al mare: vieni con noi?","Vamos à praia: vem com a gente?"],["volentieri!","😀","Un caffè? — Volentieri!","Um café? — Com prazer!"],["purtroppo non posso","😔","Purtroppo non posso, lavoro.","Infelizmente não posso, trabalho."]]},
+{h:"Dias da semana",items:[["lunedì","1️⃣","Lunedì comincio il corso.","Segunda começo o curso."],["martedì","2️⃣","Il martedì vado in palestra.","Às terças vou à academia."],["mercoledì","3️⃣","Mercoledì ho una riunione.","Quarta tenho uma reunião."],["giovedì","4️⃣","Giovedì ceniamo fuori.","Quinta jantamos fora."],["venerdì","5️⃣","Venerdì sera esco.","Sexta à noite saio."],["sabato","6️⃣","Sabato dormo fino a tardi.","Sábado durmo até tarde."],["domenica","7️⃣","La domenica pranzo dai nonni.","Aos domingos almoço na casa dos avós."],["il fine settimana","🗓️","Che cosa fai il fine settimana?","O que você faz no fim de semana?"]]},
+{h:"Frequência",items:[["spesso","🔁","Vado spesso al cinema.","Vou muito ao cinema."],["qualche volta","↪️","Qualche volta gioco a tennis.","Às vezes jogo tênis."],["mai","🚫","Non guardo mai la TV.","Nunca vejo TV."]]}],
+useful:[["Convite em três passos",[["Ti va di andare al cinema?","Você está a fim de ir ao cinema?"],["Sì, perché no? A che ora?","Sim, por que não? A que horas?"],["Mi dispiace, ho un impegno. Magari un'altra volta!","Desculpe, tenho um compromisso. Quem sabe outra vez!"]]]],
+tip:"Dia com artigo indica hábito: <i class='it'>il sabato</i> = todo sábado. Sem artigo, um dia específico: <i class='it'>sabato vado al mare</i>. Os dias são masculinos, menos <i class='it'>la domenica</i>."};
+
+VX["a1-6"]={sit:"Procurar casa: os cômodos, os móveis, o andar e o endereço.",scene:()=>V.plan(),
+groups:[
+{h:"A casa",items:[["la casa","🏠","Una casa con giardino.","Uma casa com jardim."],["l'appartamento","🏢","Cerco un appartamento in centro.","Procuro um apartamento no centro."],["la camera da letto","🛏️","La camera da letto è grande.","O quarto é grande."],["il soggiorno","🛋️","Il soggiorno è luminoso.","A sala é clara."],["la cucina","🍳","La cucina è piccola.","A cozinha é pequena."],["il bagno","🛁","Il bagno è accanto alla camera.","O banheiro fica ao lado do quarto."],["il balcone","🌿","Pranziamo sul balcone.","Almoçamos na sacada."],["la finestra","🪟","Apri la finestra, per favore.","Abra a janela, por favor."]]},
+{h:"Móveis",items:[["il letto","🛏️","Il letto è comodo.","A cama é confortável."],["il divano","🛋️","Il divano è davanti alla TV.","O sofá fica na frente da TV."],["il tavolo","🪑","Il tavolo è in cucina.","A mesa fica na cozinha."],["la sedia","💺","Ci sono quattro sedie.","Há quatro cadeiras."],["l'armadio","🚪","I vestiti sono nell'armadio.","As roupas estão no armário."]]},
+{h:"Endereço e andar",items:[["l'indirizzo","📬","Qual è il tuo indirizzo?","Qual é o seu endereço?"],["la via","🛣️","Abito in via Mazzini, 12.","Moro na rua Mazzini, 12."],["il piano","🔼","Abito al secondo piano.","Moro no segundo andar."],["primo","1️⃣","Al primo piano c'è un bar.","No primeiro andar há um bar."],["secondo","2️⃣","La seconda porta a destra.","A segunda porta à direita."],["terzo","3️⃣","È al terzo piano.","Fica no terceiro andar."]]},
+{h:"Números grandes",items:[["trenta","30","Trenta metri quadri.","Trinta metros quadrados."],["cinquanta","50","Cinquanta euro al mese.","Cinquenta euros por mês."],["cento","100","Cento metri dalla stazione.","Cem metros da estação."],["mille","1000","Mille euro di affitto.","Mil euros de aluguel."],["duemila","2000","Duemila abitanti.","Dois mil habitantes."]]}],
+useful:[["Visitar um apartamento",[["Quante camere ci sono?","Quantos quartos tem?"],["A che piano è? C'è l'ascensore?","Em que andar fica? Tem elevador?"],["Quanto costa l'affitto?","Quanto custa o aluguel?"]]]],
+tip:"<i class='it'>La camera</i> é o quarto; <i class='it'>la stanza</i> é qualquer cômodo. E o primeiro andar italiano (<i class='it'>il primo piano</i>) fica acima do térreo (<i class='it'>il piano terra</i>)."};
+
+VX["a1-7"]={sit:"Na cidade: os lugares, os meios de transporte e como pedir e dar direções.",scene:()=>V.map(),
+groups:[
+{h:"Lugares",items:[["la stazione","🚉","La stazione è in centro.","A estação fica no centro."],["la piazza","⛲","Ci vediamo in piazza.","A gente se vê na praça."],["la banca","🏦","La banca apre alle otto e mezza.","O banco abre às oito e meia."],["la farmacia","💊","C'è una farmacia qui vicino?","Tem uma farmácia aqui perto?"],["l'ufficio","🏢","L'ufficio è al terzo piano.","O escritório fica no terceiro andar."],["il museo","🏛️","Il museo è chiuso il lunedì.","O museu fecha às segundas."],["il centro","🎯","Abito in centro.","Moro no centro."]]},
+{h:"Transporte",items:[["la fermata","🚏","La fermata è davanti al bar.","O ponto fica na frente do bar."],["l'autobus","🚌","Prendo l'autobus numero 20.","Pego o ônibus número 20."],["il treno","🚆","Vado a Roma in treno.","Vou a Roma de trem."],["la metropolitana","🚇","A Milano prendo la metropolitana.","Em Milão pego o metrô."],["a piedi","🚶","Vado in ufficio a piedi.","Vou ao escritório a pé."],["in macchina","🚗","Andiamo in macchina?","Vamos de carro?"]]},
+{h:"Direções",items:[["dov'è…?","📍","Scusi, dov'è il museo?","Com licença, onde fica o museu?"],["scusi","🙋","Scusi, una domanda…","Com licença, uma pergunta…"],["sempre dritto","⬆️","Vada sempre dritto.","Siga sempre reto."],["a destra","➡️","Giri a destra.","Vire à direita."],["a sinistra","⬅️","La banca è a sinistra.","O banco fica à esquerda."],["girare","↪️","Giri alla seconda strada.","Vire na segunda rua."],["attraversare","🚸","Attraversi la piazza.","Atravesse a praça."],["vicino","📏","È vicino, cinque minuti.","É perto, cinco minutos."],["lontano","🗺️","La stazione è lontana.","A estação é longe."]]}],
+useful:[["Pedir e dar direções",[["Scusi, per andare alla stazione?","Com licença, para ir à estação?"],["Vada dritto e poi giri a sinistra.","Siga reto e depois vire à esquerda."],["È lontano? — No, è a dieci minuti a piedi.","É longe? — Não, fica a dez minutos a pé."]]]],
+tip:"Nas direções, com estranhos, usa-se o imperativo formal: <i class='it'>vada, giri, prenda, attraversi</i>. Com amigos: <i class='it'>vai, gira, prendi, attraversa</i>."};
+
+VX["a1-8"]={sit:"No bar e na feira: pedir, perguntar o preço e as quantidades.",scene:()=>V.menu("Listino del bar",[["caffè","☕","1,20"],["cappuccino","☕","1,60"],["cornetto","🥐","1,40"],["succo d'arancia","🧃","2,50"],["acqua minerale","💧","1,00"],["panino","🥪","4,00"]])+V.qty(),
+groups:[
+{h:"No bar",items:[["il caffè","☕","Un caffè, per favore.","Um café, por favor."],["il cornetto","🥐","Un cornetto alla crema.","Um croissant de creme."],["l'acqua","💧","Un'acqua naturale.","Uma água sem gás."],["il succo","🧃","Un succo d'arancia.","Um suco de laranja."],["il panino","🥪","Un panino al prosciutto.","Um sanduíche de presunto."],["il vino","🍷","Un bicchiere di vino rosso.","Uma taça de vinho tinto."],["il conto","🧾","Il conto, per favore.","A conta, por favor."]]},
+{h:"Na feira e no mercado",items:[["il pane","🍞","Il pane è fresco.","O pão está fresco."],["il formaggio","🧀","Un etto di formaggio.","Cem gramas de queijo."],["il latte","🥛","Un litro di latte.","Um litro de leite."],["la mela","🍎","Un chilo di mele.","Um quilo de maçãs."],["il pomodoro","🍅","I pomodori sono maturi.","Os tomates estão maduros."],["la pasta","🍝","Un pacco di pasta.","Um pacote de massa."]]},
+{h:"Quantidades",items:[["un chilo di","⚖️","Un chilo di patate.","Um quilo de batatas."],["un etto di","🔹","Un etto di prosciutto.","Cem gramas de presunto."],["una bottiglia di","🍾","Una bottiglia di vino.","Uma garrafa de vinho."],["un pacco di","📦","Un pacco di biscotti.","Um pacote de biscoitos."]]},
+{h:"Pedir e pagar",items:[["vorrei","🙏","Vorrei un cappuccino.","Eu queria um cappuccino."],["quanto costa?","💶","Quanto costa il panino?","Quanto custa o sanduíche?"],["quanto costano?","💶","Quanto costano le mele?","Quanto custam as maçãs?"],["l'euro","💶","Sono tre euro.","São três euros."],["il prezzo","🏷️","Il prezzo è buono.","O preço é bom."]]}],
+useful:[["No bar",[["Che cosa prende? — Un caffè e un cornetto.","O que vai querer? — Um café e um croissant."],["Al banco o al tavolo?","No balcão ou na mesa?"]]],["Na feira",[["Mi dà mezzo chilo di pomodori?","O senhor me dá meio quilo de tomates?"],["Altro? — No, basta così, grazie.","Mais alguma coisa? — Não, só isso, obrigado."]]]],
+tip:"Na Itália, no bar, primeiro se paga no caixa (<i class='it'>alla cassa</i>) e depois se pede no balcão com o recibo. Tomar café no balcão (<i class='it'>al banco</i>) é mais barato que na mesa."};
+
+VX["a1-9"]={sit:"A família de Giulia: quem é quem e quando é o aniversário de cada um.",scene:()=>V.tree()+V.months(),
+groups:[
+{h:"Pais e filhos",items:[["la famiglia","👨‍👩‍👧‍👦","Ho una famiglia grande.","Tenho uma família grande."],["il padre","👨","Mio padre si chiama Franco.","Meu pai se chama Franco."],["la madre","👩","Mia madre è insegnante.","Minha mãe é professora."],["i genitori","👫","I miei genitori abitano a Roma.","Meus pais moram em Roma."],["il figlio","👦","Il figlio di Luca ha sei anni.","O filho do Luca tem seis anos."],["la figlia","👧","Sofia è la figlia di Luca.","Sofia é a filha do Luca."]]},
+{h:"Irmãos, casal e outros parentes",items:[["il fratello","🧑","Mio fratello è più grande.","Meu irmão é mais velho."],["la sorella","👩","Mia sorella studia medicina.","Minha irmã estuda medicina."],["il marito","🤵","Il marito di Anna è francese.","O marido da Anna é francês."],["la moglie","👰","Sua moglie è italiana.","A esposa dele é italiana."],["la fidanzata","💑","La mia fidanzata è brasiliana.","Minha namorada é brasileira."],["il nonno","👴","Il nonno ha ottant'anni.","O avô tem oitenta anos."],["la nonna","👵","La nonna cucina benissimo.","A avó cozinha muito bem."],["lo zio","🧔","Lo zio abita in Sicilia.","O tio mora na Sicília."],["il cugino","🧒","Mio cugino gioca a calcio.","Meu primo joga futebol."]]},
+{h:"Meses e aniversário",items:[["il compleanno","🎂","Il mio compleanno è a maggio.","Meu aniversário é em maio."],["gennaio","❄️","A gennaio fa freddo.","Em janeiro faz frio."],["febbraio","🎭","A febbraio c'è il carnevale.","Em fevereiro tem carnaval."],["marzo","🌱","Il dodici marzo.","Dia doze de março."],["aprile","🌷","Ad aprile piove.","Em abril chove."],["maggio","🌸","Il primo maggio.","Primeiro de maio."],["giugno","☀️","A giugno finisce la scuola.","Em junho termina a escola."],["luglio","🏖️","A luglio vado al mare.","Em julho vou à praia."],["agosto","🌞","Ad agosto tutti in vacanza.","Em agosto todos de férias."],["settembre","🍂","A settembre ricomincia il lavoro.","Em setembro recomeça o trabalho."],["ottobre","🍁","Il tre ottobre.","Dia três de outubro."],["novembre","🌫️","A novembre è nuvoloso.","Em novembro fica nublado."],["dicembre","🎄","A dicembre c'è il Natale.","Em dezembro tem o Natal."]]}],
+useful:[["Falar da família",[["Hai fratelli? — Sì, ho una sorella.","Você tem irmãos? — Sim, tenho uma irmã."],["Quando è il tuo compleanno? — Il cinque luglio.","Quando é o seu aniversário? — Dia cinco de julho."],["Questa è mia madre e questi sono i miei nonni.","Esta é minha mãe e estes são meus avós."]]]],
+tip:"<i class='it'>I parenti</i> são os parentes em geral; os pais são <i class='it'>i genitori</i>. E <i class='it'>il nipote</i> serve tanto para neto quanto para sobrinho."};
+
+VX["a1-10"]={sit:"Gostos e rotina: o que você gosta de fazer e como é a sua manhã.",scene:()=>V.likes()+IG.tl([{at:.04,it:"mi sveglio",pt:"6:30"},{at:.2,it:"mi alzo",pt:"6:40"},{at:.36,it:"faccio la doccia",pt:"6:50"},{at:.52,it:"mi vesto",pt:"7:10"},{at:.68,it:"faccio colazione",pt:"7:20"},{at:.9,it:"esco",pt:"7:45"}],["mattina","",""]),
+groups:[
+{h:"Gostos",items:[["mi piace","👍","Mi piace il caffè.","Gosto de café."],["mi piacciono","❤️","Mi piacciono i film italiani.","Gosto dos filmes italianos."],["anche a me","🙌","Mi piace il jazz. — Anche a me!","Gosto de jazz. — Eu também!"],["a me no","🙅","Mi piace il pesce. — A me no.","Gosto de peixe. — Eu não."]]},
+{h:"Rotina com verbos reflexivos",items:[["svegliarsi","⏰","Mi sveglio alle sei e mezza.","Acordo às seis e meia."],["alzarsi","🛏️","Mi alzo subito.","Levanto logo."],["lavarsi","🧼","Mi lavo i denti.","Escovo os dentes."],["fare la doccia","🚿","Faccio la doccia la mattina.","Tomo banho de manhã."],["vestirsi","👔","Mi vesto in fretta.","Me visto com pressa."],["chiamarsi","🪪","Come ti chiami?","Como você se chama?"],["divertirsi","🎉","Ci divertiamo alle feste.","Nos divertimos nas festas."],["riposarsi","🛋️","La domenica mi riposo.","No domingo descanso."]]},
+{h:"Refeições",items:[["la colazione","🥐","A colazione prendo un cornetto.","No café da manhã como um croissant."],["il pranzo","🍝","Il pranzo è all'una.","O almoço é à uma."],["la cena","🍽️","La cena è alle otto.","O jantar é às oito."]]},
+{h:"Sequência e agora",items:[["prima","1️⃣","Prima faccio colazione.","Primeiro tomo café."],["poi","2️⃣","Poi mi vesto.","Depois me visto."],["dopo","➡️","Dopo esco di casa.","Depois saio de casa."],["infine","🏁","Infine prendo l'autobus.","Por fim pego o ônibus."],["adesso","⏱️","Adesso sto studiando.","Agora estou estudando."],["in questo momento","⏳","In questo momento sto lavorando.","Neste momento estou trabalhando."]]}],
+useful:[["Concordar e discordar",[["Ti piace la pizza? — Sì, tantissimo!","Você gosta de pizza? — Sim, muitíssimo!"],["Non mi piace. — Neanche a me.","Não gosto. — Eu também não."]]]],
+tip:"Com <b>piacere</b>, a resposta “eu também” é <i class='it'>anche a me</i> (não <i class='it'>anch'io</i>), e “eu também não” é <i class='it'>neanche a me</i>."};
+
+/* ============================ VOCABULÁRIO EM CONTEXTO — A2 ============================ */
+VX["a2-1"]={sit:"Segunda-feira no escritório: os colegas contam o que fizeram no fim de semana.",scene:()=>V.past()+V.diary([["sabato mattina","🧹","ho pulito la casa"],["sabato pomeriggio","🛒","ho fatto la spesa"],["sabato sera","🎬","ho visto un film"],["domenica","🏛️","ho visitato un museo"]]),
+groups:[
+{h:"Quando? (marcadores do passado)",items:[["ieri","⬅️","Ieri ho lavorato tanto.","Ontem trabalhei muito."],["ieri sera","🌙","Ieri sera ho visto un film.","Ontem à noite vi um filme."],["l'altro ieri","⏪","L'altro ieri ho incontrato Marco.","Anteontem encontrei o Marco."],["stamattina","🌅","Stamattina ho preso l'autobus.","Hoje de manhã peguei o ônibus."],["la settimana scorsa","🗓️","La settimana scorsa sono andato a Roma.","Na semana passada fui a Roma."],["l'anno scorso","📆","L'anno scorso ho cambiato casa.","No ano passado mudei de casa."],["due giorni fa","⏮️","Due giorni fa ho finito il progetto.","Dois dias atrás terminei o projeto."]]},
+{h:"O que você fez?",items:[["fare una passeggiata","🚶","Domenica ho fatto una passeggiata.","Domingo dei um passeio."],["visitare un museo","🏛️","Abbiamo visitato un museo.","Visitamos um museu."],["vedere un film","🎬","Ho visto un film francese.","Vi um filme francês."],["fare la spesa","🛒","Sabato ho fatto la spesa.","Sábado fiz as compras."],["pulire la casa","🧹","Ho pulito la casa tutta la mattina.","Limpei a casa a manhã toda."],["incontrare","🤝","Ho incontrato una collega al bar.","Encontrei uma colega no bar."]]},
+{h:"Já, ainda não, acabou de",items:[["già","✅","Ho già mangiato.","Já comi."],["non… ancora","⏳","Non ho ancora finito.","Ainda não terminei."],["appena","⚡","Sono appena arrivato.","Acabei de chegar."]]},
+{h:"Particípios irregulares",items:[["fatto","🛠️","Che cosa hai fatto ieri?","O que você fez ontem?"],["visto","👀","Hai visto Giulia?","Você viu a Giulia?"],["preso","☕","Ho preso un caffè.","Tomei um café."],["scritto","✍️","Ho scritto una mail al capo.","Escrevi um e-mail para o chefe."],["letto","📖","Ho letto un bel libro.","Li um livro bom."],["detto","💬","Che cosa ha detto?","O que ele disse?"]]}],
+useful:[["Segunda de manhã",[["Com'è andato il fine settimana?","Como foi o fim de semana?"],["Benissimo! Sono andato al mare.","Ótimo! Fui à praia."],["Niente di speciale, sono rimasto a casa.","Nada de especial, fiquei em casa."]]]],
+tip:"Os marcadores <i class='it'>ieri, la settimana scorsa, … fa</i> pedem o <b>passato prossimo</b>. <i class='it'>Già</i> e <i class='it'>ancora</i> ficam entre o auxiliar e o particípio: <i class='it'>ho già visto</i>."};
+
+VX["a2-2"]={sit:"Viagem de trem de Bolonha a Florença e uma noite no hotel.",scene:()=>V.ticket(),
+groups:[
+{h:"Na estação",items:[["la stazione","🚉","Ci vediamo alla stazione alle nove.","A gente se vê na estação às nove."],["il biglietto","🎫","Un biglietto per Firenze, per favore.","Uma passagem para Florença, por favor."],["andata e ritorno","🔁","Andata e ritorno, seconda classe.","Ida e volta, segunda classe."],["il binario","🛤️","Il treno parte dal binario tre.","O trem sai da plataforma três."],["in ritardo","⏰","Il treno è in ritardo di dieci minuti.","O trem está dez minutos atrasado."],["in orario","✅","Per fortuna è in orario.","Por sorte está no horário."],["la coincidenza","🔀","Ho perso la coincidenza a Milano.","Perdi a conexão em Milão."],["il viaggio","🧳","Buon viaggio!","Boa viagem!"],["la valigia","🧳","La valigia è pesante.","A mala está pesada."]]},
+{h:"No hotel",items:[["l'albergo","🏨","L'albergo è vicino al centro.","O hotel fica perto do centro."],["la prenotazione","📋","Ho una prenotazione a nome Manfrin.","Tenho uma reserva em nome de Manfrin."],["prenotare","🖱️","Ho prenotato due notti.","Reservei duas noites."],["la camera singola","🛏️","Una camera singola con bagno.","Um quarto de solteiro com banheiro."],["la camera doppia","🛏️","Vorrei una camera doppia.","Eu queria um quarto de casal."]]},
+{h:"Verbos de movimento (passado com essere)",items:[["partire","🚆","Sono partito alle otto.","Parti às oito."],["arrivare","📍","Siamo arrivati a mezzogiorno.","Chegamos ao meio-dia."],["salire","⬆️","Sono salita sul treno.","Subi no trem."],["scendere","⬇️","Scendiamo alla prossima fermata.","Descemos no próximo ponto."],["tornare","↩️","Sono tornato domenica sera.","Voltei domingo à noite."],["restare","📌","Siamo restati tre giorni.","Ficamos três dias."],["nascere","👶","Sono nato a Curitiba.","Nasci em Curitiba."],["diventare","🌱","È diventata ingegnere.","Ela se tornou engenheira."]]}],
+useful:[["Na bilheteria",[["A che ora parte il prossimo treno per Firenze?","A que horas sai o próximo trem para Florença?"],["Da quale binario parte?","De qual plataforma sai?"],["Devo cambiare? — Sì, a Bologna.","Preciso trocar? — Sim, em Bolonha."]]],["No hotel",[["La colazione è inclusa?","O café da manhã está incluído?"],["A che ora devo lasciare la camera?","A que horas preciso deixar o quarto?"]]]],
+tip:"Antes de embarcar, é preciso validar o bilhete regional (<i class='it'>convalidare il biglietto</i>) na maquininha da estação, senão a multa é certa."};
+
+VX["a2-3"]={sit:"No supermercado: embalagens, quantidades e a conversa no balcão de frios.",scene:()=>V.containers(),
+groups:[
+{h:"No supermercado",items:[["il supermercato","🏬","Il supermercato chiude alle nove.","O supermercado fecha às nove."],["il carrello","🛒","Prendo un carrello.","Pego um carrinho."],["la cassa","🧑‍💼","Pago alla cassa numero due.","Pago no caixa número dois."],["lo scontrino","🧾","Vuole lo scontrino?","O senhor quer o cupom?"],["in offerta","🏷️","Il caffè è in offerta.","O café está em promoção."],["fresco","🥬","Il pesce è fresco?","O peixe é fresco?"],["comprare","🛍️","Devo comprare il latte.","Preciso comprar leite."],["prendere","🤲","Prendo anche due yogurt.","Levo também dois iogurtes."]]},
+{h:"Embalagens",items:[["la bottiglia","🍾","Una bottiglia d'olio.","Uma garrafa de azeite."],["il barattolo","🫙","Un barattolo di pomodori pelati.","Um pote de tomates pelados."],["la scatola","📦","Una scatola di biscotti.","Uma caixa de biscoitos."],["il vasetto","🍯","Un vasetto di marmellata.","Um potinho de geleia."],["la lattina","🥫","Una lattina di Coca-Cola.","Uma lata de Coca-Cola."],["il pacchetto","🎁","Un pacchetto di caffè.","Um pacote de café."]]},
+{h:"Quantidades",items:[["un litro di","🥛","Un litro di latte fresco.","Um litro de leite fresco."],["mezzo chilo","⚖️","Mezzo chilo di carne macinata.","Meio quilo de carne moída."]]},
+{h:"No balcão (com ne)",items:[["quanto ne vuole?","❓","Prosciutto? Quanto ne vuole?","Presunto? Quanto o senhor quer?"],["ne vorrei due","✌️","Le mele? Ne vorrei due.","As maçãs? Queria duas."],["ce l'ho","👌","La borsa? Sì, ce l'ho.","A sacola? Sim, eu tenho."],["altro?","➕","Altro? — Sì, del pane.","Mais alguma coisa? — Sim, pão."],["basta così","✋","Basta così, grazie.","Só isso, obrigado."]]}],
+useful:[["No balcão de frios",[["Mi dà due etti di prosciutto crudo?","O senhor me dá duzentos gramas de presunto cru?"],["Lo vuole affettato sottile?","Quer fatiado fino?"],["Ecco a Lei. Altro?","Aqui está. Mais alguma coisa?"]]]],
+tip:"<i class='it'>Ne</i> substitui uma quantidade já mencionada: <i class='it'>Quante mele? — Ne prendo tre</i> (= três delas). Sem número, use <i class='it'>lo/la</i>: <i class='it'>Il latte? Lo prendo.</i>"};
+
+VX["a2-4"]={sit:"Aniversário da Giulia e as festas do ano: presentes, convites e votos.",scene:()=>V.holidays(),
+groups:[
+{h:"Festas e votos",items:[["la festa","🎉","Sabato faccio una festa.","Sábado faço uma festa."],["festeggiare","🥂","Festeggiamo il compleanno di Giulia.","Comemoramos o aniversário da Giulia."],["tanti auguri!","🎊","Tanti auguri, Giulia!","Parabéns, Giulia!"],["buon compleanno!","🎂","Buon compleanno, Marco!","Feliz aniversário, Marco!"],["fare gli auguri","💌","Ho telefonato per fare gli auguri.","Telefonei para dar os parabéns."],["il Natale","🎄","Buon Natale a tutti!","Feliz Natal a todos!"],["il Capodanno","🎆","A Capodanno andiamo in piazza.","No Ano-Novo vamos à praça."],["la Pasqua","🐣","Buona Pasqua!","Feliz Páscoa!"],["la sorpresa","🎁","È una sorpresa: non dire niente!","É surpresa: não diga nada!"]]},
+{h:"Presentes",items:[["il regalo","🎁","Che bel regalo!","Que presente bonito!"],["il mazzo di fiori","💐","Le regalo un mazzo di fiori.","Dou a ela um buquê de flores."],["il dolce","🍰","Porto io il dolce.","Eu levo a sobremesa."]]},
+{h:"Verbos “dar algo a alguém”",items:[["regalare","🎀","Gli regalo un libro.","Dou um livro de presente a ele."],["dare","🤲","Le do il mio numero.","Dou o meu número a ela."],["mandare","📨","Ti mando la foto.","Te mando a foto."],["prestare","🔄","Mi presti la macchina?","Você me empresta o carro?"],["scrivere","✍️","Le scrivo un biglietto.","Escrevo um cartão para ela."],["telefonare","📞","Telefono a mia madre.","Telefono para minha mãe."]]},
+{h:"Convidar",items:[["invitare","🙋","Ti invito alla mia festa.","Te convido para minha festa."],["l'invito","✉️","Grazie per l'invito!","Obrigado pelo convite!"]]}],
+useful:[["Cartão de aniversário",[["Tanti auguri di buon compleanno!","Muitas felicidades e feliz aniversário!"],["Ti auguro una giornata bellissima.","Te desejo um dia lindo."],["Un abbraccio, Lucas","Um abraço, Lucas"]]],["Aceitar um convite",[["Grazie, vengo volentieri! Porto qualcosa?","Obrigado, vou com prazer! Levo alguma coisa?"]]]],
+tip:"Os verbos de “dar/mandar/escrever <b>a</b> alguém” pedem pronome indireto: <i class='it'>gli</i> (a ele), <i class='it'>le</i> (a ela), <i class='it'>Le</i> (ao senhor/à senhora)."};
+
+VX["a2-5"]={sit:"Lembranças de infância: como era a vida, a escola e o bairro.",scene:()=>V.thenNow(),
+groups:[
+{h:"A infância",items:[["l'infanzia","🧸","Ho avuto un'infanzia felice.","Tive uma infância feliz."],["da bambino","👦","Da bambino abitavo in campagna.","Quando criança eu morava no interior."],["da bambina","👧","Da bambina ero timida.","Quando criança eu era tímida."],["il giocattolo","🪀","Il mio giocattolo preferito era un treno.","Meu brinquedo preferido era um trenzinho."],["giocare","⚽","Giocavo a calcio in strada.","Eu jogava bola na rua."],["crescere","🌱","Sono cresciuto a Curitiba.","Cresci em Curitiba."],["la nonna","👵","La nonna mi raccontava storie.","A avó me contava histórias."]]},
+{h:"Escola e lugar",items:[["la scuola elementare","🏫","La scuola elementare era vicina a casa.","A escola primária ficava perto de casa."],["il maestro","🧑‍🏫","Il maestro era molto severo.","O professor era muito severo."],["il quartiere","🏘️","Il mio quartiere era tranquillo.","Meu bairro era tranquilo."],["abitare in campagna","🌾","Abitavamo in campagna.","Morávamos no interior."]]},
+{h:"Como você era?",items:[["timido","🙈","Ero un bambino timido.","Eu era uma criança tímida."],["vivace","🤸","Mia sorella era molto vivace.","Minha irmã era muito agitada."]]},
+{h:"Hábitos do passado",items:[["di solito","🔁","Di solito andavo a scuola a piedi.","Geralmente eu ia à escola a pé."],["sempre","♾️","D'estate andavamo sempre al mare.","No verão íamos sempre à praia."],["ogni estate","☀️","Ogni estate visitavo i nonni.","Todo verão eu visitava os avós."],["una volta","🕰️","Una volta non c'era internet.","Antigamente não havia internet."],["mentre","↔️","Mentre studiavo, ascoltavo la radio.","Enquanto estudava, ouvia rádio."]]},
+{h:"Lembrar",items:[["ricordare","💭","Ricordo bene la mia prima maestra.","Lembro bem da minha primeira professora."],["il ricordo","🖼️","È un bel ricordo.","É uma boa lembrança."]]}],
+useful:[["Contar lembranças",[["Quando ero piccolo, abitavo in un piccolo paese.","Quando eu era pequeno, morava numa cidadezinha."],["Ti ricordi? Andavamo sempre al parco.","Você lembra? A gente ia sempre ao parque."],["Com'eri da bambino? — Ero molto vivace.","Como você era quando criança? — Era muito agitado."]]]],
+tip:"Descrições e hábitos do passado vão no <b>imperfetto</b> (<i class='it'>ero, abitavo, giocavo</i>). Um fato pontual, no passato prossimo: <i class='it'>un giorno sono caduto</i>."};
+
+VX["a2-6"]={sit:"Planejar as férias: destino, previsão do tempo e o que vamos fazer.",scene:()=>V.forecast(),
+groups:[
+{h:"Destinos",items:[["le vacanze","🏝️","Dove andrai in vacanza?","Aonde você vai nas férias?"],["il mare","🌊","Andremo al mare in Puglia.","Vamos à praia na Puglia."],["la montagna","🏔️","D'inverno preferisco la montagna.","No inverno prefiro a montanha."],["la gita","🚌","Domani facciamo una gita a Siena.","Amanhã fazemos um passeio a Siena."],["il programma","📝","Qual è il programma per domani?","Qual é o plano para amanhã?"],["prenotare","🖱️","Prenoterò l'albergo stasera.","Vou reservar o hotel hoje à noite."],["promettere","🤞","Ti prometto che verrò.","Te prometo que vou."]]},
+{h:"O tempo",items:[["che tempo fa?","🌡️","Che tempo fa a Roma?","Como está o tempo em Roma?"],["fa bel tempo","🌤️","Oggi fa bel tempo.","Hoje o tempo está bom."],["c'è il sole","☀️","C'è il sole: andiamo in spiaggia!","Está sol: vamos à praia!"],["nuvoloso","☁️","Il cielo è nuvoloso.","O céu está nublado."],["piove","🌧️","Piove da stamattina.","Chove desde hoje cedo."],["nevica","🌨️","In montagna nevica.","Na montanha neva."],["fa caldo","🥵","Ad agosto fa molto caldo.","Em agosto faz muito calor."],["fa freddo","🥶","A gennaio fa freddo.","Em janeiro faz frio."],["le previsioni del tempo","📺","Le previsioni dicono pioggia.","A previsão diz chuva."]]},
+{h:"Quando? (futuro)",items:[["domani","➡️","Domani partirò presto.","Amanhã vou partir cedo."],["dopodomani","⏩","Dopodomani torneremo.","Depois de amanhã voltaremos."],["la settimana prossima","🗓️","La settimana prossima avrò ferie.","Semana que vem estarei de folga."],["tra un mese","📅","Tra un mese sarò in Italia.","Daqui a um mês estarei na Itália."],["l'anno prossimo","🎯","L'anno prossimo studierò di più.","Ano que vem vou estudar mais."]]}],
+useful:[["Fazer planos",[["Che cosa farai quest'estate?","O que você vai fazer neste verão?"],["Se farà bel tempo, andremo al mare.","Se o tempo estiver bom, iremos à praia."],["Non so ancora, forse resterò a casa.","Ainda não sei, talvez fique em casa."]]]],
+tip:"Tempo atmosférico usa <b>fare</b>: <i class='it'>fa caldo, fa bel tempo</i>. Chuva e neve são verbos: <i class='it'>piove, nevica</i>. E depois de <i class='it'>se</i> com ideia futura, o italiano também usa o futuro: <i class='it'>se pioverà…</i>."};
+
+VX["a2-7"]={sit:"Numa loja de roupas em época de liquidação: experimentar, tamanho e pagamento.",scene:()=>V.clothes(),
+groups:[
+{h:"Roupas",items:[["la giacca","🧥","Questa giacca è elegante.","Este paletó é elegante."],["la camicia","👔","Una camicia bianca per il lavoro.","Uma camisa branca para o trabalho."],["i pantaloni","👖","I pantaloni sono troppo lunghi.","A calça está comprida demais."],["la gonna","👗","Una gonna blu.","Uma saia azul."],["il cappotto","🧥","Il cappotto costa troppo.","O casaco custa caro demais."],["le scarpe","👞","Le scarpe nere sono in vetrina.","Os sapatos pretos estão na vitrine."]]},
+{h:"Experimentar",items:[["la commessa","🛍️","La commessa è molto gentile.","A vendedora é muito gentil."],["che taglia porta?","❓","Che taglia porta? — La 48.","Que tamanho o senhor usa? — 48."],["la taglia","📏","Avete una taglia più grande?","Vocês têm um tamanho maior?"],["il numero","👟","Porto il numero 42.","Calço 42."],["provare","🪞","Posso provarla?","Posso experimentá-la?"],["il camerino","🚪","Il camerino è in fondo.","O provador fica no fundo."],["mi sta bene","😍","Questa giacca mi sta bene.","Este paletó fica bem em mim."],["stretto","🤏","È un po' stretta.","Está um pouco apertada."],["largo","↔️","I pantaloni sono larghi.","A calça está folgada."]]},
+{h:"Preço e pagamento",items:[["i saldi","🏷️","A gennaio ci sono i saldi.","Em janeiro tem liquidação."],["lo sconto","➖","C'è il trenta per cento di sconto.","Tem trinta por cento de desconto."],["costare","💶","Quanto costa questa camicia?","Quanto custa esta camisa?"],["pagare in contanti","💵","Pago in contanti.","Pago em dinheiro."],["pagare con la carta","💳","Posso pagare con la carta?","Posso pagar com cartão?"]]}],
+useful:[["Na loja",[["Posso aiutarLa? — Sì, cerco una giacca.","Posso ajudá-lo? — Sim, procuro um paletó."],["Come Le sta? — Mi sta un po' stretta.","Como ficou? — Ficou um pouco apertado."],["La prendo! / Ci penso, grazie.","Vou levar! / Vou pensar, obrigado."]]]],
+tip:"Pronome direto + <i class='it'>provare</i>: <i class='it'>la giacca → la provo; i pantaloni → li provo; le scarpe → le provo</i>. No passado, o particípio concorda: <i class='it'>l'ho provata</i>."};
+
+VX["a2-8"]={sit:"Jantar fora e cozinhar em casa: o cardápio italiano e uma receita.",scene:()=>V.menu("Trattoria da Nino",[["antipasto","🥗","bruschette"],["primo","🍝","tagliatelle al ragù"],["secondo","🥩","cotoletta"],["contorno","🥔","patate al forno"],["dolce","🍮","tiramisù"]],1)+V.tools(),
+groups:[
+{h:"O cardápio",items:[["il menù","📜","Ci porta il menù, per favore?","O senhor nos traz o cardápio, por favor?"],["l'antipasto","🥗","Come antipasto, le bruschette.","De entrada, as bruschettas."],["il primo","🍝","Come primo prendo le tagliatelle.","De primeiro prato quero o tagliatelle."],["il secondo","🥩","Come secondo, una cotoletta.","De segundo prato, uma milanesa."],["il contorno","🥔","Di contorno patate al forno.","De acompanhamento, batatas assadas."],["il dolce","🍮","Per dolce, un tiramisù.","De sobremesa, um tiramisù."]]},
+{h:"No restaurante",items:[["prenotare un tavolo","📞","Vorrei prenotare un tavolo per due.","Eu queria reservar uma mesa para dois."],["il cameriere","🤵","Il cameriere è simpatico.","O garçom é simpático."],["il conto, per favore","🧾","Scusi, il conto, per favore.","Com licença, a conta, por favor."],["assaggiare","😋","Vuoi assaggiare il mio risotto?","Quer provar meu risoto?"]]},
+{h:"Na cozinha",items:[["la pentola","🍲","Metti l'acqua nella pentola.","Coloque a água na panela."],["la padella","🍳","Scalda l'olio in padella.","Aqueça o azeite na frigideira."],["il cucchiaio","🥄","Un cucchiaio di zucchero.","Uma colher de açúcar."],["il coltello","🔪","Taglia con il coltello.","Corte com a faca."]]},
+{h:"Verbos da receita",items:[["bollire","♨️","Quando l'acqua bolle, butta la pasta.","Quando a água ferver, jogue a massa."],["cuocere","🔥","Cuoci la pasta per dieci minuti.","Cozinhe a massa por dez minutos."],["tagliare","🔪","Taglia la cipolla.","Corte a cebola."],["mescolare","🥣","Mescola bene.","Misture bem."],["aggiungere","➕","Aggiungi il sale.","Acrescente o sal."],["versare","🫗","Versa il latte.","Despeje o leite."]]}],
+useful:[["Pedir no restaurante",[["Che cosa ci consiglia?","O que o senhor nos recomenda?"],["Per me un primo, grazie.","Para mim um primeiro prato, obrigado."],["Era tutto buonissimo!","Estava tudo delicioso!"]]]],
+tip:"Na receita, o imperativo informal (<i class='it'>taglia, mescola, aggiungi</i>) é o mais comum. Uma refeição completa tem <i class='it'>antipasto → primo → secondo con contorno → dolce → caffè</i>, mas ninguém é obrigado a pedir tudo!"};
+
+VX["a2-9"]={sit:"Não estou bem: no médico e na farmácia, dizendo o que dói.",scene:()=>V.body(),
+groups:[
+{h:"O corpo",items:[["la testa","🧠","Mi fa male la testa.","Minha cabeça dói."],["la gola","🗣️","Ho mal di gola.","Estou com dor de garganta."],["la schiena","🧍","Mi fa male la schiena.","Minhas costas doem."],["lo stomaco","🫃","Ho mal di stomaco.","Estou com dor de estômago."],["il braccio (le braccia)","💪","Mi fanno male le braccia.","Meus braços doem."],["la gamba","🦵","Mi sono rotto una gamba.","Quebrei uma perna."],["il piede","🦶","Mi fa male il piede destro.","Meu pé direito dói."]]},
+{h:"Sintomas",items:[["mi fa male…","🤕","Mi fa male il ginocchio.","Meu joelho dói."],["ho mal di testa","😣","Ho mal di testa da ieri.","Estou com dor de cabeça desde ontem."],["la febbre","🤒","Ho la febbre a trentotto.","Estou com febre de trinta e oito."],["il raffreddore","🤧","Ho il raffreddore.","Estou resfriado."],["la tosse","😷","Ho una tosse forte.","Estou com uma tosse forte."]]},
+{h:"Médico e farmácia",items:[["il medico","🩺","Devo andare dal medico.","Preciso ir ao médico."],["la ricetta","📄","Il medico mi ha dato la ricetta.","O médico me deu a receita."],["la farmacia","💊","La farmacia è aperta fino alle otto.","A farmácia fica aberta até as oito."],["la medicina","💊","Prendi la medicina dopo i pasti.","Tome o remédio depois das refeições."]]},
+{h:"Melhorar",items:[["riposare","🛌","Deve riposare due giorni.","O senhor deve descansar dois dias."],["stare meglio","🙂","Oggi sto meglio, grazie.","Hoje estou melhor, obrigado."],["guarire","🌈","Guarisci presto!","Melhoras!"],["sano","🍏","Mangiare sano è importante.","Comer de forma saudável é importante."]]}],
+useful:[["No consultório",[["Che cosa si sente? — Ho la febbre e mal di gola.","O que o senhor está sentindo? — Estou com febre e dor de garganta."],["Da quanto tempo? — Da tre giorni.","Desde quando? — Há três dias."],["Prenda questo sciroppo tre volte al giorno.","Tome este xarope três vezes ao dia."]]]],
+tip:"<i class='it'>Mi fa male</i> + singular, <i class='it'>mi fanno male</i> + plural (<i class='it'>le gambe</i>). Partes do corpo com plural irregular: <i class='it'>il braccio → le braccia, il ginocchio → le ginocchia, la mano → le mani</i>."};
+
+VX["a2-10"]={sit:"Trabalho numa empresa de engenharia: obra, reuniões, e-mail formal e planos de carreira.",scene:()=>V.email()+V.site(),
+groups:[
+{h:"A empresa",items:[["l'azienda","🏢","Lavoro in un'azienda di costruzioni.","Trabalho numa construtora."],["il capo","👔","Il capo è in riunione.","O chefe está em reunião."],["il collega","🧑‍💼","Il mio collega è di Torino.","Meu colega é de Turim."],["la riunione","👥","La riunione comincia alle dieci.","A reunião começa às dez."],["lo stipendio","💶","Lo stipendio arriva a fine mese.","O salário cai no fim do mês."]]},
+{h:"Obra e projeto",items:[["il progetto","📐","Il progetto è quasi finito.","O projeto está quase pronto."],["il cantiere","🏗️","Domani vado in cantiere.","Amanhã vou ao canteiro de obras."],["il sopralluogo","🔍","Facciamo un sopralluogo giovedì.","Fazemos uma vistoria na quinta."],["il preventivo","🧮","Mi manda il preventivo?","O senhor me manda o orçamento?"],["la relazione","📄","Ho scritto la relazione tecnica.","Escrevi o relatório técnico."],["la scadenza","⏰","La scadenza è venerdì.","O prazo é sexta."]]},
+{h:"E-mail formal",items:[["gentile dottore","✉️","Gentile dottore, Le scrivo per…","Prezado doutor, escrevo-lhe para…"],["allegare","📎","Le allego il preventivo.","Anexo-lhe o orçamento."],["cordiali saluti","🖋️","Cordiali saluti, Lucas Manfrin","Cordialmente, Lucas Manfrin"]]},
+{h:"Carreira e desejos",items:[["il colloquio","🤝","Ho un colloquio di lavoro lunedì.","Tenho uma entrevista de emprego na segunda."],["il curriculum","📑","Ho mandato il curriculum.","Mandei o currículo."],["l'esperienza","🎓","Ho dieci anni di esperienza.","Tenho dez anos de experiência."],["mi piacerebbe","✨","Mi piacerebbe lavorare in Italia.","Eu gostaria de trabalhar na Itália."],["cambiare lavoro","🔄","Vorrei cambiare lavoro.","Eu queria mudar de emprego."],["il sogno","💭","Il mio sogno è vivere a Bologna.","Meu sonho é morar em Bolonha."]]}],
+useful:[["Na reunião",[["Possiamo spostare la riunione a domani?","Podemos mudar a reunião para amanhã?"],["Entro quando serve la relazione?","Até quando precisa do relatório?"]]],["Na entrevista",[["Mi parli della Sua esperienza.","Fale-me da sua experiência."],["Mi piacerebbe crescere in questa azienda.","Eu gostaria de crescer nesta empresa."]]]],
+tip:"No e-mail formal, o pronome de cortesia vai com maiúscula: <i class='it'>Le scrivo, La ringrazio</i>. Feche com <i class='it'>Cordiali saluti</i> ou <i class='it'>Distinti saluti</i>."};
+
 /* ============================ VERBOS ============================ */
 const P=["io","tu","lui/lei","noi","voi","loro"];
 const IRR_PRES={essere:"sono sei è siamo siete sono",avere:"ho hai ha abbiamo avete hanno",andare:"vado vai va andiamo andate vanno",fare:"faccio fai fa facciamo fate fanno",venire:"vengo vieni viene veniamo venite vengono",stare:"sto stai sta stiamo state stanno",dire:"dico dici dice diciamo dite dicono",uscire:"esco esci esce usciamo uscite escono",potere:"posso puoi può possiamo potete possono",volere:"voglio vuoi vuole vogliamo volete vogliono",dovere:"devo devi deve dobbiamo dovete devono",sapere:"so sai sa sappiamo sapete sanno",dare:"do dai dà diamo date danno",bere:"bevo bevi beve beviamo bevete bevono",rimanere:"rimango rimani rimane rimaniamo rimanete rimangono",salire:"salgo sali sale saliamo salite salgono",scegliere:"scelgo scegli sceglie scegliamo scegliete scelgono",tenere:"tengo tieni tiene teniamo tenete tengono",piacere:"piaccio piaci piace piacciamo piacete piacciono",tradurre:"traduco traduci traduce traduciamo traducete traducono"};
@@ -1992,8 +2434,9 @@ function renderTopic(){const t=CUR,c=tprog(t.id),idx=COURSE.indexOf(t),nxt=COURS
  $$("#cTopic [data-part]").forEach(b=>b.onclick=()=>{CPART=b.dataset.part;RUN=null;renderTopic();$("#cTopic").scrollIntoView({block:"start"})});
  const body=$("#cBody");
  if(CPART==="voc"){markSeen("voc");
-  body.innerHTML=`<p class="muted small">${t.voc.length} palavras e expressões. Toque numa palavra para ver exemplos; o alto-falante pronuncia. Ao abrir este tópico, elas são liberadas nos cartões de revisão.</p>
-  <div class="vgrid">${t.voc.map(v=>`<div class="vcell"><div><span class="it">${esc(v[0])}</span><span class="pt">${esc(v[1])}</span></div>${spkBtn(v[0])}</div>`).join("")}</div>
+  const vc=typeof renderVocabCtx==="function"?renderVocabCtx(t):null;
+  body.innerHTML=(vc?`<p class="muted small">${t.voc.length} palavras e expressões, em contexto. Toque em qualquer palavra italiana para ver o significado; o alto-falante pronuncia a palavra e o exemplo.</p>`+vc:`<p class="muted small">${t.voc.length} palavras e expressões. Toque numa palavra para ver exemplos; o alto-falante pronuncia.</p>
+  <div class="vgrid">${t.voc.map(v=>`<div class="vcell"><div><span class="it">${esc(v[0])}</span><span class="pt">${esc(v[1])}</span></div>${spkBtn(v[0])}</div>`).join("")}</div>`)+`
   <button class="btn primary" data-part-go="gram">Ir para a gramática →</button>`}
  else if(CPART==="gram"){markSeen("gram");
   body.innerHTML=t.gram.map(g=>`<section class="gsec"><h3>${esc(g.h)}</h3>${g.html}</section>`).join("")+`<button class="btn primary" data-part-go="hist">Ler a história do tópico →</button>`}
