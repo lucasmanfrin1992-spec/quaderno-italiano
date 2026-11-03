@@ -1,5 +1,9 @@
 {
 "days": {
+"01-01": {
+"title": "1° gennaio 1948: entra in vigore la Costituzione",
+"topic": "Accadde oggi"
+},
 "11-03": {
 "title": "Bologna, la città dei portici",
 "topic": "Città"
@@ -199,6 +203,42 @@
 "12-22": {
 "title": "Una monetina nella Fontana di Trevi",
 "topic": "Città"
+},
+"12-23": {
+"title": "Tutti a casa per Natale",
+"topic": "Società"
+},
+"12-24": {
+"title": "Natale 1223: San Francesco e il primo presepe",
+"topic": "Accadde oggi"
+},
+"12-25": {
+"title": "Buon Natale! Come si festeggia il 25 dicembre",
+"topic": "Tradizioni"
+},
+"12-26": {
+"title": "26 dicembre: Santo Stefano, la festa dopo la festa",
+"topic": "Accadde oggi"
+},
+"12-27": {
+"title": "La Lotteria Italia e il sogno di diventare milionari",
+"topic": "Società"
+},
+"12-28": {
+"title": "Lenticchie a Capodanno per diventare ricchi",
+"topic": "Cucina"
+},
+"12-29": {
+"title": "Auguri, auguroni, tanti auguri!",
+"topic": "Lingua"
+},
+"12-30": {
+"title": "I buoni propositi per l'anno nuovo",
+"topic": "Società"
+},
+"12-31": {
+"title": "31 dicembre: la notte di San Silvestro",
+"topic": "Accadde oggi"
 }
 }
 }
