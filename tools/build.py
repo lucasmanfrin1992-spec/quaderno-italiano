@@ -35,6 +35,7 @@ inst=inst[:inst.index('<button class="btn primary" id="installBtn" hidden>Instal
 out=out.replace('    <div class="homegrid">',inst+'    <div class="homegrid">',1)
 bk='''<p class="small muted">O progresso fica salvo neste aparelho, separado por perfil.</p>
     </div>
+    <div class="card stack" id="syncCard"></div>
     <div class="card stack">
       <h3>Backup do progresso</h3>
       <p class="small muted">O progresso deste perfil fica salvo neste aparelho. Para levá-lo a outro celular ou computador, exporte aqui e importe lá, dentro do mesmo perfil.</p>
@@ -66,6 +67,11 @@ tail=tail.replace('''const c=Object.keys(o.cards||{}).length,n=Object.keys(o.new
  return`${c} cartões · ${n} notícias lidas · ${f} palavras salvas`}''','''const c=o.resetEpoch===RESET_EPOCH?Object.keys(o.cards||{}).length:0,n=Object.keys(o.newsDone||{}).length,t=Object.values(o.course||{}).filter(x=>x&&x.best>=70).length;
  return`${t} tópicos concluídos · ${c} cartões · ${n} notícias lidas`}''')
 assert 'tópicos concluídos' in tail, 'profstats'
+import re as _re
+tail=_re.sub(r'/\* ==== SYNC-BEGIN ==== \*/[\s\S]*?/\* ==== SYNC-END ==== \*/\n?','',tail)
+_ini='/* ============================ INÍCIO ============================ */'
+assert _ini in tail,'inicio'
+tail=tail.replace(_ini,r('pwa_sync.js')+_ini,1)
 out=out[:out.rindex('</script>')]+tail+'</script>\n\n</body>\n</html>\n'
 open(os.path.join(ROOT,'index.html'),'w').write(out)
 print(len(out))
