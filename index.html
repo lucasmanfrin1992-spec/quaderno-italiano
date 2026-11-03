@@ -3642,12 +3642,18 @@ function renderHomeNews(){const el=$("#homeNews");if(!el)return;const n=NEWS.lat
 function renderNewsAll(){renderHomeNews();updateFavCount();
  if(!$("#v-news").hidden){if(NEWS.rendered!==NEWS.cur||!NEWS.cur)renderNews();if(!$("#ns-cal").hidden)renderCal()}}
 
-/* PWA: notícias em arquivos estáticos (news/index.json + news/AAAA-MM-DD.json) */
-async function loadNews(d){if(NEWS.cache[d])return NEWS.cache[d];const r=await fetch("news/"+d+".json");if(!r.ok)throw new Error("http "+r.status);const n=await r.json();n.date=n.date||d;NEWS.cache[d]=n;return n}
-async function initCloud(){try{const r=await fetch("news/index.json",{cache:"no-cache"});if(!r.ok)throw 0;const idx=await r.json();
-  NEWS.index=idx.days||{};const dates=Object.keys(NEWS.index).sort();
-  if(!dates.length){NEWS.state="empty";renderNewsAll();return}
-  const last=dates[dates.length-1];const n=await loadNews(last);NEWS.latest=n;if(!NEWS.curDate||NEWS.curDate===last){NEWS.cur=n;NEWS.curDate=last}NEWS.state="ok"}
+/* PWA: notícias em arquivos estáticos (news/index.json + news/AAAA-MM-DD.json) e biblioteca anual (news/ano/MM-DD.json, um texto liberado por dia) */
+const ANO_START="2026-11-03";let ANO=null;
+async function loadAno(){if(ANO)return ANO;try{const r=await fetch("news/ano/index.json",{cache:"no-cache"});if(r.ok)ANO=(await r.json()).days||{}}catch(e){}return ANO||{}}
+function anoDates(){const out={};if(!ANO)return out;const d=new Date(ANO_START+"T12:00:00"),t=today();
+ while(fmt(d)<=t){const k=fmt(d).slice(5);if(ANO[k])out[fmt(d)]=Object.assign({ano:1},ANO[k]);d.setDate(d.getDate()+1)}return out}
+async function loadNews(d){if(NEWS.cache[d])return NEWS.cache[d];const e=NEWS.index[d];
+ const r=await fetch(e&&e.ano?"news/ano/"+d.slice(5)+".json":"news/"+d+".json");if(!r.ok)throw new Error("http "+r.status);const n=await r.json();n.date=d;NEWS.cache[d]=n;return n}
+async function initCloud(){try{let real={};try{const r=await fetch("news/index.json",{cache:"no-cache"});if(r.ok)real=(await r.json()).days||{}}catch(e){}
+  await loadAno();const t=today();NEWS.index=Object.assign({},real,anoDates());Object.keys(NEWS.index).forEach(k=>{if(k>t)delete NEWS.index[k]});
+  const dates=Object.keys(NEWS.index).sort();
+  if(!dates.length){NEWS.state=navigator.onLine===false?"offline":"empty";renderNewsAll();return}
+  const last=dates[dates.length-1];const n=await loadNews(last);NEWS.latest=n;if(!NEWS.curDate||NEWS.curDate===last||!NEWS.index[NEWS.curDate]){NEWS.cur=n;NEWS.curDate=last}NEWS.state="ok"}
  catch(e){NEWS.state=navigator.onLine===false?"offline":"error"}renderNewsAll()}
 window.addEventListener("online",()=>{if(NEWS.state!=="ok")initCloud()});
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&NEWS.latest&&NEWS.latest.date!==today())initCloud()});
