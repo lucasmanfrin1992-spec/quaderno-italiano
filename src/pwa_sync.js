@@ -2,7 +2,7 @@
 /* ============================ CONTA E SINCRONIZAÇÃO (Supabase) ============================ */
 const SB_URL="https://velritgzwafzbrpqznqz.supabase.co",SB_KEY="sb_publishable_P6DotFxWAHaXo-eEOtrwgA_e5o35PEl";
 const AUTH_KEY="nonna.auth:"+(CURP?CURP.id:"__sem-perfil"),SYNCED_KEY="nonna.synced:"+(CURP?CURP.id:"__sem-perfil");
-const SYNC_ON=false; // liga quando a tabela "progress" existir no Supabase
+const SYNC_ON=true; // liga quando a tabela "progress" existir no Supabase
 const SYNC={session:null,state:"off",last:0,msg:"",busy:false};
 try{SYNC.session=JSON.parse(localStorage.getItem(AUTH_KEY)||"null")}catch(e){}
 function sbSaveSession(s){SYNC.session=s;try{s?localStorage.setItem(AUTH_KEY,JSON.stringify(s)):localStorage.removeItem(AUTH_KEY)}catch(e){}}
