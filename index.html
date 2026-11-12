@@ -455,8 +455,45 @@ textarea:focus-visible{outline:2px solid var(--saffron);outline-offset:1px}
 .dtx .it{font-style:normal;color:var(--ink);font-size:1.05rem}
 .dpt{font-size:.86rem;color:var(--muted)}
 .show-it .dpt{display:none}
-.show-none .dtx{visibility:hidden}
-.show-none .dl.cur .dtx{visibility:hidden}
+.show-none .dtx,.show-after .dl:not(.seen) .dtx{filter:blur(7px);opacity:.5;pointer-events:none;user-select:none}
+/* shadowing: estúdio em 5 etapas */
+.sdots{display:flex;gap:4px;margin-top:6px}
+.sdots i{width:9px;height:9px;border-radius:50%;background:var(--line);display:block}
+.sdots i.on{background:var(--ok)}
+.shday{display:grid;gap:10px;padding:14px 18px}
+.shday>div:first-child{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.shday b{font-family:var(--display);font-size:1.5rem;font-weight:700}
+.shday .progress i{background:var(--ok)}
+details.showto>summary,details.padj>summary{list-style:none;cursor:pointer;display:flex;flex-direction:column;gap:2px;position:relative;padding-right:30px}
+details.showto>summary::-webkit-details-marker,details.padj>summary::-webkit-details-marker{display:none}
+details.showto>summary::after,details.padj>summary::after{content:"";position:absolute;right:6px;top:50%;width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-70%) rotate(45deg);transition:transform .2s}
+details.showto[open]>summary::after,details.padj[open]>summary::after{transform:translateY(-30%) rotate(-135deg)}
+.padj{padding:12px 16px}
+.padj .popts{margin-top:12px}
+.popts label[hidden]{display:none}
+.popts .pchk{flex-direction:row;align-items:center;gap:8px;grid-column:1/-1;font-size:.9rem;color:var(--ink)}
+.pchk input{width:20px;height:20px;accent-color:var(--cobalt);flex:none}
+.stp5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.stp5 button{border:2px solid var(--line);background:var(--surface);border-radius:14px;padding:8px 2px;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:68px;color:var(--muted)}
+.stp5 button b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--line);color:var(--ink);font-size:.85rem;flex:none}
+.stp5 button span{font-size:.68rem;font-weight:700;line-height:1.15;text-align:center;text-wrap:balance}
+.stp5 button.done b{background:var(--ok-soft);color:var(--ok)}
+.stp5 button.on{border-color:var(--cobalt);background:var(--cobalt-soft);color:var(--ink)}
+.stp5 button.on b{background:var(--cobalt);color:var(--surface)}
+.stepd{font-size:.95rem}
+.pgap{display:grid;gap:8px}
+.pgbar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.pgbar i{display:block;height:100%;width:100%;background:var(--saffron)}
+.pgbtn{justify-content:center}
+.pfilt svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;vertical-align:-2px;stroke-linecap:round;stroke-linejoin:round}
+.dact{display:flex;flex-direction:column;gap:6px}
+.dhard svg{stroke:var(--muted)}
+.dhard[aria-pressed="true"]{background:var(--saffron-soft);border-color:var(--saffron)}
+.dhard[aria-pressed="true"] svg{stroke:var(--ink);fill:var(--saffron)}
+.dl.hard{border-left:4px solid var(--saffron)}
+.dlg.only .dl:not(.hard){opacity:.4}
+button.w.say{background-color:var(--saffron);color:#2B1D16;box-shadow:0 0 0 2px var(--saffron)}
+.pdone .row{margin-top:4px}
 .dl.cur{border-color:var(--cobalt);box-shadow:0 0 0 2px var(--cobalt-soft)}
 .dl.you{border-color:var(--saffron);background:var(--saffron-soft)}
 @media (max-width:420px){.dl{grid-template-columns:1fr auto}.dsp{grid-column:1/-1;padding-top:0}}
@@ -2718,7 +2755,7 @@ function dlgWire(root,d){if(!d)return;
 
 /* ============================ VERBOS ============================ */
 const P=["io","tu","lui/lei","noi","voi","loro"];
-const IRR_PRES={essere:"sono sei è siamo siete sono",avere:"ho hai ha abbiamo avete hanno",andare:"vado vai va andiamo andate vanno",fare:"faccio fai fa facciamo fate fanno",venire:"vengo vieni viene veniamo venite vengono",stare:"sto stai sta stiamo state stanno",dire:"dico dici dice diciamo dite dicono",uscire:"esco esci esce usciamo uscite escono",potere:"posso puoi può possiamo potete possono",volere:"voglio vuoi vuole vogliamo volete vogliono",dovere:"devo devi deve dobbiamo dovete devono",sapere:"so sai sa sappiamo sapete sanno",dare:"do dai dà diamo date danno",bere:"bevo bevi beve beviamo bevete bevono",rimanere:"rimango rimani rimane rimaniamo rimanete rimangono",salire:"salgo sali sale saliamo salite salgono",scegliere:"scelgo scegli sceglie scegliamo scegliete scelgono",tenere:"tengo tieni tiene teniamo tenete tengono",piacere:"piaccio piaci piace piacciamo piacete piacciono",tradurre:"traduco traduci traduce traduciamo traducete traducono"};
+const IRR_PRES={essere:"sono sei è siamo siete sono",avere:"ho hai ha abbiamo avete hanno",andare:"vado vai va andiamo andate vanno",fare:"faccio fai fa facciamo fate fanno",venire:"vengo vieni viene veniamo venite vengono",stare:"sto stai sta stiamo state stanno",dire:"dico dici dice diciamo dite dicono",uscire:"esco esci esce usciamo uscite escono",potere:"posso puoi può possiamo potete possono",volere:"voglio vuoi vuole vogliamo volete vogliono",dovere:"devo devi deve dobbiamo dovete devono",sapere:"so sai sa sappiamo sapete sanno",dare:"do dai dà diamo date danno",bere:"bevo bevi beve beviamo bevete bevono",rimanere:"rimango rimani rimane rimaniamo rimanete rimangono",salire:"salgo sali sale saliamo salite salgono",scegliere:"scelgo scegli sceglie scegliamo scegliete scelgono",morire:"muoio muori muore moriamo morite muoiono",cuocere:"cuocio cuoci cuoce cuociamo cuocete cuociono",tenere:"tengo tieni tiene teniamo tenete tengono",piacere:"piaccio piaci piace piacciamo piacete piacciono",tradurre:"traduco traduci traduce traduciamo traducete traducono"};
 const IRR_FUT={essere:"sar",avere:"avr",andare:"andr",fare:"far",dare:"dar",stare:"star",venire:"verr",volere:"vorr",potere:"potr",dovere:"dovr",sapere:"sapr",vedere:"vedr",vivere:"vivr",bere:"berr",rimanere:"rimarr",dire:"dir",tenere:"terr",cadere:"cadr"};
 const IRR_IMP={essere:"ero eri era eravamo eravate erano",fare:"facevo facevi faceva facevamo facevate facevano",bere:"bevevo bevevi beveva bevevamo bevevate bevevano",dire:"dicevo dicevi diceva dicevamo dicevate dicevano",tradurre:"traducevo traducevi traduceva traducevamo traducevate traducevano"};
 const VERBS=[
@@ -2733,14 +2770,14 @@ function join(stem,end,isAre){if(isAre&&/[cg]$/.test(stem)&&/^[ie]/.test(end))st
 function pres(v){if(IRR_PRES[v.inf])return IRR_PRES[v.inf].split(" ");const s=v.inf.slice(0,-3),e=v.inf.slice(-3);
  let E=e==="are"?["o","i","a","iamo","ate","ano"]:e==="ere"?["o","i","e","iamo","ete","ono"]:v.isc?["isco","isci","isce","iamo","ite","iscono"]:["o","i","e","iamo","ite","ono"];
  return E.map(x=>join(s,x,e==="are"))}
-function futStem(v){if(IRR_FUT[v.inf])return IRR_FUT[v.inf];const s=v.inf.slice(0,-3),e=v.inf.slice(-3);
+function futStem(v){if(IRR_FUT[v.inf])return IRR_FUT[v.inf];if(v.inf.endsWith("rre"))return v.inf.slice(0,-1);const s=v.inf.slice(0,-3),e=v.inf.slice(-3);
  if(e==="ire")return s+"ir";if(e==="ere")return s+"er";if(/(ci|gi)$/.test(s))return s.slice(0,-1)+"er";return join(s,"er",true)}
 function fut(v){const st=futStem(v);return["ò","ai","à","emo","ete","anno"].map(x=>st+x)}
 function cond(v){const st=futStem(v);return["ei","esti","ebbe","emmo","este","ebbero"].map(x=>st+x)}
 function imperf(v){if(IRR_IMP[v.inf])return IRR_IMP[v.inf].split(" ");const st=v.inf.slice(0,-2);return["vo","vi","va","vamo","vate","vano"].map(x=>st+x)}
 function pass(v){const A=v.aux==="a"?["ho","hai","ha","abbiamo","avete","hanno"]:["sono","sei","è","siamo","siete","sono"];
  return A.map((a,i)=>a+" "+(v.aux==="e"?v.pp.slice(0,-1)+(i<3?"o":"i"):v.pp))}
-function gerund(v){const irr={fare:"facendo",bere:"bevendo",dire:"dicendo",tradurre:"traducendo"};if(irr[v.inf])return irr[v.inf];const s=v.inf.slice(0,-3);return s+(v.inf.endsWith("are")?"ando":"endo")}
+function gerund(v){const irr={fare:"facendo",bere:"bevendo",dire:"dicendo",tradurre:"traducendo"};if(irr[v.inf])return irr[v.inf];if(v.inf.endsWith("urre"))return v.inf.slice(0,-3)+"cendo";if(v.inf.endsWith("porre"))return v.inf.slice(0,-3)+"nendo";if(/.fare$/.test(v.inf))return v.inf.slice(0,-2)+"cendo";const s=v.inf.slice(0,-3);return s+(v.inf.endsWith("are")?"ando":"endo")}
 const TENSES={pres:{n:"presente",f:pres},pass:{n:"passato prossimo",f:pass},fut:{n:"futuro",f:fut},imp:{n:"imperfetto",f:imperf},cond:{n:"condizionale",f:cond}};
 
 /* ============================ ESTADO ============================ */
@@ -2780,7 +2817,7 @@ const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random(
 const pick=a=>a[Math.random()*a.length|0];
 const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[’`]/g,"'").replace(/\s+/g," ").trim();
 const canSpeak="speechSynthesis" in window;
-function speak(t){if(!canSpeak)return;try{const u=new SpeechSynthesisUtterance(String(t).replace(/\(.*?\)/g,"").replace(/\.\.\./g,"").replace(/___/g,""));u.lang="it-IT";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+function speak(t){if(!canSpeak)return;try{const u=new SpeechSynthesisUtterance(String(t).replace(/\(.*?\)/g,"").replace(/\.\.\./g,"").replace(/___/g,""));u.lang="it-IT";u.rate=.9;const bv=typeof bestVoice==="function"?bestVoice():null;if(bv)u.voice=bv;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
 function spkBtn(t){return canSpeak?`<button class="spk" data-say="${esc(t)}" aria-label="Ouvir pronúncia">${SPK_SVG}</button>`:""}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-say]");if(b){e.stopPropagation();speak(b.dataset.say)}});
 const TOPIC=Object.fromEntries(COURSE.map(t=>[t.id,t]));
@@ -2811,10 +2848,16 @@ function lookupLocal(k,surface){k=k.toLowerCase().replace(/’/g,"'");const kk=k
  let e=null;const f=FUNC[k]||FUNC[kk];if(f)e=Object.assign({},f);
  const vf=FORMS[kk];
  const voc=VOCIDX[kk]||VOCIDX[k];
- if(!e&&voc)e={lemma:voc.lemma,meaning:voc.meaning,pos:voc.inflected?"forma flexionada":"",note:voc.inflected?"Forma de “"+voc.lemma+"” (plural ou feminino).":"",topic:voc.topic};
+ const vocE=()=>({lemma:voc.lemma,meaning:voc.meaning,pos:voc.inflected?"forma flexionada":"",note:voc.inflected?"Forma de “"+voc.lemma+"” (plural ou feminino).":"",topic:voc.topic});
+ if(!e&&voc&&!voc.inflected)e=vocE();
+ if(!e&&(XIDX[kk]||XIDX[k]))e=Object.assign({},XIDX[kk]||XIDX[k]);
+ if(!e&&XINF[kk])e=Object.assign({},XINF[kk]);
+ if(!e&&voc&&!(voc.inflected&&vf))e=vocE();
+ if(!e&&!vf)e=xFallback(k,kk);
  if(!e&&!vf)return null;
  if(!e)e={lemma:vf[0].v.inf,meaning:vf[0].v.pt,pos:"verbo"};
- if(vf)e.verb=vf;
+ if(vf&&!e.verb)e.verb=vf;
+ xAlso(e,kk);
  e.found=findExamples(surface||kk,3);
  e.phrases=PHRASES.filter(p=>new RegExp("(^|[^"+LET+"])"+kk.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"($|[^"+LET+"])","i").test(p.it)).slice(0,4);
  return e}
@@ -3040,6 +3083,1843 @@ function renderHome(){const {due,nw}=updateChips();$("#nDue").textContent=due;$(
  const sp=PODS.find(p=>p.topic===t.id)||PODS[0],ss=S.shadow[sp.topic];
  $("#homeShadow").innerHTML=`<div class="row" style="justify-content:space-between"><span class="label">Shadowing · ${esc(TOPIC[sp.topic].lvl)} · tópico ${TOPIC[sp.topic].n}</span>${ss?`<span class="pill ok">${ss.n}×</span>`:""}</div><h3>${esc(sp.t)}</h3><p class="small muted">${esc(sp.sit)}</p><div class="row"><button class="btn" data-goto="shadow" data-pod="${sp.topic}">Praticar a pronúncia</button></div>`;
  renderGoal();renderHomeReview();renderHomeWeak();renderHomeNews()}
+
+/* ============================ DICIONÁRIO AMPLIADO: DADOS ============================ */
+// Uma entrada por linha: palavra|classe|significado|formas irregulares (opcional, separadas por vírgula)
+// classes: m/f = substantivo masc./fem. · mf = dos dois gêneros · mi/fi = invariável · a = adjetivo · ai = adjetivo invariável
+//          d = indefinido/quantificador (flexiona como adjetivo) · av = advérbio · c = conjunção · pp = preposição
+//          p = pronome · i = interjeição/expressão · x = outra
+const XLEX=`
+giorno|m|dia
+giornata|f|dia (a duração do dia: una bella giornata)
+tempo|m|tempo (duração e clima)
+mese|m|mês
+anno|m|ano
+secolo|m|século
+settimana|f|semana
+minuto|m|minuto
+ora|f|hora; também «agora»
+momento|m|momento
+attimo|m|instante (un attimo! = um momento!)
+orario|m|horário
+ritardo|m|atraso (in ritardo = atrasado)
+anticipo|m|antecedência (in anticipo = adiantado)
+inizio|m|início
+fine|f|fim (il fine settimana = o fim de semana)
+futuro|m|futuro
+passato|m|passado
+presente|m|presente
+mattina|f|manhã
+mattino|m|manhã
+pomeriggio|m|tarde
+sera|f|noite (começo da noite)
+serata|f|noite (a duração: una bella serata)
+notte|f|noite (madrugada)
+mezzogiorno|m|meio-dia
+mezzanotte|f|meia-noite
+weekend|mi|fim de semana
+data|f|data
+calendario|m|calendário
+lunedì|mi|segunda-feira
+martedì|mi|terça-feira
+mercoledì|mi|quarta-feira
+giovedì|mi|quinta-feira
+venerdì|mi|sexta-feira
+sabato|m|sábado
+domenica|f|domingo
+gennaio|m|janeiro
+febbraio|m|fevereiro
+marzo|m|março
+aprile|m|abril
+maggio|m|maio
+giugno|m|junho
+luglio|m|julho
+agosto|m|agosto
+settembre|m|setembro
+ottobre|m|outubro
+novembre|m|novembro
+dicembre|m|dezembro
+primavera|f|primavera
+estate|f|verão
+autunno|m|outono
+inverno|m|inverno
+stagione|f|estação (do ano); temporada
+natale|m|Natal
+pasqua|f|Páscoa
+capodanno|m|Ano-Novo
+carnevale|m|Carnaval
+ferragosto|m|feriado de 15 de agosto
+festa|f|festa; feriado
+compleanno|m|aniversário
+regalo|m|presente
+augurio|m|voto, desejo (auguri! = parabéns! / felicidades!)
+matrimonio|m|casamento
+nozze|x|casamento, bodas (só no plural)
+cartolina|f|cartão-postal
+film|mi|filme
+bar|mi|bar, café (o lugar)
+cinema|mi|cinema
+sport|mi|esporte
+computer|mi|computador
+hotel|mi|hotel
+taxi|mi|táxi
+autobus|mi|ônibus
+tram|mi|bonde
+menu|mi|cardápio
+menù|mi|cardápio
+caffè|mi|café
+tè|mi|chá
+yogurt|mi|iogurte
+croissant|mi|croissant
+tiramisù|mi|tiramisù (sobremesa com café e mascarpone)
+ragù|mi|ragu (molho de carne)
+jazz|mi|jazz
+tennis|mi|tênis (esporte)
+internet|fi|internet
+email|fi|e-mail
+mail|fi|e-mail
+foto|fi|foto
+fotografia|f|fotografia
+radio|fi|rádio
+moto|fi|moto
+auto|fi|carro
+bici|fi|bicicleta (forma curta)
+città|fi|cidade
+università|fi|universidade
+novità|fi|novidade
+verità|fi|verdade
+opportunità|fi|oportunidade
+attività|fi|atividade
+possibilità|fi|possibilidade
+qualità|fi|qualidade
+quantità|fi|quantidade
+età|fi|idade
+difficoltà|fi|dificuldade
+nazionalità|fi|nacionalidade
+specialità|fi|especialidade
+società|fi|sociedade; empresa
+libertà|fi|liberdade
+metà|fi|metade
+tv|fi|TV
+crisi|fi|crise
+analisi|fi|análise; exame (de sangue)
+sci|mi|esqui
+euro|mi|euro
+garage|mi|garagem
+brioche|fi|brioche (croissant doce)
+ananas|mi|abacaxi
+jeans|mi|calça jeans
+bambino|m|menino, criança
+bambina|f|menina
+ragazzo|m|rapaz, garoto; namorado
+ragazza|f|moça, garota; namorada
+uomo|m|homem|uomini
+donna|f|mulher
+signore|m|senhor
+signora|f|senhora
+signorina|f|senhorita
+persona|f|pessoa
+gente|f|gente, as pessoas (verbo no singular)
+dottore|m|doutor; médico
+dottoressa|f|doutora; médica
+professore|m|professor
+professoressa|f|professora
+direttore|m|diretor
+direttrice|f|diretora
+ingegnere|m|engenheiro
+ingegneria|f|engenharia
+avvocato|m|advogado
+architetto|m|arquiteto
+commesso|m|vendedor (de loja)
+commessa|f|vendedora (de loja)
+cameriere|m|garçom
+cameriera|f|garçonete
+cuoco|m|cozinheiro
+barista|mf|barista, atendente de bar
+dentista|mf|dentista
+turista|mf|turista
+giornalista|mf|jornalista
+artista|mf|artista
+farmacista|mf|farmacêutico(a)
+autista|mf|motorista
+tassista|mf|taxista
+cliente|mf|cliente
+paziente|mf|paciente
+agente|mf|agente; corretor (agente immobiliare)
+parente|mf|parente
+nipote|mf|sobrinho(a) ou neto(a)
+insegnante|mf|professor(a)
+studente|m|estudante
+studentessa|f|estudante (mulher)
+collega|mf|colega|colleghi,colleghe
+capo|m|chefe
+impiegato|m|funcionário (de escritório)
+operaio|m|operário
+segretario|m|secretário
+infermiere|m|enfermeiro
+poliziotto|m|policial
+sindaco|m|prefeito|sindaci
+presidente|mf|presidente
+ministro|m|ministro
+governo|m|governo
+stato|m|estado
+paese|m|país; vilarejo
+comune|m|município, prefeitura
+regione|f|região
+provincia|f|província|province
+capitale|f|capital
+mondo|m|mundo
+abitante|mf|habitante
+papà|mi|papai
+mamma|f|mamãe
+padre|m|pai
+madre|f|mãe
+genitore|m|pai ou mãe (i genitori = os pais)
+nonno|m|avô
+nonna|f|avó
+zio|m|tio|zii
+zia|f|tia
+cugino|m|primo
+cugina|f|prima
+marito|m|marido
+moglie|f|esposa|mogli
+figlio|m|filho
+figlia|f|filha
+fratello|m|irmão
+sorella|f|irmã
+sorellina|f|irmãzinha
+fratellino|m|irmãozinho
+suocero|m|sogro
+cognato|m|cunhado
+fidanzato|m|noivo; namorado
+fidanzata|f|noiva; namorada
+amico|m|amigo|amici
+amica|f|amiga
+coppia|f|casal; par
+famiglia|f|família
+cane|m|cachorro
+gatto|m|gato
+cavallo|m|cavalo
+uccello|m|pássaro
+animale|m|animal
+pane|m|pão
+latte|m|leite
+formaggio|m|queijo
+burro|m|manteiga
+uovo|m|ovo|uova
+carne|f|carne
+pesce|m|peixe
+pollo|m|frango
+manzo|m|carne bovina
+maiale|m|porco
+prosciutto|m|presunto
+salame|m|salame
+salume|m|frio, embutido (i salumi = os frios)
+affettato|m|frios fatiados
+pasta|f|massa, macarrão
+riso|m|arroz; riso
+risotto|m|risoto
+pizza|f|pizza
+lasagna|f|lasanha (em geral no plural: le lasagne)
+tagliatella|f|talharim (le tagliatelle)
+tortellino|m|tortellini (massa recheada de Bolonha)
+spaghetto|m|espaguete (gli spaghetti)
+gnocco|m|nhoque (gli gnocchi)
+sugo|m|molho|sughi
+salsa|f|molho
+olio|m|óleo; azeite
+aceto|m|vinagre
+sale|m|sal
+pepe|m|pimenta-do-reino
+zucchero|m|açúcar
+farina|f|farinha
+miele|m|mel
+marmellata|f|geleia
+biscotto|m|biscoito
+torta|f|bolo; torta
+dolce|m|doce, sobremesa; como adjetivo: doce
+gelato|m|sorvete
+cioccolato|m|chocolate
+cioccolata|f|chocolate (quente ou em barra)
+crema|f|creme
+panna|f|creme de leite, nata
+frutta|f|fruta (coletivo: la frutta)
+verdura|f|verdura, legumes
+insalata|f|salada
+pomodoro|m|tomate
+patata|f|batata
+cipolla|f|cebola
+aglio|m|alho
+carota|f|cenoura
+zucchina|f|abobrinha
+melanzana|f|berinjela
+peperone|m|pimentão
+fungo|m|cogumelo
+fagiolo|m|feijão
+basilico|m|manjericão
+prezzemolo|m|salsinha
+limone|m|limão
+arancia|f|laranja|arance
+mela|f|maçã
+pera|f|pera
+banana|f|banana
+fragola|f|morango
+uva|f|uva
+pesca|f|pêssego; pesca|pesche
+ciliegia|f|cereja|ciliegie
+anguria|f|melancia
+melone|m|melão
+acqua|f|água
+vino|m|vinho
+birra|f|cerveja
+succo|m|suco
+spremuta|f|suco espremido na hora
+aranciata|f|refrigerante de laranja
+bibita|f|refrigerante, bebida
+ghiaccio|m|gelo
+cappuccino|m|cappuccino
+espresso|m|café expresso
+cornetto|m|croissant (como se diz em Roma)
+panino|m|sanduíche
+tramezzino|m|sanduíche de pão de forma
+bruschetta|f|bruschetta (pão tostado com tomate)|bruschette
+crostino|m|torradinha com cobertura
+arancino|m|bolinho de arroz siciliano
+antipasto|m|entrada (antes do primeiro prato)
+contorno|m|acompanhamento
+piatto|m|prato
+bicchiere|m|copo
+tazza|f|xícara
+bottiglia|f|garrafa
+forchetta|f|garfo
+coltello|m|faca
+cucchiaio|m|colher
+cucchiaino|m|colherzinha
+tovagliolo|m|guardanapo
+pentola|f|panela
+padella|f|frigideira
+forno|m|forno
+frigorifero|m|geladeira
+frigo|mi|geladeira (forma curta)
+lavatrice|f|máquina de lavar roupa
+conto|m|conta
+mancia|f|gorjeta|mance
+ricetta|f|receita
+ingrediente|m|ingrediente
+ripieno|m|recheio
+colazione|f|café da manhã
+pranzo|m|almoço
+cena|f|jantar
+merenda|f|lanche da tarde
+spuntino|m|lanchinho
+aperitivo|m|aperitivo (bebida e petiscos antes do jantar)
+pasto|m|refeição
+fame|f|fome (ho fame = estou com fome)
+sete|f|sede (ho sete = estou com sede)
+mozzarella|f|muçarela
+parmigiano|m|queijo parmesão
+cotoletta|f|bife à milanesa
+bistecca|f|bife|bistecche
+salsiccia|f|linguiça|salsicce
+tonno|m|atum
+pelati|x|tomates pelados em lata (só no plural)
+macinata|f|carne moída
+mazzo|m|maço (un mazzo di fiori = um buquê)
+etto|m|100 gramas (un etto di prosciutto)
+chilo|m|quilo
+litro|m|litro
+grammo|m|grama
+metro|m|metro
+chilometro|m|quilômetro
+pacco|m|pacote
+scatola|f|caixa
+lattina|f|lata (de bebida)
+sacchetto|m|sacola, saquinho
+busta|f|envelope; sacola
+pezzo|m|pedaço; peça
+fetta|f|fatia
+paio|m|par|paia
+casa|f|casa
+appartamento|m|apartamento
+stanza|f|cômodo; quarto
+camera|f|quarto (camera da letto = quarto de dormir)
+bagno|m|banheiro; banho
+cucina|f|cozinha
+soggiorno|m|sala de estar; estadia
+salotto|m|sala de visitas
+sala|f|sala
+corridoio|m|corredor
+ingresso|m|entrada
+balcone|m|sacada
+terrazzo|m|terraço
+giardino|m|jardim
+cantina|f|porão, adega
+piano|m|andar; plano; como advérbio: devagar (piano terra = térreo)
+ascensore|m|elevador
+scala|f|escada
+porta|f|porta
+finestra|f|janela
+muro|m|muro, parede
+parete|f|parede
+pavimento|m|piso
+tetto|m|telhado
+chiave|f|chave
+affitto|m|aluguel (in affitto = para alugar)
+proprietario|m|proprietário
+bolletta|f|conta (de luz, gás, água)
+mobile|m|móvel
+tavolo|m|mesa
+sedia|f|cadeira
+poltrona|f|poltrona
+divano|m|sofá
+letto|m|cama
+armadio|m|armário, guarda-roupa
+scaffale|m|estante, prateleira
+cassetto|m|gaveta
+scrivania|f|escrivaninha
+lampada|f|luminária
+specchio|m|espelho
+tappeto|m|tapete
+quadro|m|quadro
+tenda|f|cortina; barraca
+cuscino|m|travesseiro, almofada
+coperta|f|cobertor
+asciugamano|m|toalha
+doccia|f|chuveiro, ducha|docce
+vasca|f|banheira|vasche
+riscaldamento|m|aquecimento
+luce|f|luz
+via|f|rua; como advérbio: embora (andare via = ir embora)
+strada|f|rua, estrada
+piazza|f|praça
+viale|m|avenida arborizada
+incrocio|m|cruzamento
+semaforo|m|semáforo
+angolo|m|esquina; canto
+ponte|m|ponte
+centro|m|centro
+periferia|f|periferia
+quartiere|m|bairro
+palazzo|m|prédio; palácio
+edificio|m|edifício
+chiesa|f|igreja
+duomo|m|catedral
+campanile|m|campanário, torre do sino
+torre|f|torre
+museo|m|museu
+teatro|m|teatro
+stadio|m|estádio
+parco|m|parque
+biblioteca|f|biblioteca|biblioteche
+scuola|f|escola
+ospedale|m|hospital
+farmacia|f|farmácia|farmacie
+banca|f|banco (instituição)|banche
+banco|m|balcão; carteira escolar
+posta|f|correio
+ufficio|m|escritório
+negozio|m|loja
+supermercato|m|supermercado
+mercato|m|mercado, feira
+panificio|m|padaria
+macelleria|f|açougue
+fruttivendolo|m|quitandeiro, quitanda
+pasticceria|f|confeitaria
+gelateria|f|sorveteria
+pizzeria|f|pizzaria
+trattoria|f|trattoria (restaurante simples e familiar)
+ristorante|m|restaurante
+libreria|f|livraria; estante de livros
+edicola|f|banca de jornal
+stazione|f|estação
+aeroporto|m|aeroporto
+fermata|f|parada, ponto (de ônibus)
+binario|m|plataforma, trilho
+biglietteria|f|bilheteria
+biglietto|m|bilhete, passagem
+treno|m|trem
+aereo|m|avião
+volo|m|voo
+nave|f|navio
+barca|f|barco|barche
+gondola|f|gôndola
+metropolitana|f|metrô
+macchina|f|carro; máquina
+bicicletta|f|bicicleta
+motorino|m|motoneta
+benzina|f|gasolina
+parcheggio|m|estacionamento
+traffico|m|trânsito
+incidente|m|acidente
+patente|f|carteira de motorista
+viaggio|m|viagem
+gita|f|passeio, excursão
+vacanza|f|férias (in vacanza = de férias)
+ferie|x|férias do trabalho (só no plural)
+valigia|f|mala|valigie
+bagaglio|m|bagagem
+zaino|m|mochila
+passaporto|m|passaporte
+documento|m|documento
+prenotazione|f|reserva
+albergo|m|hotel
+rifugio|m|abrigo de montanha
+spiaggia|f|praia|spiagge
+mare|m|mar
+montagna|f|montanha
+collina|f|colina
+lago|m|lago
+fiume|m|rio
+isola|f|ilha
+bosco|m|bosque
+campagna|f|campo, interior
+paesaggio|m|paisagem
+natura|f|natureza
+cielo|m|céu
+sole|m|sol
+luna|f|lua
+stella|f|estrela
+terra|f|terra; chão
+aria|f|ar
+fuoco|m|fogo
+vento|m|vento
+pioggia|f|chuva|piogge
+neve|f|neve
+nebbia|f|neblina
+nuvola|f|nuvem
+temporale|m|temporal
+grado|m|grau
+temperatura|f|temperatura
+clima|m|clima
+previsione|f|previsão (le previsioni del tempo = a previsão do tempo)
+ombrello|m|guarda-chuva
+corpo|m|corpo
+testa|f|cabeça
+faccia|f|rosto, cara|facce
+viso|m|rosto
+occhio|m|olho
+naso|m|nariz
+bocca|f|boca (in bocca al lupo! = boa sorte!)|bocche
+orecchio|m|orelha, ouvido
+dente|m|dente
+lingua|f|língua
+gola|f|garganta
+collo|m|pescoço
+spalla|f|ombro
+braccio|m|braço|braccia
+mano|f|mão|mani
+dito|m|dedo|dita
+pancia|f|barriga|pance
+stomaco|m|estômago
+schiena|f|costas
+gamba|f|perna
+ginocchio|m|joelho|ginocchia,ginocchi
+piede|m|pé (a piedi = a pé)
+pelle|f|pele
+cuore|m|coração
+sangue|m|sangue
+capello|m|fio de cabelo (i capelli = o cabelo)
+barba|f|barba
+salute|f|saúde (salute! = saúde!)
+malattia|f|doença
+dolore|m|dor
+febbre|f|febre
+tosse|f|tosse
+raffreddore|m|resfriado
+influenza|f|gripe
+medico|m|médico|medici
+medicina|f|remédio; medicina
+farmaco|m|remédio, medicamento|farmaci
+pastiglia|f|pastilha, comprimido
+sciroppo|m|xarope
+visita|f|consulta; visita
+appuntamento|m|hora marcada, compromisso, encontro
+benessere|m|bem-estar
+riposo|m|descanso
+sonno|m|sono (ho sonno = estou com sono)
+sogno|m|sonho
+vestito|m|vestido; roupa; terno
+abito|m|roupa, traje
+abbigliamento|m|vestuário, roupas
+maglietta|f|camiseta
+maglia|f|blusa, malha
+maglione|m|suéter
+camicia|f|camisa|camicie
+giacca|f|jaqueta, paletó|giacche
+cappotto|m|sobretudo, casaco
+pantaloni|x|calça (só no plural)
+gonna|f|saia
+scarpa|f|sapato
+stivale|m|bota
+calza|f|meia
+cappello|m|chapéu
+sciarpa|f|cachecol
+guanto|m|luva
+cintura|f|cinto
+cravatta|f|gravata
+borsa|f|bolsa
+portafoglio|m|carteira
+occhiali|x|óculos (só no plural)
+orologio|m|relógio
+anello|m|anel
+costume|m|traje; costume (da bagno = roupa de banho)
+tuta|f|agasalho esportivo; macacão
+taglia|f|tamanho (de roupa)
+misura|f|medida, tamanho
+camerino|m|provador
+vetrina|f|vitrine
+saldi|x|liquidação (só no plural)
+sconto|m|desconto
+prezzo|m|preço
+cassa|f|caixa (onde se paga)
+scontrino|m|cupom fiscal, notinha
+contanti|x|dinheiro vivo (in contanti = em dinheiro)
+carta|f|papel; cartão (carta di credito); carta de baralho
+bancomat|mi|caixa eletrônico; cartão de débito
+soldi|x|dinheiro (só no plural)
+moneta|f|moeda
+resto|m|troco; resto
+spesa|f|compras (fare la spesa = fazer compras de mercado); gasto
+tessera|f|cartão (de fidelidade, de sócio)
+colore|m|cor
+lavoro|m|trabalho
+ditta|f|firma, empresa
+azienda|f|empresa
+impresa|f|empresa; empreitada
+fabbrica|f|fábrica|fabbriche
+cantiere|m|canteiro de obras
+progetto|m|projeto
+riunione|f|reunião
+stipendio|m|salário
+contratto|m|contrato
+colloquio|m|entrevista (de emprego); conversa
+esperienza|f|experiência
+carriera|f|carreira
+professione|f|profissão
+impegno|m|compromisso; empenho
+problema|m|problema|problemi
+soluzione|f|solução
+domanda|f|pergunta; pedido; demanda
+risposta|f|resposta
+idea|f|ideia
+consiglio|m|conselho
+aiuto|m|ajuda
+errore|m|erro
+sbaglio|m|engano
+esempio|m|exemplo (per esempio = por exemplo)
+esercizio|m|exercício
+compito|m|tarefa (i compiti = o dever de casa)
+lezione|f|aula, lição
+corso|m|curso; avenida
+classe|f|turma; classe
+esame|m|prova, exame
+voto|m|nota (escolar); voto
+libro|m|livro
+quaderno|m|caderno
+penna|f|caneta
+matita|f|lápis
+foglio|m|folha (de papel)
+pagina|f|página
+parola|f|palavra
+frase|f|frase
+lettera|f|carta; letra
+messaggio|m|mensagem
+telefonata|f|telefonema
+telefono|m|telefone
+cellulare|m|celular
+numero|m|número
+indirizzo|m|endereço
+nome|m|nome
+cognome|m|sobrenome
+firma|f|assinatura
+modulo|m|formulário
+allegato|m|anexo
+riscontro|m|retorno, resposta (in attesa di un Suo riscontro = no aguardo do seu retorno)
+chiarimento|m|esclarecimento
+disposizione|f|disposição (a disposizione = à disposição)
+saluto|m|saudação (cordiali saluti = atenciosamente)
+oggetto|m|objeto; assunto (de e-mail)
+relazione|f|relatório; relação
+notizia|f|notícia
+giornale|m|jornal
+rivista|f|revista
+articolo|m|artigo
+televisione|f|televisão
+programma|m|programa|programmi
+canzone|f|canção, música
+musica|f|música
+concerto|m|show, concerto
+spettacolo|m|espetáculo
+mostra|f|exposição
+arte|f|arte
+storia|f|história
+commedia|f|comédia
+fumetto|m|história em quadrinhos
+cartone|m|papelão (i cartoni animati = os desenhos animados)
+videogioco|m|videogame|videogiochi
+gioco|m|jogo, brincadeira
+giocattolo|m|brinquedo
+calcio|m|futebol; chute
+partita|f|partida, jogo
+squadra|f|time, equipe
+palla|f|bola
+pallone|m|bola (de futebol)
+piscina|f|piscina
+palestra|f|academia (de ginástica)
+nuoto|m|natação
+corsa|f|corrida
+passeggiata|f|passeio a pé, caminhada
+fiore|m|flor
+albero|m|árvore
+pianta|f|planta
+legno|m|madeira
+ferro|m|ferro
+vetro|m|vidro
+cosa|f|coisa
+modo|m|modo, jeito
+tipo|m|tipo
+parte|f|parte
+volta|f|vez (una volta = uma vez)
+posto|m|lugar; vaga; emprego
+luogo|m|lugar, local
+fondo|m|fundo (in fondo = no fundo, lá no fim)
+mezzo|m|meio; como adjetivo: meio (mezzo chilo)
+destra|f|direita (a destra = à direita)
+sinistra|f|esquerda (a sinistra = à esquerda)
+nord|mi|norte
+sud|mi|sul
+est|mi|leste
+ovest|mi|oeste
+vita|f|vida
+amore|m|amor
+pace|f|paz
+guerra|f|guerra
+gruppo|m|grupo
+fortuna|f|sorte (per fortuna = por sorte)
+sorte|f|sorte, destino
+peccato|m|pecado (che peccato! = que pena!)
+guaio|m|encrenca, problema
+disastro|m|desastre
+noia|f|tédio (che noia! = que chato!)
+paura|f|medo
+fretta|f|pressa (ho fretta = estou com pressa)
+voglia|f|vontade (ho voglia di = estou com vontade de)
+bisogno|m|necessidade (ho bisogno di = preciso de)
+ragione|f|razão (hai ragione = você tem razão)
+favore|m|favor (per favore = por favor)
+permesso|m|licença, permissão (permesso? = com licença?)
+attenzione|f|atenção (attenzione! = cuidado!)
+rispetto|m|respeito
+cortesia|f|gentileza (per cortesia = por gentileza)
+sorpresa|f|surpresa
+ricordo|m|lembrança
+pensiero|m|pensamento
+opinione|f|opinião
+differenza|f|diferença
+motivo|m|motivo
+risultato|m|resultado
+successo|m|sucesso
+situazione|f|situação
+informazione|f|informação
+tradizione|f|tradição
+costruzione|f|construção
+ristrutturazione|f|reforma (de imóvel)
+manutenzione|f|manutenção
+attesa|f|espera (in attesa di = no aguardo de)
+arrivo|m|chegada
+partenza|f|partida, saída
+ritorno|m|volta (andata e ritorno = ida e volta)
+andata|f|ida
+uscita|f|saída
+entrata|f|entrada
+fila|f|fila
+pausa|f|pausa, intervalo
+abbraccio|m|abraço
+bacio|m|beijo
+campana|f|sino
+camino|m|lareira; chaminé
+cammino|m|caminho, caminhada
+contrario|m|contrário (al contrario = ao contrário)
+nota|f|nota, anotação
+pala|f|pá
+papa|m|papa (o pontífice)|papi
+pappa|f|papinha
+pena|f|pena (vale la pena = vale a pena)
+profumo|m|perfume; cheiro bom
+quadrato|m|quadrado
+registro|m|registro; nível de formalidade
+saldo|m|saldo
+scena|f|cena
+sede|f|sede (de empresa, de órgão)
+serra|f|estufa
+testo|m|texto
+titolo|m|título
+tribunale|m|tribunal, fórum
+uso|m|uso
+copia|f|cópia
+eco|f|eco
+fato|m|destino, fado
+filo|m|fio
+carattere|m|personalidade, jeito; caractere
+carnevale|m|Carnaval
+legge|f|lei
+polizia|f|polícia
+economia|f|economia
+aumento|m|aumento
+milione|m|milhão
+miliardo|m|bilhão
+dato|m|dado
+studio|m|estudo; escritório, consultório
+ricerca|f|pesquisa; busca|ricerche
+scienza|f|ciência
+tecnologia|f|tecnologia
+ambiente|m|ambiente; meio ambiente
+energia|f|energia
+giovane|mf|jovem
+turismo|m|turismo
+cultura|f|cultura
+sicurezza|f|segurança
+elezione|f|eleição
+partito|m|partido
+accordo|m|acordo (d'accordo = combinado, de acordo)
+incontro|m|encontro; reunião
+evento|m|evento
+premio|m|prêmio
+campionato|m|campeonato
+vittoria|f|vitória
+lupo|m|lobo (in bocca al lupo! = boa sorte! — resposta: crepi!)
+grande|a|grande
+piccolo|a|pequeno
+nuovo|a|novo
+vecchio|a|velho
+bello|a|bonito, belo
+brutto|a|feio; ruim
+buono|a|bom
+cattivo|a|mau, ruim
+bravo|a|bom (em algo), competente; bravo! = muito bem!
+alto|a|alto
+basso|a|baixo
+lungo|a|comprido, longo
+corto|a|curto
+largo|a|largo
+stretto|a|apertado, estreito
+grosso|a|grosso, grande
+sottile|a|fino
+magro|a|magro
+grasso|a|gordo
+forte|a|forte
+debole|a|fraco
+pesante|a|pesado
+leggero|a|leve
+duro|a|duro
+morbido|a|macio
+caldo|a|quente; como substantivo: calor (ho caldo, fa caldo)
+freddo|a|frio (ho freddo, fa freddo)
+fresco|a|fresco
+bollente|a|fervendo, muito quente
+amaro|a|amargo
+salato|a|salgado
+piccante|a|picante
+crudo|a|cru
+cotto|a|cozido
+maturo|a|maduro
+delizioso|a|delicioso
+ottimo|a|ótimo
+pessimo|a|péssimo
+migliore|a|melhor (adjetivo)
+miglior|ai|melhor (forma curta de migliore antes do substantivo)
+peggiore|a|pior (adjetivo)
+maggiore|a|maior; mais velho
+minore|a|menor; mais novo
+facile|a|fácil
+difficile|a|difícil
+semplice|a|simples
+complicato|a|complicado
+possibile|a|possível
+impossibile|a|impossível
+necessario|a|necessário
+importante|a|importante
+interessante|a|interessante
+noioso|a|chato, entediante
+divertente|a|divertido
+strano|a|estranho
+normale|a|normal
+speciale|a|especial
+particolare|a|particular, especial
+generale|a|geral
+diverso|a|diferente; diversos
+uguale|a|igual
+simile|a|parecido
+stesso|a|mesmo
+vero|a|verdadeiro (è vero = é verdade; vero? = né?)
+falso|a|falso
+giusto|a|certo, justo
+sbagliato|a|errado
+esatto|a|exato
+corretto|a|correto
+sicuro|a|seguro; com certeza
+certo|a|certo; como resposta: claro!
+chiaro|a|claro
+scuro|a|escuro
+pieno|a|cheio
+vuoto|a|vazio
+aperto|a|aberto
+chiuso|a|fechado
+libero|a|livre
+occupato|a|ocupado
+pronto|a|pronto (pronto? = alô?)
+stanco|a|cansado
+felice|a|feliz
+contento|a|contente
+triste|a|triste
+arrabbiato|a|zangado, bravo
+nervoso|a|nervoso
+tranquillo|a|tranquilo
+calmo|a|calmo
+preoccupato|a|preocupado
+sorpreso|a|surpreso
+innamorato|a|apaixonado
+fortunato|a|sortudo
+ricco|a|rico
+povero|a|pobre
+caro|a|caro; querido
+economico|a|barato; econômico
+costoso|a|caro, custoso
+gratuito|a|gratuito
+gratis|ai|grátis
+gentile|a|gentil
+simpatico|a|simpático
+antipatico|a|antipático
+allegro|a|alegre
+serio|a|sério
+timido|a|tímido
+socievole|a|sociável
+severo|a|severo
+educato|a|educado
+intelligente|a|inteligente
+stupido|a|bobo, burro
+onesto|a|honesto
+sincero|a|sincero
+pigro|a|preguiçoso
+sportivo|a|esportivo, esportista
+elegante|a|elegante
+moderno|a|moderno
+antico|a|antigo|antichi,antica,antiche
+storico|a|histórico
+famoso|a|famoso
+tipico|a|típico
+tradizionale|a|tradicional
+locale|a|local; como substantivo: bar, estabelecimento
+nazionale|a|nacional
+internazionale|a|internacional
+straniero|a|estrangeiro
+italiano|a|italiano
+brasiliano|a|brasileiro
+francese|a|francês
+inglese|a|inglês
+tedesco|a|alemão
+spagnolo|a|espanhol
+portoghese|a|português
+americano|a|americano
+cinese|a|chinês
+giapponese|a|japonês
+europeo|a|europeu
+romano|a|romano
+bolognese|a|bolonhês, de Bolonha
+vaticano|a|do Vaticano (i Musei Vaticani)
+pulito|a|limpo
+sporco|a|sujo
+ordinato|a|arrumado, organizado
+comodo|a|confortável, cômodo
+scomodo|a|desconfortável
+luminoso|a|claro, bem iluminado
+buio|a|escuro
+silenzioso|a|silencioso
+rumoroso|a|barulhento
+vicino|a|perto, próximo; como substantivo: vizinho
+lontano|a|longe, distante
+centrale|a|central
+rapido|a|rápido
+veloce|a|veloz, rápido
+lento|a|lento
+puntuale|a|pontual
+ultimo|a|último
+primo|a|primeiro; il primo = o primeiro prato
+secondo|a|segundo; il secondo = o prato principal; secondo me = na minha opinião
+terzo|a|terceiro
+quarto|a|quarto; un quarto = um quarto (15 minutos)
+quinto|a|quinto
+sesto|a|sexto
+settimo|a|sétimo
+ottavo|a|oitavo
+nono|a|nono
+decimo|a|décimo
+prossimo|a|próximo
+scorso|a|passado (l'anno scorso = o ano passado)
+attuale|a|atual
+recente|a|recente
+quotidiano|a|diário, cotidiano
+solo|a|sozinho; como advérbio: só, apenas
+sposato|a|casado
+single|ai|solteiro(a)
+malato|a|doente
+sano|a|saudável
+grave|a|grave
+rotto|a|quebrado
+nuvoloso|a|nublado
+sereno|a|sereno, de céu limpo
+umido|a|úmido
+naturale|a|natural; acqua naturale = água sem gás
+frizzante|a|com gás
+minerale|a|mineral
+liscio|a|liso; acqua liscia = água sem gás
+misto|a|misto
+doppio|a|duplo; camera doppia = quarto duplo
+singolo|a|individual; camera singola = quarto de solteiro
+matrimoniale|a|de casal (camera matrimoniale)
+incluso|a|incluído
+compreso|a|incluído, compreendido
+disponibile|a|disponível
+previsto|a|previsto
+pubblico|a|público
+privato|a|privado, particular
+personale|a|pessoal; como substantivo: equipe, funcionários
+professionale|a|profissional
+tecnico|a|técnico
+elettrico|a|elétrico
+principale|a|principal
+efficace|a|eficaz
+utile|a|útil
+inutile|a|inútil
+pericoloso|a|perigoso
+vietato|a|proibido
+obbligatorio|a|obrigatório
+urgente|a|urgente
+perfetto|a|perfeito
+fantastico|a|fantástico
+magnifico|a|magnífico
+meraviglioso|a|maravilhoso
+stupendo|a|estupendo
+terribile|a|terrível
+incredibile|a|incrível
+indimenticabile|a|inesquecível
+enorme|a|enorme
+minimo|a|mínimo
+massimo|a|máximo
+medio|a|médio
+intero|a|inteiro
+beato|a|sortudo (beato te! = sorte sua!)
+distinto|a|distinto (distinti saluti = atenciosamente, bem formal)
+cordiale|a|cordial (cordiali saluti = atenciosamente)
+egregio|a|prezado (Egregio Dottor Rossi)
+elementare|a|elementar; scuola elementare = ensino fundamental I
+destro|a|direito
+sinistro|a|esquerdo
+dritto|a|reto; sempre dritto = sempre em frente
+diretto|a|direto
+pallido|a|pálido
+riccio|a|cacheado
+castano|a|castanho
+biondo|a|loiro
+anziano|a|idoso
+rosso|a|vermelho
+verde|a|verde
+giallo|a|amarelo
+azzurro|a|azul-claro
+bianco|a|branco
+nero|a|preto
+grigio|a|cinza
+marrone|a|marrom
+arancione|a|laranja (cor)
+blu|ai|azul
+rosa|ai|rosa
+viola|ai|roxo
+beige|ai|bege
+online|ai|online
+altro|d|outro
+tutto|d|todo, tudo (tutti = todos; tutti e due = os dois)
+molto|d|muito
+tanto|d|tanto, muito
+poco|d|pouco (un po' = um pouco)
+troppo|d|demais, muito
+quanto|d|quanto (quanti anni hai? = quantos anos você tem?)
+nessuno|d|nenhum; ninguém
+alcuno|d|algum (alcuni = alguns)
+ciascuno|d|cada um
+parecchio|d|bastante
+vario|d|vário, variado
+certo|d|certo
+stesso|d|mesmo
+ogni|x|cada, todo (ogni giorno = todo dia) — invariável
+qualche|x|algum, alguns (sempre com singular: qualche volta = algumas vezes)
+qualsiasi|x|qualquer
+qualunque|x|qualquer
+entrambi|x|ambos (feminino: entrambe)
+oggi|av|hoje
+ieri|av|ontem
+domani|av|amanhã
+dopodomani|av|depois de amanhã
+stamattina|av|hoje de manhã
+stasera|av|hoje à noite
+stanotte|av|esta noite
+adesso|av|agora
+subito|av|já, imediatamente
+presto|av|cedo; logo (a presto = até breve)
+tardi|av|tarde (è tardi = está tarde)
+prima|av|antes; primeiro
+dopo|av|depois
+poi|av|depois, então
+sempre|av|sempre
+mai|av|nunca; alguma vez (em perguntas)
+spesso|av|frequentemente, muitas vezes
+già|av|já
+ancora|av|ainda; de novo
+appena|av|assim que; mal, apenas
+quasi|av|quase
+circa|av|cerca de, mais ou menos
+proprio|av|mesmo, realmente; como adjetivo: próprio
+davvero|av|de verdade, mesmo
+veramente|av|realmente
+certamente|av|certamente
+sicuramente|av|com certeza
+probabilmente|av|provavelmente
+forse|av|talvez
+magari|av|quem dera!; talvez
+purtroppo|av|infelizmente
+fortunatamente|av|felizmente
+finalmente|av|finalmente
+insomma|av|enfim; mais ou menos
+comunque|av|de qualquer forma
+invece|av|em vez disso; já (para contrastar)
+inoltre|av|além disso
+infatti|av|de fato, realmente
+cioè|av|isto é, ou seja
+anzi|av|aliás, pelo contrário
+soprattutto|av|sobretudo, principalmente
+specialmente|av|especialmente
+almeno|av|pelo menos
+soltanto|av|somente
+solamente|av|somente
+neanche|av|nem, também não
+nemmeno|av|nem, nem mesmo
+pure|av|também; à vontade (faccia pure)
+abbastanza|av|bastante, suficientemente
+piuttosto|av|bastante; em vez de
+meno|av|menos
+meglio|av|melhor (advérbio)
+peggio|av|pior (advérbio)
+benissimo|av|muito bem
+malissimo|av|muito mal
+volentieri|av|com prazer, de bom grado
+insieme|av|juntos
+qui|av|aqui
+qua|av|aqui
+lì|av|ali, lá
+là|av|lá
+lassù|av|lá em cima
+laggiù|av|lá embaixo
+dappertutto|av|em todo lugar
+avanti|av|adiante, para frente (avanti! = entre!)
+indietro|av|para trás
+giù|av|para baixo, embaixo
+intorno|av|em volta
+intanto|av|enquanto isso
+ormai|av|já, a esta altura
+velocemente|av|rapidamente
+lentamente|av|lentamente
+facilmente|av|facilmente
+regolarmente|av|regularmente
+frequentemente|av|frequentemente
+raramente|av|raramente
+normalmente|av|normalmente
+generalmente|av|geralmente
+naturalmente|av|naturalmente, claro
+ovviamente|av|obviamente
+esattamente|av|exatamente
+assolutamente|av|absolutamente
+completamente|av|completamente
+direttamente|av|diretamente
+immediatamente|av|imediatamente
+attentamente|av|atentamente
+cordialmente|av|cordialmente
+gentilmente|av|gentilmente
+particolarmente|av|particularmente
+praticamente|av|praticamente
+semplicemente|av|simplesmente
+recentemente|av|recentemente
+ultimamente|av|ultimamente
+solito|x|costumeiro (di solito = geralmente)
+eccolo|x|aqui está ele (ecco + lo)
+eccola|x|aqui está ela (ecco + la)
+eccoli|x|aqui estão eles (ecco + li)
+eccole|x|aqui estão elas (ecco + le)
+eccomi|x|aqui estou (ecco + mi)
+senza|pp|sem
+verso|pp|em direção a; por volta de (verso le otto)
+contro|pp|contra
+durante|pp|durante
+entro|pp|dentro de, até (prazo: entro venerdì)
+fino|pp|até (fino a = até)
+oltre|pp|além de
+lungo|pp|ao longo de
+tranne|pp|exceto
+attraverso|pp|através de
+oppure|c|ou então
+né|c|nem (né… né… = nem… nem…)
+perciò|c|por isso
+dunque|c|portanto, então
+siccome|c|como, já que
+poiché|c|já que, visto que
+finché|c|até que; enquanto
+eppure|c|e no entanto
+tuttavia|c|todavia
+altrimenti|c|senão, caso contrário
+sennò|c|senão
+qualcosa|p|alguma coisa
+qualcuno|p|alguém
+niente|p|nada (di niente = de nada)
+nulla|p|nada
+ognuno|p|cada um
+chiunque|p|qualquer pessoa
+ciò|p|isso
+cui|p|que, o qual (relativo depois de preposição: la città in cui abito)
+quale|p|qual (plural: quali)
+quali|p|quais
+chissà|x|quem sabe, sei lá
+salve|i|olá (cumprimento neutro)
+buon|x|bom — forma curta de buono antes de substantivo masculino (buon viaggio!)
+bel|x|bonito — forma curta de bello (un bel film)
+gran|x|grande — forma curta de grande (una gran bella giornata)
+san|x|são (santo): San Marco
+signor|x|senhor — forma usada antes do nome (il signor Rossi)
+dottor|x|doutor — forma usada antes do nome (il dottor Bianchi)
+professor|x|professor — forma usada antes do nome
+ingegner|x|engenheiro — forma usada antes do nome (l'ingegner Manfrin)
+dott|x|abreviação de dottore (Dott.)
+sig|x|abreviação de signore (Sig.)
+mal|x|dor de… — forma curta de male (mal di testa = dor de cabeça)
+complimenti|i|parabéns!
+evviva|i|viva!
+boh|i|sei lá
+mah|i|hum, não sei
+beh|i|bem, bom…
+uffa|i|ufa! (impaciência, tédio)
+dai|i|vamos!, vai! (também: forma de dare)
+forza|i|força!, vamos!; como substantivo: força
+basta|i|chega!, basta
+altrettanto|i|igualmente (resposta a um desejo: Buon appetito! — Altrettanto!)
+benvenuto|a|bem-vindo
+arrivederla|i|até logo (formal)
+addio|i|adeus
+mmm|i|hum (gostoso!)
+ah|i|ah
+oh|i|oh
+eh|i|é, pois é
+ok|i|ok
+okay|i|ok
+agenzia|f|agência
+condizionale|m|condicional (o tempo verbal de «vorrei»)
+imperfetto|m|imperfeito (tempo verbal do passado)
+congiuntivo|m|subjuntivo
+imperativo|m|imperativo
+infinito|m|infinitivo
+participio|m|particípio
+gerundio|m|gerúndio
+plurale|m|plural
+singolare|m|singular
+maschile|a|masculino
+femminile|a|feminino
+formale|a|formal
+informale|a|informal
+impersonale|a|impessoal
+partitivo|m|partitivo (del, della… = um pouco de)
+paragone|m|comparação
+verbo|m|verbo
+aggettivo|m|adjetivo
+avverbio|m|advérbio
+pronome|m|pronome
+preposizione|f|preposição
+soggetto|m|sujeito
+grammatica|f|gramática|grammatiche
+vocabolario|m|vocabulário
+dizionario|m|dicionário
+traduzione|f|tradução
+significato|m|significado
+pronuncia|f|pronúncia|pronunce
+accento|m|acento; sotaque
+stressante|a|estressante
+archeologico|a|arqueológico
+prodotto|m|produto
+servizio|m|serviço
+sistema|m|sistema|sistemi
+rete|f|rede
+sito|m|site; local
+video|mi|vídeo
+schermo|m|tela
+app|fi|aplicativo
+applicazione|f|aplicativo; aplicação
+password|fi|senha
+immagine|f|imagem
+suono|m|som
+voce|f|voz (ad alta voce = em voz alta)
+silenzio|m|silêncio
+rumore|m|barulho
+odore|m|cheiro
+sapore|m|sabor
+gusto|m|gosto, sabor
+forma|f|forma
+linea|f|linha
+punto|m|ponto
+lato|m|lado
+spazio|m|espaço
+zona|f|zona, área
+area|f|área
+livello|m|nível
+base|f|base
+caso|m|caso (in ogni caso = em todo caso)
+fatto|m|fato
+regola|f|regra
+scelta|f|escolha
+decisione|f|decisão
+proposta|f|proposta
+richiesta|f|pedido, solicitação
+offerta|f|oferta
+pagamento|m|pagamento
+fattura|f|fatura, nota fiscal
+ricevuta|f|recibo
+tassa|f|taxa, imposto
+multa|f|multa
+costo|m|custo
+valore|m|valor
+sviluppo|m|desenvolvimento
+crescita|f|crescimento
+generazione|f|geração
+popolazione|f|população
+cittadino|m|cidadão
+diritto|m|direito
+giustizia|f|justiça
+giudice|mf|juiz(a)
+processo|m|processo; julgamento
+sentenza|f|sentença
+reato|m|crime
+incendio|m|incêndio
+terremoto|m|terremoto
+alluvione|f|enchente
+emergenza|f|emergência
+pericolo|m|perigo
+rischio|m|risco
+danno|m|dano, prejuízo
+vittima|f|vítima
+ospite|mf|hóspede; convidado(a)
+visitatore|m|visitante
+sciopero|m|greve
+manifestazione|f|manifestação; evento
+protesta|f|protesto
+lavoratore|m|trabalhador
+disoccupazione|f|desemprego
+pensione|f|aposentadoria; pensão
+alunno|m|aluno
+maestro|m|professor (do ensino fundamental); mestre
+maestra|f|professora (do ensino fundamental)
+laurea|f|diploma universitário, graduação
+materia|f|matéria, disciplina
+matematica|f|matemática
+geografia|f|geografia
+chimica|f|química
+fisica|f|física
+genere|m|gênero; tipo
+sociale|a|social
+politico|a|político
+culturale|a|cultural
+ambientale|a|ambiental
+digitale|a|digital
+numeroso|a|numeroso
+civile|a|civil
+legale|a|legal
+responsabile|a|responsável
+capace|a|capaz
+favorevole|a|favorável
+soddisfatto|a|satisfeito
+deluso|a|decepcionado
+orgoglioso|a|orgulhoso
+curioso|a|curioso
+geloso|a|ciumento
+coraggioso|a|corajoso
+sensibile|a|sensível
+generoso|a|generoso
+annuale|a|anual
+ferito|a|ferido
+ovunque|av|em qualquer lugar, por toda parte
+altrove|av|em outro lugar
+percento|x|por cento
+tavola|f|mesa (posta, para comer); tábua
+crepi|i|resposta a «in bocca al lupo!» (boa sorte): crepi (il lupo)!
+zero|x|zero
+mezza|x|meia (le otto e mezza = oito e meia)
+mila|x|mil — plural de mille (duemila = dois mil)
+mille|x|mil
+`;
+// verbos só do dicionário (não entram nos cartões): infinitivo|português|particípio irregular|auxiliar (a/e)|isc
+const XVERBS=`
+aiutare|ajudar
+amare|amar
+adorare|adorar
+accettare|aceitar
+rifiutare|recusar
+alzare|levantar (alzarsi = levantar-se)
+svegliare|acordar (svegliarsi = acordar)
+lavare|lavar (lavarsi = lavar-se)
+riposare|descansar (riposarsi = descansar)
+sposare|casar com (sposarsi = casar-se)
+trovare|encontrar, achar (trovarsi = ficar, estar situado)
+pensare|pensar, achar
+sperare|esperar (ter esperança)
+desiderare|desejar (desidera? = pois não?)
+ringraziare|agradecer
+salutare|cumprimentar, despedir-se de
+invitare|convidar
+festeggiare|comemorar
+augurare|desejar (votos)
+ballare|dançar
+cantare|cantar
+suonare|tocar (instrumento); soar, tocar (campainha)
+nuotare|nadar
+sciare|esquiar
+camminare|caminhar
+passeggiare|passear
+guidare|dirigir
+girare|virar, girar (giri a destra = vire à direita)
+attraversare|atravessar
+continuare|continuar
+fermare|parar (fermarsi = parar)
+cambiare|mudar, trocar
+cucinare|cozinhar
+preparare|preparar
+assaggiare|provar (comida)
+mescolare|misturar, mexer
+versare|despejar
+buttare|jogar (buttare la pasta = colocar a massa na água)
+scaldare|esquentar
+pesare|pesar
+ordinare|pedir (no restaurante); arrumar
+cenare|jantar
+pranzare|almoçar
+lasciare|deixar
+dimenticare|esquecer
+imparare|aprender
+insegnare|ensinar
+spiegare|explicar
+raccontare|contar (uma história)
+domandare|perguntar
+firmare|assinar
+inviare|enviar
+allegare|anexar
+fissare|marcar (um compromisso); fixar
+spostare|mudar de lugar; remarcar
+confermare|confirmar
+annullare|cancelar
+controllare|conferir, verificar
+convalidare|validar (o bilhete)
+usare|usar
+funzionare|funcionar
+riparare|consertar
+mostrare|mostrar
+presentare|apresentar (presentarsi = apresentar-se)
+consigliare|aconselhar, recomendar
+occupare|ocupar (occuparsi di = cuidar de, trabalhar com)
+organizzare|organizar
+partecipare|participar
+migliorare|melhorar
+aumentare|aumentar
+iniziare|começar
+ricominciare|recomeçar
+terminare|terminar
+superare|superar; passar (em prova)
+sbagliare|errar
+toccare|tocar (tocca a te = é a sua vez)
+incartare|embrulhar
+fumare|fumar
+abbracciare|abraçar
+baciare|beijar
+litigare|brigar
+scherzare|brincar, fazer piada
+sognare|sonhar
+nevicare|nevar||e
+tirare|puxar (tira vento = está ventando)
+bastare|bastar, ser suficiente||e
+sembrare|parecer||e
+mancare|faltar; fazer falta (mi manchi = sinto sua falta)||e
+passare|passar
+accompagnare|acompanhar
+affittare|alugar
+risparmiare|economizar
+guadagnare|ganhar (dinheiro)
+prestare|emprestar
+rubare|roubar
+accomodare|acomodar (si accomodi = fique à vontade, sente-se)
+scusare|desculpar (scusi = desculpe, formal; scusa = desculpa, informal)
+bagnare|molhar
+chiacchierare|conversar, bater papo
+comunicare|comunicar
+considerare|considerar
+contare|contar (números); contar com
+creare|criar
+curare|cuidar, tratar
+disegnare|desenhar
+disturbare|incomodar
+evitare|evitar
+frequentare|frequentar
+immaginare|imaginar
+indicare|indicar
+informare|informar
+interessare|interessar
+notare|notar
+osservare|observar
+parcheggiare|estacionar
+pregare|pedir, rogar; rezar (La prego = por favor)
+preoccupare|preocupar (non ti preoccupare = não se preocupe)
+pubblicare|publicar
+rappresentare|representar
+realizzare|realizar
+rilassare|relaxar (rilassarsi = relaxar)
+rispettare|respeitar
+ritirare|retirar; sacar (dinheiro)
+ritornare|voltar||e
+riguardare|dizer respeito a
+salvare|salvar
+saltare|pular
+scappare|fugir, sair correndo||e
+scaricare|baixar (arquivo); descarregar
+caricare|carregar
+scambiare|trocar
+segnare|marcar
+sistemare|arrumar, organizar
+stampare|imprimir
+stirare|passar (roupa)
+trattare|tratar
+trasportare|transportar
+vietare|proibir
+volare|voar
+votare|votar
+piovere|chover||e
+ricevere|receber
+ripetere|repetir
+cadere|cair||e
+accadere|acontecer||e
+esistere|existir|esistito|e
+permettere|permitir|permesso
+promettere|prometer|promesso
+smettere|parar de|smesso
+discutere|discutir|discusso
+ridere|rir|riso
+sorridere|sorrir|sorriso
+dividere|dividir|diviso
+accendere|acender, ligar|acceso
+spegnere|apagar, desligar|spento
+attendere|aguardar|atteso
+rendere|tornar; devolver|reso
+comprendere|compreender; incluir|compreso
+sorprendere|surpreender|sorpreso
+riprendere|retomar; pegar de volta|ripreso
+muovere|mover|mosso
+piangere|chorar|pianto
+spingere|empurrar|spinto
+dipingere|pintar|dipinto
+raggiungere|alcançar, chegar a|raggiunto
+svolgere|realizar, desempenhar|svolto
+risolvere|resolver|risolto
+togliere|tirar|tolto
+raccogliere|recolher, colher|raccolto
+descrivere|descrever|descritto
+iscrivere|inscrever (iscriversi = matricular-se)|iscritto
+correggere|corrigir|corretto
+proteggere|proteger|protetto
+friggere|fritar|fritto
+stringere|apertar|stretto
+rivedere|rever|rivisto
+prevedere|prever|previsto
+sedere|sentar (sedersi = sentar-se)||e
+concludere|concluir|concluso
+includere|incluir|incluso
+nascondere|esconder|nascosto
+riconoscere|reconhecer|riconosciuto
+dispiacere|lamentar (mi dispiace = sinto muito)|dispiaciuto|e
+convincere|convencer|convinto
+produrre|produzir|prodotto
+ridurre|reduzir|ridotto
+proporre|propor|proposto
+ottenere|obter
+mantenere|manter
+contenere|conter
+appartenere|pertencer
+avvenire|acontecer|avvenuto|e
+intervenire|intervir|intervenuto|e
+rifare|refazer|rifatto
+valere|valer (vale la pena = vale a pena)|valso|e
+riuscire|conseguir (riesco a = eu consigo)||e
+rompere|quebrar|rotto
+battere|bater
+premere|apertar (um botão)
+trascorrere|passar (o tempo)|trascorso
+scoprire|descobrir|scoperto
+coprire|cobrir|coperto
+soffrire|sofrer|sofferto
+seguire|seguir
+servire|servir; ser necessário (mi serve = preciso de)
+vestire|vestir (vestirsi = vestir-se)
+divertire|divertir (divertirsi = divertir-se)
+bollire|ferver
+avvertire|avisar
+riempire|encher
+annunciare|anunciar
+dichiarare|declarar
+approvare|aprovar
+lanciare|lançar
+colpire|atingir, golpear|||1
+ferire|ferir|||1
+uccidere|matar|ucciso
+arrestare|prender
+denunciare|denunciar
+protestare|protestar
+calare|cair, baixar||e
+causare|causar
+provocare|provocar
+difendere|defender|difeso
+attaccare|atacar; colar
+celebrare|celebrar
+inaugurare|inaugurar
+ospitare|hospedar; sediar
+allenare|treinar (allenarsi = treinar)
+rimandare|adiar
+affermare|afirmar
+smentire|desmentir|||1
+sostenere|apoiar, sustentar; fazer (uma prova)
+ritenere|considerar, achar
+temere|temer
+rischiare|arriscar
+obbligare|obrigar
+investire|investir; atropelar
+costruire|construir|||1
+gestire|gerir, administrar|||1
+unire|unir|||1
+fornire|fornecer|||1
+stabilire|estabelecer|||1
+chiarire|esclarecer|||1
+proibire|proibir|||1
+suggerire|sugerir|||1
+trasferire|transferir (trasferirsi = mudar-se)|||1
+restituire|devolver|||1
+sostituire|substituir|||1
+diminuire|diminuir|||1
+`;
+const XIRR_PRES={togliere:"tolgo togli toglie togliamo togliete tolgono",raccogliere:"raccolgo raccogli raccoglie raccogliamo raccogliete raccolgono",sedere:"siedo siedi siede sediamo sedete siedono",spegnere:"spengo spegni spegne spegniamo spegnete spengono",dispiacere:"dispiaccio dispiaci dispiace dispiacciamo dispiacete dispiacciono",produrre:"produco produci produce produciamo producete producono",ridurre:"riduco riduci riduce riduciamo riducete riducono",proporre:"propongo proponi propone proponiamo proponete propongono",ottenere:"ottengo ottieni ottiene otteniamo ottenete ottengono",mantenere:"mantengo mantieni mantiene manteniamo mantenete mantengono",contenere:"contengo contieni contiene conteniamo contenete contengono",appartenere:"appartengo appartieni appartiene apparteniamo appartenete appartengono",avvenire:"avvengo avvieni avviene avveniamo avvenite avvengono",intervenire:"intervengo intervieni interviene interveniamo intervenite intervengono",rifare:"rifaccio rifai rifà rifacciamo rifate rifanno",valere:"valgo vali vale valiamo valete valgono",riuscire:"riesco riesci riesce riusciamo riuscite riescono",riempire:"riempio riempi riempie riempiamo riempite riempiono",sciare:"scio scii scia sciamo sciate sciano",inviare:"invio invii invia inviamo inviate inviano"};
+const XIRR_FUT={tradurre:"tradurr",produrre:"produrr",ridurre:"ridurr",proporre:"proporr",ottenere:"otterr",mantenere:"manterr",contenere:"conterr",appartenere:"apparterr",avvenire:"avverr",intervenire:"interverr",rifare:"rifar",valere:"varr",rivedere:"rivedr",prevedere:"prevedr",accadere:"accadr",sciare:"scier"};
+const XIRR_IMP={produrre:"producevo producevi produceva producevamo producevate producevano",ridurre:"riducevo riducevi riduceva riducevamo riducevate riducevano",proporre:"proponevo proponevi proponeva proponevamo proponevate proponevano",rifare:"rifacevo rifacevi rifaceva rifacevamo rifacevate rifacevano"};
+// nomes próprios: palavra|explicação
+const XNAMES=`
+lucas|nome de pessoa (Lucas)
+giulia|nome de pessoa (Júlia)
+marco|nome de pessoa (Marcos)
+luca|nome de pessoa (Lucas)
+paolo|nome de pessoa (Paulo)
+paola|nome de pessoa (Paula)
+franco|nome de pessoa
+sofia|nome de pessoa
+matteo|nome de pessoa (Mateus)
+sara|nome de pessoa
+elena|nome de pessoa (Helena)
+chiara|nome de pessoa (Clara)
+marta|nome de pessoa
+maria|nome de pessoa
+davide|nome de pessoa (Davi)
+pietro|nome de pessoa (Pedro)
+anna|nome de pessoa (Ana)
+francesco|nome de pessoa (Francisco)
+francesca|nome de pessoa (Francisca)
+giovanni|nome de pessoa (João)
+giuseppe|nome de pessoa (José)
+andrea|nome de pessoa (André — na Itália é nome masculino)
+alessandro|nome de pessoa (Alexandre)
+lorenzo|nome de pessoa (Lourenço)
+mario|nome de pessoa
+luigi|nome de pessoa (Luís)
+antonio|nome de pessoa
+stefano|nome de pessoa (Estêvão)
+roberto|nome de pessoa
+laura|nome de pessoa
+valentina|nome de pessoa
+silvia|nome de pessoa
+alice|nome de pessoa
+simone|nome de pessoa (Simão — na Itália é nome masculino)
+bianchi|sobrenome italiano
+rossi|sobrenome italiano
+ferrari|sobrenome italiano
+manfrin|sobrenome
+mazzini|Giuseppe Mazzini, figura da unificação italiana; nome comum de ruas (Via Mazzini)
+garibaldi|Giuseppe Garibaldi, herói da unificação italiana; nome comum de ruas e praças
+giotto|Giotto, pintor italiano do século XIV
+pippo|apelido (de Giuseppe ou Filippo); nome do Pateta em italiano
+pedro|nome de pessoa
+carlos|nome de pessoa
+ana|nome de pessoa
+mariana|nome de pessoa
+hans|nome de pessoa (alemão)
+claire|nome de pessoa (francês)
+pierre|nome de pessoa (francês)
+john|nome de pessoa (inglês)
+mary|nome de pessoa (inglês)
+italia|Itália
+brasile|Brasil
+francia|França
+germania|Alemanha
+spagna|Espanha
+portogallo|Portugal
+inghilterra|Inglaterra
+svizzera|Suíça
+austria|Áustria
+europa|Europa
+america|América
+cina|China
+giappone|Japão
+roma|Roma, capital da Itália
+milano|Milão
+napoli|Nápoles
+firenze|Florença
+venezia|Veneza
+torino|Turim
+bologna|Bolonha
+genova|Gênova
+palermo|Palermo, capital da Sicília
+catania|Catânia, cidade da Sicília
+siena|Siena, cidade da Toscana
+verona|Verona
+pisa|Pisa
+bari|Bari, capital da Puglia
+curitiba|Curitiba
+sicilia|Sicília (ilha e região)
+sardegna|Sardenha (ilha e região)
+toscana|Toscana (região de Florença)
+puglia|Puglia (região do «salto da bota»)
+lombardia|Lombardia (região de Milão)
+veneto|Vêneto (região de Veneza)
+lazio|Lácio (região de Roma)
+emilia|Emília (da região Emília-Romanha, a de Bolonha)
+romagna|Romanha (da região Emília-Romanha)
+dolomiti|Dolomitas (montanhas do norte da Itália)
+alpi|Alpes
+colosseo|Coliseu
+vaticano|Vaticano
+whatsapp|WhatsApp
+bellavista|nome de hotel (“bela vista”)
+`;
+
+/* ============================ DICIONÁRIO AMPLIADO: LÓGICA ============================ */
+// Cobre as palavras que não estão no vocabulário dos tópicos: substantivos e adjetivos com plural/feminino,
+// verbos extras (todas as formas), imperativo, pronomes grudados no verbo, elisões (c', dov', trent'), números e nomes próprios.
+const XPOS={m:"substantivo masculino",f:"substantivo feminino",mf:"substantivo (masculino e feminino)",mi:"substantivo masculino invariável",fi:"substantivo feminino invariável",a:"adjetivo",ai:"adjetivo invariável",d:"indefinido / quantificador",av:"advérbio",c:"conjunção",pp:"preposição",p:"pronome",i:"expressão",x:""};
+const XIDX={},XINF={},XNAME={};
+function xAdd(T,k,e){k=k.toLowerCase();if(k&&!T[k])T[k]=e}
+function xArt(w,g,pl){const v=/^[aeiouàèéìòùh]/.test(w),s=/^(s[^aeiou]|z|ps|gn|x|y)/.test(w);
+ if(g==="f")return pl?"le ":v?"l'":"la ";return pl?(v||s?"gli ":"i "):v?"l'":s?"lo ":"il "}
+function xNounPl(w,g){if(!/[aeo]$/.test(w))return[];const s=w.slice(0,-1),l=w.slice(-1);
+ if(/ista$/.test(w))return g==="f"?[s+"e"]:g==="m"?[s+"i"]:[s+"i",s+"e"];
+ if(l==="e")return[s+"i"];
+ if(l==="o"){if(/io$/.test(w))return[w.slice(0,-2)+"i"];if(/ico$/.test(w)&&w.length>4)return[s.slice(0,-1)+"ci"];if(/[cg]o$/.test(w))return[s+"hi"];return[s+"i"]}
+ if(g==="m")return[s+"i"];if(g==="mf")return[s+"i",s+"e"];
+ if(/[cg]a$/.test(w))return[s+"he"];
+ if(/[^aeiou][cg]ia$/.test(w))return[w.slice(0,-2)+"e"];
+ return[s+"e"]}
+function xAdjForms(w){const s=w.slice(0,-1),l=w.slice(-1);
+ if(l==="e")return[[s+"i","plural"]];
+ if(l!=="o")return[];
+ if(/io$/.test(w)){const t=w.slice(0,-2),r=[[t+"ia","feminino"],[t+"i","masculino plural"],[t+"ie","feminino plural"]];if(/[cg]io$/.test(w))r.push([t+"e","feminino plural"]);return r}
+ if(/co$/.test(w))return[[s+"a","feminino"],[/ico$/.test(w)&&w.length>4?s.slice(0,-1)+"ci":s+"hi","masculino plural"],[s+"he","feminino plural"]];
+ if(/go$/.test(w))return[[s+"a","feminino"],[s+"hi","masculino plural"],[s+"he","feminino plural"]];
+ return[[s+"a","feminino"],[s+"i","masculino plural"],[s+"e","feminino plural"]]}
+function xSupStem(w){if(!/[oe]$/.test(w))return null;if(/io$/.test(w))return w.slice(0,-2);const s=w.slice(0,-1);if(/[cg]o$/.test(w)&&!(/ico$/.test(w)&&w.length>4))return s+"h";return s}
+XLEX.trim().split("\n").forEach(line=>{const[w,pos,m,irr]=line.split("|");if(!w||!m)return;
+ const e={lemma:w,meaning:m,pos:XPOS[pos]||"",kind:"x"};
+ const g=pos==="m"||pos==="mi"?"m":pos==="f"||pos==="fi"?"f":pos==="mf"?"mf":"";
+ if(g){const pls=pos==="mi"||pos==="fi"?[w]:irr?irr.split(","):xNounPl(w,g);
+  const sg=g==="mf"?xArt(w,"m")+w+" / "+xArt(w,"f")+w:xArt(w,g)+w;
+  const pl=pls.length?(g==="mf"&&pls.length>1?xArt(pls[0],"m",1)+pls[0]+" / "+xArt(pls[1],"f",1)+pls[1]:pls.map(p=>(g==="m"&&/a$/.test(p)?"le ":xArt(p,g==="mf"?"m":g,1))+p).join(" / ")):"";
+  e.how=["Com artigo: <i class='it'>"+esc(sg)+"</i>"+(pl?" · plural: <i class='it'>"+esc(pl)+"</i>"+(pos==="mi"||pos==="fi"?" (não muda)":""):"")+"."];
+  xAdd(XIDX,w,e);pls.forEach(p=>{if(p!==w)xAdd(XINF,p,Object.assign({},e,{note:"Plural de “"+w+"”."}))});return}
+ xAdd(XIDX,w,e);
+ if(pos==="a"||pos==="d"){
+  const fs=irr?irr.split(",").map((f,i)=>[f,["masculino plural","feminino","feminino plural"][i]||"forma"]):xAdjForms(w);
+  if(fs.length)e.how=["Formas: <i class='it'>"+esc([w].concat(fs.map(f=>f[0])).join(", "))+"</i>. Concorda com o substantivo."];
+  fs.forEach(f=>xAdd(XINF,f[0],Object.assign({},e,{note:f[1][0].toUpperCase()+f[1].slice(1)+" de “"+w+"”."})));
+  const st=xSupStem(w);if(st&&st.length>1)[["issimo","masculino"],["issima","feminino"],["issimi","masculino plural"],["issime","feminino plural"]].forEach(([x])=>
+   xAdd(XINF,st+x,{lemma:w,meaning:"muito "+m.split(/[;,(]/)[0].trim(),pos:"superlativo",kind:"x",note:"Superlativo de “"+w+"”: a terminação -issimo quer dizer “muito”."}))}});
+[["po'","pouco (un po' = um pouco)","forma curta de poco"],["bei","bonitos — plural de bello antes de consoante (i bei tempi)","adjetivo"],["begli","bonitos — plural de bello antes de vogal ou s+consoante (begli occhi)","adjetivo"],["nessun","nenhum — forma curta de nessuno antes de substantivo masculino","indefinido"],["alcun","nenhum, algum — forma curta de alcuno","indefinido"],["entrambe","ambas","indefinido"],["tutti","todos","indefinido"],["ad","a — forma da preposição a antes de vogal (ad esempio)","preposição"],["od","ou — forma de o antes de vogal","conjunção"]].forEach(r=>xAdd(XIDX,r[0],{lemma:r[0],meaning:r[1],pos:r[2],kind:"x"}));
+XNAMES.trim().split("\n").forEach(line=>{const[w,m]=line.split("|");if(w&&m)XNAME[w]={lemma:w[0].toUpperCase()+w.slice(1),meaning:m,pos:"nome próprio",kind:"x"}});
+
+/* verbos extras: entram só no dicionário (todas as formas), não nos cartões */
+Object.assign(IRR_PRES,XIRR_PRES);Object.assign(IRR_FUT,XIRR_FUT);Object.assign(IRR_IMP,XIRR_IMP);
+// compostos herdam a irregularidade do verbo-base: mantenere ← tenere, intervenire ← venire, rifare ← fare
+XVERBS.trim().split("\n").forEach(l=>{const inf=l.split("|")[0];["tenere","venire","fare","dire"].forEach(b=>{if(inf.length>b.length&&inf.endsWith(b)){const pre=inf.slice(0,-b.length),ap=x=>x.split(" ").map(f=>pre+f).join(" ");
+ if(!IRR_PRES[inf]&&IRR_PRES[b])IRR_PRES[inf]=ap(IRR_PRES[b]);if(!IRR_FUT[inf]&&IRR_FUT[b])IRR_FUT[inf]=pre+IRR_FUT[b];if(!IRR_IMP[inf]&&IRR_IMP[b])IRR_IMP[inf]=ap(IRR_IMP[b])}})});
+const XVLIST=XVERBS.trim().split("\n").map(l=>l.split("|")).filter(v=>v[0]&&!VERBMAP[v[0]]).map(v=>({inf:v[0],pt:v[1],pp:v[2]||regPP(v[0]),aux:v[3]||"a",isc:!!v[4]}));
+function xPush(f,o){if(!f)return;(FORMS[f]=FORMS[f]||[]);if(!FORMS[f].some(x=>x.v===o.v&&x.tk===o.tk&&x.i===o.i&&x.who===o.who))FORMS[f].push(o)}
+XVLIST.forEach(v=>{VERBMAP[v.inf]=v;
+ Object.entries(TENSES).forEach(([tk,T])=>{if(tk==="pass")return;T.f(v).forEach((f,i)=>xPush(f,{v,tk,i}))});
+ [v.pp,v.pp.replace(/o$/,"a"),v.pp.replace(/o$/,"i"),v.pp.replace(/o$/,"e")].forEach(f=>xPush(f,{v,tk:"pp",i:-1}));
+ xPush(gerund(v),{v,tk:"ger",i:-1});xPush(v.inf,{v,tk:"inf",i:-1})});
+/* imperativo de todos os verbos (tu, Lei, loro) */
+const IMPV_TU={essere:"sii",avere:"abbi",sapere:"sappi"},IMPV_LEI={essere:"sia",avere:"abbia",andare:"vada",dare:"dia",stare:"stia",sapere:"sappia",dovere:"debba"};
+const IMPV_SHORT={andare:"va",fare:"fa",dare:"da",stare:"sta",dire:"di"};
+VERBS.concat(XVLIST).forEach(v=>{const p=pres(v),are=v.inf.endsWith("are");
+ const tu=IMPV_TU[v.inf]||(are&&!IRR_PRES[v.inf]?p[2]:p[1]);
+ const lei=IMPV_LEI[v.inf]||(are&&!IRR_PRES[v.inf]?p[1]:p[0].replace(/o$/,"a"));
+ xPush(tu,{v,tk:"impv",i:-1,who:"tu"});xPush(lei,{v,tk:"impv",i:-1,who:"Lei"});xPush(lei+"no",{v,tk:"impv",i:-1,who:"loro"});
+ if(IMPV_SHORT[v.inf])xPush(IMPV_SHORT[v.inf],{v,tk:"impv",i:-1,who:"tu"})});
+TLAB.impv="imperativo";
+
+/* números por extenso */
+const NUM1={zero:0,uno:1,un:1,una:1,due:2,tre:3,"tré":3,quattro:4,cinque:5,sei:6,sette:7,otto:8,nove:9,dieci:10,undici:11,dodici:12,tredici:13,quattordici:14,quindici:15,sedici:16,diciassette:17,diciotto:18,diciannove:19};
+const NUMT={venti:20,trenta:30,quaranta:40,cinquanta:50,sessanta:60,settanta:70,ottanta:80,novanta:90};
+function parseNum(s){if(!s)return null;if(NUM1[s]!=null)return NUM1[s];
+ let i=s.indexOf("mila");if(i>0){const a=parseNum(s.slice(0,i)),r=s.slice(i+4),b=r?parseNum(r):0;return a>1&&a<1000&&b!=null&&b<1000?a*1000+b:null}
+ if(s.startsWith("mille")){const r=s.slice(5),b=r?parseNum(r):0;return b!=null&&b<1000?1000+b:null}
+ i=s.indexOf("cento");if(i>=0){const h=i===0?1:parseNum(s.slice(0,i)),r=s.slice(i+5),b=r?parseNum(r):0;return h>=1&&h<10&&b!=null&&b<100?h*100+b:null}
+ for(const t in NUMT){if(s===t)return NUMT[t];const st=t.slice(0,-1);if(!s.startsWith(st))continue;
+  const full=s.startsWith(t),u=NUM1[s.slice(full?t.length:st.length)];
+  if(u>=1&&u<=9&&(full?(u!==1&&u!==8):(u===1||u===8)))return NUMT[t]+u}
+ return null}
+function ptNum(n){const u=["zero","um","dois","três","quatro","cinco","seis","sete","oito","nove","dez","onze","doze","treze","catorze","quinze","dezesseis","dezessete","dezoito","dezenove"],d=["","","vinte","trinta","quarenta","cinquenta","sessenta","setenta","oitenta","noventa"],c=["","cento","duzentos","trezentos","quatrocentos","quinhentos","seiscentos","setecentos","oitocentos","novecentos"];
+ if(n<20)return u[n];if(n<100)return d[n/10|0]+(n%10?" e "+u[n%10]:"");if(n===100)return"cem";if(n<1000)return c[n/100|0]+(n%100?" e "+ptNum(n%100):"");
+ const m=n/1000|0,r=n%1000;return(m===1?"mil":ptNum(m)+" mil")+(r?(r<100||r%100===0?" e ":" ")+ptNum(r):"")}
+function xNumber(k){const n=parseNum(k);if(n==null)return null;
+ return{lemma:k,meaning:n+" ("+ptNum(n)+")",pos:"número",kind:"x",how:n>20?["Os números se escrevem numa palavra só: <i class='it'>"+esc(k)+"</i>.","Antes de <i class='it'>uno</i> e <i class='it'>otto</i> a dezena perde a vogal: <i class='it'>ventuno, ventotto</i>."]:[]}}
+
+/* pronomes grudados no fim do verbo: aiutarla, dimmi, mettila, alzati */
+const CLIT={mi:"me / a mim",ti:"te / a você",si:"se",ci:"nos; lá",vi:"vos / a vocês",lo:"o (isso, ele)",la:"a (ela; a senhora)",li:"os",le:"as; a ela / à senhora",ne:"disso, dele",gli:"a ele / a eles"};
+const CLITRE=/(glielo|gliela|glieli|gliele|gliene|(?:me|te|se|ce|ve)(?:lo|la|li|le|ne)|mi|ti|si|ci|vi|lo|la|li|le|ne|gli)$/;
+function xClitic(k){const m=k.match(CLITRE);if(!m)return null;const c=m[1],st=k.slice(0,-c.length);if(st.length<2)return null;
+ const cands=[[st+"e",["inf"]],[st+"re",["inf"]],[st,["impv","ger"]]];
+ if(st.slice(-1)===c[0])cands.push([st.slice(0,-1),["impv"]]);
+ for(const[cand,tks]of cands){const vf=(FORMS[cand]||[]).filter(z=>tks.includes(z.tk)||(tks.includes("impv")&&z.tk==="pres"&&(z.i===3||z.i===4)));
+  if(vf.length){const v=vf[0].v,two=c.length>3&&c!=="gli";
+   return{lemma:v.inf,meaning:v.pt,pos:"verbo + pronome",kind:"x",verb:vf,
+    note:two?"Forma de “"+v.inf+"” com dois pronomes grudados no final (“"+c+"”).":"Forma de “"+v.inf+"” com o pronome “"+c+"” ("+CLIT[c]+") grudado no final."}}}
+ return null}
+
+/* elisões: a vogal final cai antes de outra vogal (c'è, dov'è, trent'anni) */
+const ELIS={"c'":"ci","d'":"di","m'":"mi","t'":"ti","s'":"si","v'":"vi","n'":"ne","dov'":"dove","com'":"come","cos'":"cosa","anch'":"anche","nient'":"niente","quest'":"questo","bell'":"bello","buon'":"buona","sant'":"santo","quand'":"quando","senz'":"senza","tutt'":"tutto","mezz'":"mezzo","grand'":"grande","gliel'":"glielo","quant'":"quanto","nessun'":"nessuna","neanch'":"neanche","quell'":"quello","sull'":"sullo","dell'":"dello","all'":"allo","dall'":"dallo","nell'":"nello"};
+function xElision(k){if(!/'$/.test(k))return null;const st=k.slice(0,-1);
+ const tries=ELIS[k]?[ELIS[k]]:[st+"o",st+"a",st+"e",st+"i"];
+ for(const t of tries){const e=lookupLocal(t,t);if(e&&e.meaning){e.note="Forma de “"+t+"” sem a vogal final, usada antes de palavra que começa com vogal."+(e.note?" "+e.note:"");e.lemma=e.lemma||t;return e}}
+ return null}
+// leituras extras da mesma palavra: “alzati” (particípio ou imperativo + ti), “sei” (verbo ou número)
+function xAlso(e,kk){const xc=e.pos==="verbo"&&!e.note?xClitic(kk):null;if(xc)e.note="Também pode ser: "+xc.note[0].toLowerCase()+xc.note.slice(1);
+ const n=e.pos!=="número"?parseNum(kk):null;if(n>=2)e.note=(e.note?e.note+" ":"")+"Também é o número "+n+" ("+ptNum(n)+").";return e}
+// chamada pelo lookupLocal quando nada mais achou
+function xFallback(k,kk){
+ if(XNAME[kk])return Object.assign({},XNAME[kk]);
+ const tr=(FORMS[kk+"e"]||[]).filter(z=>z.tk==="inf");
+ if(tr.length&&kk.length>2)return{lemma:tr[0].v.inf,meaning:tr[0].v.pt,pos:"verbo",kind:"x",verb:tr,note:"Infinitivo sem o -e final, comum antes de outro verbo ou em expressões: “"+kk+"”."};
+ return xNumber(kk)||xClitic(kk)||xElision(k)||(FUNC[kk+"'"]?Object.assign({},FUNC[kk+"'"]):null)}
 
 /* ============================ PRÁTICA: GERADORES, ESCUTA, TESTES, ERROS, META ============================ */
 const PERS=["io","tu","lui/lei","noi","voi","loro"],PERSQ=["io","tu","lei","noi","voi","loro"];
@@ -3338,7 +5218,7 @@ function renderDict(){const box=$("#shp-dict"),it=DT.items[DT.i],t=TOPIC[DT.tid]
  $("#dtCheck").onclick=()=>{const v=$("#dtIn").value.trim();if(!v)return;const d=wordDiff(it[0],v);DT.scores.push(d.score);recordCat("list",d.score>=90);$("#dtCheck").disabled=true;$("#dtIn").disabled=true;
   $("#dtRes").innerHTML=`<div class="fb ${d.score>=90?"ok":"no"}"><b>${d.score}% certo</b><div class="trorig it">${d.html}</div>${it[1]?`<span class="small">${esc(it[1])}</span>`:""}</div><button class="btn primary" id="dtNext" style="margin-top:10px">${DT.i<DT.items.length-1?"Próxima":"Ver resultado"}</button>`;tokenize($("#dtRes"));
   $("#dtNext").onclick=()=>{DT.i++;if(DT.i<DT.items.length){renderDict();return}const avg=Math.round(DT.scores.reduce((a,b)=>a+b,0)/DT.scores.length);S.dict=S.dict||{};const prev=S.dict[DT.tid];S.dict[DT.tid]={best:Math.max(avg,prev?prev.best:0),last:today()};logInc("s");save();
-   const tid=DT.tid;box.innerHTML=`<div class="card stack"><span class="label">Ditado · ${esc(t.t)}</span><h2>${avg}%</h2><p>${avg>=90?"Excelente: seu ouvido já pega as frases inteiras.":"Ouça os podcasts do tópico no modo “Frase + pausa” e tente de novo."}</p><div class="row"><button class="btn primary" id="dtAgain">Outras 5 frases</button><button class="btn" id="dtHome">Outros tópicos</button></div></div>`;
+   const tid=DT.tid;box.innerHTML=`<div class="card stack"><span class="label">Ditado · ${esc(t.t)}</span><h2>${avg}%</h2><p>${avg>=90?"Excelente: seu ouvido já pega as frases inteiras.":"Ouça os podcasts do tópico no modo “Trecho + pausa” e tente de novo."}</p><div class="row"><button class="btn primary" id="dtAgain">Outras 5 frases</button><button class="btn" id="dtHome">Outros tópicos</button></div></div>`;
    $("#dtAgain").onclick=()=>{DT={tid,items:shuffle(LSENT[tid]||[]).filter(s=>s[0].length<80&&s[0].split(/\s+/).length>=4).slice(0,5),i:0,scores:[]};renderDict()};$("#dtHome").onclick=()=>{DT=null;renderDictHome()}}}}
 
 /* ============================ PAINEL DA PALAVRA (todo o app) ============================ */
@@ -3363,14 +5243,17 @@ document.addEventListener("click",e=>{const b=e.target.closest("button.w");if(b)
 function showSheet(on){$("#sheet").hidden=!on;$("#sheetBack").hidden=!on;
  if(on){$("#sheet").scrollTop=0;setTimeout(()=>$("#shClose").focus({preventScroll:true}),0)}else{$$("button.w.on").forEach(x=>x.classList.remove("on"));if(SH&&SH.btn&&document.contains(SH.btn))SH.btn.focus({preventScroll:true})}}
 function favKeyOf(e,k){return String((e&&e.lemma)||k).toLowerCase().trim()}
-function verbBlock(vf,surface){const x=vf.find(z=>z.tk!=="inf")||vf[0],v=x.v;
+function verbBlock(vf,surface){const x=vf.find(z=>z.tk!=="inf"&&z.tk!=="impv")||vf.find(z=>z.tk!=="inf")||vf[0],v=x.v;
+ const iw=[...new Set(vf.filter(z=>z.v===v&&z.tk==="impv").map(z=>z.who==="tu"?"tu":z.who==="Lei"?"Lei (formal)":"loro"))];
+ const impTxt=iw.length?`imperativo para ${iw.join(" / ")}`+(iw.some(w=>w!=="tu")?" (igual ao congiuntivo presente)":""):"";
+ if(x.tk==="impv")return`<p class="small">Forma de verbo <b class="it">${esc(v.inf)}</b> (${esc(v.pt)}) · <b>${impTxt}</b>. O imperativo dá ordens, instruções e convites: <i class="it">${esc(surface)}!</i></p>${miniConj(v,"pres",-1)}`;
  let label=`verbo <b class="it">${esc(v.inf)}</b> (${esc(v.pt)})`;
  if(x.tk==="inf")return`<p class="small">${label} · infinitivo · auxiliar no passado: <b>${v.aux==="e"?"essere":"avere"}</b></p>${miniConj(v,"pres",-1)}`;
  if(x.tk==="pp")return`<p class="small">Particípio passado de ${label}. Forma o passato prossimo com <b>${v.aux==="e"?"essere":"avere"}</b>: <i class="it">${esc(pass(v)[0])}</i>.${v.aux==="e"?" Com essere concorda com o sujeito (-o, -a, -i, -e).":""}</p>${miniConj(v,"pass",-1)}`;
  if(x.tk==="ger")return`<p class="small">Gerúndio de ${label}. Com <b>stare</b> indica ação em andamento: <i class="it">sto ${esc(surface)}</i>.</p>`;
  const who=vf.filter(z=>z.v===v&&z.tk===x.tk).map(z=>P[z.i]).join(" / ");
  const others=vf.filter(z=>z.v===v&&z.tk!==x.tk&&z.i>=0).map(z=>TLAB[z.tk]+" ("+P[z.i]+")");
- return`<p class="small">Forma de ${label} · <b>${TLAB[x.tk]}</b> · ${esc(who)}${others.length?` · também ${esc(others.join(", "))}`:""}</p>${miniConj(v,x.tk,vf.filter(z=>z.v===v&&z.tk===x.tk).map(z=>z.i))}`}
+ return`<p class="small">Forma de ${label} · <b>${TLAB[x.tk]}</b> · ${esc(who)}${others.length?` · também ${esc(others.join(", "))}`:""}${impTxt?` · também ${impTxt}`:""}</p>${miniConj(v,x.tk,vf.filter(z=>z.v===v&&z.tk===x.tk).map(z=>z.i))}`}
 function miniConj(v,tk,mark){const f=TENSES[tk].f(v),m=[].concat(mark);return`<div class="stack" style="gap:6px"><span class="label">${TENSES[tk].n} de ${esc(v.inf)}</span><div class="cjmini">${f.map((x,i)=>`<span><em>${P[i]}</em><b class="${m.includes(i)?"me":""}" style="font-weight:${m.includes(i)?700:500}">${esc(x)}</b></span>`).join("")}</div></div>`}
 function extLinks(){return`<div class="row"><a class="btn small" href="https://www.wordreference.com/itpt/${encodeURIComponent(SH.surface.toLowerCase())}" target="_blank" rel="noopener">Ver no WordReference</a></div>`}
 function renderSheet(){const e=SH.entry,fk=e?favKeyOf(e,SH.k):null,isFav=!!(fk&&S.favs[fk]&&e.meaning);
@@ -3393,7 +5276,7 @@ function renderSheet(){const e=SH.entry,fk=e?favKeyOf(e,SH.k):null,isFav=!!(fk&&
   if(e.topic&&TOPIC[e.topic])h+=`<p class="small muted">Do vocabulário de <b>${esc(TOPIC[e.topic].lvl)} · ${esc(TOPIC[e.topic].t)}</b>.</p>`;
   if(e.meaning)h+=`<p class="favline small">${isFav?"★ Salva nas minhas palavras. Ela aparece nos cartões de revisão.":"Toque na estrela para revisar esta palavra nos cartões."}</p>`;
  }
- else h+=`<p class="muted">Esta palavra ainda não está no dicionário do curso.</p>`+extLinks();
+ else h+=`<p class="muted">Esta palavra ainda não está no dicionário do app. Veja o significado no dicionário online:</p>`+extLinks();
  if(SH.sentence&&SH.sentence.toLowerCase()!==SH.surface.toLowerCase())h+=`<div class="stack" style="gap:6px"><span class="label">Onde aparece</span><div class="exi"><div><i class="it">${esc(SH.sentence)}</i></div>${spkBtn(SH.sentence)}</div></div>`;
  if(SH.sentence&&SH.sentence.split(/\s+/).length>2){const sid=sentCardId(SH.sentence,SH.surface),sv=!!(S.sents||{})[sid];h+=`<button class="btn small${sv?" ghost":""}" id="shSent">${sv?"★ Frase salva nos cartões (tocar para remover)":"Salvar a frase nos cartões"}</button>`}
  $("#shBody").innerHTML=h;tokenize($("#shBody"));
@@ -3410,66 +5293,58 @@ function toggleFav(){const e=SH&&SH.entry;if(!e||!e.meaning)return;const key=fav
  save();renderSheet();refreshTokenMarks();updateFavCount();renderDecks();renderHome()}
 
 /* ============================ SHADOWING ============================ */
+// Estúdio de shadowing: 5 etapas guiadas por podcast, trechos curtos com pausa cronometrada,
+// palavra acesa enquanto o áudio fala, frases difíceis marcadas para treinar depois e minutos do dia.
 let SLVL="A1",SCUR=null;
-const SHP={i:0,state:"idle",tok:0,mode:"shadow",rate:.85,show:"it",rep:0};
-try{const o=JSON.parse(localStorage.getItem(KEY+".shp")||"{}");if(o.mode)SHP.mode=o.mode;if(o.rate)SHP.rate=o.rate;if(o.show)SHP.show=o.show}catch(e){}
-function saveShp(){try{localStorage.setItem(KEY+".shp",JSON.stringify({mode:SHP.mode,rate:SHP.rate,show:SHP.show}))}catch(e){}}
-let IT_VOICES=[];
-function loadVoices(){if(!canSpeak)return;try{const v=speechSynthesis.getVoices().filter(x=>/^it/i.test(x.lang));IT_VOICES=v}catch(e){}}
+const STEPS=[
+ {k:1,n:"Ouvir",d:"Só escute, sem ler. O objetivo é entender a situação, não cada palavra.",mode:"listen",show:"none",rate:.9},
+ {k:2,n:"Entender",d:"Ouça de novo lendo com a tradução. Toque nas palavras novas para ver o significado.",mode:"listen",show:"both",rate:.8},
+ {k:3,n:"Repetir lendo",d:"O áudio toca um trecho curto e para. Na pausa, repita em voz alta lendo o texto.",mode:"shadow",show:"it",rate:.8},
+ {k:4,n:"Repetir de ouvido",d:"Igual à etapa 3, mas sem ler: o texto só aparece depois que você repete.",mode:"shadow",show:"after",rate:.85},
+ {k:5,n:"Falar junto",d:"Velocidade normal e sem pausas. Fale junto com o áudio, meio segundo atrás, como uma sombra.",mode:"listen",show:"it",rate:1}];
+const MODES={shadow:"Trecho + pausa",loop:"Cada trecho 3×",listen:"Direto, sem pausa"};
+const GAPS={short:["Curta",1],normal:["Normal",1.35],long:["Longa",1.9],manual:["Eu aviso (toque para seguir)",0]};
+const SHOWS={it:"Italiano",both:"Italiano + tradução",after:"Escondido até eu repetir",none:"Sem texto"};
+const SHP={i:0,c:0,state:"idle",tok:0,step:1,mode:"listen",rate:.9,show:"none",rep:0,gap:"normal",chunk:true,voice:"",only:false,done:false};
+try{const o=JSON.parse(localStorage.getItem(KEY+".shp")||"{}");if(GAPS[o.gap])SHP.gap=o.gap;if(o.chunk===false)SHP.chunk=false;if(typeof o.voice==="string")SHP.voice=o.voice}catch(e){}
+function saveShp(){try{localStorage.setItem(KEY+".shp",JSON.stringify({gap:SHP.gap,chunk:SHP.chunk,voice:SHP.voice}))}catch(e){}}
+
+/* ---- vozes: escolhe as melhores vozes italianas do aparelho ---- */
+let IT_VOICES=[],VOICES_SEEN=false;
+function rankVoice(v){const n=v.name||"";let s=0;if(/^it[-_]IT/i.test(v.lang))s+=5;if(/natural|neural|premium|enhanced|siri/i.test(n))s+=4;if(/google/i.test(n))s+=3;if(/compact|eloquence|espeak/i.test(n))s-=4;return s}
+function loadVoices(){if(!canSpeak)return;try{const all=speechSynthesis.getVoices();if(all.length)VOICES_SEEN=true;
+ IT_VOICES=all.filter(x=>/^it/i.test(x.lang)).map((v,i)=>({v,r:rankVoice(v),i})).sort((a,b)=>b.r-a.r||a.i-b.i).map(x=>x.v);
+ if($("#pVoice"))fillVoices()}catch(e){}}
 if(canSpeak){loadVoices();try{speechSynthesis.addEventListener("voiceschanged",loadVoices)}catch(e){}}
-function voiceFor(sp){if(!IT_VOICES.length)return{voice:null,pitch:sp==="A"?1:1.18};if(IT_VOICES.length>1)return{voice:IT_VOICES[sp==="A"?0:1],pitch:1};return{voice:IT_VOICES[0],pitch:sp==="A"?.95:1.2}}
+function chosenVoice(){return SHP.voice?IT_VOICES.find(v=>v.name===SHP.voice)||null:null}
+function voiceFor(sp){const c=chosenVoice();if(c)return{voice:c,pitch:sp==="A"?1:1.12};
+ if(!IT_VOICES.length)return{voice:null,pitch:sp==="A"?1:1.15};
+ if(IT_VOICES.length>1&&rankVoice(IT_VOICES[1])>=rankVoice(IT_VOICES[0])-3)return{voice:IT_VOICES[sp==="A"?0:1],pitch:1};
+ return{voice:IT_VOICES[0],pitch:sp==="A"?1:1.15}}
+function bestVoice(){return chosenVoice()||IT_VOICES[0]||null}
+function fillVoices(){const el=$("#pVoice");if(!el)return;
+ el.innerHTML=`<option value="">Automática${IT_VOICES.length>1?" (duas vozes)":""}</option>`+IT_VOICES.map(v=>`<option value="${esc(v.name)}" ${SHP.voice===v.name?"selected":""}>${esc(v.name.replace(/\s*\(.*?\)\s*/g," ").trim())}</option>`).join("");
+ const lab=el.closest("label");if(lab)lab.hidden=IT_VOICES.length<2;
+ const w=$("#pNoVoice");if(w)w.hidden=!(VOICES_SEEN&&!IT_VOICES.length)}
+
+/* ---- minutos de prática do dia ---- */
+function shMin(){const m=S.shmin;return m&&m.d===today()?Math.round(m.ms/6e4):0}
+function addShMs(ms){if(!(ms>0))return;if(!S.shmin||S.shmin.d!==today())S.shmin={d:today(),ms:0};S.shmin.ms+=Math.min(ms,6e4);saveLocal()}
+const SH_GOAL=10;
+
+/* ---- tela inicial do shadowing ---- */
 $$("#sSeg button").forEach(b=>b.addEventListener("click",()=>{SLVL=b.dataset.sl;renderShadow()}));
+function podState(id){return(S.shadow||{})[id]||null}
+function stepsDone(s){return s&&s.steps?STEPS.filter(x=>s.steps[x.k]).length:0}
+function nextStep(s){const st=(s&&s.steps)||{};const n=STEPS.find(x=>!st[x.k]);return n?n.k:5}
+function dots(s){const st=(s&&s.steps)||{};return`<span class="sdots" aria-label="${stepsDone(s)} de 5 etapas feitas">${STEPS.map(x=>`<i class="${st[x.k]?"on":""}"></i>`).join("")}</span>`}
 function renderShadow(){if(SCUR&&!$("#sPlay").hidden)return;
+ renderShadowIntro();
  $$("#sSeg button").forEach(b=>{const on=b.dataset.sl===SLVL;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
- $("#slist").innerHTML=PODS.filter(p=>TOPIC[p.topic].lvl===SLVL).map(p=>{const t=TOPIC[p.topic],s=(S.shadow||{})[p.topic];return`<button class="tcard${s&&s.n>=3?" done":""}" data-sopen="${p.topic}"><span class="tn">${t.n}</span><div><h3>${esc(p.t)}</h3><p>${esc(t.t)} · ${p.L.length} falas</p></div><span class="pill ${s?"ok":""}">${s?s.n+"×":"novo"}</span></button>`}).join("");
+ $("#slist").innerHTML=PODS.filter(p=>TOPIC[p.topic].lvl===SLVL).map(p=>{const t=TOPIC[p.topic],s=podState(p.topic),n=stepsDone(s);
+  return`<button class="tcard${n>=5?" done":""}" data-sopen="${p.topic}"><span class="tn">${t.n}</span><div><h3>${esc(p.t)}</h3><p>${esc(t.t)} · ${p.L.length} falas</p>${dots(s)}</div><span class="pill ${s?"ok":""}">${n>=5?"completo":s?(n?n+"/5":s.n+"×"):"novo"}</span></button>`}).join("");
  $$("[data-sopen]").forEach(b=>b.onclick=()=>openPod(b.dataset.sopen))}
-function openPod(id){const p=PODS.find(x=>x.topic===id);if(!p)return;SMODE="pod";renderSMode();SCUR=p;SLVL=TOPIC[id].lvl;stopPod();SHP.i=0;$("#sHome").hidden=true;$("#sPlay").hidden=false;renderPod();window.scrollTo(0,0)}
-function closePod(){stopPod();SCUR=null;$("#sPlay").hidden=true;$("#sHome").hidden=false;renderShadow();window.scrollTo(0,0)}
-const MODES={shadow:"Frase + pausa",loop:"Cada frase 3×",listen:"Direto, sem pausa"};
-function renderPod(){const p=SCUR,t=TOPIC[p.topic],s=(S.shadow||{})[p.topic];
- $("#sPlay").innerHTML=`<button class="back" id="sBack">← Podcasts ${t.lvl}</button>
- <div class="tophead"><span class="label">${t.lvl} · Tópico ${t.n} · ${esc(t.t)}</span><h2>${esc(p.t)}</h2><p class="muted small">${esc(p.sit)}</p>${s?`<p class="small">Você já praticou este podcast <b>${s.n}</b> ${s.n===1?"vez":"vezes"} (último: ${fmtBR(s.last)}).</p>`:""}</div>
- <div class="card popts-card"><div class="popts">
-   <label for="pMode">Modo<select id="pMode">${Object.entries(MODES).map(([k,n])=>`<option value="${k}" ${SHP.mode===k?"selected":""}>${n}</option>`).join("")}</select></label>
-   <label for="pRate">Velocidade<select id="pRate">${[[.65,"Bem devagar"],[.8,"Devagar"],[.9,"Quase normal"],[1,"Normal"]].map(([v,n])=>`<option value="${v}" ${Math.abs(SHP.rate-v)<.01?"selected":""}>${n}</option>`).join("")}</select></label>
-   <label for="pShow">Texto<select id="pShow"><option value="it" ${SHP.show==="it"?"selected":""}>Italiano</option><option value="both" ${SHP.show==="both"?"selected":""}>Italiano + tradução</option><option value="none" ${SHP.show==="none"?"selected":""}>Sem texto (só ouvir)</option></select></label>
-  </div></div>
- <div class="card stack player">
-  <div class="pctl"><button class="iconbtn" id="pPrev" aria-label="Fala anterior"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><button class="btn primary pbig" id="pPlay"></button><button class="iconbtn" id="pNext" aria-label="Próxima fala"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div>
-  <div class="progress"><i id="pBar" style="width:0%"></i></div>
-  <p class="small muted" id="pHint"></p>
- </div>
- ${canSpeak?"":`<div class="trap"><span class="label">Sem áudio</span>Este navegador não tem síntese de voz. Abra o app no celular ou no Chrome para ouvir.</div>`}
- <div class="dlg show-${SHP.show}" id="dlg">${p.L.map((l,i)=>`<div class="dl sp${l[0]}" data-li="${i}"><span class="dsp">${esc(p.sp[l[0]])}</span><div class="dtx"><span class="it">${esc(l[1])}</span><span class="dpt">${esc(l[2])}</span></div><button class="spk dplay" data-pi="${i}" aria-label="Tocar a partir desta fala">${SPK_SVG}</button></div>`).join("")}</div>
- <div class="tip"><span class="label">Roteiro sugerido para este podcast</span>1) Ouça direto, sem texto. 2) Leia com a tradução e toque nas palavras que não conhece. 3) Modo "Frase + pausa", com texto, devagar. 4) Mesmo modo, sem texto. 5) Velocidade normal, falando junto com o áudio.</div>`;
- tokenize($("#dlg"));
- $("#sBack").onclick=closePod;$("#pPlay").onclick=togglePod;$("#pPrev").onclick=()=>jumpPod(-1);$("#pNext").onclick=()=>jumpPod(1);
- $("#pMode").onchange=e=>{SHP.mode=e.target.value;saveShp();updPod()};
- $("#pRate").onchange=e=>{SHP.rate=+e.target.value;saveShp()};
- $("#pShow").onchange=e=>{SHP.show=e.target.value;saveShp();$("#dlg").className="dlg show-"+SHP.show};
- $$("#dlg .dplay").forEach(b=>b.addEventListener("click",ev=>{ev.stopPropagation();ev.preventDefault();stopPod();SHP.i=+b.dataset.pi;SHP.state="playing";playLine()},true));
- updPod()}
-function updPod(){if(!SCUR||!$("#pPlay"))return;const n=SCUR.L.length;
- $("#pPlay").innerHTML=SHP.state==="playing"?'<svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>Pausar':SHP.state==="gap"?'<svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>Sua vez… (pausar)':(SPK_SVG+(SHP.i>0?"Continuar":"Começar"));
- $("#pBar").style.width=(SHP.i/n*100)+"%";
- $$("#dlg .dl").forEach(d=>{const i=+d.dataset.li;d.classList.toggle("cur",i===SHP.i&&SHP.state!=="idle");d.classList.toggle("you",i===SHP.i&&SHP.state==="gap")});
- $("#pHint").textContent=SHP.state==="gap"?"Sua vez: repita em voz alta, com o mesmo ritmo.":SHP.mode==="listen"?"Fale junto, meio segundo atrás do áudio.":SHP.mode==="shadow"?"Depois de cada fala, uma pausa para você repetir.":"Cada fala toca 3 vezes, com pausa entre elas."}
-function togglePod(){if(!canSpeak)return;if(SHP.state==="playing"||SHP.state==="gap"){stopPod(true);return}SHP.state="playing";if(SHP.i>=SCUR.L.length)SHP.i=0;SHP.rep=0;playLine()}
-function stopPod(keep){SHP.tok++;SHP.state="idle";clearTimeout(SHP.t);try{speechSynthesis.cancel()}catch(e){}if(!keep)SHP.rep=0;updPod()}
-function jumpPod(d){const was=SHP.state!=="idle";stopPod();SHP.i=Math.max(0,Math.min(SCUR.L.length-1,SHP.i+d));if(was){SHP.state="playing";playLine()}else{updPod();scrollCur()}}
-function scrollCur(){const el=$(`#dlg .dl[data-li="${SHP.i}"]`);if(el)el.scrollIntoView({block:"center",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})}
-function playLine(){const tok=++SHP.tok,p=SCUR,l=p.L[SHP.i];if(!l){finishPod();return}
- SHP.state="playing";updPod();scrollCur();
- try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(l[1]);u.lang="it-IT";u.rate=SHP.rate;const v=voiceFor(l[0]);if(v.voice)u.voice=v.voice;u.pitch=v.pitch;
-  const t0=Date.now();
-  u.onend=()=>{if(tok!==SHP.tok)return;const dur=Date.now()-t0;
-   if(SHP.mode==="listen"){SHP.i++;SHP.t=setTimeout(()=>{if(tok===SHP.tok)playLine()},450);return}
-   SHP.state="gap";updPod();const gap=Math.max(1400,dur*1.25+400);
-   SHP.t=setTimeout(()=>{if(tok!==SHP.tok)return;if(SHP.mode==="loop"&&SHP.rep<2){SHP.rep++;playLine();return}SHP.rep=0;SHP.i++;playLine()},gap)};
-  u.onerror=()=>{if(tok!==SHP.tok)return;SHP.state="idle";updPod()};
-  speechSynthesis.speak(u)}catch(e){SHP.state="idle";updPod()}}
-function finishPod(){SHP.state="idle";SHP.i=0;const id=SCUR.topic;S.shadow=S.shadow||{};const s=S.shadow[id]=S.shadow[id]||{n:0};s.n++;s.last=today();logInc("s");save();updPod();
- $("#pHint").innerHTML=`<b>Podcast concluído.</b> Repita amanhã: o shadowing funciona melhor com o mesmo áudio por alguns dias seguidos.`}
+function lastPod(){let best=null;Object.entries(S.shadow||{}).forEach(([id,s])=>{if(s&&s.last&&TOPIC[id]&&PODS.some(p=>p.topic===id)&&(!best||s.last>best[1].last))best=[id,s]});return best}
 function renderShadowIntro(){
  const wave=(y,cls,off)=>{let d=`M${20+off} ${y}`;for(let x=0;x<=420;x+=6){const a=Math.sin(x/9)*Math.sin(x/53)*14*(x%140<100?1:.15);d+=` L${20+off+x} ${(y+a).toFixed(1)}`}return`<path d="${d}" class="${cls}" fill="none"/>`};
  const echo=`<div class="tlw"><svg viewBox="0 0 560 150" class="pssvg" role="img" aria-label="O áudio e a sua voz, com meio segundo de atraso">
@@ -3477,17 +5352,164 @@ function renderShadowIntro(){
   <text x="10" y="104" class="tllab">você</text>${wave(110,"wvB",100)}
   <line x1="90" y1="70" x2="90" y2="132" class="tlnow"/><line x1="120" y1="70" x2="120" y2="132" class="tlnow"/>
   <text x="105" y="146" class="tlpt" text-anchor="middle">≈ 0,5 s</text></svg></div>`;
- $("#sIntro").innerHTML=`<div class="stack" style="gap:6px"><h2>Shadowing</h2><p class="muted">Shadowing (“sombra”) é repetir em voz alta o que você ouve, quase ao mesmo tempo que o falante nativo, imitando ritmo, entonação e pronúncia. Treina o ouvido e a boca juntos: você para de traduzir na cabeça e começa a falar em blocos.</p></div>
- ${IG.box("Como funciona: você fala logo atrás do áudio",echo,"Você não espera a frase terminar: começa a falar meio segundo depois, como uma sombra. Na pausa do modo “Frase + pausa”, você repete a frase inteira.")}
- ${IG.box("As 5 etapas com o mesmo podcast",`<ol class="steps">
-  <li><b>Ouvir sem texto</b><span>Entenda a situação. Não se preocupe com cada palavra.</span></li>
-  <li><b>Ler com tradução</b><span>Toque nas palavras novas para ver o significado e os exemplos.</span></li>
-  <li><b>Sombra com texto, devagar</b><span>Modo “Frase + pausa” ou “3 vezes”. Leia e repita em voz alta.</span></li>
-  <li><b>Sombra sem texto</b><span>Esconda o texto e repita só de ouvido.</span></li>
-  <li><b>Velocidade normal</b><span>Modo “Ouvir direto”: fale junto, colado no áudio.</span></li></ol>`,"Grave a sua voz com o gravador do celular de vez em quando e compare com o áudio.")}
- ${IG.box("Dicas",IG.cards([{h:"10–15 min por dia",p:"melhor que uma hora no fim de semana"},{h:"o mesmo áudio por 3–5 dias",p:"a repetição é o que fixa"},{h:"em voz alta",p:"murmurar não treina a pronúncia"},{h:"ritmo antes da perfeição",p:"copie a melodia; os erros somem com as repetições"}]))}
- <p class="small muted">Os podcasts abaixo acompanham cada tópico do curso e usam o vocabulário e a gramática dele. A voz é a do seu aparelho (síntese de voz em italiano); por isso, a qualidade varia de um celular para outro.</p>`;
+ const min=shMin(),lp=lastPod();let cont="";
+ if(lp){const p=PODS.find(x=>x.topic===lp[0]),k=nextStep(lp[1]),all=stepsDone(lp[1])>=5;
+  cont=`<div class="card stack scont"><span class="label">Continuar de onde parou</span><h3>${esc(p.t)}</h3>${dots(lp[1])}<p class="small muted">${all?"As 5 etapas já foram feitas. Repetir o mesmo podcast por alguns dias é o que fixa.":"Próxima etapa: <b>"+k+" · "+STEPS[k-1].n+"</b>"}</p><div class="row"><button class="btn primary" data-sopen="${p.topic}">${all?"Praticar de novo":"Continuar"}</button></div></div>`}
+ else{const p=PODS.find(x=>TOPIC[x.topic].lvl===SLVL)||PODS[0];
+  cont=`<div class="card stack scont"><span class="label">Comece por aqui</span><h3>${esc(p.t)}</h3><p class="small muted">${esc(p.sit)} São 5 etapas curtas com o mesmo diálogo; o app conduz cada uma.</p><div class="row"><button class="btn primary" data-sopen="${p.topic}">Começar a etapa 1</button></div></div>`}
+ $("#sIntro").innerHTML=`<div class="stack" style="gap:6px"><h2>Shadowing</h2><p class="muted">Ouça um diálogo curto e repita em voz alta, imitando ritmo e entonação. Cada podcast tem 5 etapas: do só ouvir até falar junto com o áudio.</p></div>
+ <div class="card shday"><div><span class="label">Hoje</span><b>${min} min</b><span class="small muted">meta: ${SH_GOAL} min por dia</span></div><div class="progress" role="img" aria-label="${min} de ${SH_GOAL} minutos"><i style="width:${Math.min(100,min/SH_GOAL*100)}%"></i></div></div>
+ ${cont}
+ <details class="card showto"${lp?"":" open"}><summary><b>Como funciona o shadowing</b><span class="small muted">a técnica, as 5 etapas e dicas</span></summary><div class="stack" style="gap:16px;margin-top:14px">
+ ${IG.box("Você fala logo atrás do áudio",echo,"Shadowing (“sombra”) é repetir o que você ouve quase ao mesmo tempo que o falante, copiando a melodia. Treina o ouvido e a boca juntos: você para de traduzir na cabeça e começa a falar em blocos.")}
+ ${IG.box("As 5 etapas com o mesmo podcast",`<ol class="steps">${STEPS.map(x=>`<li><b>${x.n}</b><span>${x.d}</span></li>`).join("")}</ol>`,"Não precisa fazer as 5 no mesmo dia. Duas ou três etapas por dia, com o mesmo podcast por 3 a 5 dias, funcionam melhor.")}
+ ${IG.box("Dicas",IG.cards([{h:"10–15 min por dia",p:"melhor que uma hora no fim de semana"},{h:"em voz alta",p:"murmurar não treina a pronúncia"},{h:"ritmo antes da perfeição",p:"copie a melodia; os erros somem com as repetições"},{h:"marque as difíceis",p:"toque na bandeira da frase e treine só elas no final"}]))}
+ <p class="small muted">A voz é a do seu aparelho (síntese de voz em italiano), por isso a qualidade varia de um celular para outro. Em Ajustes, dentro do podcast, dá para trocar de voz quando o aparelho tem mais de uma.</p></div></details>`;
+ $$("#sIntro [data-sopen]").forEach(b=>b.onclick=()=>openPod(b.dataset.sopen));
  $("#sLinks").innerHTML=`<div class="stack" style="gap:8px"><span class="label">Podcasts reais para continuar</span>${PODLINKS.map(l=>`<a class="lnk" href="${l.u}" target="_blank" rel="noopener"><b>${esc(l.n)}</b><span>${esc(l.d)}</span></a>`).join("")}<p class="small muted">Abrem fora do app. Com eles, use o modo de ouvir-pausar-repetir do próprio player do podcast.</p></div>`}
+
+/* ---- abrir / fechar um podcast ---- */
+function openPod(id){const p=PODS.find(x=>x.topic===id);if(!p)return;SMODE="pod";renderSMode();SCUR=p;SLVL=TOPIC[id].lvl;stopPod();
+ SHP.only=false;SHP.done=false;applyStep(nextStep(podState(id)));$("#sHome").hidden=true;$("#sPlay").hidden=false;renderPod();window.scrollTo(0,0)}
+function closePod(){stopPod();save();SCUR=null;$("#sPlay").hidden=true;$("#sHome").hidden=false;renderShadow();window.scrollTo(0,0)}
+function applyStep(k){const st=STEPS[k-1]||STEPS[0];SHP.step=st.k;SHP.mode=st.mode;SHP.show=st.show;SHP.rate=st.rate;SHP.i=firstIdx();SHP.c=0;SHP.rep=0;SHP.done=false}
+function hardList(){const s=podState(SCUR.topic);return(s&&s.hard||[]).filter(i=>i>=0&&i<SCUR.L.length).sort((a,b)=>a-b)}
+function playList(){const h=hardList();return SHP.only&&h.length?h:SCUR.L.map((_,i)=>i)}
+function firstIdx(){return SCUR?playList()[0]:0}
+function stepIdx(i,d){const l=playList(),p=l.indexOf(i);if(p<0){const n=l.find(x=>x>i);return d>0?(n==null?-1:n):l[0]}const q=p+d;return q<0?l[0]:q>=l.length?-1:l[q]}
+
+/* ---- trechos: frases longas viram blocos curtos para repetir ---- */
+const wc=s=>s.trim().split(/\s+/).filter(Boolean).length;
+function chunkLine(text){const parts=[];const re=/[^.!?…]+[.!?…]+["»”)]*\s*|[^.!?…]+$/g;let m;
+ while((m=re.exec(text))){if(m[0].trim())parts.push({t:m[0],s:m.index})}
+ if(!parts.length)return[{t:text,s:0}];
+ const out=[];parts.forEach(p=>{const last=out[out.length-1];if(last&&wc(last.t)<3)last.t+=p.t;else out.push({t:p.t,s:p.s})});
+ if(out.length>1&&wc(out[out.length-1].t)<3){const l=out.pop();out[out.length-1].t+=l.t}
+ const fin=[];out.forEach(p=>{if(wc(p.t)>12){const mid=p.t.length/2;let best=-1;for(let i=p.t.indexOf(", ");i>=0;i=p.t.indexOf(", ",i+1)){if(best<0||Math.abs(i-mid)<Math.abs(best-mid))best=i}
+   if(best>0&&wc(p.t.slice(0,best))>=3&&wc(p.t.slice(best+2))>=3){fin.push({t:p.t.slice(0,best+2),s:p.s},{t:p.t.slice(best+2),s:p.s+best+2});return}}fin.push(p)});
+ return fin}
+function lineChunks(i){const t=SCUR.L[i][1];return SHP.mode!=="listen"&&SHP.chunk?chunkLine(t):[{t,s:0}]}
+
+/* ---- render do player ---- */
+const FLAG_SVG='<svg viewBox="0 0 24 24"><path d="M6 21V4M6 4h11l-2 4 2 4H6"/></svg>';
+const PAUSE_SVG='<svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
+let LW=[];
+function renderPod(){const p=SCUR,t=TOPIC[p.topic],s=podState(p.topic)||{},st=s.steps||{},hard=hardList();
+ $("#sPlay").innerHTML=`<button class="back" id="sBack">← Podcasts ${t.lvl}</button>
+ <div class="tophead"><span class="label">${t.lvl} · Tópico ${t.n} · ${esc(t.t)}</span><h2>${esc(p.t)}</h2><p class="muted small">${esc(p.sit)}</p></div>
+ <div class="stp5" role="tablist" aria-label="Etapas do shadowing">${STEPS.map(x=>`<button role="tab" data-step="${x.k}" aria-selected="${SHP.step===x.k}" class="${SHP.step===x.k?"on":""}${st[x.k]?" done":""}"><b>${st[x.k]?"✓":x.k}</b><span>${x.n}</span></button>`).join("")}</div>
+ <p class="stepd" id="stepD"></p>
+ <div class="card stack player">
+  <div class="pctl"><button class="iconbtn" id="pPrev" aria-label="Fala anterior"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><button class="btn primary pbig" id="pPlay"></button><button class="iconbtn" id="pNext" aria-label="Próxima fala"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div>
+  <div class="pgap" id="pGap" hidden><div class="pgbar"><i id="pGapBar"></i></div><div class="row pgbtn"><button class="btn small" id="pAgain">Ouvir de novo</button><button class="btn small primary" id="pSkip">Já repeti →</button></div></div>
+  <div class="progress"><i id="pBar" style="width:0%"></i></div>
+  <p class="small muted" id="pHint" role="status"></p>
+ </div>
+ ${canSpeak?`<div class="trap" id="pNoVoice" hidden><span class="label">Sem voz em italiano</span>Este aparelho não tem uma voz italiana instalada, então a pronúncia pode sair errada. No celular, instale “Italiano” nas configurações de conversão de texto em voz (em Idioma e entrada ou Acessibilidade) e reabra o app.</div>`:`<div class="trap"><span class="label">Sem áudio</span>Este navegador não tem síntese de voz. Abra o app no celular ou no Chrome para ouvir.</div>`}
+ <details class="card padj" id="pAdj"><summary><b>Ajustes</b><span class="small muted" id="pAdjSum"></span></summary><div class="popts">
+   <label for="pMode">Modo<select id="pMode">${Object.entries(MODES).map(([k,n])=>`<option value="${k}">${n}</option>`).join("")}</select></label>
+   <label for="pRate">Velocidade<select id="pRate">${[[.65,"Bem devagar"],[.8,"Devagar"],[.85,"Um pouco devagar"],[.9,"Quase normal"],[1,"Normal"]].map(([v,n])=>`<option value="${v}">${n}</option>`).join("")}</select></label>
+   <label for="pShow">Texto<select id="pShow">${Object.entries(SHOWS).map(([k,n])=>`<option value="${k}">${n}</option>`).join("")}</select></label>
+   <label for="pGapSel">Pausa para repetir<select id="pGapSel">${Object.entries(GAPS).map(([k,n])=>`<option value="${k}">${n[0]}</option>`).join("")}</select></label>
+   <label for="pVoice">Voz<select id="pVoice"></select></label>
+   <label class="pchk" for="pChunk"><input type="checkbox" id="pChunk"> Dividir falas longas em trechos curtos</label>
+  </div></details>
+ <div class="row pfilt"><button class="btn small" id="pOnly" aria-pressed="false" ${hard.length?"":"hidden"}></button><span class="small muted" id="pFlagTip">${FLAG_SVG} marca uma fala difícil para treinar depois</span></div>
+ <div class="dlg show-${SHP.show}" id="dlg">${p.L.map((l,i)=>`<div class="dl sp${l[0]}${hard.includes(i)?" hard":""}" data-li="${i}"><span class="dsp">${esc(p.sp[l[0]])}</span><div class="dtx"><span class="it">${esc(l[1])}</span><span class="dpt">${esc(l[2])}</span></div><div class="dact"><button class="spk dplay" data-pi="${i}" aria-label="Tocar a partir desta fala">${SPK_SVG}</button><button class="spk dhard" data-hi="${i}" aria-pressed="${hard.includes(i)}" aria-label="Marcar como fala difícil">${FLAG_SVG}</button></div></div>`).join("")}</div>
+ <div id="pDone"></div>`;
+ tokenize($("#dlg"));
+ LW=p.L.map((l,i)=>{let pos=0;return[...$$(`#dlg .dl[data-li="${i}"] .it button.w`)].map(el=>{const o=l[1].indexOf(el.textContent,pos);if(o>=0)pos=o+el.textContent.length;return{o,el}})});
+ $("#sBack").onclick=closePod;$("#pPlay").onclick=togglePod;$("#pPrev").onclick=()=>jumpPod(-1);$("#pNext").onclick=()=>jumpPod(1);
+ $("#pAgain").onclick=()=>{if(SHP.state!=="gap")return;SHP.rep=0;playCur()};
+ $("#pSkip").onclick=()=>{if(SHP.state!=="gap")return;clearTimeout(SHP.t);addShMs(Date.now()-(SHP.g0||Date.now()));afterGap(SHP.tok)};
+ $$("#sPlay [data-step]").forEach(b=>b.onclick=()=>{stopPod();SHP.only=false;applyStep(+b.dataset.step);syncPod();window.scrollTo(0,0)});
+ $("#pMode").onchange=e=>{stopPod(true);SHP.mode=e.target.value;SHP.c=0;syncPod()};
+ $("#pRate").onchange=e=>{SHP.rate=+e.target.value;syncPod()};
+ $("#pShow").onchange=e=>{SHP.show=e.target.value;syncPod()};
+ $("#pGapSel").onchange=e=>{SHP.gap=e.target.value;saveShp();syncPod()};
+ $("#pChunk").onchange=e=>{stopPod(true);SHP.chunk=e.target.checked;SHP.c=0;saveShp();syncPod()};
+ $("#pVoice").onchange=e=>{SHP.voice=e.target.value;saveShp()};
+ $("#pOnly").onclick=()=>{stopPod();SHP.only=!SHP.only;SHP.i=firstIdx();SHP.done=false;syncPod()};
+ $$("#dlg .dplay").forEach(b=>b.onclick=()=>{stopPod();SHP.i=+b.dataset.pi;SHP.c=0;SHP.done=false;$("#pDone").innerHTML="";playCur()});
+ $$("#dlg .dhard").forEach(b=>b.onclick=()=>toggleHard(+b.dataset.hi));
+ fillVoices();syncPod()}
+/* acerta todos os controles com o estado atual (etapa, ajustes, filtro) */
+function syncPod(){if(!SCUR||!$("#pPlay"))return;const s=podState(SCUR.topic)||{},st=s.steps||{},hard=hardList(),cur=STEPS[SHP.step-1];
+ $$("#sPlay [data-step]").forEach(b=>{const k=+b.dataset.step,on=k===SHP.step;b.classList.toggle("on",on);b.classList.toggle("done",!!st[k]);b.setAttribute("aria-selected",on);b.querySelector("b").textContent=st[k]?"✓":k});
+ $("#stepD").innerHTML=`<b>Etapa ${cur.k} · ${cur.n}.</b> ${cur.d}`;
+ $("#pMode").value=SHP.mode;$("#pRate").value=String(SHP.rate);$("#pShow").value=SHP.show;$("#pGapSel").value=SHP.gap;$("#pChunk").checked=SHP.chunk;
+ $("#pGapSel").closest("label").hidden=SHP.mode==="listen";$("#pChunk").closest("label").hidden=SHP.mode==="listen";
+ $("#pAdjSum").textContent=MODES[SHP.mode]+" · "+($("#pRate").selectedOptions[0]?$("#pRate").selectedOptions[0].textContent.toLowerCase():"")+" · "+SHOWS[SHP.show].toLowerCase();
+ $("#dlg").className="dlg show-"+SHP.show+(SHP.only&&hard.length?" only":"");
+ const ob=$("#pOnly");ob.hidden=!hard.length;if(!hard.length)SHP.only=false;ob.setAttribute("aria-pressed",SHP.only);ob.classList.toggle("primary",SHP.only);
+ ob.textContent=SHP.only?"Voltar a todas as falas":`Treinar só as difíceis (${hard.length})`;$("#pFlagTip").hidden=hard.length>0;
+ if(!playList().includes(SHP.i))SHP.i=firstIdx();
+ updPod()}
+function toggleHard(i){S.shadow=S.shadow||{};const s=S.shadow[SCUR.topic]=S.shadow[SCUR.topic]||{n:0};const h=new Set(s.hard||[]);h.has(i)?h.delete(i):h.add(i);s.hard=[...h].sort((a,b)=>a-b);save();
+ const d=$(`#dlg .dl[data-li="${i}"]`);if(d){d.classList.toggle("hard",h.has(i));d.querySelector(".dhard").setAttribute("aria-pressed",h.has(i))}
+ if(SHP.only&&SHP.state!=="idle"&&!h.has(SHP.i))stopPod();syncPod()}
+function hintText(){if(SHP.done)return"";
+ if(SHP.state==="gap")return SHP.gap==="manual"?"Sua vez: repita em voz alta e toque em “Já repeti”.":"Sua vez: repita em voz alta, com o mesmo ritmo.";
+ if(SHP.state==="playing")return SHP.mode==="listen"?(SHP.step===5?"Fale junto, meio segundo atrás do áudio.":SHP.step===1?"Só escute.":"Acompanhe o texto enquanto ouve."):"Escute o trecho com atenção.";
+ return SHP.mode==="listen"?(SHP.step===5?"O áudio toca direto: fale junto com ele.":"O áudio toca direto, sem pausas."):SHP.mode==="shadow"?"Depois de cada trecho, uma pausa para você repetir.":"Cada trecho toca 3 vezes, com pausa para repetir."}
+function updPod(){if(!SCUR||!$("#pPlay"))return;const l=playList(),pos=Math.max(0,l.indexOf(SHP.i)),ch=lineChunks(SHP.i).length;
+ $("#pPlay").innerHTML=SHP.state==="playing"?PAUSE_SVG+"Pausar":SHP.state==="gap"?PAUSE_SVG+"Sua vez… (pausar)":(SPK_SVG+(SHP.done?"Ouvir de novo":pos>0||SHP.c>0?"Continuar":"Começar"));
+ $("#pBar").style.width=(SHP.done?100:(pos+(ch?SHP.c/ch:0))/l.length*100)+"%";
+ $$("#dlg .dl").forEach(d=>{const i=+d.dataset.li;d.classList.toggle("cur",i===SHP.i&&SHP.state!=="idle");d.classList.toggle("you",i===SHP.i&&SHP.state==="gap")});
+ $("#pGap").hidden=SHP.state!=="gap";
+ $("#pHint").textContent=hintText()}
+function hlWord(i,ci){const ws=LW[i]||[];let cur=null;for(const w of ws){if(w.o>=0&&w.o<=ci)cur=w;else if(w.o>ci)break}
+ $$("#dlg button.w.say").forEach(b=>{if(!cur||b!==cur.el)b.classList.remove("say")});if(cur)cur.el.classList.add("say")}
+function clearHl(){$$("#dlg button.w.say").forEach(b=>b.classList.remove("say"))}
+function scrollCur(){const el=$(`#dlg .dl[data-li="${SHP.i}"]`);if(el)el.scrollIntoView({block:"center",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})}
+
+/* ---- motor de reprodução ---- */
+function togglePod(){if(!canSpeak)return;if(SHP.state==="playing"||SHP.state==="gap"){stopPod(true);return}
+ if(SHP.done||!playList().includes(SHP.i)){SHP.i=firstIdx();SHP.c=0}SHP.done=false;$("#pDone").innerHTML="";SHP.rep=0;playCur()}
+function stopPod(keep){SHP.tok++;SHP.state="idle";clearTimeout(SHP.t);clearTimeout(SHP.wd);try{speechSynthesis.cancel()}catch(e){}if(!keep){SHP.rep=0;SHP.c=0}clearHl();updPod()}
+function jumpPod(d){const was=SHP.state!=="idle";stopPod();const n=stepIdx(SHP.i,d);SHP.i=n<0?SHP.i:n;SHP.done=false;if(was)playCur();else{updPod();scrollCur()}}
+function playCur(){const tok=++SHP.tok,p=SCUR,l=p.L[SHP.i];clearTimeout(SHP.t);clearTimeout(SHP.wd);if(!l){finishPod();return}
+ const chs=lineChunks(SHP.i);if(SHP.c>=chs.length)SHP.c=0;const ch=chs[SHP.c];
+ SHP.state="playing";updPod();if(SHP.c===0)scrollCur();
+ try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(ch.t.trim());u.lang="it-IT";u.rate=SHP.rate;const v=voiceFor(l[0]);if(v.voice)u.voice=v.voice;u.pitch=v.pitch;
+  const t0=Date.now(),lead=ch.t.length-ch.t.trimStart().length;let fin=false;
+  const end=()=>{if(fin||tok!==SHP.tok)return;fin=true;clearTimeout(SHP.wd);clearHl();const dur=Date.now()-t0;addShMs(dur);
+   if(SHP.mode==="listen"){SHP.t=setTimeout(()=>{if(tok===SHP.tok)advance(tok)},380);return}
+   SHP.state="gap";SHP.g0=Date.now();updPod();const f=GAPS[SHP.gap][1],bar=$("#pGapBar");
+   if(!f){if(bar){bar.style.transition="none";bar.style.width="100%"}return}
+   const gap=Math.max(1300,dur*f+500);
+   if(bar){bar.style.transition="none";bar.style.width="100%";void bar.offsetWidth;bar.style.transition="width "+gap+"ms linear";bar.style.width="0%"}
+   SHP.t=setTimeout(()=>{if(tok!==SHP.tok)return;addShMs(gap);afterGap(tok)},gap)};
+  u.onend=end;
+  u.onboundary=e=>{if(tok!==SHP.tok||fin)return;if(e.name&&e.name!=="word")return;hlWord(SHP.i,ch.s+lead+(e.charIndex||0))};
+  u.onerror=e=>{if(fin||tok!==SHP.tok)return;fin=true;clearTimeout(SHP.wd);clearHl();SHP.state="idle";updPod();
+   if(!e||(e.error!=="interrupted"&&e.error!=="canceled"))$("#pHint").textContent="Não consegui tocar o áudio. Toque em Começar de novo; se continuar, confira o volume e a voz em Ajustes."};
+  // alguns celulares nunca avisam que a fala terminou: segue em frente pelo tempo estimado
+  SHP.wd=setTimeout(end,ch.t.length*115/SHP.rate+4000);
+  speechSynthesis.speak(u)}catch(e){SHP.state="idle";updPod()}}
+function afterGap(tok){if(tok!==SHP.tok)return;if(SHP.mode==="loop"&&SHP.rep<2){SHP.rep++;playCur();return}SHP.rep=0;advance(tok)}
+function advance(tok){if(tok!==SHP.tok)return;const chs=lineChunks(SHP.i);
+ if(SHP.c+1<chs.length){SHP.c++;playCur();return}
+ const d=$(`#dlg .dl[data-li="${SHP.i}"]`);if(d)d.classList.add("seen");
+ SHP.c=0;const n=stepIdx(SHP.i,1);if(n<0){finishPod();return}SHP.i=n;playCur()}
+function finishPod(){SHP.tok++;SHP.state="idle";SHP.c=0;SHP.done=true;clearHl();const id=SCUR.topic,k=SHP.step,only=SHP.only;
+ S.shadow=S.shadow||{};const s=S.shadow[id]=S.shadow[id]||{n:0};s.last=today();
+ if(!only){s.n=(s.n||0)+1;s.steps=s.steps||{};s.steps[k]=today();logInc("s")}
+ save();syncPod();
+ const hard=hardList(),all=stepsDone(s)>=5,nx=STEPS.find(x=>!s.steps||!s.steps[x.k]);
+ const box=$("#pDone");
+ box.innerHTML=`<div class="fb ok pdone"><b>${only?"Falas difíceis treinadas.":"Etapa "+k+" concluída · "+STEPS[k-1].n+" ✓"}</b>
+  <span>${only?"Repita até elas saírem sem esforço; depois desmarque a bandeira.":all?"Você fez as 5 etapas deste podcast. Volte a ele amanhã e repita as etapas 3 a 5: o mesmo áudio por alguns dias é o que fixa.":nx?"Próxima: etapa "+nx.k+" · "+nx.n+". "+nx.d:""}</span>
+  <div class="row">${!only&&nx?`<button class="btn primary" id="pdNext">Ir para a etapa ${nx.k}</button>`:""}<button class="btn" id="pdAgain">${only?"Treinar de novo":"Repetir esta etapa"}</button>${!only&&hard.length?`<button class="btn" id="pdHard">Treinar as difíceis (${hard.length})</button>`:""}${only?`<button class="btn" id="pdAll">Voltar a todas as falas</button>`:""}</div>
+  <span class="small">Hoje: ${shMin()} min de shadowing.</span></div>`;
+ box.scrollIntoView({block:"center",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+ const go=f=>()=>{box.innerHTML="";f();SHP.done=false;syncPod();window.scrollTo(0,0);playCur()};
+ if($("#pdNext"))$("#pdNext").onclick=go(()=>applyStep(nx.k));
+ $("#pdAgain").onclick=go(()=>{SHP.i=firstIdx();SHP.c=0});
+ if($("#pdHard"))$("#pdHard").onclick=go(()=>{SHP.only=true;if(SHP.mode==="listen"){SHP.mode="shadow";if(SHP.show==="none")SHP.show="it"}SHP.i=firstIdx();SHP.c=0});
+ if($("#pdAll"))$("#pdAll").onclick=()=>{box.innerHTML="";SHP.only=false;SHP.done=false;SHP.i=firstIdx();syncPod()}}
+// tocar numa palavra durante o áudio: pausa o podcast para o painel da palavra falar sozinho
+document.addEventListener("click",e=>{if(SCUR&&SHP.state!=="idle"&&e.target.closest&&e.target.closest("#dlg button.w"))stopPod(true)},true);
 renderShadowIntro();
 
 const NEWS={latest:null,cur:null,curDate:null,index:{},cache:{},extra:{},state:"loading",calMonth:null,rendered:null};

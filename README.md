@@ -13,7 +13,7 @@ Publicado com GitHub Pages (branch `main`, pasta raiz). O progresso fica no apar
 
 ## Como editar
 
-O conteúdo e o código ficam em `src/` (curso A1 em `a1.js`, A2 em `a2.js`, escrita em `writing.js`, podcasts em `shadow_data.js`, mini-histórias em `stories.js`, textos-modelo e checklists da escrita em `writing_models.js`, técnicas extras (tradução, diário, pares mínimos, ditado, mapa de erros) em `extras.js`, dicionário em `lex.js`, exercícios gerados, testes e meta em `practice.js`). Depois de editar:
+O conteúdo e o código ficam em `src/` (curso A1 em `a1.js`, A2 em `a2.js`, escrita em `writing.js`, podcasts em `shadow_data.js`, mini-histórias em `stories.js`, textos-modelo e checklists da escrita em `writing_models.js`, técnicas extras (tradução, diário, pares mínimos, ditado, mapa de erros) em `extras.js`, dicionário em `lex.js` (palavras gramaticais) e `lex_extra_data.js` / `lex_extra.js` (dicionário ampliado: substantivos, adjetivos, verbos extras, números, nomes próprios), exercícios gerados, testes e meta em `practice.js`). Depois de editar:
 
 1. `python3 tools/build.py` — gera `index.html` (esta PWA) e `dist/artifact.html` (a versão do Claude).
 2. Suba o número da versão em `sw.js` (`const V=...`) para os celulares baixarem a versão nova.

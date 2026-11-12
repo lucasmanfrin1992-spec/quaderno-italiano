@@ -1,6 +1,6 @@
 /* ============================ VERBOS ============================ */
 const P=["io","tu","lui/lei","noi","voi","loro"];
-const IRR_PRES={essere:"sono sei è siamo siete sono",avere:"ho hai ha abbiamo avete hanno",andare:"vado vai va andiamo andate vanno",fare:"faccio fai fa facciamo fate fanno",venire:"vengo vieni viene veniamo venite vengono",stare:"sto stai sta stiamo state stanno",dire:"dico dici dice diciamo dite dicono",uscire:"esco esci esce usciamo uscite escono",potere:"posso puoi può possiamo potete possono",volere:"voglio vuoi vuole vogliamo volete vogliono",dovere:"devo devi deve dobbiamo dovete devono",sapere:"so sai sa sappiamo sapete sanno",dare:"do dai dà diamo date danno",bere:"bevo bevi beve beviamo bevete bevono",rimanere:"rimango rimani rimane rimaniamo rimanete rimangono",salire:"salgo sali sale saliamo salite salgono",scegliere:"scelgo scegli sceglie scegliamo scegliete scelgono",tenere:"tengo tieni tiene teniamo tenete tengono",piacere:"piaccio piaci piace piacciamo piacete piacciono",tradurre:"traduco traduci traduce traduciamo traducete traducono"};
+const IRR_PRES={essere:"sono sei è siamo siete sono",avere:"ho hai ha abbiamo avete hanno",andare:"vado vai va andiamo andate vanno",fare:"faccio fai fa facciamo fate fanno",venire:"vengo vieni viene veniamo venite vengono",stare:"sto stai sta stiamo state stanno",dire:"dico dici dice diciamo dite dicono",uscire:"esco esci esce usciamo uscite escono",potere:"posso puoi può possiamo potete possono",volere:"voglio vuoi vuole vogliamo volete vogliono",dovere:"devo devi deve dobbiamo dovete devono",sapere:"so sai sa sappiamo sapete sanno",dare:"do dai dà diamo date danno",bere:"bevo bevi beve beviamo bevete bevono",rimanere:"rimango rimani rimane rimaniamo rimanete rimangono",salire:"salgo sali sale saliamo salite salgono",scegliere:"scelgo scegli sceglie scegliamo scegliete scelgono",morire:"muoio muori muore moriamo morite muoiono",cuocere:"cuocio cuoci cuoce cuociamo cuocete cuociono",tenere:"tengo tieni tiene teniamo tenete tengono",piacere:"piaccio piaci piace piacciamo piacete piacciono",tradurre:"traduco traduci traduce traduciamo traducete traducono"};
 const IRR_FUT={essere:"sar",avere:"avr",andare:"andr",fare:"far",dare:"dar",stare:"star",venire:"verr",volere:"vorr",potere:"potr",dovere:"dovr",sapere:"sapr",vedere:"vedr",vivere:"vivr",bere:"berr",rimanere:"rimarr",dire:"dir",tenere:"terr",cadere:"cadr"};
 const IRR_IMP={essere:"ero eri era eravamo eravate erano",fare:"facevo facevi faceva facevamo facevate facevano",bere:"bevevo bevevi beveva bevevamo bevevate bevevano",dire:"dicevo dicevi diceva dicevamo dicevate dicevano",tradurre:"traducevo traducevi traduceva traducevamo traducevate traducevano"};
 const VERBS=[
@@ -15,14 +15,14 @@ function join(stem,end,isAre){if(isAre&&/[cg]$/.test(stem)&&/^[ie]/.test(end))st
 function pres(v){if(IRR_PRES[v.inf])return IRR_PRES[v.inf].split(" ");const s=v.inf.slice(0,-3),e=v.inf.slice(-3);
  let E=e==="are"?["o","i","a","iamo","ate","ano"]:e==="ere"?["o","i","e","iamo","ete","ono"]:v.isc?["isco","isci","isce","iamo","ite","iscono"]:["o","i","e","iamo","ite","ono"];
  return E.map(x=>join(s,x,e==="are"))}
-function futStem(v){if(IRR_FUT[v.inf])return IRR_FUT[v.inf];const s=v.inf.slice(0,-3),e=v.inf.slice(-3);
+function futStem(v){if(IRR_FUT[v.inf])return IRR_FUT[v.inf];if(v.inf.endsWith("rre"))return v.inf.slice(0,-1);const s=v.inf.slice(0,-3),e=v.inf.slice(-3);
  if(e==="ire")return s+"ir";if(e==="ere")return s+"er";if(/(ci|gi)$/.test(s))return s.slice(0,-1)+"er";return join(s,"er",true)}
 function fut(v){const st=futStem(v);return["ò","ai","à","emo","ete","anno"].map(x=>st+x)}
 function cond(v){const st=futStem(v);return["ei","esti","ebbe","emmo","este","ebbero"].map(x=>st+x)}
 function imperf(v){if(IRR_IMP[v.inf])return IRR_IMP[v.inf].split(" ");const st=v.inf.slice(0,-2);return["vo","vi","va","vamo","vate","vano"].map(x=>st+x)}
 function pass(v){const A=v.aux==="a"?["ho","hai","ha","abbiamo","avete","hanno"]:["sono","sei","è","siamo","siete","sono"];
  return A.map((a,i)=>a+" "+(v.aux==="e"?v.pp.slice(0,-1)+(i<3?"o":"i"):v.pp))}
-function gerund(v){const irr={fare:"facendo",bere:"bevendo",dire:"dicendo",tradurre:"traducendo"};if(irr[v.inf])return irr[v.inf];const s=v.inf.slice(0,-3);return s+(v.inf.endsWith("are")?"ando":"endo")}
+function gerund(v){const irr={fare:"facendo",bere:"bevendo",dire:"dicendo",tradurre:"traducendo"};if(irr[v.inf])return irr[v.inf];if(v.inf.endsWith("urre"))return v.inf.slice(0,-3)+"cendo";if(v.inf.endsWith("porre"))return v.inf.slice(0,-3)+"nendo";if(/.fare$/.test(v.inf))return v.inf.slice(0,-2)+"cendo";const s=v.inf.slice(0,-3);return s+(v.inf.endsWith("are")?"ando":"endo")}
 const TENSES={pres:{n:"presente",f:pres},pass:{n:"passato prossimo",f:pass},fut:{n:"futuro",f:fut},imp:{n:"imperfetto",f:imperf},cond:{n:"condizionale",f:cond}};
 
 /* ============================ ESTADO ============================ */
@@ -56,7 +56,7 @@ const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random(
 const pick=a=>a[Math.random()*a.length|0];
 const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[’`]/g,"'").replace(/\s+/g," ").trim();
 const canSpeak="speechSynthesis" in window;
-function speak(t){if(!canSpeak)return;try{const u=new SpeechSynthesisUtterance(String(t).replace(/\(.*?\)/g,"").replace(/\.\.\./g,"").replace(/___/g,""));u.lang="it-IT";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+function speak(t){if(!canSpeak)return;try{const u=new SpeechSynthesisUtterance(String(t).replace(/\(.*?\)/g,"").replace(/\.\.\./g,"").replace(/___/g,""));u.lang="it-IT";u.rate=.9;const bv=typeof bestVoice==="function"?bestVoice():null;if(bv)u.voice=bv;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
 function spkBtn(t){return canSpeak?`<button class="spk" data-say="${esc(t)}" aria-label="Ouvir pronúncia">${SPK_SVG}</button>`:""}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-say]");if(b){e.stopPropagation();speak(b.dataset.say)}});
 const TOPIC=Object.fromEntries(COURSE.map(t=>[t.id,t]));
@@ -87,10 +87,16 @@ function lookupLocal(k,surface){k=k.toLowerCase().replace(/’/g,"'");const kk=k
  let e=null;const f=FUNC[k]||FUNC[kk];if(f)e=Object.assign({},f);
  const vf=FORMS[kk];
  const voc=VOCIDX[kk]||VOCIDX[k];
- if(!e&&voc)e={lemma:voc.lemma,meaning:voc.meaning,pos:voc.inflected?"forma flexionada":"",note:voc.inflected?"Forma de “"+voc.lemma+"” (plural ou feminino).":"",topic:voc.topic};
+ const vocE=()=>({lemma:voc.lemma,meaning:voc.meaning,pos:voc.inflected?"forma flexionada":"",note:voc.inflected?"Forma de “"+voc.lemma+"” (plural ou feminino).":"",topic:voc.topic});
+ if(!e&&voc&&!voc.inflected)e=vocE();
+ if(!e&&(XIDX[kk]||XIDX[k]))e=Object.assign({},XIDX[kk]||XIDX[k]);
+ if(!e&&XINF[kk])e=Object.assign({},XINF[kk]);
+ if(!e&&voc&&!(voc.inflected&&vf))e=vocE();
+ if(!e&&!vf)e=xFallback(k,kk);
  if(!e&&!vf)return null;
  if(!e)e={lemma:vf[0].v.inf,meaning:vf[0].v.pt,pos:"verbo"};
- if(vf)e.verb=vf;
+ if(vf&&!e.verb)e.verb=vf;
+ xAlso(e,kk);
  e.found=findExamples(surface||kk,3);
  e.phrases=PHRASES.filter(p=>new RegExp("(^|[^"+LET+"])"+kk.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"($|[^"+LET+"])","i").test(p.it)).slice(0,4);
  return e}
