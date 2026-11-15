@@ -667,3 +667,17 @@ body.dragsel,body.dragsel *{-webkit-user-select:none;user-select:none}
 .exwrong .it{font-style:normal;color:var(--ink)}
 .extext .aplayer .btn{padding:7px 12px;font-size:.86rem}
 .excat .tlist{margin-top:4px}
+
+/* v3 fase 1: aviso "Sem som?" e tela de teste de áudio */
+.audwarn{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(78px + env(safe-area-inset-bottom,0px));z-index:46;width:min(94vw,520px);background:#2a211a;color:#fff;border:0;border-radius:12px;padding:11px 14px;font:inherit;font-size:14px;text-align:left;box-shadow:0 6px 24px rgba(0,0,0,.25);cursor:pointer}
+.audwarn[hidden]{display:none}
+.audov{position:fixed;inset:0;z-index:60;background:rgba(20,14,8,.45);display:flex;align-items:flex-end;justify-content:center}
+.audov[hidden]{display:none}
+.audin{background:var(--surface);width:min(560px,100vw);max-height:88vh;overflow:auto;border-radius:18px 18px 0 0;padding:16px 16px calc(18px + env(safe-area-inset-bottom,0px))}
+@media (min-width:720px){.audov{align-items:center}.audin{border-radius:16px}}
+.atlist{list-style:none;margin:10px 0;padding:0;display:grid;gap:10px}
+.atrow{display:flex;gap:10px;align-items:flex-start}
+.atic{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;background:var(--line);color:var(--ink)}
+.atrow.ok .atic{background:#2f7a4a;color:#fff}.atrow.bad .atic{background:var(--accent,#C2402A);color:#fff}
+.atbtns{display:grid;gap:6px;margin:6px 0 10px}
+.linkbtn{background:none;border:0;padding:0;font:inherit;color:inherit;text-decoration:underline;cursor:pointer}

@@ -8,7 +8,7 @@ const PLAY_SVG='<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="tru
 const PAUSE_SVG='<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>';
 function audioRate(){const r=S.settings&&S.settings.rate;return AUDIO_RATES.includes(r)?r:1}
 function rateLabel(r){return String(r).replace(".",",")+"×"}
-function hasItVoice(){return canSpeak&&!(VOICES_SEEN&&!IT_VOICES.length)} // enquanto o aparelho não informa as vozes, o player aparece
+function hasItVoice(){return canSpeak||!!REC.keys} // o player sempre aparece: sem voz italiana, fala com lang="it-IT" ou toca o áudio gravado
 function splitSents(p){const out=[];let buf="";(String(p).match(/[^.!?…]+[.!?…]+[»”"]?(?:\s+|$)|[^.!?…]+$/g)||[p]).forEach(x=>{buf+=x;if(/(?:^|\s)(?:Ing|Dott|Sig|Arch)\.\s*$/.test(buf))return;if(buf.trim())out.push(buf.trim());buf=""});if(buf.trim())out.push(buf.trim());return out}
 function audioHTML(){return hasItVoice()?`<div class="aplayer" data-aplayer><button class="btn primary" data-aplay></button><button class="btn" data-arate></button><span class="small muted" data-apos role="status"></span></div>`
  :`<p class="small muted anovoice">Este aparelho não tem voz em italiano, por isso o áudio não aparece aqui.</p>`}
@@ -23,7 +23,7 @@ function audioStep(){const tok=++AU.tok;audioMarks();
  audioUI();
  sayIt(it.text,{rate:audioRate(),
   onend:()=>{if(tok!==AU.tok)return;AU.i++;setTimeout(()=>{if(tok===AU.tok)audioStep()},220)},
-  onerror:c=>{if(tok!==AU.tok)return;AU.on=false;audioMarks();audioUI();const s=AU.box&&AU.box.querySelector("[data-apos]");if(s)s.textContent="Sem som? Use “Testar áudio” na tela Início."}})}
+  onerror:c=>{if(tok!==AU.tok)return;AU.on=false;audioMarks();audioUI();const s=AU.box&&AU.box.querySelector("[data-apos]");if(s){s.innerHTML="Sem som? Confira a chave de silencioso e o volume. Se continuar, <button class=\"linkbtn\" type=\"button\">toque aqui</button>.";const b=s.querySelector("button");if(b)b.onclick=audTestOpen}}})}
 function audioPlay(){if(!AU.items.length)return;AU.on=true;audioStep()}
 function audioPause(){if(!AU.on)return;AU.on=false;AU.tok++;sayStop();audioUI()}
 function audioStop(){const was=AU.on||AU.i>0;AU.on=false;AU.tok++;AU.i=0;if(was){sayStop();audioMarks()}audioUI()}

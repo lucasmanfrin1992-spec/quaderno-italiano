@@ -7,7 +7,7 @@ JS=r"""async()=>{const REC=new Map();const add=t=>{const n=audioNorm(t);if(!n||!
  window.sayIt=(t)=>add(t);window.readLines=(lines)=>lines.forEach(add);
  const WORDS=new Set();const says=root=>{root.querySelectorAll('[data-say]').forEach(b=>speak(b.dataset.say));tokenize(root);root.querySelectorAll('button.w').forEach(b=>WORDS.add(b.textContent))};
  const src={};const mark=(name,f)=>{const a=REC.size;f();src[name]=REC.size-a};
- add("Ciao! Sono la Nonna. Mi senti bene?");
+ add("Ciao! Sono la Nonna. Mi senti bene?");add("Buongiorno, sono la Nonna.");
  mark('cartoes',()=>Object.keys(CARDS).forEach(id=>{try{const f=cardFace(id);if(f&&f.say)speak(f.say)}catch(e){}}));
  mark('curso',()=>{for(const t of COURSE){for(const part of ['voc','gram','hist']){openTopic(t.id,part);says(document);document.querySelectorAll('#cBody .ibub .it').forEach(e=>add(e.textContent));
    const st=document.querySelector('#stRead');if(st)st.click();const dr=document.querySelector('#dlgRead');if(dr)dr.click()}}});
