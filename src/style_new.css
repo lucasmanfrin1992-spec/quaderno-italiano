@@ -549,3 +549,29 @@ nobr{white-space:nowrap}
 .modi .label{margin-right:6px}
 .spk.star.on{background:var(--saffron-soft);border-color:var(--saffron)}
 .spk.star.on svg{fill:var(--saffron);stroke:var(--saffron)}
+/* v2 fase 6: calendário e painel */
+.hcal .hday{aspect-ratio:1;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:.9rem;color:var(--muted);font-variant-numeric:tabular-nums;position:relative}
+.hcal .hday.act{color:var(--ink);font-weight:700}
+.hcal .hday i{width:6px;height:6px;border-radius:50%;background:var(--cobalt)}
+.hcal .hday.lei{background:var(--ok-soft);border:1px solid var(--ok);color:var(--ink);font-weight:700}
+.hcal .hday.hoje{box-shadow:0 0 0 2px var(--saffron);color:var(--ink);font-weight:700}
+.legend i.lg-act{background:var(--cobalt);border-color:var(--cobalt);border-radius:50%;width:8px;height:8px}
+.legend i.lg-lei{background:var(--ok-soft);border-color:var(--ok)}
+.legend i.lg-rev{background:var(--cobalt-soft);border-color:var(--cobalt)}
+.legend i.lg-out{background:var(--saffron);border-color:var(--saffron)}
+.pnstats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.pnstats div{background:var(--paper);border-radius:10px;padding:10px 12px;min-width:0}
+.pnstats b{display:block;font-family:var(--display);font-weight:400;font-size:1.6rem;font-variant-numeric:tabular-nums;line-height:1.1}
+.pnstats span{font-size:.8rem;color:var(--muted)}
+.pbars{width:100%;height:auto;display:block}
+.pbars .pb-axis{stroke:var(--line)}
+.pbars .pb-rev{fill:var(--cobalt-soft);stroke:var(--cobalt);stroke-width:1}
+.pbars .pb-out{fill:var(--saffron)}
+.pbars .pb-n{font:600 9px var(--mono);fill:var(--muted);text-anchor:middle}
+.pbars .pb-l{font:500 9px var(--mono);fill:var(--muted);text-anchor:middle}
+.pnbar{display:inline-block;width:72px;height:8px;border-radius:4px;background:var(--line);overflow:hidden;vertical-align:middle}
+.pnbar i{display:block;height:100%;background:var(--ok)}
+.pnstate{display:flex;gap:6px;flex-wrap:wrap}
+.pnstate .lvl{font-style:normal}
+.pntoday li{font-size:.94rem}
+@media (min-width:560px){.pnstats{grid-template-columns:repeat(4,minmax(0,1fr))}}

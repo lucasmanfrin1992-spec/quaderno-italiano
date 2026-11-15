@@ -8,7 +8,7 @@ function origemLabel(o){if(!o)return"";const i=o.indexOf(":"),t=o.slice(0,i),id=
 /* ---------- palavra sem tradução cadastrada: salva com a tradução do usuário ---------- */
 function saveOwn(v){v=String(v||"").trim();if(!v||!SH)return;const k=SH.k;
  S.favs[k]={lemma:k,surface:SH.surface,pos:"",meaning:v,synonyms:[],example:"",examplePt:"",context:SH.sentence,date:today(),added:today(),tipo:"palavra",origem:origemOf(SH.btn),own:true};
- addFavCard(k);save();SH.entry={lemma:k,meaning:v,pos:"",own:true};SH.src="own";renderSheet();updateFavCount();renderDecks();renderHome()}
+ addFavCard(k);logEvento("favorito",k);save();SH.entry={lemma:k,meaning:v,pos:"",own:true};SH.src="own";renderSheet();updateFavCount();renderDecks();renderHome()}
 
 /* ---------- trecho: da primeira à última palavra tocada ---------- */
 let RANGE=null;
@@ -43,7 +43,7 @@ function renderPhrase(){const fav=S.favs[SH.k],gl=phraseGloss(),star=$("#shFav")
 function savePhrase(){const typed=(($("#shOwn")||{}).value||"").trim(),auto=phraseGloss().filter(x=>x.m).map(x=>x.m).join(" · "),meaning=typed||auto;
  if(!meaning){const m=$("#shPhMsg");if(m)m.textContent="Não há tradução cadastrada para estas palavras. Escreva a sua tradução para salvar.";return}
  S.favs[SH.k]={lemma:SH.surface,surface:SH.surface,pos:"frase",meaning,synonyms:[],example:"",examplePt:"",context:SH.sentence,date:today(),added:today(),tipo:"frase",origem:origemOf(SH.btn),auto:!typed};
- addFavCard(SH.k);save();renderSheet();updateFavCount();renderDecks();renderHome()}
+ addFavCard(SH.k);logEvento("favorito",SH.k);save();renderSheet();updateFavCount();renderDecks();renderHome()}
 function removePhrase(){delete S.favs[SH.k];removeFavCard(SH.k);save();renderSheet();updateFavCount();renderDecks();renderHome()}
 
 /* ---------- lista ---------- */

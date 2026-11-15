@@ -29,15 +29,16 @@ const TENSES={pres:{n:"presente",f:pres},pass:{n:"passato prossimo",f:pass},fut:
 const KEY="quaderno.v1";
 const RESET_EPOCH="2026-11-02"; // muda este valor para zerar os cartões de todos
 const DECKS={err:"Meus erros",fav:"Preferiti (palavras e frases)",vA1:"Vocabulário A1",vA2:"Vocabulário A2",verb:"Verbos (presente, passato, futuro)"};
-const DATA_V=2; // versão do formato dos dados salvos; migrar() leva os dados antigos para a versão atual sem apagar nada
-function defState(){return{cards:{},settings:{decks:{err:true,frase:true,fav:true,vA1:true,vA2:true,verb:true},newPerDay:20,dir:"mix",typing:false},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},favs:{},newsDone:{},course:{},writing:{},shadow:{},errs:{},log:{},tests:{},sents:{},estat:{},diary:{},chats:{},bt:{},dict:{},pairs:{},leituras:{},modi:{},versaoDados:DATA_V,resetEpoch:RESET_EPOCH,updatedAt:0}}
+const DATA_V=3; // versão do formato dos dados salvos; migrar() leva os dados antigos para a versão atual sem apagar nada
+function defState(){return{cards:{},settings:{decks:{err:true,frase:true,fav:true,vA1:true,vA2:true,verb:true},newPerDay:20,dir:"mix",typing:false},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},favs:{},newsDone:{},course:{},writing:{},shadow:{},errs:{},log:{},tests:{},sents:{},estat:{},diary:{},chats:{},bt:{},dict:{},pairs:{},leituras:{},modi:{},eventos:{},versaoDados:DATA_V,resetEpoch:RESET_EPOCH,updatedAt:0}}
 function hydrate(o){const d=defState();S=Object.assign(d,o);S.settings=Object.assign(defState().settings,o.settings||{});S.settings.decks=Object.assign(defState().settings.decks,(o.settings||{}).decks||{});
  migrar(o.versaoDados||1);
- S.leituras=S.leituras||{};S.modi=S.modi||{};S.favs=S.favs||{};S.newsDone=S.newsDone||{};S.cards=S.cards||{};S.course=S.course||{};S.writing=S.writing||{};S.shadow=S.shadow||{};S.errs=S.errs||{};S.log=S.log||{};S.tests=S.tests||{};
+ S.leituras=S.leituras||{};S.modi=S.modi||{};S.eventos=S.eventos||{};S.favs=S.favs||{};S.newsDone=S.newsDone||{};S.cards=S.cards||{};S.course=S.course||{};S.writing=S.writing||{};S.shadow=S.shadow||{};S.errs=S.errs||{};S.log=S.log||{};S.tests=S.tests||{};
  if(o.resetEpoch!==RESET_EPOCH){S.cards={};S.daily={date:"",newDone:0,reviewed:0};S.streak={last:"",count:0};delete S.best;S.resetEpoch=RESET_EPOCH;return true}return false}
 function migrar(de){try{
  if(de<2){Object.values(S.errs||{}).forEach(e=>{if(e&&e.f==="Escreva a frase que você ouviu")e.f="Ouça a frase e diga o que ela significa"}); // v2: sem perguntas escritas
   if(S.settings)S.settings.typing=false}
+ if(de<3)evBackfill(); // v3: log de eventos para o calendário e o painel
  }catch(e){}S.versaoDados=DATA_V}
 let S=defState();
 let DB=null,UID=null,stateRef=null,syncT=null,syncing=false,syncDirty=false,syncRetried=false;
@@ -192,7 +193,7 @@ function feedback(ok,q){const r=RUN;q.ok=ok;recordCat(qCat(q),ok);if(ok)r.score+
  $("#fb").innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${ok?"Certo!":"Resposta: "+esc(q.a.split("/").join(" ou "))}</b>${full?`<div class="row" style="gap:8px;flex-wrap:nowrap"><i class="it" style="flex:1">${esc(full)}</i>${spkBtn(full)}</div>`:""}<div>${esc(q.exp)}</div></div>
  <button class="btn primary" id="nextQ" style="margin-top:12px">${r.i<r.qs.length-1?"Próxima":"Ver resultado"}</button>`;tokenize($("#fb"));
  $("#nextQ").onclick=()=>{r.i++;r.i<r.qs.length?renderQ():(r.test?endTest():r.focus?endFocus():endEx())};$("#nextQ").focus({preventScroll:true})}
-function endEx(){const r=RUN,n=r.qs.length,pct=Math.round(r.score/n*100),c=S.course[r.topic]=S.course[r.topic]||{};if(c.best==null||pct>c.best)c.best=pct;c.ex=1;c.last=today();if(r.review)revAfter(r.topic,pct);else revInit(r.topic);logInc("e");save();
+function endEx(){const r=RUN,n=r.qs.length,pct=Math.round(r.score/n*100),c=S.course[r.topic]=S.course[r.topic]||{};const wasDone=isDone(r.topic);if(c.best==null||pct>c.best)c.best=pct;if(!wasDone&&isDone(r.topic))logEvento("unidade","curso:"+r.topic);c.ex=1;c.last=today();if(r.review)revAfter(r.topic,pct);else revInit(r.topic);logInc("e");save();
  const msg=r.review?(pct>=70?"Revisão feita. O tópico volta mais tarde para a próxima revisão.":"Vale rever a gramática: esta revisão volta em 2 dias."):pct>=90?"Excelente. Tópico dominado.":pct>=70?"Muito bom. Tópico concluído.":pct>=50?"No caminho. Releia a gramática dos erros e tente de novo.":"Vale rever a gramática antes de repetir.";
  const t=CUR,idx=COURSE.indexOf(t),nxt=COURSE[idx+1];
  $("#cBody").innerHTML=`<div class="card stack"><span class="label">${r.review?"Revisão do tópico":"Resultado"}</span><h2>${r.score}/${n} · ${pct}%</h2><p>${msg}</p>
@@ -253,7 +254,7 @@ function renderFlash(){if(!SESSION||SESSION.queue.length===0&&SESSION.total===0)
 function rate(r){const s=SESSION,id=s.queue.shift(),isNew=!S.cards[id];
  if(isNew&&!s.extra&&CARDS[id]&&CARDS[id].deck!=="fav"&&CARDS[id].deck!=="err"&&CARDS[id].deck!=="frase")S.daily.newDone++;logInc("c");
  const st=sched(S.cards[id],r);
- if(r===0)s.queue.splice(Math.min(3,s.queue.length),0,id);else s.done++;
+ if(r===0)s.queue.splice(Math.min(3,s.queue.length),0,id);else s.done++;logEvento("revisao",id);
  S.cards[id]=st;S.daily.reviewed++;
  const t=today();if(S.streak.last!==t){S.streak.count=S.streak.last===addDays(-1)?S.streak.count+1:1;S.streak.last=t}
  if(!s.queue.length)logInc("cz",1);save();s.shown=false;s.dirFlip=null;renderFlash()}
@@ -274,5 +275,5 @@ function renderHome(){const {due,nw}=updateChips();$("#nDue").textContent=due;$(
  $("#todayTitle").textContent=due+nw?(due+nw)+" cartões te esperando":"Tudo em dia por hoje";
  const t=nextTopic(),c=tprog(t.id),doneN=COURSE.filter(x=>isDone(x.id)).length;
  $("#homeCourse").innerHTML=`<div class="row" style="justify-content:space-between"><span class="label">Curso · ${doneN}/${COURSE.length} tópicos</span><span class="cefr">${t.lvl}</span></div><h3>${esc(t.t)}</h3><p class="small muted">${esc(t.sub)}</p><div class="row"><button class="btn primary" data-goto="curso" data-topic="${t.id}" data-part="${c.voc?(c.gram?"ex":"gram"):"voc"}">${c.voc?"Continuar":"Começar"} tópico ${t.n}</button></div>`;
- renderHomePref();renderHomeLet();
+ renderHomePref();renderHomeLet();renderHomeCal();renderPainel();
  renderGoal();renderHomeReview();renderHomeWeak();renderHomeNews()}

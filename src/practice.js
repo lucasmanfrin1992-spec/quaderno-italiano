@@ -184,7 +184,7 @@ function openTest(id){const T=TESTS.find(x=>x.id===id);if(!T)return;TEST=T;CUR=n
  $("#tStart").onclick=()=>{RUN={test:id,qs:buildTest(T),i:0,score:0,wrong:[],by:{}};renderQ()};window.scrollTo(0,0)}
 function endTest(){const r=RUN,T=TESTS.find(x=>x.id===r.test),n=r.qs.length,pct=Math.round(r.score/n*100);S.tests=S.tests||{};const prev=S.tests[T.id];S.tests[T.id]={best:Math.max(pct,prev?prev.best:0),last:today()};
  const per=T.ts.map(id=>{const qs=r.qs.filter(q=>q.tp===id),ok=qs.filter(q=>q.ok).length;return{id,ok,n:qs.length,pct:qs.length?Math.round(ok/qs.length*100):0}});
- const passed=[];per.forEach(p=>{if(p.pct>=75){const c=S.course[p.id]=S.course[p.id]||{};if(c.best==null||p.pct>c.best){c.best=p.pct;c.viaTest=1}revInit(p.id);passed.push(p.id)}});
+ const passed=[];per.forEach(p=>{if(p.pct>=75){const c=S.course[p.id]=S.course[p.id]||{},wasDone=isDone(p.id);if(c.best==null||p.pct>c.best){c.best=p.pct;c.viaTest=1}if(!wasDone&&isDone(p.id))logEvento("unidade","curso:"+p.id);revInit(p.id);passed.push(p.id)}});
  logInc("e");save();
  const weak=per.filter(p=>p.pct<75);
  $("#cBody").innerHTML=`<div class="card stack"><span class="label">Resultado do teste</span><h2>${r.score}/${n} · ${pct}%</h2>

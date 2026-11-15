@@ -818,6 +818,32 @@ nobr{white-space:nowrap}
 .modi .label{margin-right:6px}
 .spk.star.on{background:var(--saffron-soft);border-color:var(--saffron)}
 .spk.star.on svg{fill:var(--saffron);stroke:var(--saffron)}
+/* v2 fase 6: calendário e painel */
+.hcal .hday{aspect-ratio:1;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:.9rem;color:var(--muted);font-variant-numeric:tabular-nums;position:relative}
+.hcal .hday.act{color:var(--ink);font-weight:700}
+.hcal .hday i{width:6px;height:6px;border-radius:50%;background:var(--cobalt)}
+.hcal .hday.lei{background:var(--ok-soft);border:1px solid var(--ok);color:var(--ink);font-weight:700}
+.hcal .hday.hoje{box-shadow:0 0 0 2px var(--saffron);color:var(--ink);font-weight:700}
+.legend i.lg-act{background:var(--cobalt);border-color:var(--cobalt);border-radius:50%;width:8px;height:8px}
+.legend i.lg-lei{background:var(--ok-soft);border-color:var(--ok)}
+.legend i.lg-rev{background:var(--cobalt-soft);border-color:var(--cobalt)}
+.legend i.lg-out{background:var(--saffron);border-color:var(--saffron)}
+.pnstats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.pnstats div{background:var(--paper);border-radius:10px;padding:10px 12px;min-width:0}
+.pnstats b{display:block;font-family:var(--display);font-weight:400;font-size:1.6rem;font-variant-numeric:tabular-nums;line-height:1.1}
+.pnstats span{font-size:.8rem;color:var(--muted)}
+.pbars{width:100%;height:auto;display:block}
+.pbars .pb-axis{stroke:var(--line)}
+.pbars .pb-rev{fill:var(--cobalt-soft);stroke:var(--cobalt);stroke-width:1}
+.pbars .pb-out{fill:var(--saffron)}
+.pbars .pb-n{font:600 9px var(--mono);fill:var(--muted);text-anchor:middle}
+.pbars .pb-l{font:500 9px var(--mono);fill:var(--muted);text-anchor:middle}
+.pnbar{display:inline-block;width:72px;height:8px;border-radius:4px;background:var(--line);overflow:hidden;vertical-align:middle}
+.pnbar i{display:block;height:100%;background:var(--ok)}
+.pnstate{display:flex;gap:6px;flex-wrap:wrap}
+.pnstate .lvl{font-style:normal}
+.pntoday li{font-size:.94rem}
+@media (min-width:560px){.pnstats{grid-template-columns:repeat(4,minmax(0,1fr))}}
 </style>
 
 <div class="wrap">
@@ -838,6 +864,7 @@ nobr{white-space:nowrap}
   <!-- ===================== INÍCIO ===================== -->
   <section class="view" id="v-inicio" data-view="inicio">
     <div class="card stack" id="homeGoal"></div>
+    <div class="card stack" id="homeCal"></div>
     <div class="today">
       <div class="label">Revisão de hoje</div>
       <h2 id="todayTitle">Seus cartões de hoje</h2>
@@ -856,6 +883,7 @@ nobr{white-space:nowrap}
     </div>
     <div class="card" id="homeLet"></div>
     <div class="card" id="homeNews"><span class="label">Notícia do dia</span><p class="muted small">Carregando…</p></div>
+    <div class="card stack" id="homePainel"></div>
     <p class="hint">Dica: em qualquer texto, toque numa palavra em italiano para ver o significado e os exemplos. A estrela salva a palavra em Preferiti; “Marcar um trecho” salva uma frase inteira.</p>
   </section>
 
@@ -2668,15 +2696,16 @@ const TENSES={pres:{n:"presente",f:pres},pass:{n:"passato prossimo",f:pass},fut:
 const KEY="quaderno.v1";
 const RESET_EPOCH="2026-11-02"; // muda este valor para zerar os cartões de todos
 const DECKS={err:"Meus erros",fav:"Preferiti (palavras e frases)",vA1:"Vocabulário A1",vA2:"Vocabulário A2",verb:"Verbos (presente, passato, futuro)"};
-const DATA_V=2; // versão do formato dos dados salvos; migrar() leva os dados antigos para a versão atual sem apagar nada
-function defState(){return{cards:{},settings:{decks:{err:true,frase:true,fav:true,vA1:true,vA2:true,verb:true},newPerDay:20,dir:"mix",typing:false},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},favs:{},newsDone:{},course:{},writing:{},shadow:{},errs:{},log:{},tests:{},sents:{},estat:{},diary:{},chats:{},bt:{},dict:{},pairs:{},leituras:{},modi:{},versaoDados:DATA_V,resetEpoch:RESET_EPOCH,updatedAt:0}}
+const DATA_V=3; // versão do formato dos dados salvos; migrar() leva os dados antigos para a versão atual sem apagar nada
+function defState(){return{cards:{},settings:{decks:{err:true,frase:true,fav:true,vA1:true,vA2:true,verb:true},newPerDay:20,dir:"mix",typing:false},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},favs:{},newsDone:{},course:{},writing:{},shadow:{},errs:{},log:{},tests:{},sents:{},estat:{},diary:{},chats:{},bt:{},dict:{},pairs:{},leituras:{},modi:{},eventos:{},versaoDados:DATA_V,resetEpoch:RESET_EPOCH,updatedAt:0}}
 function hydrate(o){const d=defState();S=Object.assign(d,o);S.settings=Object.assign(defState().settings,o.settings||{});S.settings.decks=Object.assign(defState().settings.decks,(o.settings||{}).decks||{});
  migrar(o.versaoDados||1);
- S.leituras=S.leituras||{};S.modi=S.modi||{};S.favs=S.favs||{};S.newsDone=S.newsDone||{};S.cards=S.cards||{};S.course=S.course||{};S.writing=S.writing||{};S.shadow=S.shadow||{};S.errs=S.errs||{};S.log=S.log||{};S.tests=S.tests||{};
+ S.leituras=S.leituras||{};S.modi=S.modi||{};S.eventos=S.eventos||{};S.favs=S.favs||{};S.newsDone=S.newsDone||{};S.cards=S.cards||{};S.course=S.course||{};S.writing=S.writing||{};S.shadow=S.shadow||{};S.errs=S.errs||{};S.log=S.log||{};S.tests=S.tests||{};
  if(o.resetEpoch!==RESET_EPOCH){S.cards={};S.daily={date:"",newDone:0,reviewed:0};S.streak={last:"",count:0};delete S.best;S.resetEpoch=RESET_EPOCH;return true}return false}
 function migrar(de){try{
  if(de<2){Object.values(S.errs||{}).forEach(e=>{if(e&&e.f==="Escreva a frase que você ouviu")e.f="Ouça a frase e diga o que ela significa"}); // v2: sem perguntas escritas
   if(S.settings)S.settings.typing=false}
+ if(de<3)evBackfill(); // v3: log de eventos para o calendário e o painel
  }catch(e){}S.versaoDados=DATA_V}
 let S=defState();
 let DB=null,UID=null,stateRef=null,syncT=null,syncing=false,syncDirty=false,syncRetried=false;
@@ -2831,7 +2860,7 @@ function feedback(ok,q){const r=RUN;q.ok=ok;recordCat(qCat(q),ok);if(ok)r.score+
  $("#fb").innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${ok?"Certo!":"Resposta: "+esc(q.a.split("/").join(" ou "))}</b>${full?`<div class="row" style="gap:8px;flex-wrap:nowrap"><i class="it" style="flex:1">${esc(full)}</i>${spkBtn(full)}</div>`:""}<div>${esc(q.exp)}</div></div>
  <button class="btn primary" id="nextQ" style="margin-top:12px">${r.i<r.qs.length-1?"Próxima":"Ver resultado"}</button>`;tokenize($("#fb"));
  $("#nextQ").onclick=()=>{r.i++;r.i<r.qs.length?renderQ():(r.test?endTest():r.focus?endFocus():endEx())};$("#nextQ").focus({preventScroll:true})}
-function endEx(){const r=RUN,n=r.qs.length,pct=Math.round(r.score/n*100),c=S.course[r.topic]=S.course[r.topic]||{};if(c.best==null||pct>c.best)c.best=pct;c.ex=1;c.last=today();if(r.review)revAfter(r.topic,pct);else revInit(r.topic);logInc("e");save();
+function endEx(){const r=RUN,n=r.qs.length,pct=Math.round(r.score/n*100),c=S.course[r.topic]=S.course[r.topic]||{};const wasDone=isDone(r.topic);if(c.best==null||pct>c.best)c.best=pct;if(!wasDone&&isDone(r.topic))logEvento("unidade","curso:"+r.topic);c.ex=1;c.last=today();if(r.review)revAfter(r.topic,pct);else revInit(r.topic);logInc("e");save();
  const msg=r.review?(pct>=70?"Revisão feita. O tópico volta mais tarde para a próxima revisão.":"Vale rever a gramática: esta revisão volta em 2 dias."):pct>=90?"Excelente. Tópico dominado.":pct>=70?"Muito bom. Tópico concluído.":pct>=50?"No caminho. Releia a gramática dos erros e tente de novo.":"Vale rever a gramática antes de repetir.";
  const t=CUR,idx=COURSE.indexOf(t),nxt=COURSE[idx+1];
  $("#cBody").innerHTML=`<div class="card stack"><span class="label">${r.review?"Revisão do tópico":"Resultado"}</span><h2>${r.score}/${n} · ${pct}%</h2><p>${msg}</p>
@@ -2892,7 +2921,7 @@ function renderFlash(){if(!SESSION||SESSION.queue.length===0&&SESSION.total===0)
 function rate(r){const s=SESSION,id=s.queue.shift(),isNew=!S.cards[id];
  if(isNew&&!s.extra&&CARDS[id]&&CARDS[id].deck!=="fav"&&CARDS[id].deck!=="err"&&CARDS[id].deck!=="frase")S.daily.newDone++;logInc("c");
  const st=sched(S.cards[id],r);
- if(r===0)s.queue.splice(Math.min(3,s.queue.length),0,id);else s.done++;
+ if(r===0)s.queue.splice(Math.min(3,s.queue.length),0,id);else s.done++;logEvento("revisao",id);
  S.cards[id]=st;S.daily.reviewed++;
  const t=today();if(S.streak.last!==t){S.streak.count=S.streak.last===addDays(-1)?S.streak.count+1:1;S.streak.last=t}
  if(!s.queue.length)logInc("cz",1);save();s.shown=false;s.dirFlip=null;renderFlash()}
@@ -2913,7 +2942,7 @@ function renderHome(){const {due,nw}=updateChips();$("#nDue").textContent=due;$(
  $("#todayTitle").textContent=due+nw?(due+nw)+" cartões te esperando":"Tudo em dia por hoje";
  const t=nextTopic(),c=tprog(t.id),doneN=COURSE.filter(x=>isDone(x.id)).length;
  $("#homeCourse").innerHTML=`<div class="row" style="justify-content:space-between"><span class="label">Curso · ${doneN}/${COURSE.length} tópicos</span><span class="cefr">${t.lvl}</span></div><h3>${esc(t.t)}</h3><p class="small muted">${esc(t.sub)}</p><div class="row"><button class="btn primary" data-goto="curso" data-topic="${t.id}" data-part="${c.voc?(c.gram?"ex":"gram"):"voc"}">${c.voc?"Continuar":"Começar"} tópico ${t.n}</button></div>`;
- renderHomePref();renderHomeLet();
+ renderHomePref();renderHomeLet();renderHomeCal();renderPainel();
  renderGoal();renderHomeReview();renderHomeWeak();renderHomeNews()}
 
 /* ============================ DICIONÁRIO AMPLIADO: DADOS ============================ */
@@ -4939,7 +4968,7 @@ function openTest(id){const T=TESTS.find(x=>x.id===id);if(!T)return;TEST=T;CUR=n
  $("#tStart").onclick=()=>{RUN={test:id,qs:buildTest(T),i:0,score:0,wrong:[],by:{}};renderQ()};window.scrollTo(0,0)}
 function endTest(){const r=RUN,T=TESTS.find(x=>x.id===r.test),n=r.qs.length,pct=Math.round(r.score/n*100);S.tests=S.tests||{};const prev=S.tests[T.id];S.tests[T.id]={best:Math.max(pct,prev?prev.best:0),last:today()};
  const per=T.ts.map(id=>{const qs=r.qs.filter(q=>q.tp===id),ok=qs.filter(q=>q.ok).length;return{id,ok,n:qs.length,pct:qs.length?Math.round(ok/qs.length*100):0}});
- const passed=[];per.forEach(p=>{if(p.pct>=75){const c=S.course[p.id]=S.course[p.id]||{};if(c.best==null||p.pct>c.best){c.best=p.pct;c.viaTest=1}revInit(p.id);passed.push(p.id)}});
+ const passed=[];per.forEach(p=>{if(p.pct>=75){const c=S.course[p.id]=S.course[p.id]||{},wasDone=isDone(p.id);if(c.best==null||p.pct>c.best){c.best=p.pct;c.viaTest=1}if(!wasDone&&isDone(p.id))logEvento("unidade","curso:"+p.id);revInit(p.id);passed.push(p.id)}});
  logInc("e");save();
  const weak=per.filter(p=>p.pct<75);
  $("#cBody").innerHTML=`<div class="card stack"><span class="label">Resultado do teste</span><h2>${r.score}/${n} · ${pct}%</h2>
@@ -5105,7 +5134,7 @@ function toggleFav(){if(SH&&SH.mode==="phrase"){S.favs[SH.k]?removePhrase():save
  const e=SH&&SH.entry;if(!e||!e.meaning)return;const key=favKeyOf(e,SH.k);
  if(S.favs[key]){delete S.favs[key];removeFavCard(key)}
  else{const ex=e.example?[e.example,e.examplePt||""]:((e.found||[])[0]||(e.examples||[])[0]||["",""]);
-  S.favs[key]={lemma:e.lemma||SH.surface,surface:SH.surface,pos:e.pos||"",meaning:e.meaning||"",synonyms:(e.synonyms||[]).slice(0,5),example:ex[0]||"",examplePt:ex[1]||"",context:SH.sentence,date:SH.btn&&SH.btn.closest("#newsBox")&&NEWS.cur?NEWS.cur.date:today(),added:today(),tipo:"palavra",origem:origemOf(SH.btn)};addFavCard(key)}
+  S.favs[key]={lemma:e.lemma||SH.surface,surface:SH.surface,pos:e.pos||"",meaning:e.meaning||"",synonyms:(e.synonyms||[]).slice(0,5),example:ex[0]||"",examplePt:ex[1]||"",context:SH.sentence,date:SH.btn&&SH.btn.closest("#newsBox")&&NEWS.cur?NEWS.cur.date:today(),added:today(),tipo:"palavra",origem:origemOf(SH.btn)};addFavCard(key);logEvento("favorito",key)}
  save();renderSheet();refreshTokenMarks();updateFavCount();renderDecks();renderHome()}
 
 /* ============================ ÁUDIO: leitura em voz alta com velocidade ============================ */
@@ -5332,7 +5361,7 @@ function origemLabel(o){if(!o)return"";const i=o.indexOf(":"),t=o.slice(0,i),id=
 /* ---------- palavra sem tradução cadastrada: salva com a tradução do usuário ---------- */
 function saveOwn(v){v=String(v||"").trim();if(!v||!SH)return;const k=SH.k;
  S.favs[k]={lemma:k,surface:SH.surface,pos:"",meaning:v,synonyms:[],example:"",examplePt:"",context:SH.sentence,date:today(),added:today(),tipo:"palavra",origem:origemOf(SH.btn),own:true};
- addFavCard(k);save();SH.entry={lemma:k,meaning:v,pos:"",own:true};SH.src="own";renderSheet();updateFavCount();renderDecks();renderHome()}
+ addFavCard(k);logEvento("favorito",k);save();SH.entry={lemma:k,meaning:v,pos:"",own:true};SH.src="own";renderSheet();updateFavCount();renderDecks();renderHome()}
 
 /* ---------- trecho: da primeira à última palavra tocada ---------- */
 let RANGE=null;
@@ -5367,7 +5396,7 @@ function renderPhrase(){const fav=S.favs[SH.k],gl=phraseGloss(),star=$("#shFav")
 function savePhrase(){const typed=(($("#shOwn")||{}).value||"").trim(),auto=phraseGloss().filter(x=>x.m).map(x=>x.m).join(" · "),meaning=typed||auto;
  if(!meaning){const m=$("#shPhMsg");if(m)m.textContent="Não há tradução cadastrada para estas palavras. Escreva a sua tradução para salvar.";return}
  S.favs[SH.k]={lemma:SH.surface,surface:SH.surface,pos:"frase",meaning,synonyms:[],example:"",examplePt:"",context:SH.sentence,date:today(),added:today(),tipo:"frase",origem:origemOf(SH.btn),auto:!typed};
- addFavCard(SH.k);save();renderSheet();updateFavCount();renderDecks();renderHome()}
+ addFavCard(SH.k);logEvento("favorito",SH.k);save();renderSheet();updateFavCount();renderDecks();renderHome()}
 function removePhrase(){delete S.favs[SH.k];removeFavCard(SH.k);save();renderSheet();updateFavCount();renderDecks();renderHome()}
 
 /* ---------- lista ---------- */
@@ -5828,7 +5857,7 @@ function renderLetQuiz(){const t=LT.cur,box=$("#letQuiz");if(!t||!box)return;con
  if(answered===n)h+=right===n?`<div class="fb ok"><b>${n}/${n}: texto lido!</b><span>${done?"Concluído em "+fmtBR(done)+".":""}</span></div>`:`<div class="fb no"><b>${right}/${n} certas.</b><span>Releia o texto e toque em “Limpar” para tentar de novo.</span></div>`;
  box.innerHTML=h;tokenize(box);
  $$("#letQuiz [data-lq]").forEach(b=>b.onclick=()=>{const i=+b.dataset.lq;if(st.ans[i]!=null)return;st.ans[i]=+b.dataset.k;
-  if(Object.keys(st.ans).length===n&&t.quiz.every((q,j)=>st.ans[j]===q.correta)){S.leituras=S.leituras||{};if(!S.leituras[t.id])S.leituras[t.id]={done:today()};logInc("n",1);save();renderHome()}
+  if(Object.keys(st.ans).length===n&&t.quiz.every((q,j)=>st.ans[j]===q.correta)){S.leituras=S.leituras||{};if(!S.leituras[t.id]){S.leituras[t.id]={done:today()};logEvento("leitura",t.id)}logInc("n",1);save();renderHome()}
   renderLetQuiz()});
  if($("#letClear"))$("#letClear").onclick=()=>{LT.quiz[t.id]={ans:{},ord:{}};renderLetQuiz()}}
 
@@ -5902,7 +5931,7 @@ function renderModiIndex(){const n=modiDoneN(),tot=MODI.length;
  $$("#modiBox [data-modi-open]").forEach(b=>b.onclick=()=>openModi(b.dataset.modiOpen))}
 function modiKey(m){return m.it.toLowerCase()}
 function modiToggle(u,m){const k=modiKey(m);if(S.favs[k]){delete S.favs[k];removeFavCard(k)}
- else{S.favs[k]={lemma:m.it,surface:m.it,pos:"modo di dire",meaning:m.pt,synonyms:[],example:m.es,examplePt:m.espt,context:m.es,date:today(),added:today(),tipo:"frase",origem:"modi:"+u.id};addFavCard(k)}
+ else{S.favs[k]={lemma:m.it,surface:m.it,pos:"modo di dire",meaning:m.pt,synonyms:[],example:m.es,examplePt:m.espt,context:m.es,date:today(),added:today(),tipo:"frase",origem:"modi:"+u.id};addFavCard(k);logEvento("favorito",k)}
  save();updateFavCount();renderDecks();renderHome();renderModiUnit(true)}
 function renderModiUnit(keep){const u=MD.cur,box=$("#modiBox"),i=MODI.indexOf(u),prev=MODI[i-1],next=MODI[i+1],y=window.scrollY;
  box.innerHTML=`<button class="back" id="modiBack">← Modi di dire</button>
@@ -5929,9 +5958,78 @@ function renderModiQuiz(){const u=MD.cur,box=$("#modiQuiz");if(!u||!box)return;c
  if(answered===n)h+=right===n?`<div class="fb ok"><b>${n}/${n}: unidade feita!</b></div>`:`<div class="fb no"><b>${right}/${n} certas.</b><span>Releia as expressões e toque em “Limpar” para tentar de novo.</span></div>`;
  box.innerHTML=h;tokenize(box);
  $$("#modiQuiz [data-mq]").forEach(b=>b.onclick=()=>{const k=+b.dataset.mq;if(st.ans[k]!=null)return;st.ans[k]=+b.dataset.j;
-  if(Object.keys(st.ans).length===n&&u.itens.every((_,j)=>st.ans[j]===j)){S.modi=S.modi||{};if(!S.modi[u.id])S.modi[u.id]={done:today()};logInc("e",1);save();renderHome()}
+  if(Object.keys(st.ans).length===n&&u.itens.every((_,j)=>st.ans[j]===j)){S.modi=S.modi||{};if(!S.modi[u.id]){S.modi[u.id]={done:today()};logEvento("unidade","modi:"+u.id)}logInc("e",1);save();renderHome()}
   renderModiQuiz()});
  if($("#modiClear"))$("#modiClear").onclick=()=>{delete MD.quiz[u.id];renderModiQuiz()}}
+
+/* ============================ CALENDÁRIO E PAINEL ============================ */
+// Log de eventos por perfil em S.eventos: { "AAAA-MM-DD": [[tipo, id], ...] }
+// tipos: "leitura" (texto concluído com 3/3), "unidade" (tópico do curso ou unidade de modi di dire concluída),
+//        "revisao" (cartão revisado; um por cartão por dia), "favorito" (item salvo em Preferiti).
+// Revisões com mais de 60 dias viram uma entrada só por dia: ["revisao", "", quantidade].
+const EV_TIPOS=["leitura","unidade","revisao","favorito"];
+function logEvento(tipo,id){try{if(!EV_TIPOS.includes(tipo))return;S.eventos=S.eventos||{};const t=today(),d=S.eventos[t]=S.eventos[t]||[];id=String(id||"");
+ if((tipo==="revisao"||tipo==="favorito")&&d.some(e=>e[0]===tipo&&e[1]===id))return;d.push([tipo,id]);evCompact()}catch(e){}}
+function evCompact(){const lim=addDays(-60);Object.keys(S.eventos).forEach(day=>{if(day>=lim)return;const d=S.eventos[day];if(!d.some(e=>e[0]==="revisao"&&e[1]!==""))return;
+ let n=0;const rest=d.filter(e=>{if(e[0]!=="revisao")return true;n+=e[1]===""?(+e[2]||0):1;return false});if(n)rest.push(["revisao","",n]);S.eventos[day]=rest})}
+function evCount(e){return e[0]==="revisao"&&e[1]===""?(+e[2]||0):1}
+function evDays(){return S.eventos||{}}
+function dayActive(ds){const o=(S.log||{})[ds];if(o&&Object.keys(o).some(k=>typeof o[k]==="number"&&o[k]>0&&k!=="cz"))return true;return((S.eventos||{})[ds]||[]).length>0}
+function dayLeitura(ds){return((S.eventos||{})[ds]||[]).some(e=>e[0]==="leitura")||Object.values(S.leituras||{}).some(r=>r&&r.done===ds)}
+function activeStreak(){let d=new Date(),c=0;if(!dayActive(fmt(d)))d.setDate(d.getDate()-1);while(dayActive(fmt(d))){c++;d.setDate(d.getDate()-1)}return c}
+// v3: preenche o log com o que já tinha data (leituras, modi di dire e favoritos), para o calendário e o painel não começarem vazios
+function evBackfill(){S.eventos=S.eventos||{};const add=(day,tipo,id)=>{if(!day||!/^\d{4}-\d\d-\d\d$/.test(day))return;const d=S.eventos[day]=S.eventos[day]||[];if(!d.some(e=>e[0]===tipo&&e[1]===id))d.push([tipo,id])};
+ Object.keys(S.leituras||{}).forEach(id=>add(S.leituras[id]&&S.leituras[id].done,"leitura",id));
+ Object.keys(S.modi||{}).forEach(id=>add(S.modi[id]&&S.modi[id].done,"unidade","modi:"+id));
+ Object.keys(S.favs||{}).forEach(k=>add(S.favs[k]&&(S.favs[k].added||S.favs[k].date),"favorito",k))}
+
+/* ---------- calendário mensal (tela inicial) ---------- */
+const HC={month:""};
+function renderHomeCal(){const el=$("#homeCal");if(!el)return;const t=today(),cur=t.slice(0,7),base=HC.month||cur,[y,m]=base.split("-").map(Number);
+ const startDow=(new Date(y,m-1,1).getDay()+6)%7,dim=new Date(y,m,0).getDate();let cells=["seg","ter","qua","qui","sex","sáb","dom"].map(d=>`<span class="dow">${d}</span>`).join(""),act=0,lei=0;
+ for(let i=0;i<startDow;i++)cells+="<span></span>";
+ for(let d=1;d<=dim;d++){const ds=`${y}-${pad2(m)}-${pad2(d)}`,a=dayActive(ds),l=dayLeitura(ds);if(a)act++;if(l)lei++;
+  cells+=`<span class="hday${a?" act":""}${l?" lei":""}${ds===t?" hoje":""}" aria-label="${d} de ${MONTHS[m-1]}${l?", leitura concluída":a?", com atividade":""}">${d}${a&&!l?"<i></i>":""}</span>`}
+ const prev=new Date(y,m-2,1),next=new Date(y,m,1),pk=fmt(prev).slice(0,7),nk=fmt(next).slice(0,7),st=activeStreak();
+ el.innerHTML=`<div class="row" style="justify-content:space-between"><span class="label">Calendário</span><span class="chip${st?" hot":""}">sequência atual: ${st} ${st===1?"dia":"dias"}</span></div>
+ <div class="calhead"><button class="iconbtn" id="hcPrev" aria-label="Mês anterior"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><h3>${MONTHS[m-1][0].toUpperCase()+MONTHS[m-1].slice(1)} de ${y}</h3><button class="iconbtn" id="hcNext" aria-label="Próximo mês" ${nk>cur?"disabled":""}><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div>
+ <div class="calgrid hcal">${cells}</div>
+ <div class="legend"><span><i class="lg-act"></i>dia com estudo · ${act}</span><span><i class="lg-lei"></i>texto concluído (3/3) · ${lei}</span></div>`;
+ $("#hcPrev").onclick=()=>{HC.month=pk;renderHomeCal()};$("#hcNext").onclick=()=>{if(nk<=cur){HC.month=nk;renderHomeCal()}}}
+
+/* ---------- painel ---------- */
+const PN={per:"semana"};
+const PER_LBL={semana:"últimos 7 dias",mes:"últimos 30 dias",tudo:"desde o começo"};
+function perStart(){return PN.per==="semana"?addDays(-6):PN.per==="mes"?addDays(-29):""}
+function evInPeriod(tipo,pred){const s=perStart();let n=0;Object.keys(evDays()).forEach(day=>{if(s&&day<s)return;S.eventos[day].forEach(e=>{if(e[0]===tipo&&(!pred||pred(e[1])))n+=evCount(e)})});return n}
+function painelBuckets(){const out=[];
+ if(PN.per==="tudo"){const now=new Date();for(let i=5;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1),k=fmt(d).slice(0,7);out.push({k,lbl:MONTHS[d.getMonth()].slice(0,3),from:k+"-01",to:k+"-31"})}}
+ else{const n=PN.per==="semana"?7:30,DOW=["dom","seg","ter","qua","qui","sex","sáb"];for(let i=n-1;i>=0;i--){const ds=addDays(-i),d=new Date(ds+"T12:00");out.push({k:ds,lbl:n===7?DOW[d.getDay()]:(d.getDate()===1||i===n-1||i===0||d.getDate()%5===0?String(d.getDate()):""),from:ds,to:ds})}}
+ out.forEach(b=>{b.rev=0;b.out=0;Object.keys(evDays()).forEach(day=>{if(day<b.from||day>b.to)return;S.eventos[day].forEach(e=>{if(e[0]==="revisao")b.rev+=evCount(e);else b.out+=1})})});return out}
+function barsSVG(bk){const W=320,H=120,pad=18,max=Math.max(1,...bk.map(b=>b.rev+b.out)),bw=(W-8)/bk.length,gap=Math.min(6,bw*.25);
+ return`<svg class="pbars" viewBox="0 0 ${W} ${H+pad}" role="img" aria-label="Itens estudados por ${PN.per==="tudo"?"mês":"dia"}: ${bk.map(b=>(b.lbl||b.k)+" "+(b.rev+b.out)).join(", ")}">
+  <line x1="0" x2="${W}" y1="${H}" y2="${H}" class="pb-axis"/>
+  ${bk.map((b,i)=>{const x=4+i*bw+gap/2,w=bw-gap,hr=b.rev/max*(H-14),ho=b.out/max*(H-14),tot=b.rev+b.out;
+   return`<g><title>${esc(b.lbl||b.k)}: ${b.rev} revisões, ${b.out} outras atividades</title>${hr?`<rect x="${x}" y="${H-hr}" width="${w}" height="${hr}" rx="2" class="pb-rev"/>`:""}${ho?`<rect x="${x}" y="${H-hr-ho}" width="${w}" height="${ho}" rx="2" class="pb-out"/>`:""}${tot&&bk.length<=12?`<text x="${x+w/2}" y="${H-hr-ho-4}" class="pb-n">${tot}</text>`:""}${b.lbl?`<text x="${x+w/2}" y="${H+13}" class="pb-l">${esc(b.lbl)}</text>`:""}</g>`}).join("")}</svg>`}
+function renderPainel(){const el=$("#homePainel");if(!el)return;const s=perStart(),all=PN.per==="tudo";
+ const cA1=COURSE.filter(t=>t.lvl==="A1"),cA2=COURSE.filter(t=>t.lvl==="A2"),done=a=>a.filter(t=>isDone(t.id)).length;
+ const lA1=LETTURE.filter(t=>t.nivel==="A1"),lA2=LETTURE.filter(t=>t.nivel==="A2"),ldone=a=>a.filter(t=>letDone(t.id)).length;
+ const inP=(tipo,pred)=>evInPeriod(tipo,pred);
+ const rows=[["Curso","A1",done(cA1),cA1.length,inP("unidade",id=>id.startsWith("curso:")&&TOPIC[id.slice(6)]&&TOPIC[id.slice(6)].lvl==="A1")],["Curso","A2",done(cA2),cA2.length,inP("unidade",id=>id.startsWith("curso:")&&TOPIC[id.slice(6)]&&TOPIC[id.slice(6)].lvl==="A2")],
+  ["Textos","A1",ldone(lA1),lA1.length,inP("leitura",id=>LETI[id]&&LETI[id].nivel==="A1")],["Textos","A2",ldone(lA2),lA2.length,inP("leitura",id=>LETI[id]&&LETI[id].nivel==="A2")],
+  ["Modi di dire","A1–A2",modiDoneN(),MODI.length,inP("unidade",id=>id.startsWith("modi:"))]];
+ const prefs=prefItems(),pst={novo:0,aprendendo:0,revisao:0};prefs.forEach(x=>pst[prefState(x.id)]++);
+ const {due,nw}=updateChips(),pdue=prefDueIds().length,nl=letNext();
+ const leit=all?letDoneN():inP("leitura"),rev=inP("revisao"),fav=all?prefs.length:inP("favorito"),uni=all?rows.filter(r=>r[0]!=="Textos").reduce((a,r)=>a+r[2],0):inP("unidade"); // textos contam à parte
+ el.innerHTML=`<div class="row" style="justify-content:space-between"><span class="label">Painel</span><span class="small muted">${PER_LBL[PN.per]}</span></div>
+ <div class="seg" id="pnSeg" role="tablist" aria-label="Período">${[["semana","Semana"],["mes","Mês"],["tudo","Tudo"]].map(([k,l])=>`<button role="tab" data-per="${k}" class="${PN.per===k?"on":""}" aria-selected="${PN.per===k}">${l}</button>`).join("")}</div>
+ <div class="pnstats"><div><b>${leit}</b><span>${all?"textos lidos":"textos concluídos"}</span></div><div><b>${uni}</b><span>unidades concluídas</span></div><div><b>${rev}</b><span>revisões</span></div><div><b>${fav}</b><span>${all?"em Preferiti":"salvos em Preferiti"}</span></div></div>
+ <div class="stack" style="gap:6px"><span class="label">Itens estudados por ${all?"mês":"dia"}</span>${barsSVG(painelBuckets())}<div class="legend"><span><i class="lg-rev"></i>revisões</span><span><i class="lg-out"></i>leituras, unidades e favoritos</span></div></div>
+ <div class="stack" style="gap:6px"><span class="label">Unidades por seção e nível</span><div class="tbl"><table><thead><tr><th>Seção</th><th>Nível</th><th>Feitas</th><th>${all?"Progresso":"Novas"}</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}/${r[3]}</td><td>${all?`<span class="pnbar"><i style="width:${r[3]?r[2]/r[3]*100:0}%"></i></span>`:(r[4]?"+"+r[4]:"—")}</td></tr>`).join("")}</tbody></table></div>${!all&&s?`<p class="small muted">Tópicos do curso concluídos antes desta versão do app contam em “Feitas”, mas não em “Novas”.</p>`:""}</div>
+ <div class="stack" style="gap:6px"><span class="label">Preferiti por estado</span><div class="pnstate"><span class="lvl st-novo">novos · ${pst.novo}</span><span class="lvl st-aprendendo">aprendendo · ${pst.aprendendo}</span><span class="lvl st-revisao">em revisão · ${pst.revisao}</span></div></div>
+ <div class="stack" style="gap:8px"><span class="label">Para estudar hoje</span><ul class="tight pntoday"><li><b>${due}</b> ${due===1?"cartão para revisar":"cartões para revisar"} e <b>${nw}</b> ${nw===1?"novo":"novos"}</li><li><b>${pdue}</b> ${pdue===1?"item":"itens"} de Preferiti para revisar</li>${nl?`<li>Próximo texto: <i class="it">${esc(nl.titulo)}</i> (${nl.nivel})</li>`:""}</ul>
+  <div class="row">${due+nw?`<button class="btn primary" data-goto="cartoes">Ir para os cartões</button>`:""}${nl?`<button class="btn" data-goto="news" data-let="${nl.id}">Ler o próximo texto</button>`:""}</div></div>`;
+ $$("#pnSeg [data-per]").forEach(b=>b.onclick=()=>{PN.per=b.dataset.per;renderPainel()})}
 
 /* ============================ INÍCIO ============================ */
 syncFavCards();syncErrCards();syncSentCards();renderDecks();renderBoxes();renderHome();updateFavCount();

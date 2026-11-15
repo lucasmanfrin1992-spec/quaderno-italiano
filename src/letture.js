@@ -60,7 +60,7 @@ function renderLetQuiz(){const t=LT.cur,box=$("#letQuiz");if(!t||!box)return;con
  if(answered===n)h+=right===n?`<div class="fb ok"><b>${n}/${n}: texto lido!</b><span>${done?"Concluído em "+fmtBR(done)+".":""}</span></div>`:`<div class="fb no"><b>${right}/${n} certas.</b><span>Releia o texto e toque em “Limpar” para tentar de novo.</span></div>`;
  box.innerHTML=h;tokenize(box);
  $$("#letQuiz [data-lq]").forEach(b=>b.onclick=()=>{const i=+b.dataset.lq;if(st.ans[i]!=null)return;st.ans[i]=+b.dataset.k;
-  if(Object.keys(st.ans).length===n&&t.quiz.every((q,j)=>st.ans[j]===q.correta)){S.leituras=S.leituras||{};if(!S.leituras[t.id])S.leituras[t.id]={done:today()};logInc("n",1);save();renderHome()}
+  if(Object.keys(st.ans).length===n&&t.quiz.every((q,j)=>st.ans[j]===q.correta)){S.leituras=S.leituras||{};if(!S.leituras[t.id]){S.leituras[t.id]={done:today()};logEvento("leitura",t.id)}logInc("n",1);save();renderHome()}
   renderLetQuiz()});
  if($("#letClear"))$("#letClear").onclick=()=>{LT.quiz[t.id]={ans:{},ord:{}};renderLetQuiz()}}
 

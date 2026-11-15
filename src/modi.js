@@ -64,7 +64,7 @@ function renderModiIndex(){const n=modiDoneN(),tot=MODI.length;
  $$("#modiBox [data-modi-open]").forEach(b=>b.onclick=()=>openModi(b.dataset.modiOpen))}
 function modiKey(m){return m.it.toLowerCase()}
 function modiToggle(u,m){const k=modiKey(m);if(S.favs[k]){delete S.favs[k];removeFavCard(k)}
- else{S.favs[k]={lemma:m.it,surface:m.it,pos:"modo di dire",meaning:m.pt,synonyms:[],example:m.es,examplePt:m.espt,context:m.es,date:today(),added:today(),tipo:"frase",origem:"modi:"+u.id};addFavCard(k)}
+ else{S.favs[k]={lemma:m.it,surface:m.it,pos:"modo di dire",meaning:m.pt,synonyms:[],example:m.es,examplePt:m.espt,context:m.es,date:today(),added:today(),tipo:"frase",origem:"modi:"+u.id};addFavCard(k);logEvento("favorito",k)}
  save();updateFavCount();renderDecks();renderHome();renderModiUnit(true)}
 function renderModiUnit(keep){const u=MD.cur,box=$("#modiBox"),i=MODI.indexOf(u),prev=MODI[i-1],next=MODI[i+1],y=window.scrollY;
  box.innerHTML=`<button class="back" id="modiBack">← Modi di dire</button>
@@ -91,6 +91,6 @@ function renderModiQuiz(){const u=MD.cur,box=$("#modiQuiz");if(!u||!box)return;c
  if(answered===n)h+=right===n?`<div class="fb ok"><b>${n}/${n}: unidade feita!</b></div>`:`<div class="fb no"><b>${right}/${n} certas.</b><span>Releia as expressões e toque em “Limpar” para tentar de novo.</span></div>`;
  box.innerHTML=h;tokenize(box);
  $$("#modiQuiz [data-mq]").forEach(b=>b.onclick=()=>{const k=+b.dataset.mq;if(st.ans[k]!=null)return;st.ans[k]=+b.dataset.j;
-  if(Object.keys(st.ans).length===n&&u.itens.every((_,j)=>st.ans[j]===j)){S.modi=S.modi||{};if(!S.modi[u.id])S.modi[u.id]={done:today()};logInc("e",1);save();renderHome()}
+  if(Object.keys(st.ans).length===n&&u.itens.every((_,j)=>st.ans[j]===j)){S.modi=S.modi||{};if(!S.modi[u.id]){S.modi[u.id]={done:today()};logEvento("unidade","modi:"+u.id)}logInc("e",1);save();renderHome()}
   renderModiQuiz()});
  if($("#modiClear"))$("#modiClear").onclick=()=>{delete MD.quiz[u.id];renderModiQuiz()}}

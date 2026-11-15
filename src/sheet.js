@@ -75,5 +75,5 @@ function toggleFav(){if(SH&&SH.mode==="phrase"){S.favs[SH.k]?removePhrase():save
  const e=SH&&SH.entry;if(!e||!e.meaning)return;const key=favKeyOf(e,SH.k);
  if(S.favs[key]){delete S.favs[key];removeFavCard(key)}
  else{const ex=e.example?[e.example,e.examplePt||""]:((e.found||[])[0]||(e.examples||[])[0]||["",""]);
-  S.favs[key]={lemma:e.lemma||SH.surface,surface:SH.surface,pos:e.pos||"",meaning:e.meaning||"",synonyms:(e.synonyms||[]).slice(0,5),example:ex[0]||"",examplePt:ex[1]||"",context:SH.sentence,date:SH.btn&&SH.btn.closest("#newsBox")&&NEWS.cur?NEWS.cur.date:today(),added:today(),tipo:"palavra",origem:origemOf(SH.btn)};addFavCard(key)}
+  S.favs[key]={lemma:e.lemma||SH.surface,surface:SH.surface,pos:e.pos||"",meaning:e.meaning||"",synonyms:(e.synonyms||[]).slice(0,5),example:ex[0]||"",examplePt:ex[1]||"",context:SH.sentence,date:SH.btn&&SH.btn.closest("#newsBox")&&NEWS.cur?NEWS.cur.date:today(),added:today(),tipo:"palavra",origem:origemOf(SH.btn)};addFavCard(key);logEvento("favorito",key)}
  save();renderSheet();refreshTokenMarks();updateFavCount();renderDecks();renderHome()}
