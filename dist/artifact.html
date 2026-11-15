@@ -8029,6 +8029,7 @@ async function shareWeek(){const m=$("#shareMsg");if(m)m.textContent="Preparando
  if(!b){if(m)m.textContent="Não consegui gerar a imagem neste aparelho.";return}
  const f=new File([b],"nonna-dice-semana.png",{type:"image/png"});
  try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:"Minha semana no Nonna Dice"});if(m)m.textContent="";return}}catch(e){if(e&&e.name==="AbortError"){if(m)m.textContent="";return}}
+ try{const cl=window.claude&&window.claude.use?await window.claude.use("downloads"):null;if(cl){try{await cl.save({filename:"nonna-dice-semana.png",data:b})}catch(e){await cl.save({filename:"nonna-dice-semana.png",data:new Uint8Array(await b.arrayBuffer())})}if(m)m.textContent="Imagem salva.";return}}catch(e){if(m)m.textContent="";return}
  const u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download="nonna-dice-semana.png";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);if(m)m.textContent="Imagem baixada."}
 
 /* ---------- busca geral ---------- */
