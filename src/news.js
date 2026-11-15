@@ -38,8 +38,8 @@ function updReadBtn(){const b=$("#readAll"),st=$("#readStop");if(b)b.innerHTML=R
  if(st)st.hidden=READ.state==="idle"}
 
 /* sub-abas */
-function setNS(v){if(v!=="read"&&v!=="cal")v="read";$$("#newsSeg button").forEach(b=>{const on=b.dataset.ns===v;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
- ["read","cal"].forEach(k=>$("#ns-"+k).hidden=k!==v);if(v==="cal")renderCal();
+function setNS(v){if(!["read","let","cal"].includes(v))v="read";if(v!=="let")stopLines();$$("#newsSeg button").forEach(b=>{const on=b.dataset.ns===v;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
+ ["read","let","cal"].forEach(k=>$("#ns-"+k).hidden=k!==v);if(v==="cal")renderCal();if(v==="let")renderLet();
  try{localStorage.setItem(KEY+".ns",v)}catch(e){}}
 $$("#newsSeg button").forEach(b=>b.addEventListener("click",()=>setNS(b.dataset.ns)));
 document.addEventListener("click",e=>{const g=e.target.closest("[data-ns-go]");if(g){setNS(g.dataset.nsGo);window.scrollTo(0,0)}});
@@ -161,5 +161,5 @@ async function initCloud(){
   if(s.exists){const r=clone(s.data());if((r.updatedAt||0)>(S.updatedAt||0)){const wasReset=hydrate(r);saveLocal();if(wasReset)save();rerenderAll()}else if((S.updatedAt||0)>(r.updatedAt||0)||r.resetEpoch!==RESET_EPOCH)scheduleSync()}
   else if(S.updatedAt)scheduleSync()}catch(e){}}
 function rerenderAll(){rollDay();syncFavCards();syncErrCards();syncSentCards();SESSION=null;renderDecks();renderBoxes();renderHome();renderNewsAll();if(!$("#v-curso").hidden&&!CUR)renderCourse();
- if(!$("#v-cartoes").hidden)renderFlash();if(!$("#v-news").hidden)renderNews();if(!$("#v-preferiti").hidden)renderFavs()}
+ if(!$("#v-cartoes").hidden)renderFlash();if(!$("#v-news").hidden){renderNews();if(!$("#ns-let").hidden)renderLet()}if(!$("#v-preferiti").hidden)renderFavs()}
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&syncDirty){clearTimeout(syncT);flushSync()}});

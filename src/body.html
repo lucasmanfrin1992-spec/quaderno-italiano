@@ -32,6 +32,7 @@
       <div class="card" id="homeCourse"></div>
       <div class="card" id="homePref"></div>
     </div>
+    <div class="card" id="homeLet"></div>
     <div class="card" id="homeNews"><span class="label">Notícia do dia</span><p class="muted small">Carregando…</p></div>
     <p class="hint">Dica: em qualquer texto, toque numa palavra em italiano para ver o significado e os exemplos. A estrela salva a palavra em Preferiti; “Marcar um trecho” salva uma frase inteira.</p>
   </section>
@@ -51,14 +52,16 @@
 
   <!-- ===================== NOTÍCIA ===================== -->
   <section class="view" id="v-news" data-view="news" hidden>
-    <div class="seg seg2" id="newsSeg" role="tablist" aria-label="Notícia">
+    <div class="seg" id="newsSeg" role="tablist" aria-label="Leitura">
       <button role="tab" data-ns="read" class="on" aria-selected="true">Notícia</button>
+      <button role="tab" data-ns="let" aria-selected="false">Textos</button>
       <button role="tab" data-ns="cal" aria-selected="false">Calendário</button>
     </div>
     <div id="ns-read" class="stack" style="gap:20px">
       <div id="newsBox"><div class="card stack"><span class="label">Notícia do dia</span><p class="muted small">Carregando…</p></div></div>
       <div id="quizBox"></div>
     </div>
+    <div id="ns-let" class="stack" style="gap:16px" hidden><div id="letBox" class="stack" style="gap:16px"></div></div>
     <div id="ns-cal" hidden><div class="card stack" id="calBox"></div></div>
   </section>
 
@@ -117,7 +120,7 @@
 <nav class="tabs" aria-label="Seções do app"><div class="in" role="tablist">
   <button role="tab" data-tab="inicio" aria-selected="true"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Início</button>
   <button role="tab" data-tab="curso" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M8 7h7M8 11h5"/></svg>Curso</button>
-  <button role="tab" data-tab="news" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 5h13v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v10a2 2 0 0 1-2 2"/><path d="M7 9h7M7 13h7M7 17h4"/></svg>Notícia</button>
+  <button role="tab" data-tab="news" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 5h13v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v10a2 2 0 0 1-2 2"/><path d="M7 9h7M7 13h7M7 17h4"/></svg>Leitura</button>
   <button role="tab" data-tab="preferiti" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>Preferiti</button>
   <button role="tab" data-tab="cartoes" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="14" height="13" rx="2"/><path d="M7 7V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-2"/></svg>Cartões</button>
 </div></nav>

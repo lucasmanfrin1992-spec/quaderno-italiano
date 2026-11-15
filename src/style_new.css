@@ -524,3 +524,14 @@ button.w.rsel{background:var(--saffron-soft);box-shadow:0 0 0 2px var(--saffron)
 .lvl.st-novo{background:var(--saffron-soft);border-color:var(--saffron);color:var(--ink)}
 .lvl.st-aprendendo{background:var(--cobalt-soft);border-color:var(--cobalt);color:var(--ink)}
 .lvl.st-revisao{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+/* v2 fase 2: leituras */
+.lettit{font-style:normal;color:var(--ink)}
+.lettext{gap:12px}
+.letp{font-size:1.06rem;line-height:1.7;max-width:66ch;border-radius:6px}
+.letp .it{font-style:normal;color:var(--ink)}
+.letp.reading{background:var(--saffron-soft);box-shadow:0 0 0 4px var(--saffron-soft)}
+.letnote{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-bottom:1px dashed var(--line)}
+.letnote:last-child{border-bottom:0}
+.letnote>b{font-family:var(--display);font-weight:400;font-size:1.08rem;color:var(--cobalt)}
+#letQuiz .qq.it{font-style:normal;color:var(--ink)}
+.letnote .formbox .f{font-size:1rem}

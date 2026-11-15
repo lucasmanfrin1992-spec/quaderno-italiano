@@ -156,7 +156,7 @@ function cardUnlocked(id){const c=CARDS[id];if(!c)return false;if(c.deck==="vA1"
  if(c.deck==="verb"){const [,inf,tk]=id.split(":");if(tk==="pres")return opened(VERB_UNLOCK_PRES[inf]||"a1-4");if(tk==="pass")return opened(VERBMAP[inf]&&VERBMAP[inf].aux==="e"?"a2-2":"a2-1");if(tk==="fut")return opened("a2-6");return true}
  return true}
 /* --- meta diária --- */
-const GOALS=[["c","Cartões","10 revisões",'cartoes'],["e","Exercício","rodada, teste ou treino",'curso'],["n","Notícia","responder o quiz",'news']];
+const GOALS=[["c","Cartões","10 revisões",'cartoes'],["e","Exercício","rodada, teste ou treino",'curso'],["n","Leitura","quiz da notícia ou de um texto",'news']];
 function dayLog(d){S.log=S.log||{};return S.log[d||today()]||{}}
 function logInc(k,v){S.log=S.log||{};const t=today(),o=S.log[t]=S.log[t]||{};o[k]=v!=null?v:(o[k]||0)+1;
  const ks=Object.keys(S.log).sort();if(ks.length>120)ks.slice(0,ks.length-120).forEach(x=>delete S.log[x])}

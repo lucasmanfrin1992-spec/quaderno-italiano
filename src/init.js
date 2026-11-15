@@ -1,6 +1,6 @@
 /* ============================ INÍCIO ============================ */
 syncFavCards();syncErrCards();syncSentCards();renderDecks();renderBoxes();renderHome();updateFavCount();
-try{const ns=localStorage.getItem(KEY+".ns");if(["read","cal","favs"].includes(ns))setNS(ns)}catch(e){}
+try{const lt=localStorage.getItem(KEY+".let");if(lt&&LETI[lt])LT.cur=LETI[lt];const ns=localStorage.getItem(KEY+".ns");if(ns)setNS(ns)}catch(e){}
 initCloud();
 (function(){let start="inicio";const h=location.hash.slice(1);
  if(VALID.includes(h))start=h;else{try{const t=localStorage.getItem(KEY+".tab");if(VALID.includes(t))start=t}catch(e){}}

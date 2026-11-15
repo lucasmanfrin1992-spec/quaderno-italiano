@@ -13,6 +13,7 @@ function openWord(btn){if(RANGE&&finishRange(btn))return;
  const local=lookupLocal(k,surface.toLowerCase());
  let entry=null,src="";
  if(inNews){const g=gloss(k);if(g){entry=Object.assign({},g);src="news";if(local){entry.how=entry.how||local.how;entry.form=local.form;entry.formNote=local.formNote;entry.verb=local.verb;entry.examples=local.examples;entry.found=local.found}}}
+ if(!entry&&btn.closest("#letBox")){const g=letGloss(k);if(g){entry=Object.assign({},local||{},{lemma:local&&local.lemma||g.it,meaning:g.pt,pos:g.classe});src="let"}} // leituras: primeiro o glossário do próprio texto
  if(!entry&&local){entry=local;src="local"}
  if(!entry&&AI_CACHE[k]){entry=AI_CACHE[k];src="ai"}
  if(!entry&&S.favs[k]&&S.favs[k].own){entry={lemma:k,meaning:S.favs[k].meaning,pos:"",own:true};src="own"} // palavra salva com tradução do próprio usuário

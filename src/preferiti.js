@@ -2,8 +2,8 @@
 // Usa o mesmo motor dos cartões: cada favorito é um cartão "w:<chave>" (S.favs) ou "s:<hash>" (S.sents, frase com lacuna).
 // Campos de um favorito em S.favs: lemma (it), meaning (pt), tipo ("palavra" | "frase"), origem ("noticia:<data>" | "curso:<tópico>"), added (criado em),
 // own (tradução digitada pelo usuário), auto (tradução palavra por palavra). Favoritos antigos, sem tipo, valem como "palavra".
-function origemOf(btn){if(!btn||!document.contains(btn))return"";if(btn.closest("#newsBox")&&NEWS.cur)return"noticia:"+NEWS.cur.date;if(btn.closest("#v-curso")&&CUR)return"curso:"+CUR.id;return""}
-function origemLabel(o){if(!o)return"";const i=o.indexOf(":"),t=o.slice(0,i),id=o.slice(i+1);if(t==="noticia")return"notícia de "+fmtBR(id);if(t==="curso"&&TOPIC[id])return TOPIC[id].lvl+" · "+TOPIC[id].t;return""}
+function origemOf(btn){if(!btn||!document.contains(btn))return"";if(btn.closest("#newsBox")&&NEWS.cur)return"noticia:"+NEWS.cur.date;if(btn.closest("#letBox")&&LT.cur)return"leitura:"+LT.cur.id;if(btn.closest("#v-curso")&&CUR)return"curso:"+CUR.id;return""}
+function origemLabel(o){if(!o)return"";const i=o.indexOf(":"),t=o.slice(0,i),id=o.slice(i+1);if(t==="noticia")return"notícia de "+fmtBR(id);if(t==="curso"&&TOPIC[id])return TOPIC[id].lvl+" · "+TOPIC[id].t;if(t==="leitura"&&LETI[id])return"texto: "+LETI[id].titulo;return""}
 
 /* ---------- palavra sem tradução cadastrada: salva com a tradução do usuário ---------- */
 function saveOwn(v){v=String(v||"").trim();if(!v||!SH)return;const k=SH.k;
@@ -28,7 +28,7 @@ function finishRange(btn){const R=RANGE;if(!R||!document.contains(R.start)){canc
  cancelRange();words.forEach(x=>x.classList.add("rsel"));
  SH={mode:"phrase",k:text.toLowerCase(),surface:text,words,sentence:((ws[a].closest(".it")||R.block).textContent||"").replace(/\s+/g," ").trim(),btn:ws[a],entry:null,src:"phrase"};
  renderSheet();showSheet(true);words.forEach(x=>x.classList.add("rsel"));speak(text);return true}
-function phraseGloss(){return SH.words.map(b=>{const k=b.dataset.w,g=b.closest("#newsBox")?gloss(k):null,e=g||lookupLocal(k,b.textContent.toLowerCase());
+function phraseGloss(){return SH.words.map(b=>{const k=b.dataset.w,lg=b.closest("#letBox")?letGloss(k):null,g=lg?{meaning:lg.pt}:b.closest("#newsBox")?gloss(k):null,e=g||lookupLocal(k,b.textContent.toLowerCase());
  return{w:b.textContent,m:e&&e.meaning?String(e.meaning).split(/[;,]/)[0].trim():""}})}
 function renderPhrase(){const fav=S.favs[SH.k],gl=phraseGloss(),star=$("#shFav");
  $("#shWord").textContent=SH.surface;$("#shLemma").textContent="trecho · "+SH.words.length+" palavras";$("#shSay").dataset.say=SH.surface;

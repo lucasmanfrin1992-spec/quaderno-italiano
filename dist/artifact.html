@@ -793,6 +793,17 @@ button.w.rsel{background:var(--saffron-soft);box-shadow:0 0 0 2px var(--saffron)
 .lvl.st-novo{background:var(--saffron-soft);border-color:var(--saffron);color:var(--ink)}
 .lvl.st-aprendendo{background:var(--cobalt-soft);border-color:var(--cobalt);color:var(--ink)}
 .lvl.st-revisao{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+/* v2 fase 2: leituras */
+.lettit{font-style:normal;color:var(--ink)}
+.lettext{gap:12px}
+.letp{font-size:1.06rem;line-height:1.7;max-width:66ch;border-radius:6px}
+.letp .it{font-style:normal;color:var(--ink)}
+.letp.reading{background:var(--saffron-soft);box-shadow:0 0 0 4px var(--saffron-soft)}
+.letnote{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-bottom:1px dashed var(--line)}
+.letnote:last-child{border-bottom:0}
+.letnote>b{font-family:var(--display);font-weight:400;font-size:1.08rem;color:var(--cobalt)}
+#letQuiz .qq.it{font-style:normal;color:var(--ink)}
+.letnote .formbox .f{font-size:1rem}
 </style>
 
 <div class="wrap">
@@ -829,6 +840,7 @@ button.w.rsel{background:var(--saffron-soft);box-shadow:0 0 0 2px var(--saffron)
       <div class="card" id="homeCourse"></div>
       <div class="card" id="homePref"></div>
     </div>
+    <div class="card" id="homeLet"></div>
     <div class="card" id="homeNews"><span class="label">Notícia do dia</span><p class="muted small">Carregando…</p></div>
     <p class="hint">Dica: em qualquer texto, toque numa palavra em italiano para ver o significado e os exemplos. A estrela salva a palavra em Preferiti; “Marcar um trecho” salva uma frase inteira.</p>
   </section>
@@ -848,14 +860,16 @@ button.w.rsel{background:var(--saffron-soft);box-shadow:0 0 0 2px var(--saffron)
 
   <!-- ===================== NOTÍCIA ===================== -->
   <section class="view" id="v-news" data-view="news" hidden>
-    <div class="seg seg2" id="newsSeg" role="tablist" aria-label="Notícia">
+    <div class="seg" id="newsSeg" role="tablist" aria-label="Leitura">
       <button role="tab" data-ns="read" class="on" aria-selected="true">Notícia</button>
+      <button role="tab" data-ns="let" aria-selected="false">Textos</button>
       <button role="tab" data-ns="cal" aria-selected="false">Calendário</button>
     </div>
     <div id="ns-read" class="stack" style="gap:20px">
       <div id="newsBox"><div class="card stack"><span class="label">Notícia do dia</span><p class="muted small">Carregando…</p></div></div>
       <div id="quizBox"></div>
     </div>
+    <div id="ns-let" class="stack" style="gap:16px" hidden><div id="letBox" class="stack" style="gap:16px"></div></div>
     <div id="ns-cal" hidden><div class="card stack" id="calBox"></div></div>
   </section>
 
@@ -914,7 +928,7 @@ button.w.rsel{background:var(--saffron-soft);box-shadow:0 0 0 2px var(--saffron)
 <nav class="tabs" aria-label="Seções do app"><div class="in" role="tablist">
   <button role="tab" data-tab="inicio" aria-selected="true"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Início</button>
   <button role="tab" data-tab="curso" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M8 7h7M8 11h5"/></svg>Curso</button>
-  <button role="tab" data-tab="news" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 5h13v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v10a2 2 0 0 1-2 2"/><path d="M7 9h7M7 13h7M7 17h4"/></svg>Notícia</button>
+  <button role="tab" data-tab="news" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 5h13v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v10a2 2 0 0 1-2 2"/><path d="M7 9h7M7 13h7M7 17h4"/></svg>Leitura</button>
   <button role="tab" data-tab="preferiti" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>Preferiti</button>
   <button role="tab" data-tab="cartoes" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="14" height="13" rx="2"/><path d="M7 7V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-2"/></svg>Cartões</button>
 </div></nav>
@@ -2639,10 +2653,10 @@ const KEY="quaderno.v1";
 const RESET_EPOCH="2026-11-02"; // muda este valor para zerar os cartões de todos
 const DECKS={err:"Meus erros",fav:"Preferiti (palavras e frases)",vA1:"Vocabulário A1",vA2:"Vocabulário A2",verb:"Verbos (presente, passato, futuro)"};
 const DATA_V=2; // versão do formato dos dados salvos; migrar() leva os dados antigos para a versão atual sem apagar nada
-function defState(){return{cards:{},settings:{decks:{err:true,frase:true,fav:true,vA1:true,vA2:true,verb:true},newPerDay:20,dir:"mix",typing:false},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},favs:{},newsDone:{},course:{},writing:{},shadow:{},errs:{},log:{},tests:{},sents:{},estat:{},diary:{},chats:{},bt:{},dict:{},pairs:{},versaoDados:DATA_V,resetEpoch:RESET_EPOCH,updatedAt:0}}
+function defState(){return{cards:{},settings:{decks:{err:true,frase:true,fav:true,vA1:true,vA2:true,verb:true},newPerDay:20,dir:"mix",typing:false},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},favs:{},newsDone:{},course:{},writing:{},shadow:{},errs:{},log:{},tests:{},sents:{},estat:{},diary:{},chats:{},bt:{},dict:{},pairs:{},leituras:{},versaoDados:DATA_V,resetEpoch:RESET_EPOCH,updatedAt:0}}
 function hydrate(o){const d=defState();S=Object.assign(d,o);S.settings=Object.assign(defState().settings,o.settings||{});S.settings.decks=Object.assign(defState().settings.decks,(o.settings||{}).decks||{});
  migrar(o.versaoDados||1);
- S.favs=S.favs||{};S.newsDone=S.newsDone||{};S.cards=S.cards||{};S.course=S.course||{};S.writing=S.writing||{};S.shadow=S.shadow||{};S.errs=S.errs||{};S.log=S.log||{};S.tests=S.tests||{};
+ S.leituras=S.leituras||{};S.favs=S.favs||{};S.newsDone=S.newsDone||{};S.cards=S.cards||{};S.course=S.course||{};S.writing=S.writing||{};S.shadow=S.shadow||{};S.errs=S.errs||{};S.log=S.log||{};S.tests=S.tests||{};
  if(o.resetEpoch!==RESET_EPOCH){S.cards={};S.daily={date:"",newDone:0,reviewed:0};S.streak={last:"",count:0};delete S.best;S.resetEpoch=RESET_EPOCH;return true}return false}
 function migrar(de){try{
  if(de<2){Object.values(S.errs||{}).forEach(e=>{if(e&&e.f==="Escreva a frase que você ouviu")e.f="Ouça a frase e diga o que ela significa"}); // v2: sem perguntas escritas
@@ -2728,10 +2742,10 @@ function tokenize(root){(root||document).querySelectorAll(".it").forEach(el=>{if
 
 /* ============================ ABAS ============================ */
 const VALID=["inicio","curso","news","preferiti","cartoes"];
-function showTab(name){if(!VALID.includes(name))name="inicio";cancelRange();if(name!=="news"&&typeof READ!=="undefined"&&READ.state!=="idle")stopReading();$$("[data-view]").forEach(v=>v.hidden=v.dataset.view!==name);$$("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===name));
- try{localStorage.setItem(KEY+".tab",name)}catch(e){}window.scrollTo(0,0);if(name==="cartoes")renderFlash();if(name==="inicio")renderHome();if(name==="curso")renderCourse();if(name==="preferiti")renderFavs();if(name==="news"){renderNews();if(!$("#ns-cal").hidden)renderCal()}}
+function showTab(name){if(!VALID.includes(name))name="inicio";cancelRange();stopLines();if(name!=="news"&&typeof READ!=="undefined"&&READ.state!=="idle")stopReading();$$("[data-view]").forEach(v=>v.hidden=v.dataset.view!==name);$$("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===name));
+ try{localStorage.setItem(KEY+".tab",name)}catch(e){}window.scrollTo(0,0);if(name==="cartoes")renderFlash();if(name==="inicio")renderHome();if(name==="curso")renderCourse();if(name==="preferiti")renderFavs();if(name==="news"){renderNews();if(!$("#ns-cal").hidden)renderCal();if(!$("#ns-let").hidden)renderLet()}}
 $$("nav.tabs button").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
-document.addEventListener("click",e=>{const g=e.target.closest("[data-goto]");if(g){showTab(g.dataset.goto);if(g.dataset.topic)openTopic(g.dataset.topic,g.dataset.part||"voc");}});
+document.addEventListener("click",e=>{const g=e.target.closest("[data-goto]");if(g){showTab(g.dataset.goto);if(g.dataset.topic)openTopic(g.dataset.topic,g.dataset.part||"voc");if(g.dataset.let){setNS("let");g.dataset.let==="index"?closeLet():openLet(g.dataset.let)}}});
 
 /* ============================ CURSO ============================ */
 let CLVL="A1",CUR=null,CPART="voc";
@@ -2882,7 +2896,7 @@ function renderHome(){const {due,nw}=updateChips();$("#nDue").textContent=due;$(
  $("#todayTitle").textContent=due+nw?(due+nw)+" cartões te esperando":"Tudo em dia por hoje";
  const t=nextTopic(),c=tprog(t.id),doneN=COURSE.filter(x=>isDone(x.id)).length;
  $("#homeCourse").innerHTML=`<div class="row" style="justify-content:space-between"><span class="label">Curso · ${doneN}/${COURSE.length} tópicos</span><span class="cefr">${t.lvl}</span></div><h3>${esc(t.t)}</h3><p class="small muted">${esc(t.sub)}</p><div class="row"><button class="btn primary" data-goto="curso" data-topic="${t.id}" data-part="${c.voc?(c.gram?"ex":"gram"):"voc"}">${c.voc?"Continuar":"Começar"} tópico ${t.n}</button></div>`;
- renderHomePref();
+ renderHomePref();renderHomeLet();
  renderGoal();renderHomeReview();renderHomeWeak();renderHomeNews()}
 
 /* ============================ DICIONÁRIO AMPLIADO: DADOS ============================ */
@@ -4880,7 +4894,7 @@ function cardUnlocked(id){const c=CARDS[id];if(!c)return false;if(c.deck==="vA1"
  if(c.deck==="verb"){const [,inf,tk]=id.split(":");if(tk==="pres")return opened(VERB_UNLOCK_PRES[inf]||"a1-4");if(tk==="pass")return opened(VERBMAP[inf]&&VERBMAP[inf].aux==="e"?"a2-2":"a2-1");if(tk==="fut")return opened("a2-6");return true}
  return true}
 /* --- meta diária --- */
-const GOALS=[["c","Cartões","10 revisões",'cartoes'],["e","Exercício","rodada, teste ou treino",'curso'],["n","Notícia","responder o quiz",'news']];
+const GOALS=[["c","Cartões","10 revisões",'cartoes'],["e","Exercício","rodada, teste ou treino",'curso'],["n","Leitura","quiz da notícia ou de um texto",'news']];
 function dayLog(d){S.log=S.log||{};return S.log[d||today()]||{}}
 function logInc(k,v){S.log=S.log||{};const t=today(),o=S.log[t]=S.log[t]||{};o[k]=v!=null?v:(o[k]||0)+1;
  const ks=Object.keys(S.log).sort();if(ks.length>120)ks.slice(0,ks.length-120).forEach(x=>delete S.log[x])}
@@ -4944,6 +4958,7 @@ function renderStoryQ(t,st,ans){const box=$("#stQ"),n=st.q.length,done=Object.ke
   if(Object.keys(ans.ans).length===n){const c=S.course[t.id]=S.course[t.id]||{};c.hist=1}save();renderStoryQ(t,st,ans)});
  if($("#stRedo"))$("#stRedo").onclick=()=>{STQ[t.id]={ans:{},ord:{}};renderStoryQ(t,st,STQ[t.id])}}
 let RL={tok:0};
+function stopLines(){RL.tok++;try{if(canSpeak)speechSynthesis.cancel()}catch(e){}$$(".reading").forEach(e=>{if(!e.closest("#newsBox"))e.classList.remove("reading")})}
 function readLines(lines,els){if(!canSpeak)return;const tok=++RL.tok;let i=0;try{speechSynthesis.cancel()}catch(e){}
  const next=()=>{els.forEach(e=>e.classList.remove("reading"));if(tok!==RL.tok||i>=lines.length)return;const el=els[i];if(el)el.classList.add("reading");
   const u=new SpeechSynthesisUtterance(lines[i]);u.lang="it-IT";u.rate=.85;u.onend=()=>{if(tok!==RL.tok)return;i++;setTimeout(next,350)};u.onerror=()=>{};speechSynthesis.speak(u)};next()}
@@ -5011,6 +5026,7 @@ function openWord(btn){if(RANGE&&finishRange(btn))return;
  const local=lookupLocal(k,surface.toLowerCase());
  let entry=null,src="";
  if(inNews){const g=gloss(k);if(g){entry=Object.assign({},g);src="news";if(local){entry.how=entry.how||local.how;entry.form=local.form;entry.formNote=local.formNote;entry.verb=local.verb;entry.examples=local.examples;entry.found=local.found}}}
+ if(!entry&&btn.closest("#letBox")){const g=letGloss(k);if(g){entry=Object.assign({},local||{},{lemma:local&&local.lemma||g.it,meaning:g.pt,pos:g.classe});src="let"}} // leituras: primeiro o glossário do próprio texto
  if(!entry&&local){entry=local;src="local"}
  if(!entry&&AI_CACHE[k]){entry=AI_CACHE[k];src="ai"}
  if(!entry&&S.favs[k]&&S.favs[k].own){entry={lemma:k,meaning:S.favs[k].meaning,pos:"",own:true};src="own"} // palavra salva com tradução do próprio usuário
@@ -5124,8 +5140,8 @@ function updReadBtn(){const b=$("#readAll"),st=$("#readStop");if(b)b.innerHTML=R
  if(st)st.hidden=READ.state==="idle"}
 
 /* sub-abas */
-function setNS(v){if(v!=="read"&&v!=="cal")v="read";$$("#newsSeg button").forEach(b=>{const on=b.dataset.ns===v;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
- ["read","cal"].forEach(k=>$("#ns-"+k).hidden=k!==v);if(v==="cal")renderCal();
+function setNS(v){if(!["read","let","cal"].includes(v))v="read";if(v!=="let")stopLines();$$("#newsSeg button").forEach(b=>{const on=b.dataset.ns===v;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
+ ["read","let","cal"].forEach(k=>$("#ns-"+k).hidden=k!==v);if(v==="cal")renderCal();if(v==="let")renderLet();
  try{localStorage.setItem(KEY+".ns",v)}catch(e){}}
 $$("#newsSeg button").forEach(b=>b.addEventListener("click",()=>setNS(b.dataset.ns)));
 document.addEventListener("click",e=>{const g=e.target.closest("[data-ns-go]");if(g){setNS(g.dataset.nsGo);window.scrollTo(0,0)}});
@@ -5247,15 +5263,15 @@ async function initCloud(){
   if(s.exists){const r=clone(s.data());if((r.updatedAt||0)>(S.updatedAt||0)){const wasReset=hydrate(r);saveLocal();if(wasReset)save();rerenderAll()}else if((S.updatedAt||0)>(r.updatedAt||0)||r.resetEpoch!==RESET_EPOCH)scheduleSync()}
   else if(S.updatedAt)scheduleSync()}catch(e){}}
 function rerenderAll(){rollDay();syncFavCards();syncErrCards();syncSentCards();SESSION=null;renderDecks();renderBoxes();renderHome();renderNewsAll();if(!$("#v-curso").hidden&&!CUR)renderCourse();
- if(!$("#v-cartoes").hidden)renderFlash();if(!$("#v-news").hidden)renderNews();if(!$("#v-preferiti").hidden)renderFavs()}
+ if(!$("#v-cartoes").hidden)renderFlash();if(!$("#v-news").hidden){renderNews();if(!$("#ns-let").hidden)renderLet()}if(!$("#v-preferiti").hidden)renderFavs()}
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&syncDirty){clearTimeout(syncT);flushSync()}});
 
 /* ============================ PREFERITI (palavras e frases salvas) ============================ */
 // Usa o mesmo motor dos cartões: cada favorito é um cartão "w:<chave>" (S.favs) ou "s:<hash>" (S.sents, frase com lacuna).
 // Campos de um favorito em S.favs: lemma (it), meaning (pt), tipo ("palavra" | "frase"), origem ("noticia:<data>" | "curso:<tópico>"), added (criado em),
 // own (tradução digitada pelo usuário), auto (tradução palavra por palavra). Favoritos antigos, sem tipo, valem como "palavra".
-function origemOf(btn){if(!btn||!document.contains(btn))return"";if(btn.closest("#newsBox")&&NEWS.cur)return"noticia:"+NEWS.cur.date;if(btn.closest("#v-curso")&&CUR)return"curso:"+CUR.id;return""}
-function origemLabel(o){if(!o)return"";const i=o.indexOf(":"),t=o.slice(0,i),id=o.slice(i+1);if(t==="noticia")return"notícia de "+fmtBR(id);if(t==="curso"&&TOPIC[id])return TOPIC[id].lvl+" · "+TOPIC[id].t;return""}
+function origemOf(btn){if(!btn||!document.contains(btn))return"";if(btn.closest("#newsBox")&&NEWS.cur)return"noticia:"+NEWS.cur.date;if(btn.closest("#letBox")&&LT.cur)return"leitura:"+LT.cur.id;if(btn.closest("#v-curso")&&CUR)return"curso:"+CUR.id;return""}
+function origemLabel(o){if(!o)return"";const i=o.indexOf(":"),t=o.slice(0,i),id=o.slice(i+1);if(t==="noticia")return"notícia de "+fmtBR(id);if(t==="curso"&&TOPIC[id])return TOPIC[id].lvl+" · "+TOPIC[id].t;if(t==="leitura"&&LETI[id])return"texto: "+LETI[id].titulo;return""}
 
 /* ---------- palavra sem tradução cadastrada: salva com a tradução do usuário ---------- */
 function saveOwn(v){v=String(v||"").trim();if(!v||!SH)return;const k=SH.k;
@@ -5280,7 +5296,7 @@ function finishRange(btn){const R=RANGE;if(!R||!document.contains(R.start)){canc
  cancelRange();words.forEach(x=>x.classList.add("rsel"));
  SH={mode:"phrase",k:text.toLowerCase(),surface:text,words,sentence:((ws[a].closest(".it")||R.block).textContent||"").replace(/\s+/g," ").trim(),btn:ws[a],entry:null,src:"phrase"};
  renderSheet();showSheet(true);words.forEach(x=>x.classList.add("rsel"));speak(text);return true}
-function phraseGloss(){return SH.words.map(b=>{const k=b.dataset.w,g=b.closest("#newsBox")?gloss(k):null,e=g||lookupLocal(k,b.textContent.toLowerCase());
+function phraseGloss(){return SH.words.map(b=>{const k=b.dataset.w,lg=b.closest("#letBox")?letGloss(k):null,g=lg?{meaning:lg.pt}:b.closest("#newsBox")?gloss(k):null,e=g||lookupLocal(k,b.textContent.toLowerCase());
  return{w:b.textContent,m:e&&e.meaning?String(e.meaning).split(/[;,]/)[0].trim():""}})}
 function renderPhrase(){const fav=S.favs[SH.k],gl=phraseGloss(),star=$("#shFav");
  $("#shWord").textContent=SH.surface;$("#shLemma").textContent="trecho · "+SH.words.length+" palavras";$("#shSay").dataset.say=SH.surface;
@@ -5334,9 +5350,306 @@ function renderHomePref(){const el=$("#homePref");if(!el)return;const all=prefIt
  el.innerHTML=`<span class="label">Preferiti · ${all.length} ${all.length===1?"salvo":"salvos"}</span><p class="small muted">${all.length?"Palavras e frases que você guardou com a estrela.":"Toque numa palavra italiana e na estrela para guardar aqui."}</p><div class="row">${dueN?`<button class="btn" id="homePrefGo">Revisar hoje (${dueN})</button>`:`<button class="btn" data-goto="preferiti">Abrir Preferiti</button>`}</div>`;
  if($("#homePrefGo"))$("#homePrefGo").onclick=prefReview}
 
+/* ============================ LETTURE: textos graduados (conteúdo original) ============================ */
+// Formato compacto de cada texto:
+//  id, nivel, tema ("lavoro" | "quotidiano"), titulo, base (parágrafos separados por \n),
+//  g: glossário do texto [forma como aparece no texto, tradução, classe]
+//  v: 5 itens de vocabulário [it, pt] · gr: 2 notas de gramática [título, trecho, explicação, regra, exemplo]
+//  co: 2 colocações [it, explicação, exemplo] · q: 3 perguntas [pergunta, [opção certa, errada, errada]]
+// LETTURE (abaixo) converte para a estrutura usada pelo app: versoes{base,intermedio,avanzato}, glossario, notas, quiz.
+const LETTURE_SRC=[
+{id:"let-a1-01",nivel:"A1",tema:"lavoro",titulo:"Il primo giorno in ufficio",
+base:"Oggi è il mio primo giorno in ufficio. Mi chiamo Lucas, sono brasiliano e sono ingegnere civile. L'ufficio è a Bologna, vicino alla stazione.\nAlle nove arriva una collega. «Buongiorno, sono Giulia. Tu sei il nuovo ingegnere?» «Sì, piacere, sono Lucas.» «Piacere mio! Di dove sei?» «Sono di Curitiba, in Brasile.»\nGiulia è architetto e lavora qui da tre anni. È molto gentile. Mi presenta gli altri colleghi: Marco, Paola e il direttore, il dottor Ferri.\nAlle dieci abbiamo una riunione. Sono un po' nervoso, ma sono anche contento: il lavoro è interessante e i colleghi sono simpatici.",
+g:[["giorno","dia","s.m."],["ufficio","escritório","s.m."],["ingegnere","engenheiro","s.m."],["vicino","perto","avv."],["collega","colega","s.m./f."],["presenta","apresenta (presentare)","verbo"],["direttore","diretor","s.m."],["riunione","reunião","s.f."],["nervoso","nervoso","agg."],["contento","contente","agg."]],
+v:[["il primo giorno","o primeiro dia"],["il collega / la collega","o colega / a colega"],["la riunione","a reunião"],["vicino a","perto de"],["piacere mio","o prazer é meu"]],
+gr:[["Essere para se apresentar","“sono brasiliano e sono ingegnere civile”","Com essere você diz a nacionalidade e a profissão (e também o nome: sono Lucas). Antes da profissão não vai artigo.","sono + nome / nacionalidade / profissão","Sono Paola, sono italiana e sono architetto."],
+["Da + tempo","“lavora qui da tre anni”","O presente com da indica uma ação que começou no passado e continua agora (em português: “trabalha aqui há três anos”).","presente + da + período","Studio italiano da sei mesi."]],
+co:[["avere una riunione","Ter uma reunião: o verbo é avere, como em português.","Domani abbiamo una riunione alle tre."],["presentare qualcuno","Apresentar uma pessoa a outra; a pessoa que recebe a apresentação vem como pronome (mi, ti, Le).","Ti presento il mio capo."]],
+q:[["Di dov'è Lucas?",["Di Curitiba","Di Bologna","Di Roma"]],["Che lavoro fa Giulia?",["È architetto","È ingegnere","È direttrice"]],["A che ora è la riunione?",["Alle dieci","Alle nove","Alle tre"]]]},
+
+{id:"let-a1-02",nivel:"A1",tema:"lavoro",titulo:"Una mail per la riunione",
+base:"Oggetto: riunione di giovedì\nBuongiorno a tutti,\ngiovedì alle dieci abbiamo la riunione del progetto. La riunione è nella sala grande, al secondo piano, e dura un'ora.\nParliamo di tre punti: il calendario dei lavori, i costi e i prossimi passi. Paola presenta il calendario. Marco porta i documenti del cliente.\nPer favore, leggete il file in allegato prima della riunione. Chi non può venire scrive una mail a me o a Giulia entro mercoledì.\nPer domande sono in ufficio tutti i giorni dalle nove alle diciotto.\nGrazie e buon lavoro,\nLucas",
+g:[["oggetto","assunto (de e-mail)","s.m."],["sala","sala","s.f."],["piano","andar","s.m."],["dura","dura (durare)","verbo"],["punti","pontos","s.m.pl."],["costi","custos","s.m.pl."],["prossimi","próximos","agg."],["passi","passos","s.m.pl."],["allegato","anexo","s.m."],["entro","até (prazo)","prep."],["domande","perguntas","s.f.pl."]],
+v:[["l'oggetto","o assunto (do e-mail)"],["in allegato","em anexo"],["entro mercoledì","até quarta-feira"],["i prossimi passi","os próximos passos"],["al secondo piano","no segundo andar"]],
+gr:[["Preposições articuladas","“nella sala grande, al secondo piano”","A preposição se junta ao artigo e forma uma palavra só.","in + la = nella · a + il = al · di + il = del","La riunione è nell'ufficio del direttore."],
+["Dalle… alle…","“dalle nove alle diciotto”","Para dizer um horário de funcionamento, use da e a com o artigo le (as horas são femininas no plural).","dalle + hora + alle + hora","Lavoro dalle otto alle diciassette."]],
+co:[["scrivere una mail a qualcuno","Quem recebe a mensagem vem depois de a.","Scrivo una mail al cliente."],["leggere il file in allegato","“In allegato” é a expressão fixa para o que vai anexo à mensagem.","In allegato trovate il calendario."]],
+q:[["Quando è la riunione?",["Giovedì alle dieci","Mercoledì alle dieci","Giovedì alle diciotto"]],["Chi presenta il calendario?",["Paola","Marco","Giulia"]],["Che cosa fa chi non può venire?",["Scrive una mail a Lucas o a Giulia","Telefona al cliente","Porta i documenti"]]]},
+
+{id:"let-a1-03",nivel:"A1",tema:"lavoro",titulo:"Sono in ritardo",
+base:"Ciao Giulia,\nscusa, oggi sono in ritardo. Il treno delle otto non parte: c'è un problema sulla linea. Adesso sono in stazione e aspetto il treno delle otto e quaranta.\nArrivo in ufficio verso le dieci. La riunione con il cliente è alle nove e mezza, vero? Puoi cominciare tu, per favore? I documenti sono sulla mia scrivania, nella cartella blu.\nSe il cliente ha domande sui costi, rispondo io quando arrivo. Ho il computer con me e posso leggere le mail in treno.\nMi dispiace per il problema. Grazie mille per l'aiuto!\nA dopo,\nLucas",
+g:[["scusa","desculpa","escl."],["ritardo","atraso","s.m."],["parte","parte (partire)","verbo"],["linea","linha","s.f."],["aspetto","espero (aspettare)","verbo"],["verso","por volta de","prep."],["cominciare","começar","verbo"],["scrivania","mesa de trabalho","s.f."],["cartella","pasta","s.f."],["rispondo","respondo (rispondere)","verbo"],["dispiace","mi dispiace = sinto muito","verbo"],["aiuto","ajuda","s.m."]],
+v:[["essere in ritardo","estar atrasado"],["verso le dieci","por volta das dez"],["la scrivania","a mesa de trabalho"],["la cartella","a pasta"],["mi dispiace","sinto muito"]],
+gr:[["C'è","“c'è un problema sulla linea”","C'è corresponde a “há / tem” com uma coisa só. Com mais de uma, usa-se ci sono.","c'è + singular · ci sono + plural","Ci sono due treni prima delle nove."],
+["Potere + infinito","“Puoi cominciare tu, per favore?”","Potere vem conjugado e o outro verbo fica no infinitivo. Com puoi você pede um favor de modo simples.","posso / puoi / può + infinito","Puoi mandare il file a Marco?"]],
+co:[["essere in ritardo","Estar atrasado. O tamanho do atraso vem com di.","Il treno è in ritardo di venti minuti."],["grazie mille per","Agradecer por alguma coisa: grazie per + substantivo.","Grazie mille per la risposta."]],
+q:[["Perché Lucas è in ritardo?",["C'è un problema con il treno","C'è molto traffico","La riunione è lunga"]],["A che ora arriva in ufficio?",["Verso le dieci","Alle otto e quaranta","Alle nove e mezza"]],["Dove sono i documenti?",["Sulla scrivania di Lucas","Nel computer di Giulia","In stazione"]]]},
+
+{id:"let-a1-04",nivel:"A1",tema:"lavoro",titulo:"Il pranzo con i colleghi",
+base:"All'una io e i colleghi andiamo a pranzo. Vicino all'ufficio c'è una piccola trattoria: si chiama «Da Rosa». Il menù del giorno costa dodici euro.\nIo prendo le tagliatelle al ragù e un'insalata. Giulia non mangia carne e prende la pasta al pomodoro. Marco ha molta fame: prende il primo, il secondo e anche il dolce!\nA tavola non parliamo di lavoro. Parliamo di calcio, di vacanze e di cucina. Paola racconta sempre storie divertenti.\nDopo il pranzo beviamo un caffè al banco. Alle due torniamo in ufficio. Il pranzo con i colleghi è il mio momento preferito della giornata.",
+g:[["pranzo","almoço","s.m."],["trattoria","restaurante simples, de comida caseira","s.f."],["costa","custa (costare)","verbo"],["prendo","peço, pego (prendere)","verbo"],["carne","carne","s.f."],["fame","fome","s.f."],["dolce","sobremesa","s.m."],["tavola","mesa (posta para comer)","s.f."],["racconta","conta (raccontare)","verbo"],["divertenti","divertidas","agg."],["banco","balcão","s.m."],["torniamo","voltamos (tornare)","verbo"],["giornata","dia (o dia inteiro)","s.f."]],
+v:[["andare a pranzo","ir almoçar"],["il menù del giorno","o prato do dia"],["il primo / il secondo","o primeiro prato / o segundo prato"],["avere fame","estar com fome"],["al banco","no balcão"]],
+gr:[["Prendere para pedir","“Io prendo le tagliatelle al ragù”","No restaurante e no bar, para dizer o que você vai pedir use prendere.","prendo + prato ou bebida","Io prendo un'acqua naturale."],
+["Parlare di","“Parliamo di calcio, di vacanze e di cucina”","O assunto da conversa vem com di.","parlare di + assunto","In riunione parliamo del progetto."]],
+co:[["avere fame","Em italiano a fome “se tem”: usa-se avere, não essere.","Ho fame, andiamo a mangiare?"],["bere un caffè","Tomar um café: o verbo é bere (também se diz prendere un caffè).","Beviamo un caffè dopo la riunione?"]],
+q:[["Quanto costa il menù del giorno?",["Dodici euro","Due euro","Venti euro"]],["Che cosa prende Giulia?",["La pasta al pomodoro","Le tagliatelle al ragù","Il dolce"]],["Di che cosa non parlano a tavola?",["Di lavoro","Di calcio","Di vacanze"]]]},
+
+{id:"let-a1-05",nivel:"A1",tema:"lavoro",titulo:"Il mio ufficio",
+base:"Lavoro in un ufficio al terzo piano di un palazzo moderno. L'ufficio non è grande, ma è luminoso: ci sono due finestre e molte piante.\nNella stanza ci sono quattro scrivanie. La mia scrivania è vicino alla finestra. Sulla scrivania ho un computer, due schermi, il telefono e una tazza per il caffè. Nel cassetto tengo le penne, i fogli e la calcolatrice.\nAccanto alla porta c'è la stampante. Di fronte c'è un armadio con i progetti e le norme tecniche. Sul muro c'è una grande pianta della città.\nLa sala riunioni è in fondo al corridoio, a destra.",
+g:[["palazzo","prédio","s.m."],["luminoso","claro, bem iluminado","agg."],["finestre","janelas","s.f.pl."],["piante","plantas","s.f.pl."],["stanza","sala, cômodo","s.f."],["schermi","telas","s.m.pl."],["tazza","xícara","s.f."],["cassetto","gaveta","s.m."],["fogli","folhas (de papel)","s.m.pl."],["stampante","impressora","s.f."],["armadio","armário","s.m."],["muro","parede","s.m."],["pianta","mapa, planta (da cidade)","s.f."],["corridoio","corredor","s.m."]],
+v:[["il palazzo","o prédio"],["lo schermo","a tela"],["la stampante","a impressora"],["il cassetto","a gaveta"],["in fondo a","no fim de"]],
+gr:[["C'è / ci sono","“ci sono due finestre… c'è la stampante”","Para dizer o que existe num lugar: c'è com uma coisa, ci sono com várias.","c'è + singular · ci sono + plural","In ufficio c'è una sala riunioni e ci sono dieci scrivanie."],
+["Onde fica","“vicino alla finestra… Accanto alla porta”","As expressões de lugar pedem a preposição a, que se junta ao artigo.","vicino a · accanto a · di fronte a · in fondo a","La stampante è accanto all'armadio."]],
+co:[["al terzo piano","O andar vem com a + artigo e o número ordinal.","L'ufficio tecnico è al primo piano."],["in fondo al corridoio","No fim do corredor; depois vem a destra ou a sinistra.","Il bagno è in fondo al corridoio, a sinistra."]],
+q:[["A che piano è l'ufficio?",["Al terzo piano","Al secondo piano","Al primo piano"]],["Dov'è la scrivania di Lucas?",["Vicino alla finestra","Accanto alla porta","In fondo al corridoio"]],["Che cosa c'è sul muro?",["Una pianta della città","Una stampante","Un armadio"]]]},
+
+{id:"let-a1-06",nivel:"A1",tema:"lavoro",titulo:"Una telefonata formale",
+base:"— Studio Ferri, buongiorno.\n— Buongiorno, sono l'ingegner Moura. Vorrei parlare con la dottoressa Bianchi, per favore.\n— Mi dispiace, la dottoressa è in riunione. Vuole lasciare un messaggio?\n— Sì, grazie. Ho bisogno di un appuntamento per parlare del progetto della scuola.\n— Va bene. Quando è libero, ingegnere?\n— Domani mattina, oppure giovedì dopo le quindici.\n— Giovedì alle sedici va bene?\n— Perfetto. Le lascio il mio numero: tre, quattro, sette, cinque, due, uno, otto.\n— Grazie. Può ripetere il Suo cognome, per favore?\n— Certo: Moura. Emme, o, u, erre, a.\n— Grazie, ingegnere. Buona giornata!\n— Grazie a Lei, arrivederci.",
+g:[["vorrei","eu gostaria (volere)","verbo"],["dottoressa","doutora","s.f."],["lasciare","deixar","verbo"],["messaggio","recado, mensagem","s.m."],["bisogno","avere bisogno di = precisar de","s.m."],["appuntamento","horário marcado, compromisso","s.m."],["libero","livre","agg."],["oppure","ou então","cong."],["ripetere","repetir","verbo"],["cognome","sobrenome","s.m."],["certo","claro","avv."],["arrivederci","até logo","escl."]],
+v:[["vorrei parlare con…","eu gostaria de falar com…"],["lasciare un messaggio","deixar um recado"],["avere bisogno di","precisar de"],["l'appuntamento","o horário marcado"],["il cognome","o sobrenome"]],
+gr:[["Lei, o tratamento formal","“Vuole lasciare un messaggio? … Può ripetere il Suo cognome, per favore?”","Com quem você não conhece, use Lei: o verbo vai para a terceira pessoa e os possessivos são Suo / Sua.","tu vuoi → Lei vuole · tu puoi → Lei può","Signora, può aspettare un momento?"],
+["Vorrei","“Vorrei parlare con la dottoressa Bianchi”","Vorrei é a forma educada de pedir. Depois vem um infinitivo ou um substantivo.","vorrei + infinito / substantivo","Vorrei un appuntamento per lunedì."]],
+co:[["lasciare un messaggio","Deixar um recado para alguém: per + pessoa.","Posso lasciare un messaggio per il direttore?"],["avere bisogno di","Precisar de: sempre com avere e di.","Ho bisogno di più tempo."]],
+q:[["Con chi vuole parlare l'ingegner Moura?",["Con la dottoressa Bianchi","Con il dottor Ferri","Con il cliente"]],["Perché non può parlare con lei?",["Perché è in riunione","Perché è in vacanza","Perché è al telefono"]],["Quando è l'appuntamento?",["Giovedì alle sedici","Domani mattina","Giovedì alle quindici"]]]},
+
+{id:"let-a1-07",nivel:"A1",tema:"lavoro",titulo:"La settimana di Lucas",
+base:"La mia settimana è piena. Il lunedì comincio alle otto e mezza e controllo le mail. Alle dieci ho la riunione con tutto il gruppo.\nIl martedì e il giovedì lavoro in cantiere: parto presto, alle sette, e torno nel pomeriggio. Il mercoledì resto in ufficio e preparo i disegni e i calcoli.\nIl venerdì scrivo il rapporto della settimana e lo mando al direttore. Di solito finisco alle diciassette.\nLa sera studio italiano per mezz'ora. Il sabato faccio la spesa e vedo gli amici. La domenica dormo fino a tardi e poi telefono alla mia famiglia in Brasile.",
+g:[["settimana","semana","s.f."],["piena","cheia","agg."],["controllo","verifico (controllare)","verbo"],["gruppo","equipe, grupo","s.m."],["cantiere","canteiro de obras","s.m."],["presto","cedo","avv."],["pomeriggio","tarde","s.m."],["resto","fico (restare)","verbo"],["disegni","desenhos","s.m.pl."],["calcoli","cálculos","s.m.pl."],["rapporto","relatório","s.m."],["mando","mando (mandare)","verbo"],["solito","di solito = geralmente","agg."],["spesa","fare la spesa = fazer as compras","s.f."],["tardi","tarde (advérbio)","avv."]],
+v:[["il cantiere","o canteiro de obras"],["il rapporto","o relatório"],["di solito","geralmente"],["nel pomeriggio","à tarde"],["fare la spesa","fazer as compras (de mercado)"]],
+gr:[["Il + dia da semana","“Il lunedì comincio alle otto e mezza”","Com o artigo, o dia da semana indica hábito: toda segunda. Sem artigo, é só aquela segunda.","il lunedì = toda segunda · lunedì = nesta segunda","Il venerdì pranzo con i colleghi."],
+["O pronome lo","“scrivo il rapporto della settimana e lo mando al direttore”","Lo substitui um substantivo masculino singular já citado e vem antes do verbo.","lo + verbo","Preparo il disegno e lo stampo."]],
+co:[["controllare le mail","Verificar os e-mails; mail é feminino e não muda no plural.","Controllo le mail ogni mattina."],["lavorare in cantiere","Trabalhar na obra: in, sem artigo.","Domani lavoro in cantiere tutto il giorno."]],
+q:[["Quando lavora in cantiere?",["Il martedì e il giovedì","Il lunedì e il mercoledì","Il venerdì"]],["Che cosa fa il venerdì?",["Scrive il rapporto della settimana","Prepara i disegni","Fa la spesa"]],["Che cosa fa la sera?",["Studia italiano","Telefona alla famiglia","Vede gli amici"]]]},
+
+{id:"let-a1-08",nivel:"A1",tema:"quotidiano",titulo:"Al bar",
+base:"La mattina, prima del lavoro, vado al bar sotto casa. Il barista si chiama Enzo e conosce tutti i clienti.\n«Buongiorno, Lucas! Il solito?» «Sì, grazie: un cappuccino e un cornetto alla crema.»\nIn Italia molte persone fanno colazione in piedi, al banco. È veloce e costa meno. Io guardo il giornale e ascolto le conversazioni: è un buon esercizio per il mio italiano!\n«Quant'è?» «Due euro e ottanta.» Pago alla cassa e saluto Enzo. «Buona giornata!» «Anche a te, a domani!»\nDopo pranzo torno al bar per un caffè. Attenzione: qui «un caffè» è sempre un espresso, piccolo e forte.",
+g:[["barista","atendente do bar","s.m./f."],["conosce","conhece (conoscere)","verbo"],["solito","il solito = o de sempre","s.m."],["cornetto","croissant","s.m."],["colazione","café da manhã","s.f."],["piedi","in piedi = em pé","s.m.pl."],["veloce","rápido","agg."],["giornale","jornal","s.m."],["conversazioni","conversas","s.f.pl."],["esercizio","exercício","s.m."],["cassa","caixa (onde se paga)","s.f."],["saluto","cumprimento, me despeço (salutare)","verbo"],["forte","forte","agg."]],
+v:[["fare colazione","tomar café da manhã"],["il solito","o de sempre"],["in piedi","em pé"],["Quant'è?","quanto é?"],["la cassa","o caixa"]],
+gr:[["Expressões com fare","“molte persone fanno colazione in piedi”","Muitas ações do dia a dia usam fare + substantivo.","fare colazione · fare la spesa · fare una pausa","Faccio colazione alle sette."],
+["Prima di / dopo","“prima del lavoro… Dopo pranzo”","Prima pede di, que se junta ao artigo. Dopo vem direto antes do substantivo.","prima di + artigo + substantivo · dopo + substantivo","Prima della riunione bevo un caffè."]],
+co:[["fare colazione al bar","Na Itália é comum tomar o café da manhã no bar.","La domenica facciamo colazione al bar."],["pagare alla cassa","Pagar no caixa, não na mesa.","Si paga alla cassa, poi si prende il caffè."]],
+q:[["Che cosa prende Lucas la mattina?",["Un cappuccino e un cornetto","Un caffè e un panino","Un tè e un dolce"]],["Perché molti italiani fanno colazione al banco?",["È veloce e costa meno","C'è il giornale","Non ci sono tavoli"]],["Che cos'è «un caffè» in Italia?",["Un espresso","Un cappuccino","Un caffè lungo"]]]},
+
+{id:"let-a1-09",nivel:"A1",tema:"quotidiano",titulo:"In treno per Firenze",
+base:"Sabato vado a Firenze in treno. Alla stazione di Bologna guardo il tabellone: il mio treno parte alle nove e dieci dal binario sette.\nCompro il biglietto alla macchinetta: andata e ritorno, seconda classe. Costa ventidue euro. Il treno è puntuale, che fortuna!\nSalgo sulla carrozza quattro e cerco il mio posto, vicino al finestrino. Accanto a me c'è una signora con un cane piccolo. Il viaggio dura solo quaranta minuti.\nDal finestrino vedo le colline e i paesi. Alle nove e cinquanta arrivo a Firenze. Scendo dal treno e prendo l'autobus per il centro. Che bella giornata!",
+g:[["tabellone","painel de horários","s.m."],["binario","plataforma (trilho)","s.m."],["biglietto","passagem, bilhete","s.m."],["macchinetta","máquina automática","s.f."],["andata","ida","s.f."],["ritorno","volta","s.m."],["puntuale","pontual","agg."],["fortuna","sorte","s.f."],["salgo","subo, embarco (salire)","verbo"],["carrozza","vagão","s.f."],["posto","lugar, assento","s.m."],["finestrino","janela (de trem, carro)","s.m."],["viaggio","viagem","s.m."],["colline","colinas","s.f.pl."],["paesi","cidadezinhas, povoados","s.m.pl."],["scendo","desço (scendere)","verbo"]],
+v:[["il binario","a plataforma"],["andata e ritorno","ida e volta"],["il posto","o lugar, o assento"],["salire / scendere","subir / descer (embarcar / desembarcar)"],["essere puntuale","ser pontual, estar no horário"]],
+gr:[["Andare a / in","“vado a Firenze in treno”","Com cidade usa-se a; com o meio de transporte, in.","a + cidade · in + país · in + treno / autobus / macchina","Vado a Roma in macchina."],
+["Partire da / arrivare a","“parte alle nove e dieci dal binario sette… arrivo a Firenze”","O ponto de partida vem com da; o de chegada, com a.","partire da + lugar · arrivare a + lugar","Il treno parte da Milano e arriva a Torino."]],
+co:[["comprare il biglietto","Comprar a passagem: na máquina, na bilheteria ou online.","Compro il biglietto online."],["prendere l'autobus","Pegar o ônibus: prendere vale para todos os transportes.","Prendo l'autobus numero undici."]],
+q:[["Da quale binario parte il treno?",["Dal binario sette","Dal binario quattro","Dal binario nove"]],["Quanto dura il viaggio?",["Quaranta minuti","Ventidue minuti","Un'ora"]],["Chi c'è accanto a Lucas?",["Una signora con un cane","Un collega","Un bambino"]]]},
+
+{id:"let-a1-10",nivel:"A1",tema:"quotidiano",titulo:"In albergo",
+base:"Arrivo all'albergo alle sei di sera. Alla reception c'è un signore gentile.\n«Buonasera, ho una prenotazione a nome Moura, per due notti.» «Buonasera! Un momento… sì, una camera singola con bagno. Ha un documento, per favore?» «Ecco il passaporto.»\nLa camera è al quarto piano, numero quarantadue. C'è l'ascensore, per fortuna, perché la mia valigia è pesante. La colazione è dalle sette alle dieci, nella sala al piano terra. Il wifi è gratis: la password è sulla chiave.\nLa camera è piccola ma pulita e tranquilla. Dalla finestra vedo una piazza con una fontana. Sono stanco: faccio una doccia e poi esco a cena.",
+g:[["albergo","hotel","s.m."],["prenotazione","reserva","s.f."],["notti","noites","s.f.pl."],["camera","quarto","s.f."],["singola","de solteiro, individual","agg."],["bagno","banheiro","s.m."],["documento","documento","s.m."],["ascensore","elevador","s.m."],["valigia","mala","s.f."],["pesante","pesada","agg."],["chiave","chave","s.f."],["pulita","limpa","agg."],["tranquilla","tranquila","agg."],["piazza","praça","s.f."],["doccia","banho de chuveiro, ducha","s.f."],["cena","jantar","s.f."]],
+v:[["la prenotazione","a reserva"],["a nome…","em nome de…"],["la camera singola","o quarto individual"],["il piano terra","o térreo"],["fare una doccia","tomar banho"]],
+gr:[["Avere no tratamento formal","“ho una prenotazione… Ha un documento, per favore?”","Para falar com um desconhecido, o verbo vai para a forma de Lei: ha.","io ho · tu hai · Lei ha","Ha una camera per stasera?"],
+["O adjetivo concorda","“La camera è piccola ma pulita e tranquilla”","Camera é feminino, então os adjetivos terminam em -a.","-o no masculino · -a no feminino","L'albergo è piccolo ma pulito."]],
+co:[["avere una prenotazione","Ter uma reserva: per + número de pessoas ou de noites.","Abbiamo una prenotazione per quattro persone."],["fare una doccia","Tomar banho de chuveiro: com fare.","Dopo il lavoro faccio una doccia."]],
+q:[["Per quante notti è la prenotazione?",["Per due notti","Per una notte","Per quattro notti"]],["Dov'è la sala della colazione?",["Al piano terra","Al quarto piano","Vicino alla piazza"]],["Che cosa vede Lucas dalla finestra?",["Una piazza con una fontana","La stazione","Un giardino"]]]},
+
+{id:"let-a1-11",nivel:"A1",tema:"quotidiano",titulo:"Al mercato",
+base:"Il sabato mattina vado al mercato in piazza. Ci sono molti banchi di frutta, verdura, formaggio e pesce. I prezzi sono buoni e i prodotti sono freschi.\n«Buongiorno! Che cosa desidera?» «Vorrei un chilo di pomodori e mezzo chilo di zucchine.» «Ecco. Altro?» «Sì, quattro mele e un po' di basilico.» «Il basilico è un regalo! Sono quattro euro e cinquanta.»\nPoi compro il pane e duecento grammi di parmigiano. Il signore del formaggio mi fa assaggiare un pezzo: è buonissimo!\nTorno a casa con due borse piene. Stasera cucino la pasta al pomodoro per i miei amici.",
+g:[["mercato","feira, mercado","s.m."],["banchi","bancas","s.m.pl."],["verdura","verduras e legumes","s.f."],["formaggio","queijo","s.m."],["pesce","peixe","s.m."],["prezzi","preços","s.m.pl."],["freschi","frescos","agg."],["desidera","deseja (desiderare)","verbo"],["chilo","quilo","s.m."],["mele","maçãs","s.f.pl."],["regalo","presente","s.m."],["pane","pão","s.m."],["assaggiare","provar (comida)","verbo"],["pezzo","pedaço","s.m."],["borse","sacolas","s.f.pl."],["cucino","cozinho (cucinare)","verbo"]],
+v:[["il banco","a banca"],["un chilo di","um quilo de"],["mezzo chilo","meio quilo"],["Altro?","mais alguma coisa?"],["assaggiare","provar (comida)"]],
+gr:[["Quantidade + di","“un chilo di pomodori… duecento grammi di parmigiano”","Depois da quantidade vem di e o produto, sem artigo.","quantidade + di + produto","Vorrei un litro di latte."],
+["Plural masculino","“I prezzi sono buoni e i prodotti sono freschi”","No masculino, -o vira -i no plural, e o adjetivo acompanha o substantivo.","il prezzo buono → i prezzi buoni","I pomodori sono rossi e freschi."]],
+co:[["fare assaggiare","Dar para alguém provar: fare + infinitivo.","Mi fa assaggiare il vino?"],["andare al mercato","Ir à feira: a + il = al.","Il sabato andiamo al mercato."]],
+q:[["Quando va al mercato Lucas?",["Il sabato mattina","La domenica mattina","Il venerdì sera"]],["Che cosa è un regalo?",["Il basilico","Il parmigiano","Il pane"]],["Che cosa cucina stasera?",["La pasta al pomodoro","Il pesce","Le zucchine"]]]},
+
+{id:"let-a1-12",nivel:"A1",tema:"quotidiano",titulo:"La famiglia di Giulia",
+base:"Giulia è la mia collega. La sua famiglia vive a Verona. Suo padre si chiama Carlo, ha sessantadue anni ed è medico. Sua madre, Anna, è insegnante di musica.\nGiulia ha un fratello e una sorella. Il fratello, Davide, è più grande: ha trentacinque anni, è sposato e ha due bambini. La sorella, Sara, è la più giovane e studia ancora all'università.\nI nonni abitano in campagna, vicino al lago. La domenica tutta la famiglia pranza da loro. La nonna prepara il risotto e il nonno racconta vecchie storie.\nGiulia dice sempre: «La mia famiglia è rumorosa, ma è bellissima.»",
+g:[["famiglia","família","s.f."],["vive","mora, vive (vivere)","verbo"],["padre","pai","s.m."],["medico","médico","s.m."],["madre","mãe","s.f."],["insegnante","professora","s.m./f."],["fratello","irmão","s.m."],["sorella","irmã","s.f."],["sposato","casado","agg."],["bambini","crianças, filhos pequenos","s.m.pl."],["giovane","jovem","agg."],["nonni","avós","s.m.pl."],["campagna","campo, zona rural","s.f."],["lago","lago","s.m."],["pranza","almoça (pranzare)","verbo"],["rumorosa","barulhenta","agg."]],
+v:[["i nonni","os avós"],["essere sposato","ser casado"],["più grande","mais velho"],["la più giovane","a mais nova"],["pranzare da loro","almoçar na casa deles"]],
+gr:[["Possessivos com a família","“Suo padre… Sua madre… La sua famiglia”","Com um parente no singular o possessivo vem sem artigo. Com famiglia e com parentes no plural, o artigo volta.","mio padre · mia sorella · i miei nonni · la mia famiglia","Mio fratello vive a Milano, i miei genitori a Roma."],
+["Avere para a idade","“ha sessantadue anni”","Em italiano a idade “se tem”: avere + número + anni.","avere + número + anni","Mia sorella ha ventotto anni."]],
+co:[["pranzare da qualcuno","Almoçar na casa de alguém: da + pessoa.","Domenica pranziamo dai miei genitori."],["abitare in campagna","Morar no campo: in, sem artigo.","I miei zii abitano in campagna."]],
+q:[["Dove vive la famiglia di Giulia?",["A Verona","A Bologna","In campagna"]],["Chi studia all'università?",["Sara","Davide","Giulia"]],["Che cosa fa la famiglia la domenica?",["Pranza dai nonni","Va al lago","Studia musica"]]]},
+
+{id:"let-a2-01",nivel:"A2",tema:"lavoro",titulo:"L'ordine del giorno",
+base:"Domani c'è la riunione mensile del gruppo di progetto. Giulia prepara l'ordine del giorno e lo manda a tutti i partecipanti.\nIl primo punto è lo stato dei lavori: Marco spiega a che punto è il cantiere della scuola. Il secondo punto riguarda il bilancio: i costi dei materiali aumentano e bisogna trovare una soluzione. Il terzo punto è il calendario delle prossime settimane.\nOgni persona ha dieci minuti per parlare. Paola scrive il verbale e alla fine riassume le decisioni.\nLa riunione comincia alle nove in punto e non deve durare più di un'ora e mezza. Chi ha altri argomenti può proporli prima di stasera.",
+g:[["mensile","mensal","agg."],["partecipanti","participantes","s.m.pl."],["stato","andamento, situação","s.m."],["spiega","explica (spiegare)","verbo"],["riguarda","diz respeito a (riguardare)","verbo"],["bilancio","orçamento","s.m."],["materiali","materiais","s.m.pl."],["aumentano","aumentam (aumentare)","verbo"],["bisogna","é preciso","verbo"],["soluzione","solução","s.f."],["verbale","ata","s.m."],["riassume","resume (riassumere)","verbo"],["decisioni","decisões","s.f.pl."],["argomenti","assuntos","s.m.pl."],["proporli","propô-los (proporre + li)","verbo"]],
+v:[["l'ordine del giorno","a pauta"],["il verbale","a ata"],["lo stato dei lavori","o andamento da obra"],["il bilancio","o orçamento"],["alle nove in punto","às nove em ponto"]],
+gr:[["Bisogna + infinito","“bisogna trovare una soluzione”","Bisogna é impessoal e não muda: equivale a “é preciso”.","bisogna + infinito","Bisogna mandare il verbale entro venerdì."],
+["Pronome junto do infinitivo","“può proporli prima di stasera”","Com potere, dovere e volere, o pronome pode se juntar ao fim do infinitivo, que perde o -e (ou -re em proporre).","potere / dovere + infinito + pronome","I documenti? Devo stamparli oggi."]],
+co:[["scrivere il verbale","Redigir a ata da reunião.","Chi scrive il verbale oggi?"],["trovare una soluzione","Encontrar uma solução: a qualcosa ou per qualcosa.","Dobbiamo trovare una soluzione insieme."]],
+q:[["Chi prepara l'ordine del giorno?",["Giulia","Paola","Marco"]],["Qual è il problema del bilancio?",["I costi dei materiali aumentano","Il cantiere è chiuso","Il calendario è sbagliato"]],["Quanto tempo ha ogni persona per parlare?",["Dieci minuti","Un'ora e mezza","Cinque minuti"]]]},
+
+{id:"let-a2-02",nivel:"A2",tema:"lavoro",titulo:"Il sopralluogo in cantiere",
+base:"Giovedì mattina faccio un sopralluogo nel cantiere della nuova scuola. All'ingresso metto il casco, le scarpe di sicurezza e il giubbotto giallo: senza queste protezioni non si può entrare.\nIl capocantiere, il signor Russo, mi accompagna. Controlliamo insieme le fondazioni e i pilastri del primo piano. Misuro le distanze e faccio molte foto con il telefono.\nI muri sono a posto, ma noto una piccola crepa in una trave. Non sembra grave, però voglio verificare meglio. Chiedo al signor Russo di fermare i lavori in quella zona fino a lunedì.\nIn ufficio scrivo il rapporto e allego le foto. Il direttore vuole una risposta entro domani.",
+g:[["sopralluogo","vistoria","s.m."],["ingresso","entrada","s.m."],["casco","capacete","s.m."],["sicurezza","segurança","s.f."],["giubbotto","colete, jaqueta","s.m."],["protezioni","proteções","s.f.pl."],["capocantiere","encarregado da obra","s.m."],["accompagna","acompanha (accompagnare)","verbo"],["fondazioni","fundações","s.f.pl."],["pilastri","pilares","s.m.pl."],["misuro","meço (misurare)","verbo"],["crepa","fissura, trinca","s.f."],["trave","viga","s.f."],["grave","grave","agg."],["verificare","verificar","verbo"],["fermare","parar, interromper","verbo"],["allego","anexo (allegare)","verbo"],["risposta","resposta","s.f."]],
+v:[["il sopralluogo","a vistoria"],["il casco","o capacete"],["la trave","a viga"],["la crepa","a fissura"],["il capocantiere","o encarregado da obra"]],
+gr:[["Si impessoal","“senza queste protezioni non si può entrare”","Si + verbo na terceira pessoa fala de todo mundo, sem dizer quem: “não se pode”.","si + verbo na 3ª pessoa","In cantiere si lavora con il casco."],
+["Chiedere a qualcuno di + infinito","“Chiedo al signor Russo di fermare i lavori”","Para pedir que alguém faça algo: a pessoa vem com a, e a ação com di + infinitivo.","chiedere a + pessoa + di + infinito","Chiedo al collega di controllare i calcoli."]],
+co:[["fare un sopralluogo","Fazer uma vistoria: com fare.","Domani facciamo un sopralluogo con il cliente."],["fermare i lavori","Interromper a obra.","Con la pioggia dobbiamo fermare i lavori."]],
+q:[["Che cosa mette Lucas all'ingresso?",["Il casco, le scarpe di sicurezza e il giubbotto","Solo il casco","Gli occhiali e i guanti"]],["Che problema nota?",["Una piccola crepa in una trave","Un muro storto","Un pilastro rotto"]],["Fino a quando si fermano i lavori in quella zona?",["Fino a lunedì","Fino a domani","Fino a giovedì"]]]},
+
+{id:"let-a2-03",nivel:"A2",tema:"lavoro",titulo:"La richiesta di preventivo",
+base:"Gentile signor Conti,\nLe scrivo per chiedere un preventivo per la fornitura di materiali per il cantiere di via Mazzini.\nAbbiamo bisogno di cinquanta metri cubi di calcestruzzo e di tre tonnellate di acciaio per le armature. La consegna deve avvenire in due momenti: metà all'inizio di marzo e metà alla fine del mese.\nPuò indicare, per favore, il prezzo al metro cubo, i tempi di consegna e le condizioni di pagamento? Vorrei anche sapere se il trasporto è incluso.\nDobbiamo scegliere il fornitore entro il venti febbraio. Resto a disposizione per qualsiasi chiarimento.\nIn attesa di una Sua risposta, porgo cordiali saluti.\nIng. Lucas Moura",
+g:[["gentile","prezado (em cartas)","agg."],["preventivo","orçamento, cotação","s.m."],["fornitura","fornecimento","s.f."],["calcestruzzo","concreto","s.m."],["tonnellate","toneladas","s.f.pl."],["acciaio","aço","s.m."],["armature","armaduras","s.f.pl."],["consegna","entrega","s.f."],["avvenire","acontecer, ocorrer","verbo"],["metà","metade","s.f."],["indicare","indicar, informar","verbo"],["pagamento","pagamento","s.m."],["trasporto","transporte, frete","s.m."],["incluso","incluído","agg."],["scegliere","escolher","verbo"],["fornitore","fornecedor","s.m."],["chiarimento","esclarecimento","s.m."],["attesa","espera","s.f."],["saluti","saudações","s.m.pl."]],
+v:[["il preventivo","o orçamento, a cotação"],["il calcestruzzo","o concreto"],["l'acciaio","o aço"],["la consegna","a entrega"],["il fornitore","o fornecedor"]],
+gr:[["Le e Sua na carta formal","“Le scrivo… In attesa di una Sua risposta”","Em mensagens formais, os pronomes de Lei costumam vir com maiúscula: Le (ao senhor, à senhora) e Suo / Sua.","Le = ao senhor / à senhora · Suo, Sua = seu, sua (formal)","Le mando il contratto in allegato."],
+["Dovere + infinito","“La consegna deve avvenire in due momenti… Dobbiamo scegliere il fornitore”","Dovere conjugado + infinitivo indica obrigação ou necessidade.","devo / deve / dobbiamo + infinito","Dobbiamo firmare il contratto entro venerdì."]],
+co:[["chiedere un preventivo","Pedir uma cotação: a + fornecedor.","Chiediamo un preventivo a tre fornitori."],["restare a disposizione","Fórmula de encerramento: fico à disposição.","Resto a disposizione per altre informazioni."]],
+q:[["Che cosa chiede Lucas al signor Conti?",["Un preventivo per i materiali","Un appuntamento in cantiere","Un nuovo contratto di lavoro"]],["Quando deve arrivare la prima metà del materiale?",["All'inizio di marzo","Alla fine di marzo","Il venti febbraio"]],["Che cosa vuole sapere sul trasporto?",["Se è incluso nel prezzo","Quanto dura","Chi guida il camion"]]]},
+
+{id:"let-a2-04",nivel:"A2",tema:"lavoro",titulo:"La scadenza cambia",
+base:"Brutte notizie dal cliente: il comune vuole i documenti del progetto una settimana prima. La nuova scadenza è venerdì quindici, non più venerdì ventidue.\nIl direttore convoca subito una riunione. «Abbiamo sette giorni in meno. Come ci organizziamo?»\nMarco propone di dividere il lavoro: lui finisce i disegni, Giulia controlla i calcoli e io preparo la relazione tecnica. Paola chiama il fornitore per avere i prezzi aggiornati entro mercoledì.\nPer rispettare la scadenza dobbiamo lavorare anche sabato mattina. Nessuno è contento, ma tutti sono d'accordo.\nIl direttore promette un giorno libero dopo la consegna. «E venerdì sera offro io la pizza!»",
+g:[["brutte","más, ruins","agg."],["notizie","notícias","s.f.pl."],["comune","prefeitura","s.m."],["scadenza","prazo","s.f."],["convoca","convoca (convocare)","verbo"],["subito","logo, imediatamente","avv."],["organizziamo","organizamos (organizzarsi)","verbo"],["propone","propõe (proporre)","verbo"],["dividere","dividir","verbo"],["relazione","relatório, memorial","s.f."],["aggiornati","atualizados","agg."],["rispettare","cumprir, respeitar","verbo"],["nessuno","ninguém","pron."],["accordo","d'accordo = de acordo","s.m."],["promette","promete (promettere)","verbo"],["offro","ofereço, pago eu (offrire)","verbo"]],
+v:[["la scadenza","o prazo"],["il comune","a prefeitura"],["la relazione tecnica","o relatório técnico"],["rispettare la scadenza","cumprir o prazo"],["essere d'accordo","estar de acordo"]],
+gr:[["Proporre di + infinito","“Marco propone di dividere il lavoro”","Para sugerir uma ação: proporre + di + infinitivo.","proporre di + infinito","Propongo di cominciare alle otto."],
+["Per + infinito","“Per rispettare la scadenza dobbiamo lavorare anche sabato mattina”","Per + infinitivo indica a finalidade: “para cumprir”.","per + infinito","Per finire in tempo chiediamo aiuto a Paola."]],
+co:[["rispettare la scadenza","Cumprir o prazo; o contrário é non rispettare ou superare la scadenza.","Con questo ritmo rispettiamo la scadenza."],["convocare una riunione","Convocar uma reunião.","Il capo convoca una riunione per domani."]],
+q:[["Qual è la nuova scadenza?",["Venerdì quindici","Venerdì ventidue","Mercoledì"]],["Che cosa prepara Lucas?",["La relazione tecnica","I disegni","I prezzi aggiornati"]],["Che cosa promette il direttore?",["Un giorno libero dopo la consegna","Un aumento di stipendio","Una settimana di vacanza"]]]},
+
+{id:"let-a2-05",nivel:"A2",tema:"lavoro",titulo:"Un messaggio al capo",
+base:"Buongiorno dottor Ferri,\nLe scrivo per aggiornarLa sul progetto della scuola. I calcoli della struttura sono pronti e oggi li mando al collega per la verifica.\nC'è però un punto da decidere: il cliente chiede di spostare l'ingresso principale sul lato nord. Questa modifica è possibile, ma richiede circa due settimane di lavoro in più e aumenta i costi del cinque per cento.\nSecondo me conviene accettare, perché il nuovo ingresso è più sicuro per i bambini. Possiamo parlarne domani, dopo la riunione delle undici? Mi bastano dieci minuti.\nIntanto preparo una breve nota con i costi e i tempi.\nGrazie e buona giornata,\nLucas",
+g:[["aggiornarla","atualizá-lo, informá-lo (aggiornare + La)","verbo"],["struttura","estrutura","s.f."],["pronti","prontos","agg."],["verifica","verificação, conferência","s.f."],["decidere","decidir","verbo"],["spostare","mudar de lugar, deslocar","verbo"],["lato","lado","s.m."],["modifica","alteração","s.f."],["richiede","exige (richiedere)","verbo"],["circa","cerca de","avv."],["secondo","secondo me = na minha opinião","prep."],["conviene","vale a pena (convenire)","verbo"],["accettare","aceitar","verbo"],["sicuro","seguro","agg."],["parlarne","falar disso (parlare + ne)","verbo"],["bastano","bastam (bastare)","verbo"],["intanto","enquanto isso","avv."],["nota","nota, resumo curto","s.f."]],
+v:[["aggiornare qualcuno su","atualizar alguém sobre"],["la modifica","a alteração"],["spostare","mudar de lugar"],["secondo me","na minha opinião"],["conviene","vale a pena"]],
+gr:[["Ne","“Possiamo parlarne domani”","Ne retoma algo já dito e equivale a “disso, sobre isso”. Pode se juntar ao fim do infinitivo.","parlare di qualcosa → parlarne","È un problema serio: dobbiamo parlarne con il cliente."],
+["Più + adjetivo","“il nuovo ingresso è più sicuro per i bambini”","O comparativo se faz com più antes do adjetivo; o segundo termo, quando aparece, vem com di.","più + adjetivo (+ di)","Questa soluzione è più economica dell'altra."]],
+co:[["aggiornare sul progetto","Colocar alguém a par do projeto: su + artigo.","Ti aggiorno sul progetto dopo pranzo."],["aumentare i costi","Aumentar os custos; a porcentagem vem com di + artigo.","Questa scelta aumenta i costi del dieci per cento."]],
+q:[["Che cosa chiede il cliente?",["Di spostare l'ingresso principale","Di cambiare i materiali","Di ridurre i costi"]],["Quanto lavoro in più richiede la modifica?",["Circa due settimane","Cinque giorni","Un mese"]],["Perché Lucas vuole accettare?",["Il nuovo ingresso è più sicuro per i bambini","Costa meno","Il lavoro è più veloce"]]]},
+
+{id:"let-a2-06",nivel:"A2",tema:"lavoro",titulo:"La telefonata con il cliente",
+base:"— Buongiorno, ingegnere. Sono la signora Galli, del comune.\n— Buongiorno, signora Galli. Come posso aiutarLa?\n— La chiamo per il progetto del ponte pedonale. Ci sono novità?\n— Sì. Il progetto definitivo è quasi pronto: mancano solo i risultati delle prove sul terreno.\n— Quando arrivano?\n— Il laboratorio li consegna martedì. Se va tutto bene, Le mando i documenti completi giovedì.\n— Perfetto. E per i costi?\n— Per ora rientriamo nel bilancio previsto. Però, se il terreno è meno stabile del previsto, servono fondazioni più profonde.\n— Capisco. Mi può avvisare subito, in quel caso?\n— Certamente, signora. La tengo aggiornata.\n— La ringrazio. Buon lavoro!\n— Grazie a Lei, arrivederLa.",
+g:[["aiutarla","ajudá-la (aiutare + La)","verbo"],["chiamo","ligo, telefono (chiamare)","verbo"],["ponte","ponte","s.m."],["pedonale","de pedestres","agg."],["novità","novidades","s.f."],["definitivo","definitivo, executivo","agg."],["quasi","quase","avv."],["mancano","faltam (mancare)","verbo"],["risultati","resultados","s.m.pl."],["prove","ensaios, testes","s.f.pl."],["terreno","solo, terreno","s.m."],["consegna","entrega (consegnare)","verbo"],["rientriamo","ficamos dentro (rientrare)","verbo"],["previsto","previsto","agg."],["stabile","estável","agg."],["servono","são necessárias (servire)","verbo"],["profonde","profundas","agg."],["avvisare","avisar","verbo"],["ringrazio","agradeço (ringraziare)","verbo"]],
+v:[["il ponte pedonale","a passarela de pedestres"],["le prove sul terreno","os ensaios de solo"],["mancano…","faltam…"],["rientrare nel bilancio","ficar dentro do orçamento"],["avvisare","avisar"]],
+gr:[["La e Le no tratamento formal","“Come posso aiutarLa? … Le mando i documenti… La ringrazio”","Com Lei, o objeto direto é La e o indireto é Le, para homem ou mulher.","aiutare, ringraziare, chiamare → La · mandare, scrivere a → Le","La chiamo domani e Le mando il preventivo."],
+["Se + presente","“se il terreno è meno stabile del previsto, servono fondazioni più profonde”","Para uma hipótese real, os dois verbos ficam no presente.","se + presente, presente","Se piove, fermiamo i lavori."]],
+co:[["tenere aggiornato","Manter alguém informado; aggiornato concorda com a pessoa.","Ti tengo aggiornato sulle novità."],["rientrare nel bilancio","Ficar dentro do orçamento previsto.","Con questo fornitore rientriamo nel bilancio."]],
+q:[["Per quale progetto telefona la signora Galli?",["Per il ponte pedonale","Per la scuola","Per la strada nuova"]],["Che cosa manca ancora?",["I risultati delle prove sul terreno","I documenti del comune","Il preventivo del fornitore"]],["Che cosa serve se il terreno è meno stabile?",["Fondazioni più profonde","Un ponte più corto","Un nuovo laboratorio"]]]},
+
+{id:"let-a2-07",nivel:"A2",tema:"lavoro",titulo:"Dopo la riunione: i prossimi passi",
+base:"Cari colleghi,\ngrazie per la riunione di oggi. Ecco un breve riassunto delle decisioni e dei compiti di ognuno.\nMarco aggiorna i disegni con le modifiche richieste dal cliente e li carica nella cartella condivisa entro martedì. Giulia verifica i calcoli della copertura e mi segnala eventuali problemi. Paola contatta i due fornitori e confronta i preventivi.\nIo scrivo al comune per chiedere l'autorizzazione e fisso il prossimo sopralluogo. Propongo giovedì ventuno alle quindici: va bene per tutti?\nCi rivediamo lunedì ventotto alle dieci per controllare l'avanzamento. Se qualcuno ha difficoltà con i tempi, me lo può scrivere subito, così troviamo insieme una soluzione.\nBuon lavoro,\nLucas",
+g:[["riassunto","resumo","s.m."],["compiti","tarefas","s.m.pl."],["ognuno","cada um","pron."],["aggiorna","atualiza (aggiornare)","verbo"],["richieste","solicitadas","agg."],["carica","carrega, sobe (caricare)","verbo"],["condivisa","compartilhada","agg."],["copertura","cobertura","s.f."],["segnala","avisa, aponta (segnalare)","verbo"],["eventuali","eventuais, possíveis","agg."],["contatta","entra em contato com (contattare)","verbo"],["confronta","compara (confrontare)","verbo"],["autorizzazione","autorização","s.f."],["fisso","marco (fissare)","verbo"],["rivediamo","nos vemos de novo (rivedersi)","verbo"],["avanzamento","andamento, avanço","s.m."],["difficoltà","dificuldade","s.f."]],
+v:[["il riassunto","o resumo"],["il compito","a tarefa"],["la cartella condivisa","a pasta compartilhada"],["confrontare i preventivi","comparar os orçamentos"],["fissare un sopralluogo","marcar uma vistoria"]],
+gr:[["Pronomes combinados","“me lo può scrivere subito”","Quando mi, ti, ci, vi vêm antes de lo, la, li, le, a vogal muda para e: me lo, te la, ce li.","mi + lo → me lo · ti + la → te la","Il file? Me lo mandi stasera?"],
+["Entro","“entro martedì”","Entro marca o limite de um prazo: até, no máximo.","entro + dia / hora / data","Mando il rapporto entro le diciotto."]],
+co:[["fissare una riunione","Marcar uma reunião, uma vistoria, um horário.","Fissiamo una riunione per lunedì."],["caricare nella cartella condivisa","Subir um arquivo para a pasta compartilhada.","Carico il verbale nella cartella condivisa."]],
+q:[["Entro quando Marco carica i disegni?",["Entro martedì","Entro giovedì","Entro lunedì"]],["Che cosa fa Paola?",["Contatta i fornitori e confronta i preventivi","Verifica i calcoli","Scrive al comune"]],["Quando si rivedono?",["Lunedì ventotto alle dieci","Giovedì ventuno alle quindici","Martedì alle dieci"]]]},
+
+{id:"let-a2-08",nivel:"A2",tema:"lavoro",titulo:"Il nuovo progetto",
+base:"Il nostro studio partecipa a una gara per un nuovo progetto: una palestra per una scuola media in un piccolo comune di montagna.\nL'edificio deve resistere alla neve e al freddo, quindi il tetto ha una forte pendenza e i muri sono ben isolati. La struttura è in legno lamellare: è leggera, resistente e si monta in poco tempo.\nIo mi occupo dei calcoli strutturali. Giulia disegna gli spazi interni e sceglie i materiali. Marco prepara il piano dei costi.\nIl budget è limitato, perciò cerchiamo soluzioni semplici ed economiche. Dobbiamo consegnare la proposta tra tre settimane. Se vinciamo la gara, i lavori cominciano in primavera.",
+g:[["studio","escritório (de projetos)","s.m."],["gara","licitação, concorrência","s.f."],["palestra","ginásio","s.f."],["montagna","montanha","s.f."],["edificio","edifício","s.m."],["resistere","resistir","verbo"],["neve","neve","s.f."],["quindi","portanto, por isso","cong."],["tetto","telhado","s.m."],["pendenza","inclinação","s.f."],["isolati","isolados","agg."],["legno","madeira","s.m."],["leggera","leve","agg."],["monta","si monta = monta-se (montare)","verbo"],["occupo","mi occupo di = cuido de (occuparsi)","verbo"],["spazi","espaços","s.m.pl."],["perciò","por isso","cong."],["economiche","econômicas","agg."],["proposta","proposta","s.f."],["vinciamo","vencemos (vincere)","verbo"],["primavera","primavera","s.f."]],
+v:[["la gara","a licitação"],["la palestra","o ginásio"],["il tetto","o telhado"],["il legno","a madeira"],["occuparsi di","cuidar de, encarregar-se de"]],
+gr:[["Quindi e perciò","“quindi il tetto ha una forte pendenza… perciò cerchiamo soluzioni semplici”","Os dois ligam uma causa à sua consequência: portanto, por isso.","causa + quindi / perciò + consequência","Piove, quindi rimandiamo il sopralluogo."],
+["Tra + tempo","“tra tre settimane”","Tra (ou fra) indica quanto tempo falta: daqui a.","tra + período","La riunione comincia tra dieci minuti."]],
+co:[["partecipare a una gara","Participar de uma licitação: sempre com a.","Partecipiamo a una gara pubblica."],["occuparsi di","Ser o responsável por algo; é reflexivo.","Chi si occupa del bilancio?"]],
+q:[["Che cosa progetta lo studio?",["Una palestra per una scuola","Un ponte in montagna","Una casa in legno"]],["Perché il tetto ha una forte pendenza?",["Per resistere alla neve","Per costare meno","Per avere più luce"]],["Quando cominciano i lavori se vincono la gara?",["In primavera","Tra tre settimane","In inverno"]]]},
+
+{id:"let-a2-09",nivel:"A2",tema:"lavoro",titulo:"Un problema in cantiere",
+base:"Stamattina il capocantiere mi telefona presto. «Ingegnere, abbiamo un problema: dopo la pioggia di stanotte c'è acqua nello scavo.»\nVado subito in cantiere. L'acqua è alta circa trenta centimetri e gli operai non possono lavorare. Per prima cosa controllo le pareti dello scavo: sono stabili, per fortuna.\nPoi chiamo una ditta specializzata: arriva con due pompe e in tre ore lo scavo è asciutto.\nIl ritardo è di un giorno, ma possiamo recuperarlo la prossima settimana. Decidiamo anche di coprire lo scavo con dei teli quando il meteo prevede pioggia.\nNel pomeriggio informo il cliente con una mail breve e chiara: che cosa succede, che cosa facciamo e quando ripartono i lavori.",
+g:[["pioggia","chuva","s.f."],["stanotte","esta noite, a noite passada","avv."],["scavo","escavação, vala","s.m."],["operai","operários","s.m.pl."],["pareti","paredes","s.f.pl."],["stabili","estáveis","agg."],["ditta","empresa, firma","s.f."],["specializzata","especializada","agg."],["pompe","bombas","s.f.pl."],["asciutto","seco","agg."],["recuperarlo","recuperá-lo (recuperare + lo)","verbo"],["coprire","cobrir","verbo"],["teli","lonas","s.m.pl."],["meteo","previsão do tempo","s.m."],["prevede","prevê (prevedere)","verbo"],["informo","informo (informare)","verbo"],["chiara","clara","agg."],["succede","acontece (succedere)","verbo"],["ripartono","recomeçam (ripartire)","verbo"]],
+v:[["lo scavo","a escavação"],["gli operai","os operários"],["la ditta","a empresa"],["asciutto","seco"],["il telo","a lona"]],
+gr:[["Decidere di + infinito","“Decidiamo anche di coprire lo scavo con dei teli”","Depois de decidere, a ação vem com di + infinitivo.","decidere di + infinito","Decidiamo di rimandare la consegna."],
+["Pergunta dentro da frase","“che cosa succede, che cosa facciamo e quando ripartono i lavori”","Depois de verbos como informare, spiegare e sapere, a pergunta entra na frase sem mudar a ordem das palavras.","verbo + che cosa / quando / dove + frase","Ti spiego che cosa dobbiamo fare."]],
+co:[["recuperare il ritardo","Recuperar o atraso.","Lavoriamo sabato per recuperare il ritardo."],["informare il cliente","Informar o cliente: di ou su + assunto.","Informo il cliente appena ho novità."]],
+q:[["Perché c'è acqua nello scavo?",["Per la pioggia della notte","Per un tubo rotto","Per la neve"]],["Come risolvono il problema?",["Una ditta porta due pompe","Gli operai usano i teli","Aspettano il sole"]],["Di quanto è il ritardo?",["Di un giorno","Di tre ore","Di una settimana"]]]},
+
+{id:"let-a2-10",nivel:"A2",tema:"quotidiano",titulo:"Lo sciopero dei treni",
+base:"Venerdì voglio andare a Milano per una fiera di edilizia, ma c'è uno sciopero dei treni dalle nove alle diciassette.\nControllo il sito delle ferrovie: alcuni treni sono garantiti, ma il mio è cancellato. Posso cambiare il biglietto senza pagare o chiedere il rimborso.\nScelgo un treno alle sette e venti, prima dello sciopero. Devo svegliarmi alle cinque e mezza, che fatica! Per il ritorno prendo un treno alle diciotto.\nIn stazione c'è molta gente e una lunga fila alla biglietteria. Per fortuna ho già il biglietto sul telefono. Il treno parte con dieci minuti di ritardo, ma arrivo a Milano in tempo per l'apertura della fiera.",
+g:[["fiera","feira (de negócios)","s.f."],["edilizia","construção civil","s.f."],["sciopero","greve","s.m."],["sito","site","s.m."],["ferrovie","ferrovias","s.f.pl."],["garantiti","garantidos","agg."],["cancellato","cancelado","agg."],["cambiare","trocar, mudar","verbo"],["rimborso","reembolso","s.m."],["scelgo","escolho (scegliere)","verbo"],["svegliarmi","acordar (svegliarsi)","verbo"],["fatica","che fatica! = que canseira!","s.f."],["gente","gente, pessoas","s.f."],["fila","fila","s.f."],["biglietteria","bilheteria","s.f."],["apertura","abertura","s.f."]],
+v:[["lo sciopero","a greve"],["il rimborso","o reembolso"],["la fiera","a feira (de negócios)"],["la fila","a fila"],["in tempo","a tempo"]],
+gr:[["Reflexivo no infinitivo","“Devo svegliarmi alle cinque e mezza”","Com dovere, potere e volere, o pronome reflexivo se junta ao infinitivo e acompanha quem faz a ação.","devo svegliarmi · devi svegliarti · deve svegliarsi","Domani dobbiamo alzarci presto."],
+["Senza + infinito","“cambiare il biglietto senza pagare”","Senza + infinitivo equivale a “sem + infinitivo” em português.","senza + infinito","Non posso entrare senza mostrare il documento."]],
+co:[["chiedere il rimborso","Pedir o reembolso de uma passagem ou compra.","Se il treno è cancellato, puoi chiedere il rimborso."],["con dieci minuti di ritardo","O tamanho do atraso: con + tempo + di ritardo.","L'autobus arriva con dieci minuti di ritardo."]],
+q:[["Perché Lucas va a Milano?",["Per una fiera di edilizia","Per una riunione con il cliente","Per una vacanza"]],["Che cosa succede al suo treno?",["È cancellato","È in ritardo di un'ora","Parte da un altro binario"]],["A che ora parte il nuovo treno?",["Alle sette e venti","Alle cinque e mezza","Alle nove"]]]},
+
+{id:"let-a2-11",nivel:"A2",tema:"quotidiano",titulo:"Una prenotazione al telefono",
+base:"— Hotel Bellavista, buonasera.\n— Buonasera. Vorrei prenotare una camera doppia per il fine settimana del dodici e tredici aprile.\n— Vediamo… Sì, abbiamo una doppia con vista sul lago a centoventi euro a notte, colazione inclusa.\n— C'è anche una camera più economica?\n— Sì, senza vista costa novantacinque euro.\n— Prendo quella. È possibile arrivare tardi, verso le ventidue?\n— Certo, la reception è aperta tutta la notte. C'è anche il parcheggio, ma si paga a parte: dieci euro al giorno.\n— Va bene. Posso cancellare gratis?\n— Sì, fino a due giorni prima dell'arrivo.\n— Perfetto. Il nome è Moura.\n— Grazie, signor Moura. Le mando la conferma per mail.",
+g:[["prenotare","reservar","verbo"],["doppia","de casal, para duas pessoas","agg."],["fine","il fine settimana = o fim de semana","s.m."],["vista","vista","s.f."],["inclusa","incluída","agg."],["economica","econômica, mais barata","agg."],["quella","aquela","pron."],["aperta","aberta","agg."],["parcheggio","estacionamento","s.m."],["parte","a parte = à parte, separado","s.f."],["cancellare","cancelar","verbo"],["gratis","de graça","avv."],["arrivo","chegada","s.m."],["conferma","confirmação","s.f."]],
+v:[["prenotare una camera","reservar um quarto"],["la camera doppia","o quarto para duas pessoas"],["a notte","por noite"],["il parcheggio","o estacionamento"],["la conferma","a confirmação"]],
+gr:[["Quello como pronome","“Prendo quella”","Quello / quella substitui um substantivo já citado (aqui, la camera) e concorda com ele.","quello (m.) · quella (f.) · quelli · quelle","Quale tavolo preferisce? — Quello vicino alla finestra."],
+["È possibile + infinito","“È possibile arrivare tardi, verso le ventidue?”","Um jeito educado de perguntar se algo pode ser feito.","è possibile + infinito","È possibile pagare con la carta?"]],
+co:[["prenotare una camera","Reservar um quarto: per + noites ou datas.","Prenoto una camera per due notti."],["pagare a parte","O que não está incluído no preço se paga à parte.","La colazione si paga a parte."]],
+q:[["Quale camera sceglie il signor Moura?",["La doppia senza vista","La doppia con vista sul lago","Una singola"]],["Quanto costa il parcheggio?",["Dieci euro al giorno","È gratis","Novantacinque euro"]],["Fino a quando può cancellare gratis?",["Fino a due giorni prima dell'arrivo","Fino al giorno dell'arrivo","Non può cancellare"]]]},
+
+{id:"let-a2-12",nivel:"A2",tema:"quotidiano",titulo:"Una cena tra amici",
+base:"Sabato sera invito a cena quattro amici. Voglio preparare un piatto brasiliano, ma con ingredienti italiani: non è facile!\nLa mattina vado al supermercato con la lista della spesa. Compro riso, fagioli neri, carne di manzo, aglio e cipolle. Non trovo la farina di manioca, quindi la sostituisco con il pane.\nCucinare per cinque persone richiede tempo: comincio alle quattro del pomeriggio. Mentre la carne cuoce, apparecchio la tavola e metto in fresco le bibite.\nGli amici arrivano alle otto e portano il vino e il dolce. Tutti assaggiano con curiosità e chiedono la ricetta. Marco dice che il mio riso è più buono del risotto di sua nonna. Non ci credo, ma sono felice!",
+g:[["invito","convido (invitare)","verbo"],["piatto","prato","s.m."],["ingredienti","ingredientes","s.m.pl."],["lista","lista","s.f."],["riso","arroz","s.m."],["fagioli","feijões","s.m.pl."],["manzo","carne bovina","s.m."],["aglio","alho","s.m."],["cipolle","cebolas","s.f.pl."],["farina","farinha","s.f."],["sostituisco","substituo (sostituire)","verbo"],["mentre","enquanto","cong."],["cuoce","cozinha, está no fogo (cuocere)","verbo"],["apparecchio","ponho a mesa (apparecchiare)","verbo"],["bibite","bebidas, refrigerantes","s.f.pl."],["assaggiano","provam (assaggiare)","verbo"],["ricetta","receita","s.f."],["credo","acredito (credere)","verbo"]],
+v:[["invitare a cena","convidar para jantar"],["la lista della spesa","a lista de compras"],["apparecchiare la tavola","pôr a mesa"],["la ricetta","a receita"],["mettere in fresco","pôr para gelar"]],
+gr:[["Mentre","“Mentre la carne cuoce, apparecchio la tavola”","Mentre liga duas ações que acontecem ao mesmo tempo: enquanto.","mentre + ação 1, ação 2","Mentre aspetto il treno, leggo le mail."],
+["Più… di","“il mio riso è più buono del risotto di sua nonna”","Na comparação, o segundo termo vem com di, que se junta ao artigo.","più + adjetivo + di (+ artigo)","Questo caffè è più forte del mio."]],
+co:[["invitare a cena","Convidar alguém para jantar: a cena, sem artigo.","Vi invito a cena venerdì."],["chiedere la ricetta","Pedir a receita: a + pessoa.","Mi chiedono sempre la ricetta della torta."]],
+q:[["Che cosa vuole preparare Lucas?",["Un piatto brasiliano","Un risotto italiano","Una pizza"]],["Che cosa non trova al supermercato?",["La farina di manioca","I fagioli neri","La carne di manzo"]],["Che cosa portano gli amici?",["Il vino e il dolce","Il pane e il riso","Le bibite"]]]}
+];
+const LETTURE=LETTURE_SRC.map(x=>({id:x.id,nivel:x.nivel,tema:x.tema,titulo:x.titulo,
+ versoes:{base:x.base,intermedio:x.intermedio||"",avanzato:x.avanzato||""},
+ glossario:x.g.map(g=>({it:g[0],pt:g[1],classe:g[2]})),
+ notas:{vocabulario:x.v.map(v=>({it:v[0],pt:v[1]})),gramatica:x.gr.map(g=>({titulo:g[0],trecho:g[1],explicacao:g[2],regra:g[3],exemplo:g[4]})),colocacoes:x.co.map(c=>({it:c[0],explicacao:c[1],exemplo:c[2]}))},
+ quiz:x.q.map(q=>({pergunta:q[0],opcoes:q[1],correta:0}))}));
+
+/* ============================ LETTURE: leituras graduadas com quiz ============================ */
+// Progresso por perfil em S.leituras: { <id do texto>: { done: "AAAA-MM-DD" } } — guarda só a primeira data em que as 3 respostas ficaram certas.
+const LETI=Object.fromEntries(LETTURE.map(t=>[t.id,t]));
+const TEMAS={lavoro:"Trabalho",quotidiano:"Cotidiano"};
+const LT={cur:null,lvl:"all",q:"",quiz:{}};
+function letDone(id){const r=(S.leituras||{})[id];return r&&r.done?r.done:""}
+function letDoneN(){return LETTURE.filter(t=>letDone(t.id)).length}
+function letNext(){return LETTURE.find(t=>!letDone(t.id))||null}
+function letGloss(k){const t=LT.cur;if(!t)return null;const kk=String(k).toLowerCase().replace(/’/g,"'").replace(/'$/,"");return t.glossario.find(g=>g.it.toLowerCase()===kk)||null}
+function letVersao(t){return"base"} // Fase 3: seletor Base / Intermedio / Avanzato
+function openLet(id){const t=LETI[id];if(!t)return;stopLines();LT.cur=t;try{localStorage.setItem(KEY+".let",id)}catch(e){}renderLet();window.scrollTo(0,0)}
+function closeLet(){stopLines();LT.cur=null;try{localStorage.removeItem(KEY+".let")}catch(e){}renderLet();window.scrollTo(0,0)}
+function renderLet(){if(!$("#letBox"))return;LT.cur?renderLetText():renderLetIndex()}
+
+/* ---------- índice ---------- */
+function renderLetIndex(){const box=$("#letBox"),n=letDoneN(),tot=LETTURE.length;
+ box.innerHTML=`<div class="stack" style="gap:6px"><div class="lvlhead"><div><h2>Textos</h2><p class="muted small">Leituras curtas de trabalho e do dia a dia, com notas e 3 perguntas. Toque em qualquer palavra para ver a tradução.</p></div><span class="pill ${n===tot?"ok":"todo"}">${n}/${tot} concluídos</span></div><div class="lvlbar"><i style="width:${n/tot*100}%"></i></div></div>
+ <input type="search" id="letQ" class="prefq" placeholder="Buscar pelo título" aria-label="Buscar texto pelo título" value="${esc(LT.q)}" autocomplete="off">
+ <div class="gnav" id="letLvl" role="tablist" aria-label="Filtrar por nível">${[["all","Todos"],["A1","A1"],["A2","A2"]].map(([k,l])=>`<button role="tab" data-llvl="${k}" class="${LT.lvl===k?"on":""}" aria-selected="${LT.lvl===k}">${l} · ${LETTURE.filter(t=>k==="all"||t.nivel===k).length}</button>`).join("")}</div>
+ <div class="tlist" id="letList"></div>`;
+ $("#letQ").oninput=e=>{LT.q=e.target.value;renderLetList()};
+ $$("#letLvl [data-llvl]").forEach(b=>b.onclick=()=>{LT.lvl=b.dataset.llvl;renderLetIndex()});
+ renderLetList()}
+function renderLetList(){const box=$("#letList");if(!box)return;const q=norm(LT.q||"");
+ const items=LETTURE.filter(t=>(LT.lvl==="all"||t.nivel===LT.lvl)&&(!q||norm(t.titulo).includes(q)));
+ box.innerHTML=items.length?items.map(t=>{const d=letDone(t.id);return`<button class="tcard${d?" done":""}" data-let-open="${t.id}"><span class="tn">${d?"✓":LETTURE.indexOf(t)+1}</span><div><h3>${esc(t.titulo)}</h3><p>${t.nivel} · ${TEMAS[t.tema]||t.tema}</p></div><span class="pill ${d?"ok":""}">${d?"lido":"novo"}</span></button>`}).join(""):`<div class="card"><p class="muted small">Nenhum texto com esse título.</p></div>`;
+ $$("#letList [data-let-open]").forEach(b=>b.onclick=()=>openLet(b.dataset.letOpen))}
+
+/* ---------- tela do texto ---------- */
+function renderLetText(){const t=LT.cur,box=$("#letBox"),i=LETTURE.indexOf(t),prev=LETTURE[i-1],next=LETTURE[i+1],paras=t.versoes[letVersao(t)].split("\n"),N=t.notas;
+ box.innerHTML=`<button class="back" id="letBack">← Textos</button>
+ <div class="tophead"><span class="label">${t.nivel} · ${TEMAS[t.tema]||t.tema} · texto ${i+1} de ${LETTURE.length}</span><h2 class="it lettit">${esc(t.titulo)}</h2></div>
+ ${canSpeak?`<div class="row" id="letPlayer"><button class="btn" id="letRead">${SPK_SVG}Ouvir o texto</button><button class="btn ghost" id="letStop" hidden>Parar</button></div>`:`<p class="small muted">Este aparelho não tem voz em italiano para ouvir o texto.</p>`}
+ <article class="card stack lettext">${paras.map(p=>`<p class="letp"><span class="it">${esc(p)}</span></p>`).join("")}</article>
+ <p class="hint">Toque numa palavra para ver a tradução e salvar em Preferiti. Para salvar uma frase, use “Marcar um trecho” no painel da palavra.</p>
+ <div class="stack" style="gap:12px"><h3>Note linguistiche</h3>
+  <details class="exs" open><summary><span class="label">Vocabulário</span><span class="exn">${N.vocabulario.length}</span></summary><div class="exlist">${N.vocabulario.map(v=>`<div class="exrow"><div><i class="it">${esc(v.it)}</i><span>${esc(v.pt)}</span></div>${spkBtn(v.it)}</div>`).join("")}</div></details>
+  <details class="exs"><summary><span class="label">Gramática</span><span class="exn">${N.gramatica.length}</span></summary><div class="exlist">${N.gramatica.map(g=>`<div class="letnote"><b>${esc(g.titulo)}</b><p class="it">${esc(g.trecho)}</p><p class="small">${esc(g.explicacao)}</p><div class="formbox"><span class="label">Regra</span><div class="f">${esc(g.regra)}</div></div><div class="exi"><div><i class="it">${esc(g.exemplo)}</i></div>${spkBtn(g.exemplo)}</div></div>`).join("")}</div></details>
+  <details class="exs"><summary><span class="label">Colocações</span><span class="exn">${N.colocacoes.length}</span></summary><div class="exlist">${N.colocacoes.map(c=>`<div class="letnote"><b class="it">${esc(c.it)}</b><p class="small">${esc(c.explicacao)}</p><div class="exi"><div><i class="it">${esc(c.exemplo)}</i></div>${spkBtn(c.exemplo)}</div></div>`).join("")}</div></details>
+ </div>
+ <div id="letQuiz" class="stack"></div>
+ <div class="row" style="justify-content:space-between">${prev?`<button class="btn" data-let-open="${prev.id}">← Anterior</button>`:"<span></span>"}${next?`<button class="btn" data-let-open="${next.id}">Próximo →</button>`:"<span></span>"}</div>`;
+ tokenize(box);
+ $("#letBack").onclick=closeLet;
+ $$("#letBox > .row [data-let-open]").forEach(b=>b.onclick=()=>openLet(b.dataset.letOpen));
+ if($("#letRead")){$("#letRead").onclick=()=>{$("#letStop").hidden=false;readLines(paras.map(p=>p.replace(/^—\s*/,"")),$$("#letBox .letp"))};$("#letStop").onclick=()=>{stopLines();$("#letStop").hidden=true}}
+ renderLetQuiz()}
+
+/* ---------- Comprensione: 3 perguntas; o texto conta como lido com as 3 certas ---------- */
+function renderLetQuiz(){const t=LT.cur,box=$("#letQuiz");if(!t||!box)return;const st=LT.quiz[t.id]=LT.quiz[t.id]||{ans:{},ord:{}},n=t.quiz.length,done=letDone(t.id);
+ const right=t.quiz.filter((q,i)=>st.ans[i]===q.correta).length,answered=Object.keys(st.ans).length;
+ let h=`<div class="row" style="justify-content:space-between"><h3>Comprensione</h3><div class="row" style="gap:8px"><span class="chip${right===n?" hot":""}" id="letCount">${right}/${n}</span>${answered?`<button class="btn ghost small" id="letClear">Limpar</button>`:""}</div></div>`;
+ if(done&&!answered)h+=`<div class="fb ok"><b>Texto concluído em ${fmtBR(done)}.</b><span>Você pode responder de novo para treinar.</span></div>`;
+ else if(!done)h+=`<p class="muted small">Acerte as ${n} perguntas para marcar este texto como lido.</p>`;
+ t.quiz.forEach((q,i)=>{if(!st.ord[i])st.ord[i]=shuffle(q.opcoes.map((_,k)=>k));const a=st.ans[i];
+  h+=`<div class="qz"><span class="qn">Pergunta ${i+1} de ${n}</span><div class="qq it">${esc(q.pergunta)}</div><div class="opts">${st.ord[i].map(k=>`<button class="opt${a!=null?(k===q.correta?" right":k===a?" wrong":""):""}" data-lq="${i}" data-k="${k}" ${a!=null?"disabled":""}>${esc(q.opcoes[k])}</button>`).join("")}</div></div>`});
+ if(answered===n)h+=right===n?`<div class="fb ok"><b>${n}/${n}: texto lido!</b><span>${done?"Concluído em "+fmtBR(done)+".":""}</span></div>`:`<div class="fb no"><b>${right}/${n} certas.</b><span>Releia o texto e toque em “Limpar” para tentar de novo.</span></div>`;
+ box.innerHTML=h;tokenize(box);
+ $$("#letQuiz [data-lq]").forEach(b=>b.onclick=()=>{const i=+b.dataset.lq;if(st.ans[i]!=null)return;st.ans[i]=+b.dataset.k;
+  if(Object.keys(st.ans).length===n&&t.quiz.every((q,j)=>st.ans[j]===q.correta)){S.leituras=S.leituras||{};if(!S.leituras[t.id])S.leituras[t.id]={done:today()};logInc("n",1);save();renderHome()}
+  renderLetQuiz()});
+ if($("#letClear"))$("#letClear").onclick=()=>{LT.quiz[t.id]={ans:{},ord:{}};renderLetQuiz()}}
+
+/* ---------- cartão na tela inicial ---------- */
+function renderHomeLet(){const el=$("#homeLet");if(!el)return;const n=letDoneN(),tot=LETTURE.length,t=letNext();
+ el.innerHTML=`<div class="row" style="justify-content:space-between"><span class="label">Textos · ${n}/${tot} concluídos</span>${t?`<span class="cefr">${t.nivel}</span>`:""}</div>${t?`<h3>${esc(t.titulo)}</h3><p class="small muted">${TEMAS[t.tema]||t.tema} · leitura curta com 3 perguntas</p><div class="row"><button class="btn primary" data-goto="news" data-let="${t.id}">Ler agora</button></div>`:`<h3>Todos os textos lidos</h3><div class="row"><button class="btn" data-goto="news" data-let="index">Reler um texto</button></div>`}`}
+
 /* ============================ INÍCIO ============================ */
 syncFavCards();syncErrCards();syncSentCards();renderDecks();renderBoxes();renderHome();updateFavCount();
-try{const ns=localStorage.getItem(KEY+".ns");if(["read","cal","favs"].includes(ns))setNS(ns)}catch(e){}
+try{const lt=localStorage.getItem(KEY+".let");if(lt&&LETI[lt])LT.cur=LETI[lt];const ns=localStorage.getItem(KEY+".ns");if(ns)setNS(ns)}catch(e){}
 initCloud();
 (function(){let start="inicio";const h=location.hash.slice(1);
  if(VALID.includes(h))start=h;else{try{const t=localStorage.getItem(KEY+".tab");if(VALID.includes(t))start=t}catch(e){}}
