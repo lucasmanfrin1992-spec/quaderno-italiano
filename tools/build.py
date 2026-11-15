@@ -44,7 +44,16 @@ bk='''<p class="small muted">O progresso fica salvo neste aparelho, separado por
     </div>'''
 o='<p class="small muted">O progresso fica salvo na sua conta e neste aparelho.</p>\n    </div>'
 assert o in out;out=out.replace(o,bk,1)
-out=out.replace('<div class="sheetback" id="sheetBack" hidden></div>','<div class="profov" id="profOv" role="dialog" aria-modal="true" aria-labelledby="profTitle" hidden><div class="profin" id="profIn"></div></div>\n\n<div class="sheetback" id="sheetBack" hidden></div>',1)
+# atualizações: cartão no fim da tela Início (só no PWA)
+_hp='    <div class="card stack" id="homePainel"></div>\n'
+assert _hp in out,'homePainel'
+out=out.replace(_hp,_hp+'''    <div class="card stack" id="updCard">
+      <div class="row" style="justify-content:space-between"><h3>Atualizações do app</h3><span class="chip" id="updVer"></span></div>
+      <p class="small muted" id="updMsg" role="status">Quando houver uma versão nova, ela aparece aqui e num aviso no topo da tela.</p>
+      <div class="row"><button class="btn" id="updCheck">Verificar atualizações</button><button class="btn primary" id="updGo" hidden>Atualizar agora</button></div>
+    </div>
+''',1)
+out=out.replace('<div class="sheetback" id="sheetBack" hidden></div>','<div class="profov" id="profOv" role="dialog" aria-modal="true" aria-labelledby="profTitle" hidden><div class="profin" id="profIn"></div></div>\n\n<div class="updbar" id="updBar" role="status" hidden><span id="updBarTxt">Nova versão do app disponível.</span><button class="btn small" id="updBarGo">Atualizar</button><button class="updx" id="updBarX" aria-label="Agora não">✕</button></div>\n\n<div class="sheetback" id="sheetBack" hidden></div>',1)
 # 3 KEY
 kb=pwa[pwa.index('const PROFILES=['):]
 kb=kb[:kb.index('const KEY=')]+kb[kb.index('const KEY='):kb.index('\n',kb.index('const KEY='))]
@@ -73,5 +82,10 @@ _ini='/* ============================ INÍCIO ============================ */'
 assert _ini in tail,'inicio'
 tail=tail.replace(_ini,r('pwa_sync.js')+_ini,1)
 out=out[:out.rindex('</script>')]+tail+'</script>\n\n</body>\n</html>\n'
+# versão do app = versão do cache em sw.js (o botão de atualizar compara as duas)
+import re as _re2
+_v=_re2.search(r'const V="([^"]+)"',open(os.path.join(ROOT,'sw.js')).read()).group(1)
+assert 'const APP_V="' in out,'APP_V'
+out=_re2.sub(r'const APP_V="[^"]*";','const APP_V="'+_v+'";',out,count=1)
 open(os.path.join(ROOT,'index.html'),'w').write(out)
 print(len(out))

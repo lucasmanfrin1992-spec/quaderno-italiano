@@ -929,6 +929,12 @@ nobr{white-space:nowrap}
 .iovbar{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 0 10px;background:var(--paper)}
 .iovin{max-width:720px;margin:0 auto}
 html.noscroll,html.noscroll body{overflow:hidden}
+/* atualizações do app (PWA) */
+.updbar{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:45;width:min(94vw,520px);display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--paper);border-radius:14px;padding:10px 10px 10px 16px;font-size:.92rem;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.updbar[hidden]{display:none}
+.updbar span{flex:1;min-width:0}
+.updbar .btn{background:var(--saffron);border-color:var(--saffron);color:#1a1405;flex:none}
+.updx{background:none;border:0;color:var(--paper);font-size:1rem;padding:6px 8px;flex:none;opacity:.8}
 
 /* perfis */
 .pchip{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:var(--ink)}
@@ -998,6 +1004,11 @@ html.noscroll,html.noscroll body{overflow:hidden}
     <div class="card" id="homeLet"></div>
     <div class="card" id="homeNews"><span class="label">Notícia do dia</span><p class="muted small">Carregando…</p></div>
     <div class="card stack" id="homePainel"></div>
+    <div class="card stack" id="updCard">
+      <div class="row" style="justify-content:space-between"><h3>Atualizações do app</h3><span class="chip" id="updVer"></span></div>
+      <p class="small muted" id="updMsg" role="status">Quando houver uma versão nova, ela aparece aqui e num aviso no topo da tela.</p>
+      <div class="row"><button class="btn" id="updCheck">Verificar atualizações</button><button class="btn primary" id="updGo" hidden>Atualizar agora</button></div>
+    </div>
     <p class="hint">Dica: em qualquer texto, toque numa palavra em italiano para ver o significado e os exemplos. A estrela salva a palavra em Preferiti; “Marcar um trecho” salva uma frase inteira.</p>
   </section>
 
@@ -1081,6 +1092,8 @@ html.noscroll,html.noscroll body{overflow:hidden}
 </div>
 
 <div class="profov" id="profOv" role="dialog" aria-modal="true" aria-labelledby="profTitle" hidden><div class="profin" id="profIn"></div></div>
+
+<div class="updbar" id="updBar" role="status" hidden><span id="updBarTxt">Nova versão do app disponível.</span><button class="btn small" id="updBarGo">Atualizar</button><button class="updx" id="updBarX" aria-label="Agora não">✕</button></div>
 
 <div class="sheetback" id="sheetBack" hidden></div>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shWord" hidden>
@@ -6401,10 +6414,33 @@ initCloud();
  if(start==="curso"){try{const tp=localStorage.getItem(KEY+".topic");if(tp&&TOPIC[tp])openTopic(tp,"voc")}catch(e){}}})();
 
 /* ============================ PWA ============================ */
+/* ---------- atualizações: compara a versão aberta com a publicada (sw.js) e atualiza com um toque ---------- */
+const APP_V="quaderno-2026-11-15f";
+const UPD={newV:"",busy:false,last:0};
+function updLabel(v){const m=String(v).match(/(\d{4})-(\d\d)-(\d\d)([a-z0-9]*)$/);return m?`${m[3]}/${m[2]}/${m[1]}${m[4]?" · "+m[4]:""}`:v}
+function updUI(state){const ver=$("#updVer"),msg=$("#updMsg"),go=$("#updGo"),chk=$("#updCheck"),bar=$("#updBar");if(ver)ver.textContent="versão "+updLabel(APP_V);
+ const has=!!UPD.newV&&UPD.newV!==APP_V;
+ if(msg)msg.textContent=state==="checking"?"Verificando…":state==="updating"?"Atualizando… o app vai recarregar.":state==="offline"?"Sem conexão. Tente de novo quando a internet voltar.":state==="error"?"Não consegui verificar agora. Tente de novo em instantes.":has?`Versão nova disponível (${updLabel(UPD.newV)}). Seu progresso fica salvo.`:state==="ok"?"Você já está com a versão mais nova.":msg.textContent;
+ if(go){go.hidden=!has;go.disabled=state==="updating"}if(chk)chk.disabled=state==="checking"||state==="updating";
+ if(bar){let dis="";try{dis=sessionStorage.getItem("quaderno.updHide")||""}catch(e){}bar.hidden=!has||dis===UPD.newV;const t=$("#updBarTxt");if(t)t.textContent="Nova versão do app disponível.";const b=$("#updBarGo");if(b)b.disabled=state==="updating"}}
+async function updCheck(manual){if(UPD.busy)return;if(navigator.onLine===false){if(manual)updUI("offline");return}UPD.busy=true;if(manual)updUI("checking");
+ try{const r=await fetch("sw.js?check="+Date.now(),{cache:"no-store"});if(!r.ok)throw 0;const m=(await r.text()).match(/const V="([^"]+)"/);UPD.newV=m?m[1]:"";UPD.last=Date.now();UPD.busy=false;updUI(manual?"ok":"")}
+ catch(e){UPD.busy=false;if(manual)updUI(navigator.onLine===false?"offline":"error")}}
+async function updApply(){updUI("updating");try{save()}catch(e){}
+ try{if("serviceWorker" in navigator){const reg=await navigator.serviceWorker.getRegistration();if(reg){await reg.update().catch(()=>{});if(reg.waiting)reg.waiting.postMessage("skipWaiting")}}}catch(e){}
+ try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.filter(k=>k.startsWith("quaderno-")&&k!=="quaderno-news"&&k!=="quaderno-fonts").map(k=>caches.delete(k)))}}catch(e){}
+ location.replace(location.pathname+"?v="+encodeURIComponent(UPD.newV||Date.now())+location.hash)}
+(function(){try{if(/[?&]v=/.test(location.search))history.replaceState(null,"",location.pathname+location.hash)}catch(e){}
+ updUI("");const c=$("#updCheck"),g=$("#updGo"),bg=$("#updBarGo"),bx=$("#updBarX");
+ if(c)c.onclick=()=>updCheck(true);if(g)g.onclick=updApply;if(bg)bg.onclick=updApply;
+ if(bx)bx.onclick=()=>{try{sessionStorage.setItem("quaderno.updHide",UPD.newV)}catch(e){}$("#updBar").hidden=true};
+ setTimeout(()=>updCheck(false),2500);
+ document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&Date.now()-UPD.last>15*60*1000)updCheck(false)});
+ window.addEventListener("online",()=>updCheck(false))})();
 (function(){
  if("serviceWorker" in navigator){window.addEventListener("load",()=>{let reloaded=false;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(reloaded)return;reloaded=true;location.reload()});
    navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(reg=>{reg.update().catch(()=>{});
-   reg.addEventListener("updatefound",()=>{const w=reg.installing;w&&w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller){const b=$("#bkMsg");}})})}).catch(()=>{})})}
+   reg.addEventListener("updatefound",()=>{const w=reg.installing;w&&w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller){updCheck(false)}})})}).catch(()=>{})})}
  const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
  let hidden=false;try{hidden=localStorage.getItem(KEY+".installHide")==="1"}catch(e){}
  const card=$("#installCard"),btn=$("#installBtn");let deferred=null;
