@@ -6914,7 +6914,7 @@ initCloud();
 
 /* ============================ PWA ============================ */
 /* ---------- atualizações: compara a versão aberta com a publicada (sw.js) e atualiza com um toque ---------- */
-const APP_V="quaderno-2026-11-15j";
+const APP_V="quaderno-2026-11-15k";
 const UPD={newV:"",busy:false,last:0};
 function updLabel(v){const m=String(v).match(/(\d{4})-(\d\d)-(\d\d)([a-z0-9]*)$/);return m?`${m[3]}/${m[2]}/${m[1]}${m[4]?" · "+m[4]:""}`:v}
 function updUI(state){const ver=$("#updVer"),msg=$("#updMsg"),go=$("#updGo"),chk=$("#updCheck"),bar=$("#updBar");if(ver)ver.textContent="versão "+updLabel(APP_V);
