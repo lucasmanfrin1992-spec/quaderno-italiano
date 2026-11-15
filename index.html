@@ -1009,6 +1009,7 @@ html.noscroll,html.noscroll body{overflow:hidden}
       <p class="small muted" id="updMsg" role="status">Quando houver uma versão nova, ela aparece aqui e num aviso no topo da tela.</p>
       <div class="row"><button class="btn" id="updCheck">Verificar atualizações</button><button class="btn primary" id="updGo" hidden>Atualizar agora</button></div>
     </div>
+    <div class="card stack" id="homeAudio"></div>
     <p class="hint">Dica: em qualquer texto, toque numa palavra em italiano para ver o significado e os exemplos. A estrela salva a palavra em Preferiti; “Marcar um trecho” salva uma frase inteira.</p>
   </section>
 
@@ -2877,7 +2878,7 @@ const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random(
 const pick=a=>a[Math.random()*a.length|0];
 const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[’`]/g,"'").replace(/\s+/g," ").trim();
 const canSpeak="speechSynthesis" in window;
-function speak(t){if(!canSpeak)return;audioPause();try{const u=new SpeechSynthesisUtterance(String(t).replace(/\(.*?\)/g,"").replace(/\.\.\./g,"").replace(/___/g,""));u.lang="it-IT";u.rate=.9;const bv=typeof bestVoice==="function"?bestVoice():null;if(bv)u.voice=bv;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+function speak(t){if(!canSpeak)return;audioPause();sayIt(String(t).replace(/\(.*?\)/g,"").replace(/\.\.\./g,"").replace(/___/g,""),{rate:.9})}
 function spkBtn(t){return canSpeak?`<button class="spk" data-say="${esc(t)}" aria-label="Ouvir pronúncia">${SPK_SVG}</button>`:""}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-say]");if(b){e.stopPropagation();speak(b.dataset.say)}});
 const TOPIC=Object.fromEntries(COURSE.map(t=>[t.id,t]));
@@ -3089,7 +3090,7 @@ function renderHome(){const {due,nw}=updateChips();$("#nDue").textContent=due;$(
  $("#todayTitle").textContent=due+nw?(due+nw)+" cartões te esperando":"Tudo em dia por hoje";
  const t=nextTopic(),c=tprog(t.id),doneN=COURSE.filter(x=>isDone(x.id)).length;
  $("#homeCourse").innerHTML=`<div class="row" style="justify-content:space-between"><span class="label">Curso · ${doneN}/${COURSE.length} tópicos</span><span class="cefr">${t.lvl}</span></div><h3>${esc(t.t)}</h3><p class="small muted">${esc(t.sub)}</p><div class="row"><button class="btn primary" data-goto="curso" data-topic="${t.id}" data-part="${c.voc?(c.gram?"ex":"gram"):"voc"}">${c.voc?"Continuar":"Começar"} tópico ${t.n}</button></div>`;
- renderHomePref();renderHomeLet();renderHomeCal();renderPainel();
+ renderHomePref();renderHomeLet();renderHomeCal();renderPainel();renderAudioCard();
  renderGoal();renderHomeReview();renderHomeWeak();renderHomeNews()}
 
 /* ============================ DICIONÁRIO AMPLIADO: DADOS ============================ */
@@ -5151,10 +5152,10 @@ function renderStoryQ(t,st,ans){const box=$("#stQ"),n=st.q.length,done=Object.ke
   if(Object.keys(ans.ans).length===n){const c=S.course[t.id]=S.course[t.id]||{};c.hist=1}save();renderStoryQ(t,st,ans)});
  if($("#stRedo"))$("#stRedo").onclick=()=>{STQ[t.id]={ans:{},ord:{}};renderStoryQ(t,st,STQ[t.id])}}
 let RL={tok:0};
-function stopLines(){audioStop();RL.tok++;try{if(canSpeak)speechSynthesis.cancel()}catch(e){}$$(".reading").forEach(e=>{if(!e.closest("#newsBox"))e.classList.remove("reading")})}
-function readLines(lines,els){if(!canSpeak)return;const tok=++RL.tok;let i=0;try{speechSynthesis.cancel()}catch(e){}
+function stopLines(){audioStop();RL.tok++;sayStop();$$(".reading").forEach(e=>{if(!e.closest("#newsBox"))e.classList.remove("reading")})}
+function readLines(lines,els){if(!canSpeak)return;const tok=++RL.tok;let i=0;sayStop();
  const next=()=>{els.forEach(e=>e.classList.remove("reading"));if(tok!==RL.tok||i>=lines.length)return;const el=els[i];if(el)el.classList.add("reading");
-  const u=new SpeechSynthesisUtterance(lines[i]);u.lang="it-IT";u.rate=.85;u.onend=()=>{if(tok!==RL.tok)return;i++;setTimeout(next,350)};u.onerror=()=>{};speechSynthesis.speak(u)};next()}
+  sayIt(lines[i],{rate:.85,onend:()=>{if(tok!==RL.tok)return;i++;setTimeout(next,350)}})};next()}
 /* ---------- 2. Cartões de frase ---------- */
 DECKS.frase="Minhas frases";ORDER.frase=[];
 function sentCardId(s,w){return"s:"+hashStr(s+"|"+w)}
@@ -5307,13 +5308,12 @@ function audioStep(){const tok=++AU.tok;audioMarks();
  if(AU.i>=AU.items.length){AU.on=false;AU.i=0;audioUI();return}
  const it=AU.items[AU.i];if(it.el&&document.contains(it.el)){it.el.classList.add("reading");try{const r=it.el.getBoundingClientRect();if(r.top<70||r.bottom>window.innerHeight-90)it.el.scrollIntoView({block:"center",behavior:"smooth"})}catch(e){}}
  audioUI();
- try{const u=new SpeechSynthesisUtterance(it.text);u.lang="it-IT";u.rate=audioRate();const bv=bestVoice();if(bv)u.voice=bv;
-  u.onend=()=>{if(tok!==AU.tok)return;AU.i++;setTimeout(()=>{if(tok===AU.tok)audioStep()},220)};
-  u.onerror=()=>{if(tok!==AU.tok)return;AU.on=false;audioMarks();audioUI()};
-  speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){AU.on=false;audioUI()}}
+ sayIt(it.text,{rate:audioRate(),
+  onend:()=>{if(tok!==AU.tok)return;AU.i++;setTimeout(()=>{if(tok===AU.tok)audioStep()},220)},
+  onerror:c=>{if(tok!==AU.tok)return;AU.on=false;audioMarks();audioUI();const s=AU.box&&AU.box.querySelector("[data-apos]");if(s)s.textContent="Sem som? Use “Testar áudio” na tela Início."}})}
 function audioPlay(){if(!AU.items.length)return;AU.on=true;audioStep()}
-function audioPause(){if(!AU.on)return;AU.on=false;AU.tok++;try{speechSynthesis.cancel()}catch(e){}audioUI()}
-function audioStop(){const was=AU.on||AU.i>0;AU.on=false;AU.tok++;AU.i=0;if(was){try{if(canSpeak)speechSynthesis.cancel()}catch(e){}audioMarks()}audioUI()}
+function audioPause(){if(!AU.on)return;AU.on=false;AU.tok++;sayStop();audioUI()}
+function audioStop(){const was=AU.on||AU.i>0;AU.on=false;AU.tok++;AU.i=0;if(was){sayStop();audioMarks()}audioUI()}
 function audioBind(box,items){const p=box&&box.querySelector("[data-aplay]");if(!p)return false;
  p.onclick=()=>{if(AU.box!==box){audioMount(box,items);audioPlay();return}AU.on?audioPause():audioPlay()};
  box.querySelector("[data-arate]").onclick=()=>{const r=AUDIO_RATES[(AUDIO_RATES.indexOf(audioRate())+1)%AUDIO_RATES.length];S.settings.rate=r;save();
@@ -5326,14 +5326,58 @@ function audioVoicesChanged(){const v=hasItVoice();if(AU_VOICE===v)return;const 
  if(typeof LT!=="undefined"&&LT.cur&&!AU.on&&!$("#v-news").hidden&&!$("#ns-let").hidden)renderLetText()}
 
 /* ============================ VOZ ITALIANA ============================ */
-// escolhe a melhor voz it-IT do aparelho para a pronúncia e a leitura em voz alta
-let IT_VOICES=[],VOICES_SEEN=false;
-function rankVoice(v){const n=v.name||"";let s=0;if(/^it[-_]IT/i.test(v.lang))s+=5;if(/natural|neural|premium|enhanced|siri/i.test(n))s+=4;if(/google/i.test(n))s+=3;if(/compact|eloquence|espeak/i.test(n))s-=4;return s}
+// Escolhe a melhor voz it-IT do aparelho e fala de forma resistente às falhas conhecidas dos navegadores:
+// - Android/Chrome: cancel() seguido de speak() na mesma hora deixa a fala muda → só cancela se algo está tocando, e espera um instante;
+// - vozes "de rede" falham sem internet → a preferência é por vozes locais, e se uma voz falhar, repete sem escolher voz;
+// - a fala pode ficar "pausada" presa → resume() antes de falar;
+// - o navegador pode descartar a fala da memória antes do fim → a fala atual fica guardada em SAY.u.
+let IT_VOICES=[],VOICES_SEEN=false;const BAD_VOICES=new Set();
+function rankVoice(v){const n=v.name||"";let s=0;if(/^it[-_]IT/i.test(v.lang))s+=5;if(/natural|neural|premium|enhanced|siri/i.test(n))s+=4;if(/google/i.test(n))s+=2;if(/compact|eloquence|espeak/i.test(n))s-=4;
+ if(v.localService===false||/network/i.test(n))s-=3;else s+=2;return s}
 function loadVoices(){if(!canSpeak)return;try{const all=speechSynthesis.getVoices();if(all.length)VOICES_SEEN=true;
  IT_VOICES=all.filter(x=>/^it/i.test(x.lang)).map((v,i)=>({v,r:rankVoice(v),i})).sort((a,b)=>b.r-a.r||a.i-b.i).map(x=>x.v)}catch(e){}
- try{audioVoicesChanged()}catch(e){}}
-if(canSpeak){loadVoices();try{speechSynthesis.addEventListener("voiceschanged",loadVoices)}catch(e){}}
-function bestVoice(){return IT_VOICES[0]||null}
+ try{audioVoicesChanged()}catch(e){}try{renderAudioCard()}catch(e){}}
+if(canSpeak){loadVoices();try{speechSynthesis.addEventListener("voiceschanged",loadVoices)}catch(e){try{speechSynthesis.onvoiceschanged=loadVoices}catch(e2){}}}
+function bestVoice(){if(!IT_VOICES.length)loadVoices();return IT_VOICES.find(v=>!BAD_VOICES.has(v.name))||null}
+const SAY={u:null,tok:0,lastCancel:0};
+function sayCancel(){try{speechSynthesis.cancel()}catch(e){}SAY.lastCancel=Date.now()}
+// fala um texto; o: {rate, onstart, onend, onerror(código)}
+function sayIt(text,o){o=o||{};if(!canSpeak){o.onerror&&o.onerror("unsupported");return}const tok=++SAY.tok;let busy=false;
+ try{busy=speechSynthesis.speaking||speechSynthesis.pending}catch(e){}if(busy)sayCancel();
+ const go=(useVoice,retry)=>{if(tok!==SAY.tok)return;let started=false,done=false;
+  try{if(speechSynthesis.paused)speechSynthesis.resume()}catch(e){}
+  const u=new SpeechSynthesisUtterance(text);u.lang="it-IT";u.rate=o.rate||1;const v=useVoice?bestVoice():null;if(v)u.voice=v;SAY.u=u;
+  u.onstart=()=>{started=true;if(tok===SAY.tok&&o.onstart)o.onstart(v)};
+  u.onend=()=>{done=true;if(tok===SAY.tok&&o.onend)o.onend()};
+  u.onerror=e=>{done=true;const c=(e&&e.error)||"erro";if(tok!==SAY.tok||c==="interrupted"||c==="canceled")return;
+   if(v&&!retry){BAD_VOICES.add(v.name);go(false,true);return} // a voz escolhida falhou: tenta com a voz padrão do aparelho
+   if(o.onerror)o.onerror(c)};
+  try{speechSynthesis.speak(u)}catch(e){if(o.onerror)o.onerror("erro");return}
+  // alguns Androids não começam nem avisam erro: se nada aconteceu, tenta mais uma vez com a voz padrão
+  setTimeout(()=>{if(tok!==SAY.tok||started||done)return;let sp=false;try{sp=speechSynthesis.speaking}catch(e){}if(sp)return;
+   if(!retry){if(v)BAD_VOICES.add(v.name);sayCancel();setTimeout(()=>go(false,true),150)}else if(o.onerror)o.onerror("silencio")},2500)};
+ const wait=150-(Date.now()-SAY.lastCancel); // espera um instante depois de qualquer cancelamento recente
+ wait>0?setTimeout(()=>go(true,false),wait):go(true,false)}
+function sayStop(){SAY.tok++;try{if(canSpeak&&(speechSynthesis.speaking||speechSynthesis.pending))sayCancel()}catch(e){}}
+
+/* ---------- cartão Áudio (Início): mostra a voz usada e testa o som ---------- */
+const AUD={msg:""};
+function audioPlatform(){const ua=navigator.userAgent||"";return/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)?"ios":/Android/.test(ua)?"android":"outro"}
+function audioHelp(){const p=audioPlatform();
+ return p==="ios"?"No iPhone: desligue o modo silencioso (chave na lateral) e aumente o volume. Para uma voz melhor: Ajustes › Acessibilidade › Conteúdo Falado › Vozes › Italiano."
+  :p==="android"?"No Android: aumente o volume de mídia. Se não houver voz italiana: Configurações › Sistema › Idiomas › Saída de texto para fala › motor do Google › Instalar dados de voz › Italiano."
+  :"No computador: confira o volume e se o navegador não está sem som. Vozes italianas podem ser instaladas nas configurações de voz do sistema."}
+function renderAudioCard(){const el=$("#homeAudio");if(!el)return;
+ if(!canSpeak){el.innerHTML=`<span class="label">Áudio</span><p class="small">Este navegador não tem leitura em voz alta, por isso o app fica sem som aqui.</p><p class="small muted">Abra o app pelo Chrome (Android) ou pelo Safari (iPhone).</p>`;return}
+ const v=bestVoice(),n=IT_VOICES.length;
+ el.innerHTML=`<div class="row" style="justify-content:space-between"><span class="label">Áudio</span><span class="chip">${n?n+(n===1?" voz italiana":" vozes italianas"):VOICES_SEEN?"sem voz italiana":"procurando vozes…"}</span></div>
+ <p class="small">${v?`Voz usada: <b>${esc(v.name)}</b>${v.localService===false?" (precisa de internet)":""}.`:VOICES_SEEN?"Este aparelho não informou nenhuma voz em italiano. O app tenta falar com a voz padrão, que pode sair com sotaque ou não sair.":"O aparelho ainda não informou as vozes. Toque em Testar áudio."}</p>
+ <div class="row"><button class="btn" id="audTest">Testar áudio</button></div><p class="small" id="audMsg" role="status">${esc(AUD.msg)}</p>
+ <details class="exs"><summary><span class="small">Não sai som?</span></summary><p class="small" style="padding:0 14px 12px">${esc(audioHelp())}</p></details>`;
+ $("#audTest").onclick=()=>{const m=$("#audMsg");audioPause();AUD.msg="Preparando…";m.textContent=AUD.msg;
+  sayIt("Ciao! Sono la Nonna. Mi senti bene?",{rate:1,onstart:vv=>{AUD.msg="Falando"+(vv?" com a voz "+vv.name:" com a voz padrão do aparelho")+"… Você está ouvindo?";const x=$("#audMsg");if(x)x.textContent=AUD.msg},
+   onend:()=>{AUD.msg="Terminou. Se não ouviu nada, veja “Não sai som?” abaixo.";const x=$("#audMsg");if(x)x.textContent=AUD.msg},
+   onerror:c=>{AUD.msg=c==="silencio"?"O aparelho não começou a falar. Veja “Não sai som?” abaixo.":c==="not-allowed"?"O navegador bloqueou o som. Toque de novo em Testar áudio.":"O aparelho não conseguiu falar (erro: "+c+"). Veja “Não sai som?” abaixo.";const x=$("#audMsg");if(x)x.textContent=AUD.msg}})}}
 
 const NEWS={latest:null,cur:null,curDate:null,index:{},cache:{},extra:{},state:"loading",calMonth:null,rendered:null};
 const MONTHS=["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
@@ -5361,16 +5405,15 @@ let READ={state:"idle",tok:0,i:0,texts:[]};
 function hlPara(i){$$("#newsBox .npara,#newsBox .ntitle").forEach(p=>p.classList.remove("reading"));if(i==null||READ.state==="idle")return;const els=[$("#newsBox .ntitle"),...$$("#newsBox .npara")];if(els[i])els[i].classList.add("reading")}
 function speakFrom(i){const tok=++READ.tok;READ.i=i;
  if(i>=READ.texts.length){READ.state="idle";updReadBtn();hlPara(null);return}
- try{const u=new SpeechSynthesisUtterance(READ.texts[i]);u.lang="it-IT";u.rate=.88;
-  u.onend=()=>{if(tok!==READ.tok||READ.state!=="playing")return;speakFrom(i+1)};
-  u.onerror=()=>{if(tok!==READ.tok)return;READ.state="idle";updReadBtn();hlPara(null)};
-  hlPara(i);speechSynthesis.speak(u)}catch(e){READ.state="idle";updReadBtn()}}
+ hlPara(i);sayIt(READ.texts[i],{rate:.88,
+  onend:()=>{if(tok!==READ.tok||READ.state!=="playing")return;speakFrom(i+1)},
+  onerror:()=>{if(tok!==READ.tok)return;READ.state="idle";updReadBtn();hlPara(null)}})}
 function readAll(){if(!canSpeak||!NEWS.cur)return;
- if(READ.state==="playing"){READ.state="paused";READ.tok++;try{speechSynthesis.cancel()}catch(e){}updReadBtn();return}
+ if(READ.state==="playing"){READ.state="paused";READ.tok++;sayStop();updReadBtn();return}
  if(READ.state==="paused"){READ.state="playing";updReadBtn();speakFrom(READ.i);return}
- try{speechSynthesis.cancel()}catch(e){}
+ audioPause();
  READ.texts=[NEWS.cur.title,...(NEWS.cur.paragraphs||[])];READ.state="playing";updReadBtn();speakFrom(0)}
-function stopReading(){READ.state="idle";READ.tok++;try{speechSynthesis.cancel()}catch(e){}updReadBtn();hlPara(null)}
+function stopReading(){READ.state="idle";READ.tok++;sayStop();updReadBtn();hlPara(null)}
 function updReadBtn(){const b=$("#readAll"),st=$("#readStop");if(b)b.innerHTML=READ.state==="playing"?'<svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>Pausar':READ.state==="paused"?'<svg viewBox="0 0 24 24"><path d="M7 5l12 7-12 7z"/></svg>Continuar':SPK_SVG+"Ouvir a notícia";
  if(st)st.hidden=READ.state==="idle"}
 
@@ -6415,7 +6458,7 @@ initCloud();
 
 /* ============================ PWA ============================ */
 /* ---------- atualizações: compara a versão aberta com a publicada (sw.js) e atualiza com um toque ---------- */
-const APP_V="quaderno-2026-11-15f";
+const APP_V="quaderno-2026-11-15g";
 const UPD={newV:"",busy:false,last:0};
 function updLabel(v){const m=String(v).match(/(\d{4})-(\d\d)-(\d\d)([a-z0-9]*)$/);return m?`${m[3]}/${m[2]}/${m[1]}${m[4]?" · "+m[4]:""}`:v}
 function updUI(state){const ver=$("#updVer"),msg=$("#updMsg"),go=$("#updGo"),chk=$("#updCheck"),bar=$("#updBar");if(ver)ver.textContent="versão "+updLabel(APP_V);

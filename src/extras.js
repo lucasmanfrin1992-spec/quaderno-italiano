@@ -24,10 +24,10 @@ function renderStoryQ(t,st,ans){const box=$("#stQ"),n=st.q.length,done=Object.ke
   if(Object.keys(ans.ans).length===n){const c=S.course[t.id]=S.course[t.id]||{};c.hist=1}save();renderStoryQ(t,st,ans)});
  if($("#stRedo"))$("#stRedo").onclick=()=>{STQ[t.id]={ans:{},ord:{}};renderStoryQ(t,st,STQ[t.id])}}
 let RL={tok:0};
-function stopLines(){audioStop();RL.tok++;try{if(canSpeak)speechSynthesis.cancel()}catch(e){}$$(".reading").forEach(e=>{if(!e.closest("#newsBox"))e.classList.remove("reading")})}
-function readLines(lines,els){if(!canSpeak)return;const tok=++RL.tok;let i=0;try{speechSynthesis.cancel()}catch(e){}
+function stopLines(){audioStop();RL.tok++;sayStop();$$(".reading").forEach(e=>{if(!e.closest("#newsBox"))e.classList.remove("reading")})}
+function readLines(lines,els){if(!canSpeak)return;const tok=++RL.tok;let i=0;sayStop();
  const next=()=>{els.forEach(e=>e.classList.remove("reading"));if(tok!==RL.tok||i>=lines.length)return;const el=els[i];if(el)el.classList.add("reading");
-  const u=new SpeechSynthesisUtterance(lines[i]);u.lang="it-IT";u.rate=.85;u.onend=()=>{if(tok!==RL.tok)return;i++;setTimeout(next,350)};u.onerror=()=>{};speechSynthesis.speak(u)};next()}
+  sayIt(lines[i],{rate:.85,onend:()=>{if(tok!==RL.tok)return;i++;setTimeout(next,350)}})};next()}
 /* ---------- 2. Cartões de frase ---------- */
 DECKS.frase="Minhas frases";ORDER.frase=[];
 function sentCardId(s,w){return"s:"+hashStr(s+"|"+w)}

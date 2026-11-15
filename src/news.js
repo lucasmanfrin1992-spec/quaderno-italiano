@@ -24,16 +24,15 @@ let READ={state:"idle",tok:0,i:0,texts:[]};
 function hlPara(i){$$("#newsBox .npara,#newsBox .ntitle").forEach(p=>p.classList.remove("reading"));if(i==null||READ.state==="idle")return;const els=[$("#newsBox .ntitle"),...$$("#newsBox .npara")];if(els[i])els[i].classList.add("reading")}
 function speakFrom(i){const tok=++READ.tok;READ.i=i;
  if(i>=READ.texts.length){READ.state="idle";updReadBtn();hlPara(null);return}
- try{const u=new SpeechSynthesisUtterance(READ.texts[i]);u.lang="it-IT";u.rate=.88;
-  u.onend=()=>{if(tok!==READ.tok||READ.state!=="playing")return;speakFrom(i+1)};
-  u.onerror=()=>{if(tok!==READ.tok)return;READ.state="idle";updReadBtn();hlPara(null)};
-  hlPara(i);speechSynthesis.speak(u)}catch(e){READ.state="idle";updReadBtn()}}
+ hlPara(i);sayIt(READ.texts[i],{rate:.88,
+  onend:()=>{if(tok!==READ.tok||READ.state!=="playing")return;speakFrom(i+1)},
+  onerror:()=>{if(tok!==READ.tok)return;READ.state="idle";updReadBtn();hlPara(null)}})}
 function readAll(){if(!canSpeak||!NEWS.cur)return;
- if(READ.state==="playing"){READ.state="paused";READ.tok++;try{speechSynthesis.cancel()}catch(e){}updReadBtn();return}
+ if(READ.state==="playing"){READ.state="paused";READ.tok++;sayStop();updReadBtn();return}
  if(READ.state==="paused"){READ.state="playing";updReadBtn();speakFrom(READ.i);return}
- try{speechSynthesis.cancel()}catch(e){}
+ audioPause();
  READ.texts=[NEWS.cur.title,...(NEWS.cur.paragraphs||[])];READ.state="playing";updReadBtn();speakFrom(0)}
-function stopReading(){READ.state="idle";READ.tok++;try{speechSynthesis.cancel()}catch(e){}updReadBtn();hlPara(null)}
+function stopReading(){READ.state="idle";READ.tok++;sayStop();updReadBtn();hlPara(null)}
 function updReadBtn(){const b=$("#readAll"),st=$("#readStop");if(b)b.innerHTML=READ.state==="playing"?'<svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>Pausar':READ.state==="paused"?'<svg viewBox="0 0 24 24"><path d="M7 5l12 7-12 7z"/></svg>Continuar':SPK_SVG+"Ouvir a notícia";
  if(st)st.hidden=READ.state==="idle"}
 

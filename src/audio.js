@@ -21,13 +21,12 @@ function audioStep(){const tok=++AU.tok;audioMarks();
  if(AU.i>=AU.items.length){AU.on=false;AU.i=0;audioUI();return}
  const it=AU.items[AU.i];if(it.el&&document.contains(it.el)){it.el.classList.add("reading");try{const r=it.el.getBoundingClientRect();if(r.top<70||r.bottom>window.innerHeight-90)it.el.scrollIntoView({block:"center",behavior:"smooth"})}catch(e){}}
  audioUI();
- try{const u=new SpeechSynthesisUtterance(it.text);u.lang="it-IT";u.rate=audioRate();const bv=bestVoice();if(bv)u.voice=bv;
-  u.onend=()=>{if(tok!==AU.tok)return;AU.i++;setTimeout(()=>{if(tok===AU.tok)audioStep()},220)};
-  u.onerror=()=>{if(tok!==AU.tok)return;AU.on=false;audioMarks();audioUI()};
-  speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){AU.on=false;audioUI()}}
+ sayIt(it.text,{rate:audioRate(),
+  onend:()=>{if(tok!==AU.tok)return;AU.i++;setTimeout(()=>{if(tok===AU.tok)audioStep()},220)},
+  onerror:c=>{if(tok!==AU.tok)return;AU.on=false;audioMarks();audioUI();const s=AU.box&&AU.box.querySelector("[data-apos]");if(s)s.textContent="Sem som? Use “Testar áudio” na tela Início."}})}
 function audioPlay(){if(!AU.items.length)return;AU.on=true;audioStep()}
-function audioPause(){if(!AU.on)return;AU.on=false;AU.tok++;try{speechSynthesis.cancel()}catch(e){}audioUI()}
-function audioStop(){const was=AU.on||AU.i>0;AU.on=false;AU.tok++;AU.i=0;if(was){try{if(canSpeak)speechSynthesis.cancel()}catch(e){}audioMarks()}audioUI()}
+function audioPause(){if(!AU.on)return;AU.on=false;AU.tok++;sayStop();audioUI()}
+function audioStop(){const was=AU.on||AU.i>0;AU.on=false;AU.tok++;AU.i=0;if(was){sayStop();audioMarks()}audioUI()}
 function audioBind(box,items){const p=box&&box.querySelector("[data-aplay]");if(!p)return false;
  p.onclick=()=>{if(AU.box!==box){audioMount(box,items);audioPlay();return}AU.on?audioPause():audioPlay()};
  box.querySelector("[data-arate]").onclick=()=>{const r=AUDIO_RATES[(AUDIO_RATES.indexOf(audioRate())+1)%AUDIO_RATES.length];S.settings.rate=r;save();
