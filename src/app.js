@@ -113,7 +113,7 @@ function tokText(text,extra){let out="",last=0;const re=new RegExp("["+LET+"]+['
   if(/['’]$/.test(w)){const nx=text[off+w.length]||"";if(!new RegExp("["+LET+"]").test(nx)&&!/^po['’]$/i.test(w))w=w.slice(0,-1)}
   out+=esc(text.slice(last,off))+`<button class="w" data-w="${esc(w.toLowerCase().replace(/’/g,"'"))}"${extra||""}>${esc(w)}</button>`;last=off+w.length;re.lastIndex=last}
  // pontuação colada à palavra não se separa dela na quebra de linha (« antes, . , ; : ! ? » depois)
- return (out+esc(text.slice(last))).replace(/([«“(]+)?(<button class="w"[^>]*>[^<]*<\/button>)([.,;:!?»”)…]+)?/g,(m,a,b,c)=>a||c?`<span class="nb">${a||""}${b}${c||""}</span>`:m)}
+ return (out+esc(text.slice(last))).replace(/([«“(]+)?(<button class="w"[^>]*>[^<]*<\/button>)([.,;:!?»”)…]+)?/g,(m,a,b,c)=>a||c?`<nobr>${a||""}${b}${c||""}</nobr>`:m)} // <nobr> e não <span>: várias listas do app estilizam todo span interno
 function tokenize(root){(root||document).querySelectorAll(".it").forEach(el=>{if(el.dataset.tk||el.closest("button,.opt"))return;if(el.querySelector(".it"))return;el.dataset.tk="1";
  const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentElement.closest("button")?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
  nodes.forEach(n=>{if(!n.nodeValue.trim())return;const span=document.createElement("span");span.innerHTML=tokText(n.nodeValue);n.replaceWith(...span.childNodes)})})}

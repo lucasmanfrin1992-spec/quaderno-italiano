@@ -541,4 +541,4 @@ button.w.rsel{background:var(--saffron-soft);box-shadow:0 0 0 2px var(--saffron)
 .aplayer [data-arate]{font-family:var(--mono);min-width:68px;justify-content:center}
 .lsent.reading{background:var(--saffron-soft);box-shadow:0 0 0 3px var(--saffron-soft);border-radius:4px}
 .letp.reading{background:none;box-shadow:none}
-.nb{white-space:nowrap}
+nobr{white-space:nowrap}
