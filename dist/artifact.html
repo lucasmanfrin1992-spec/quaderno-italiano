@@ -780,7 +780,7 @@ nav.tabs .in{grid-template-columns:repeat(5,minmax(0,1fr))}
 .opts.optsw .opt{text-align:center;font-weight:700;overflow-wrap:anywhere}
 .shword.phrase{font-size:1.2rem;line-height:1.3}
 button.w.rsel{background:var(--saffron-soft);box-shadow:0 0 0 2px var(--saffron)}
-.rangebar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:30;width:min(92vw,520px);display:flex;gap:10px;align-items:center;justify-content:space-between;background:var(--ink);color:var(--paper);border-radius:14px;padding:10px 12px 10px 16px;font-size:.92rem;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.rangebar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:36;width:min(92vw,520px);display:flex;gap:10px;align-items:center;justify-content:space-between;background:var(--ink);color:var(--paper);border-radius:14px;padding:10px 12px 10px 16px;font-size:.92rem;box-shadow:0 8px 24px rgba(0,0,0,.25)}
 .rangebar[hidden]{display:none}
 .rangebar .btn{color:var(--ink);background:var(--paper);flex:none}
 .glossl{display:flex;flex-wrap:wrap;gap:6px}
@@ -850,6 +850,71 @@ nobr{white-space:nowrap}
 .duvq{font-size:1.05rem}
 .duva{font-size:.95rem;line-height:1.6;overflow-wrap:anywhere}
 .btn.danger{border-color:var(--bad);color:var(--bad);background:var(--bad-soft)}
+/* v2 fase 8: infográfico de lição */
+.info{container-type:inline-size;container-name:info;max-width:720px;width:100%;margin:0 auto;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
+.ihead{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#C2402A;color:#fff;padding:16px 14px 0 18px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.info.ifull .ihead{cursor:default}
+.ihtxt{display:flex;flex-direction:column;gap:4px;padding-bottom:16px;min-width:0}
+.itrilho{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;opacity:.85}
+.ititle{font-family:var(--display);font-weight:700;font-size:1.75rem;line-height:1.1;color:#fff}
+.isub{font-size:.92rem;opacity:.95}
+.ihint{font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;opacity:.8;margin-top:4px}
+.ihead .nonna.hd{width:108px;flex:none;align-self:flex-end;margin-bottom:-2px}
+.ihead button.w{color:inherit}
+.ibloco{padding:14px 16px 16px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:12px}
+.ibloco:first-of-type{border-top:0}
+.ibtit{margin:0;display:flex;align-items:center;gap:10px;background:var(--cobalt-soft);border-radius:999px;padding:6px 14px 6px 6px;font-family:var(--body);font-weight:800;font-size:.98rem;color:var(--ink)}
+.ibnum{flex:none;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-family:var(--mono);font-size:.85rem}
+.ibody{display:grid;grid-template-columns:1fr;gap:14px}
+.ibody.iside{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);align-items:start}
+@container info (max-width:520px){.ibody.iside{grid-template-columns:1fr}}
+@supports not (container-type:inline-size){@media (max-width:560px){.ibody.iside{grid-template-columns:1fr}}}
+.imain{display:flex;flex-direction:column;gap:10px;min-width:0}
+.itab{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.itab table{font-size:.9rem}
+.itab th{padding:6px 10px}
+.itab td{padding:6px 10px;white-space:normal;vertical-align:top}
+.itab td:first-child{width:52%}
+.itab td b.it,.iex b.it,.iicons b.it,.idica b.it{font-style:normal;color:var(--ink)}
+.idica{background:var(--saffron-soft);border-left:4px solid var(--saffron);border-radius:0 8px 8px 0;padding:8px 12px;font-size:.88rem}
+.idica b.it{font-weight:800}
+.iicons{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.iicons li{display:flex;align-items:center;gap:10px}
+.iicons li>span:last-child{display:flex;flex-direction:column;min-width:0}
+.iicons small,.iex small{color:var(--muted);font-size:.8rem}
+.iic{flex:none;width:36px;height:36px;border-radius:50%;background:var(--cobalt-soft);display:grid;place-items:center}
+.iic svg{width:19px;height:19px;stroke:var(--cobalt);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.iform{border:1.5px solid var(--cobalt);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;background:var(--paper)}
+.iform .it{font-style:normal;color:var(--ink);font-weight:700;font-size:1.02rem;line-height:1.5}
+.iexs{display:grid;gap:6px}
+.iex{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:7px 10px;border:1px solid var(--line);border-radius:10px}
+.iex>div{display:flex;flex-direction:column;min-width:0}
+.iformcard{background:var(--paper);border:1px dashed var(--line);border-radius:12px;padding:12px;display:grid;gap:8px;box-shadow:inset 0 0 0 4px var(--surface)}
+.iformcard div{display:flex;flex-direction:column;border-bottom:1px solid var(--line);padding-bottom:5px}
+.iformcard div:last-child{border-bottom:0}
+.iformcard .it{font-style:normal;color:var(--ink);font-family:var(--mono);font-size:.84rem;overflow-wrap:anywhere}
+.icena{background:var(--paper);border-radius:14px;padding:12px 10px 8px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.ibubs{display:flex;flex-direction:column;gap:8px}
+.ibub{position:relative;max-width:88%;background:var(--surface);border:1.5px solid var(--ink);border-radius:14px;padding:6px 10px 7px;display:flex;flex-direction:column;gap:1px;transition:background .2s}
+.ibub .it{font-style:normal;color:var(--ink);font-weight:700;font-size:.92rem;line-height:1.35}
+.ibub small{color:var(--muted);font-size:.76rem;line-height:1.3}
+.ibwho{font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ibub::after{content:"";position:absolute;bottom:-8px;width:12px;height:12px;background:inherit;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)}
+.ib-n{align-self:flex-start;border-bottom-left-radius:4px}
+.ib-n::after{left:16px;transform:rotate(45deg)}
+.ib-o{align-self:flex-end;border-bottom-right-radius:4px;background:var(--masc-soft)}
+.ib-o::after{right:16px;transform:rotate(45deg)}
+.ibub.reading{background:var(--saffron-soft)}
+.ichars{display:flex;justify-content:space-between;align-items:flex-end;margin-top:6px}
+.ichars svg{width:84px;height:auto}
+.icena .aplayer{justify-content:center}
+.icena .aplayer .btn{padding:7px 12px;font-size:.86rem}
+.icena .anovoice{font-size:.76rem;text-align:center}
+.infoov{position:fixed;inset:0;z-index:35;background:var(--paper);overflow:auto;-webkit-overflow-scrolling:touch;padding:0 max(12px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.infoov[hidden]{display:none}
+.iovbar{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 0 10px;background:var(--paper)}
+.iovin{max-width:720px;margin:0 auto}
+html.noscroll,html.noscroll body{overflow:hidden}
 </style>
 
 <div class="wrap">
@@ -2799,7 +2864,7 @@ function tokenize(root){(root||document).querySelectorAll(".it").forEach(el=>{if
 
 /* ============================ ABAS ============================ */
 const VALID=["inicio","curso","news","preferiti","cartoes"];
-function showTab(name){if(!VALID.includes(name))name="inicio";cancelRange();stopLines();if(name!=="news"&&typeof READ!=="undefined"&&READ.state!=="idle")stopReading();$$("[data-view]").forEach(v=>v.hidden=v.dataset.view!==name);$$("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===name));
+function showTab(name){if(!VALID.includes(name))name="inicio";cancelRange();closeInfoFull();stopLines();if(name!=="news"&&typeof READ!=="undefined"&&READ.state!=="idle")stopReading();$$("[data-view]").forEach(v=>v.hidden=v.dataset.view!==name);$$("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===name));
  try{localStorage.setItem(KEY+".tab",name)}catch(e){}window.scrollTo(0,0);if(name==="cartoes")renderFlash();if(name==="inicio")renderHome();if(name==="curso")renderCourse();if(name==="preferiti"){$("#ps-duv").hidden?renderFavs():renderDuvidas()}if(name==="news"){renderNews();if(!$("#ns-cal").hidden)renderCal();if(!$("#ns-let").hidden)renderLet();if(!$("#ns-modi").hidden)renderModi()}}
 $$("nav.tabs button").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
 document.addEventListener("click",e=>{const g=e.target.closest("[data-goto]");if(g){showTab(g.dataset.goto);if(g.dataset.topic)openTopic(g.dataset.topic,g.dataset.part||"voc");if(g.dataset.let){setNS("let");g.dataset.let==="index"?closeLet():openLet(g.dataset.let)}}});
@@ -2835,7 +2900,7 @@ function renderTopic(){const t=CUR,c=tprog(t.id),idx=COURSE.indexOf(t),nxt=COURS
   const vc=typeof renderVocabCtx==="function"?renderVocabCtx(t):null;
   body.innerHTML=(vc?`<p class="muted small">${t.voc.length} palavras e expressões. Como no livro, o tópico começa por um diálogo em que elas aparecem; depois vêm os cartões, cada um com a frase do diálogo e um exemplo. Toque em qualquer palavra italiana para ver o significado.</p>`+vc:`<p class="muted small">${t.voc.length} palavras e expressões. Toque numa palavra para ver exemplos; o alto-falante pronuncia.</p>
   <div class="vgrid">${t.voc.map(v=>`<div class="vcell"><div><span class="it">${esc(v[0])}</span><span class="pt">${esc(v[1])}</span></div>${spkBtn(v[0])}</div>`).join("")}</div>`)+`
-  <button class="btn primary" data-part-go="gram">Ir para a gramática →</button>`;if(vc&&typeof dlgWire==="function")dlgWire(body,DLG[t.id])}
+  <button class="btn primary" data-part-go="gram">Ir para a gramática →</button>`;if(vc&&typeof dlgWire==="function")dlgWire(body,DLG[t.id]);renderInfoTopic(t,body)}
  else if(CPART==="gram"){markSeen("gram");
   body.innerHTML=t.gram.map(g=>`<section class="gsec"><h3>${esc(g.h)}</h3>${g.html}</section>`).join("")+`<button class="btn primary" data-part-go="hist">Ler a história do tópico →</button>`}
  else if(CPART==="hist"){markSeen("hist");renderStory(body)}
@@ -5178,10 +5243,13 @@ function audioStep(){const tok=++AU.tok;audioMarks();
 function audioPlay(){if(!AU.items.length)return;AU.on=true;audioStep()}
 function audioPause(){if(!AU.on)return;AU.on=false;AU.tok++;try{speechSynthesis.cancel()}catch(e){}audioUI()}
 function audioStop(){const was=AU.on||AU.i>0;AU.on=false;AU.tok++;AU.i=0;if(was){try{if(canSpeak)speechSynthesis.cancel()}catch(e){}audioMarks()}audioUI()}
-function audioMount(box,items){audioStop();AU.box=box;AU.items=items.filter(x=>x&&x.text);const p=box&&box.querySelector("[data-aplay]");if(!p)return;
- p.onclick=()=>AU.on?audioPause():audioPlay();
- box.querySelector("[data-arate]").onclick=()=>{const r=AUDIO_RATES[(AUDIO_RATES.indexOf(audioRate())+1)%AUDIO_RATES.length];S.settings.rate=r;save();AU.on?audioStep():audioUI()};
- audioUI()}
+function audioBind(box,items){const p=box&&box.querySelector("[data-aplay]");if(!p)return false;
+ p.onclick=()=>{if(AU.box!==box){audioMount(box,items);audioPlay();return}AU.on?audioPause():audioPlay()};
+ box.querySelector("[data-arate]").onclick=()=>{const r=AUDIO_RATES[(AUDIO_RATES.indexOf(audioRate())+1)%AUDIO_RATES.length];S.settings.rate=r;save();
+  if(AU.box===box){AU.on?audioStep():audioUI()}else box.querySelector("[data-arate]").textContent=rateLabel(r)};return true}
+function audioMount(box,items){audioStop();AU.box=box;AU.items=items.filter(x=>x&&x.text);if(!audioBind(box,AU.items))return;audioUI()}
+function audioAttach(box,items){const its=items.filter(x=>x&&x.text);if(!audioBind(box,its))return;
+ const p=box.querySelector("[data-aplay]");p.innerHTML=PLAY_SVG+"Ouvir";box.querySelector("[data-arate]").textContent=rateLabel(audioRate())}
 let AU_VOICE=null;
 function audioVoicesChanged(){const v=hasItVoice();if(AU_VOICE===v)return;const first=AU_VOICE===null;AU_VOICE=v;if(first&&v)return; // só redesenha quando a disponibilidade muda de fato
  if(typeof LT!=="undefined"&&LT.cur&&!AU.on&&!$("#v-news").hidden&&!$("#ns-let").hidden)renderLetText()}
@@ -6084,6 +6152,190 @@ function renderDuvList(){const box=$("#duvList");if(!box)return;const all=duvLis
   <div class="duva">${esc(x.a).replace(/\n/g,"<br>")}</div></article>`).join("");
  $$("#duvList [data-duvdel]").forEach(b=>b.onclick=()=>{const id=b.dataset.duvdel;if(DV.del!==id){DV.del=id;renderDuvList();setTimeout(()=>{if(DV.del===id){DV.del="";renderDuvList()}},4000);return}
   delete S.duvidas[id];DV.del="";save();renderDuvidas()})}
+
+/* ============================ INFOGRÁFICOS DE LIÇÃO: dados (conteúdo original) ============================ */
+// Um quadro-resumo por tópico do curso, mostrado no início da parte Vocabulário. Formato (validar com node tools/check_info.js):
+//  id, topico (id do tópico do curso), cabecalho {trilho, titulo, subtitulo, nonna: acenando|apontando|pensando|comemorando}
+//  blocos (3 a 5), cada um com titulo (ação em português) e tipo:
+//   "tabela": linhas [[it, pt], ...] (até 9), dica (uma linha; **negrito** marca as palavras italianas), cena opcional
+//   "icones": itens [{icone, it, pt}], formulario opcional [[campo, valor], ...]
+//   "regra":  formula, exemplos [[it, pt], ...]
+//  cena: {nonna: pose, outro: nome, falas: [{quem: "nonna"|"outro", texto, pt}]} com 2 a 3 falas
+const INFOGRAFICOS=[
+{id:"info-apresentacoes",topico:"a1-1",
+ cabecalho:{trilho:"NONNA DICE • A1 • LIÇÃO 1",titulo:"Ciao • Piacere!",subtitulo:"Cumprimentos e primeiras apresentações no trabalho",nonna:"acenando"},
+ blocos:[
+  {tipo:"tabela",titulo:"Cumprimente e despeça-se",
+   linhas:[["Buongiorno","Bom dia"],["Buonasera","Boa tarde, boa noite (ao chegar)"],["Ciao","Oi, tchau (informal)"],["Salve","Olá (neutro)"],["Arrivederci","Até logo"],["ArrivederLa","Até logo (formal)"],["A domani","Até amanhã"],["Buona giornata!","Tenha um bom dia!"]],
+   dica:"**Buonasera** vale a partir do meio da tarde. **Ciao** só com quem você trata por tu.",
+   cena:{nonna:"acenando",outro:"Luca",falas:[{quem:"nonna",texto:"Buongiorno! Lei è il nuovo ingegnere?",pt:"Bom dia! O senhor é o novo engenheiro?"},{quem:"outro",texto:"Sì, piacere! Mi chiamo Luca.",pt:"Sim, muito prazer! Eu me chamo Luca."}]}},
+  {tipo:"tabela",titulo:"Diga seu nome, origem e profissão",
+   linhas:[["Mi chiamo…","Eu me chamo…"],["Sono brasiliano / brasiliana","Sou brasileiro / brasileira"],["Sono di Curitiba","Sou de Curitiba"],["Abito a Bologna","Moro em Bolonha"],["Sono ingegnere","Sou engenheiro"],["Lavoro in uno studio tecnico","Trabalho num escritório técnico"],["Piacere!","Muito prazer!"]],
+   dica:"Com **sono**, a profissão vem sem artigo: **sono ingegnere**, **sono architetto**.",
+   cena:{nonna:"apontando",outro:"Luca",falas:[{quem:"outro",texto:"Di dove sei?",pt:"De onde você é?"},{quem:"nonna",texto:"Sono di Napoli, e tu?",pt:"Sou de Nápoles, e você?"},{quem:"outro",texto:"Sono di Curitiba, in Brasile.",pt:"Sou de Curitiba, no Brasil."}]}},
+  {tipo:"icones",titulo:"Troque os dados de contato",
+   itens:[{icone:"pessoa",it:"il nome",pt:"o nome"},{icone:"pessoa",it:"il cognome",pt:"o sobrenome"},{icone:"cracha",it:"il ruolo",pt:"o cargo"},{icone:"empresa",it:"l'azienda",pt:"a empresa"},{icone:"telefone",it:"il numero di telefono",pt:"o número de telefone"},{icone:"email",it:"l'indirizzo email",pt:"o endereço de e-mail"}],
+   formulario:[["Nome","Luca"],["Cognome","Rossi"],["Ruolo","ingegnere civile"],["Azienda","Studio Ferri"],["Telefono","347 521 8890"],["Email","luca@esempio.it"]]},
+  {tipo:"regra",titulo:"Pergunte o nome com tu ou com Lei",
+   formula:"tu: Come ti chiami? · Lei: Come si chiama?",
+   exemplos:[["Come ti chiami?","Como você se chama?"],["Come si chiama?","Como o senhor (a senhora) se chama?"],["Di dove sei? · Di dov'è?","De onde você é? · De onde o senhor é?"]]}]},
+
+{id:"info-tu-lei",topico:"a1-3",
+ cabecalho:{trilho:"NONNA DICE • A1 • LIÇÃO 3",titulo:"Tu o Lei?",subtitulo:"Tratamento informal e formal no escritório",nonna:"pensando"},
+ blocos:[
+  {tipo:"tabela",titulo:"Escolha o tratamento certo",
+   linhas:[["tu","você (amigos, colegas próximos, crianças)"],["Lei","o senhor, a senhora (clientes, chefes, desconhecidos)"],["voi","vocês (grupo, formal ou informal)"],["dare del tu","tratar por você"],["dare del Lei","tratar por senhor ou senhora"],["Posso darti del tu?","Posso te tratar por você?"],["Diamoci del tu!","Vamos nos tratar por você!"]],
+   dica:"Na dúvida, comece com **Lei**; quem é mais velho ou tem cargo mais alto propõe o **tu**.",
+   cena:{nonna:"pensando",outro:"Luca",falas:[{quem:"nonna",texto:"Possiamo darci del tu?",pt:"Podemos nos tratar por você?"},{quem:"outro",texto:"Certo, volentieri!",pt:"Claro, com prazer!"},{quem:"nonna",texto:"Allora, come stai?",pt:"Então, como você está?"}]}},
+  {tipo:"regra",titulo:"Conjugue com Lei na 3ª pessoa",
+   formula:"tu sei · tu hai · tu puoi  →  Lei è · Lei ha · Lei può",
+   exemplos:[["Lei è di Roma?","O senhor é de Roma?"],["Ha un minuto?","O senhor tem um minuto?"],["Può ripetere, per favore?","O senhor pode repetir, por favor?"]]},
+  {tipo:"tabela",titulo:"Use os pronomes formais",
+   linhas:[["Ti chiamo domani.","Te ligo amanhã. (tu)"],["La chiamo domani.","Ligo para o senhor amanhã. (Lei)"],["Ti scrivo una mail.","Te escrevo um e-mail. (tu)"],["Le scrivo una mail.","Escrevo um e-mail ao senhor. (Lei)"],["il tuo ufficio","o seu escritório (tu)"],["il Suo ufficio","o seu escritório (Lei)"]],
+   dica:"Em e-mails, **La**, **Le** e **Suo** costumam vir com maiúscula."},
+  {tipo:"tabela",titulo:"Cumprimente de acordo com o tratamento",
+   linhas:[["Ciao, come stai?","Oi, como vai? (tu)"],["Buongiorno, come sta?","Bom dia, como vai o senhor? (Lei)"],["Bene, grazie, e tu?","Bem, obrigado, e você?"],["Bene, grazie, e Lei?","Bem, obrigado, e o senhor?"],["Ciao! A presto!","Tchau! Até breve! (tu)"],["ArrivederLa!","Até logo! (Lei)"]],
+   dica:"**Come stai?** é com tu; **Come sta?** é com Lei.",
+   cena:{nonna:"acenando",outro:"Luca",falas:[{quem:"nonna",texto:"Buongiorno, dottore, come sta?",pt:"Bom dia, doutor, como vai?"},{quem:"outro",texto:"Bene, grazie, e Lei?",pt:"Bem, obrigado, e a senhora?"}]}}]},
+
+{id:"info-essere-avere",topico:"a1-2",
+ cabecalho:{trilho:"NONNA DICE • A1 • LIÇÃO 2",titulo:"Essere • Avere",subtitulo:"Os dois verbos que sustentam o italiano",nonna:"apontando"},
+ blocos:[
+  {tipo:"regra",titulo:"Conjugue essere (ser, estar)",
+   formula:"io sono · tu sei · lui, lei, Lei è · noi siamo · voi siete · loro sono",
+   exemplos:[["Sono ingegnere.","Sou engenheiro."],["Il cantiere è chiuso.","A obra está fechada."],["Siamo in riunione.","Estamos em reunião."]]},
+  {tipo:"regra",titulo:"Conjugue avere (ter)",
+   formula:"io ho · tu hai · lui, lei, Lei ha · noi abbiamo · voi avete · loro hanno",
+   exemplos:[["Ho una riunione alle tre.","Tenho uma reunião às três."],["Hai un minuto?","Você tem um minuto?"],["L'ufficio ha due sale.","O escritório tem duas salas."]]},
+  {tipo:"tabela",titulo:"Use avere onde o português usa estar",
+   linhas:[["avere … anni","ter … anos"],["avere fame","estar com fome"],["avere sete","estar com sede"],["avere freddo · avere caldo","estar com frio · estar com calor"],["avere fretta","estar com pressa"],["avere ragione","ter razão"],["avere bisogno di","precisar de"],["avere paura","ter medo"]],
+   dica:"Idade, fome e pressa em italiano se **têm**: **ho trent'anni**, **ho fame**, **ho fretta**.",
+   cena:{nonna:"pensando",outro:"Luca",falas:[{quem:"outro",texto:"Andiamo a pranzo? Ho fame!",pt:"Vamos almoçar? Estou com fome!"},{quem:"nonna",texto:"Sì, ma ho fretta: alle due ho una riunione.",pt:"Sim, mas estou com pressa: às duas tenho uma reunião."}]}},
+  {tipo:"tabela",titulo:"Não confunda as formas parecidas",
+   linhas:[["è","é, está (essere)"],["e","e (conjunção)"],["ha","tem (avere)"],["a","a, para, em (preposição)"],["hanno","têm (avere)"],["anno","ano"]],
+   dica:"O **h** não se pronuncia: **ha** e **a** soam iguais, só a escrita muda."}]},
+
+{id:"info-reuniao",topico:"a1-5",
+ cabecalho:{trilho:"NONNA DICE • A1 • LIÇÃO 5",titulo:"Fissiamo una riunione",subtitulo:"Marcar, aceitar, recusar e remarcar reuniões",nonna:"apontando"},
+ blocos:[
+  {tipo:"tabela",titulo:"Proponha um dia e um horário",
+   linhas:[["Possiamo vederci lunedì?","Podemos nos ver na segunda?"],["Le va bene giovedì alle dieci?","Quinta às dez está bom para o senhor?"],["Ti va bene domani mattina?","Amanhã de manhã está bom para você?"],["Sei libero nel pomeriggio?","Você está livre à tarde?"],["Quando è libero, ingegnere?","Quando o senhor está livre, engenheiro?"],["Facciamo alle tre?","Que tal às três?"]],
+   dica:"**Le va bene?** é com Lei; **Ti va bene?** é com tu.",
+   cena:{nonna:"apontando",outro:"Luca",falas:[{quem:"nonna",texto:"Le va bene giovedì alle dieci?",pt:"Quinta às dez está bom para o senhor?"},{quem:"outro",texto:"Perfetto, a giovedì!",pt:"Perfeito, até quinta!"}]}},
+  {tipo:"tabela",titulo:"Aceite ou recuse com educação",
+   linhas:[["Va benissimo.","Está ótimo."],["Perfetto, a giovedì!","Perfeito, até quinta!"],["Purtroppo non posso.","Infelizmente não posso."],["Ho già un impegno.","Já tenho um compromisso."],["Preferirei il pomeriggio.","Eu preferiria à tarde."],["Facciamo un altro giorno?","Vamos marcar outro dia?"]],
+   dica:"**Purtroppo** suaviza a recusa; logo depois, proponha outra data.",
+   cena:{nonna:"pensando",outro:"Luca",falas:[{quem:"outro",texto:"Venerdì alle nove?",pt:"Sexta às nove?"},{quem:"nonna",texto:"Purtroppo ho già un impegno. Facciamo alle undici?",pt:"Infelizmente já tenho um compromisso. Que tal às onze?"}]}},
+  {tipo:"icones",titulo:"Diga quando: dias e partes do dia",
+   itens:[{icone:"calendario",it:"lunedì",pt:"segunda-feira"},{icone:"calendario",it:"martedì",pt:"terça-feira"},{icone:"calendario",it:"mercoledì",pt:"quarta-feira"},{icone:"calendario",it:"giovedì",pt:"quinta-feira"},{icone:"calendario",it:"venerdì",pt:"sexta-feira"},{icone:"relogio",it:"la mattina",pt:"de manhã"},{icone:"relogio",it:"il pomeriggio",pt:"à tarde"}],
+   formulario:[["Riunione","progetto della scuola"],["Giorno","giovedì 12"],["Ora","10:00"],["Sala","sala grande, secondo piano"],["Partecipanti","Giulia, Marco, Lucas"]]},
+  {tipo:"tabela",titulo:"Remarque ou cancele",
+   linhas:[["Dobbiamo spostare la riunione.","Precisamos mudar a reunião de data."],["La riunione è rimandata a lunedì.","A reunião foi adiada para segunda."],["La riunione è annullata.","A reunião foi cancelada."],["Scusi il poco preavviso.","Desculpe o aviso em cima da hora."],["Mi conferma l'orario?","O senhor me confirma o horário?"]],
+   dica:"**Spostare** é mudar de data; **annullare** é cancelar de vez."}]},
+
+{id:"info-email-formal",topico:"a2-10",
+ cabecalho:{trilho:"NONNA DICE • A2 • LIÇÃO 10",titulo:"Gentile… Cordiali saluti",subtitulo:"A estrutura de um e-mail formal de trabalho",nonna:"acenando"},
+ blocos:[
+  {tipo:"tabela",titulo:"Abra o e-mail",
+   linhas:[["Gentile signora Rossi,","Prezada senhora Rossi,"],["Gentile ingegner Bianchi,","Prezado engenheiro Bianchi,"],["Gentili signori,","Prezados senhores,"],["Spettabile ditta,","Prezada empresa, (muito formal)"],["Buongiorno,","Bom dia, (neutro)"]],
+   dica:"Depois da saudação vem vírgula, e o texto começa com minúscula na linha seguinte."},
+  {tipo:"tabela",titulo:"Diga por que está escrevendo",
+   linhas:[["Le scrivo per…","Escrevo ao senhor para…"],["Le scrivo in merito a…","Escrevo a respeito de…"],["Come d'accordo,","Conforme combinado,"],["In allegato trova…","Em anexo o senhor encontra…"],["Le chiedo cortesemente di…","Peço gentilmente que o senhor…"],["Vorrei sapere se…","Gostaria de saber se…"]],
+   dica:"Com Lei, os pronomes ficam na 3ª pessoa: **Le scrivo**, **La ringrazio**."},
+  {tipo:"tabela",titulo:"Feche com cortesia",
+   linhas:[["Resto a disposizione per chiarimenti.","Fico à disposição para esclarecimentos."],["In attesa di un Suo riscontro,","No aguardo de seu retorno,"],["La ringrazio per l'attenzione.","Agradeço a atenção."],["Cordiali saluti","Atenciosamente"],["Distinti saluti","Atenciosamente (mais formal)"],["Un saluto","Um abraço (menos formal)"]],
+   dica:"**Cordiali saluti** serve para quase tudo; **Distinti saluti**, para o muito formal.",
+   cena:{nonna:"comemorando",outro:"Luca",falas:[{quem:"outro",texto:"Come chiudo la mail al cliente?",pt:"Como eu fecho o e-mail para o cliente?"},{quem:"nonna",texto:"Cordiali saluti, e poi il tuo nome!",pt:"Cordiali saluti, e depois o seu nome!"}]}},
+  {tipo:"icones",titulo:"Preencha os campos da mensagem",
+   itens:[{icone:"pessoa",it:"il destinatario",pt:"o destinatário"},{icone:"email",it:"l'oggetto",pt:"o assunto"},{icone:"documento",it:"l'allegato",pt:"o anexo"},{icone:"pessoa",it:"in copia",pt:"com cópia (cc)"},{icone:"cracha",it:"la firma",pt:"a assinatura"}],
+   formulario:[["A","s.rossi@esempio.it"],["Cc","ufficio.tecnico@esempio.it"],["Oggetto","Richiesta di preventivo, cantiere di via Mazzini"],["Allegato","computo_metrico.pdf"],["Firma","Ing. Lucas Moura"]]}]},
+
+{id:"info-numeros-horarios",topico:"a1-4",
+ cabecalho:{trilho:"NONNA DICE • A1 • LIÇÃO 4",titulo:"Che ore sono?",subtitulo:"Números, horários e prazos",nonna:"comemorando"},
+ blocos:[
+  {tipo:"tabela",titulo:"Conte sem tropeçar",
+   linhas:[["uno, due, tre, quattro, cinque","1, 2, 3, 4, 5"],["sei, sette, otto, nove, dieci","6, 7, 8, 9, 10"],["undici, dodici, tredici","11, 12, 13"],["quattordici, quindici, sedici","14, 15, 16"],["diciassette, diciotto, diciannove","17, 18, 19"],["venti, trenta, quaranta, cinquanta","20, 30, 40, 50"],["ventuno, ventotto","21, 28"],["cento, mille","100, 1.000"]],
+   dica:"Com **uno** e **otto**, a dezena perde a vogal: **ventuno**, **ventotto**."},
+  {tipo:"tabela",titulo:"Pergunte e diga as horas",
+   linhas:[["Che ore sono?","Que horas são?"],["Sono le tre.","São três horas."],["È l'una.","É uma hora."],["È mezzogiorno.","É meio-dia."],["Sono le otto e mezza.","São oito e meia."],["Sono le nove e un quarto.","São nove e quinze."],["Sono le dieci meno un quarto.","São quinze para as dez."]],
+   dica:"Use **sono le** + número; só **l'una**, **mezzogiorno** e **mezzanotte** pedem **è**.",
+   cena:{nonna:"apontando",outro:"Luca",falas:[{quem:"outro",texto:"Scusi, che ore sono?",pt:"Com licença, que horas são?"},{quem:"nonna",texto:"Sono le otto e mezza: la riunione comincia tra mezz'ora!",pt:"São oito e meia: a reunião começa daqui a meia hora!"}]}},
+  {tipo:"regra",titulo:"Marque horários e prazos",
+   formula:"alle + hora · dalle … alle … · entro + prazo",
+   exemplos:[["La riunione è alle quindici e trenta.","A reunião é às 15h30."],["L'ufficio è aperto dalle nove alle diciotto.","O escritório abre das 9h às 18h."],["Mandi il rapporto entro venerdì.","Mande o relatório até sexta."]]},
+  {tipo:"tabela",titulo:"Leia os números da obra",
+   linhas:[["tre virgola cinque metri","3,5 metros"],["duemilacinquecento euro","2.500 euros"],["il quindici marzo","15 de março"],["il primo aprile","1º de abril"],["al terzo piano","no terceiro andar"],["il dieci per cento","10%"]],
+   dica:"Nas datas, o número é cardinal (**il quindici marzo**); só o dia 1 é ordinal: **il primo**."}]}
+];
+const INFO_TOP=Object.fromEntries(INFOGRAFICOS.map(x=>[x.topico,x]));
+
+/* ============================ INFOGRÁFICO DE LIÇÃO: componente ============================ */
+// Quadro-resumo gerado a partir de dados (infograficos_data.js), em HTML/CSS/SVG: nítido em qualquer tela, offline,
+// com palavras tocáveis e áudio nos balões. A Nonna e o segundo personagem são desenhos próprios em SVG.
+const NC={ink:"#2B1D16",hair:"#E7E1D6",skin:"#F2C9A5",cheek:"#C2402A",dress:"#2F6B3A",dot:"#FBF5EA",shirt:"#2D5F9A",brown:"#5A3A26"};
+function nonnaSVG(pose,cls){const k=NC,P=pose||"acenando",s=`stroke="${k.ink}" stroke-width="5"`;
+ const mouth=P==="comemorando"?`<path d="M106 136Q120 160 134 136Z" fill="${k.ink}"/><path d="M112 146Q120 152 128 146" fill="none" stroke="#C2402A" stroke-width="5" stroke-linecap="round"/>`
+  :P==="pensando"?`<path d="M111 142Q120 139 129 142" fill="none" stroke="${k.ink}" stroke-width="6" stroke-linecap="round"/>`
+  :`<path d="M108 138Q120 149 132 138" fill="none" stroke="${k.ink}" stroke-width="6" stroke-linecap="round"/>`;
+ const brows=P==="pensando"?`<path d="M90 92Q102 84 112 90" fill="none" stroke="${k.ink}" stroke-width="4.5" stroke-linecap="round"/>`:"";
+ const arm=(x1,y1,x2,y2,hx,hy)=>`<path d="M${x1} ${y1}L${x2} ${y2}" stroke="${k.ink}" stroke-width="24" stroke-linecap="round"/><path d="M${x1} ${y1}L${x2} ${y2}" stroke="${k.dress}" stroke-width="15" stroke-linecap="round"/><circle cx="${hx}" cy="${hy}" r="13" fill="${k.skin}" ${s}/>`;
+ const arms=P==="acenando"?arm(170,192,200,132,206,118)+`<path d="M222 98q8 6 6 16M230 88q12 10 9 26" fill="none" stroke="${k.ink}" stroke-width="4" stroke-linecap="round"/>`
+  :P==="apontando"?arm(170,196,212,176,222,172)+`<path d="M232 170l14 -4" stroke="${k.ink}" stroke-width="9" stroke-linecap="round"/><path d="M232 170l14 -4" stroke="${k.skin}" stroke-width="4" stroke-linecap="round"/>`
+  :P==="pensando"?arm(166,198,150,172,140,160)+`<circle cx="190" cy="58" r="6" fill="${k.ink}" opacity=".55"/><circle cx="206" cy="40" r="8" fill="${k.ink}" opacity=".55"/><circle cx="226" cy="20" r="10" fill="${k.ink}" opacity=".55"/>`
+  :arm(72,192,40,118,34,104)+arm(168,192,200,118,206,104)+`<rect x="22" y="40" width="9" height="9" rx="2" fill="#D9A21F" transform="rotate(20 26 44)"/><rect x="212" y="34" width="9" height="9" rx="2" fill="#C2402A" transform="rotate(-25 216 38)"/><circle cx="60" cy="30" r="5" fill="#2D5F9A"/><circle cx="190" cy="66" r="5" fill="#2F6B3A"/>`;
+ return`<svg class="${cls||"nonna"}" viewBox="0 0 250 236" role="img" aria-label="Nonna ${P}">
+  <path d="M58 236Q60 170 120 166Q180 170 182 236Z" fill="${k.dress}" ${s} stroke-linejoin="round"/>
+  <circle cx="110" cy="182" r="3.4" fill="${k.dot}"/><circle cx="120" cy="186" r="3.4" fill="${k.dot}"/><circle cx="130" cy="182" r="3.4" fill="${k.dot}"/>
+  <circle cx="120" cy="42" r="19" fill="${k.hair}" ${s}/><ellipse cx="120" cy="96" rx="58" ry="50" fill="${k.hair}" ${s}/>
+  <ellipse cx="120" cy="112" rx="43" ry="46" fill="${k.skin}" ${s}/>
+  <path d="M77 106Q80 64 120 62Q160 64 163 106Q148 82 120 82Q92 82 77 106Z" fill="${k.hair}" ${s} stroke-linejoin="round"/>
+  <circle cx="92" cy="130" r="7" fill="${k.cheek}" opacity=".35"/><circle cx="148" cy="130" r="7" fill="${k.cheek}" opacity=".35"/>
+  <circle cx="102" cy="113" r="12.5" fill="#fff" fill-opacity=".35" stroke="${k.ink}" stroke-width="6"/><circle cx="138" cy="113" r="12.5" fill="#fff" fill-opacity=".35" stroke="${k.ink}" stroke-width="6"/>
+  <path d="M114.5 112Q120 108 125.5 112" fill="none" stroke="${k.ink}" stroke-width="6" stroke-linecap="round"/>${brows}${mouth}${arms}</svg>`}
+function outroSVG(){const k=NC,s=`stroke="${k.ink}" stroke-width="5"`;
+ return`<svg class="outro" viewBox="0 0 250 236" role="img" aria-label="Colega">
+  <path d="M62 236Q64 172 125 168Q186 172 188 236Z" fill="${k.shirt}" ${s} stroke-linejoin="round"/>
+  <path d="M108 170l17 20 17-20" fill="#fff" ${s} stroke-linejoin="round"/>
+  <ellipse cx="125" cy="112" rx="44" ry="50" fill="${k.skin}" ${s}/>
+  <path d="M80 104Q78 58 125 56Q172 58 170 104Q160 80 140 78Q120 92 92 86Q84 94 80 104Z" fill="${k.brown}" ${s} stroke-linejoin="round"/>
+  <circle cx="107" cy="114" r="5.5" fill="${k.ink}"/><circle cx="143" cy="114" r="5.5" fill="${k.ink}"/>
+  <path d="M98 100q9 -6 18 0M134 100q9 -6 18 0" fill="none" stroke="${k.ink}" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M110 138Q125 150 140 138" fill="none" stroke="${k.ink}" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="96" cy="130" r="6" fill="${k.cheek}" opacity=".25"/><circle cx="154" cy="130" r="6" fill="${k.cheek}" opacity=".25"/></svg>`}
+const INFO_ICONS={pessoa:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>',
+ telefone:'<path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/>',
+ email:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
+ empresa:'<path d="M4 21V5l8-2v18M12 9h8v12M4 21h16M7 8h2M7 12h2M7 16h2M15 13h2M15 17h2"/>',
+ cracha:'<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M8 17c.8-2 2.2-3 4-3s3.2 1 4 3"/>',
+ calendario:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+ relogio:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+ documento:'<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/>'};
+function infoIcon(n){return`<svg viewBox="0 0 24 24" aria-hidden="true">${INFO_ICONS[n]||INFO_ICONS.documento}</svg>`}
+// **negrito** marca palavras italianas: ficam em negrito e tocáveis
+function infoDica(t){return esc(t).replace(/\*\*(.+?)\*\*/g,'<b class="it">$1</b>')}
+const NUMS=["①","②","③","④","⑤"];
+function infoCena(c){return`<div class="icena" data-cena><div class="ibubs">${c.falas.map(f=>`<div class="ibub ${f.quem==="nonna"?"ib-n":"ib-o"}"><span class="ibwho">${f.quem==="nonna"?"Nonna":esc(c.outro||"Colega")}</span><span class="it">${esc(f.texto)}</span>${f.pt?`<small>${esc(f.pt)}</small>`:""}</div>`).join("")}</div>
+ <div class="ichars">${nonnaSVG(c.nonna||"acenando","nonna sm")}${outroSVG()}</div>${audioHTML()}</div>`}
+function infoBloco(b,i){let main="";
+ if(b.tipo==="tabela")main=`<div class="itab"><table><thead><tr><th>Italiano</th><th>Português</th></tr></thead><tbody>${b.linhas.map(l=>`<tr><td><b class="it">${esc(l[0])}</b></td><td>${esc(l[1])}</td></tr>`).join("")}</tbody></table></div>${b.dica?`<div class="idica">${infoDica(b.dica)}</div>`:""}`;
+ else if(b.tipo==="icones")main=`<ul class="iicons">${b.itens.map(t=>`<li><span class="iic">${infoIcon(t.icone)}</span><span><b class="it">${esc(t.it)}</b><small>${esc(t.pt)}</small></span></li>`).join("")}</ul>`;
+ else if(b.tipo==="regra")main=`<div class="iform"><span class="label">Fórmula</span><div class="it">${esc(b.formula)}</div></div><div class="iexs">${b.exemplos.map(e=>`<div class="iex"><div><b class="it">${esc(e[0])}</b><small>${esc(e[1])}</small></div>${spkBtn(e[0])}</div>`).join("")}</div>`;
+ const side=b.cena?infoCena(b.cena):b.formulario?`<div class="iformcard" aria-label="Exemplo preenchido">${b.formulario.map(f=>`<div><span class="label">${esc(f[0])}</span><span class="it">${esc(f[1])}</span></div>`).join("")}</div>`:"";
+ return`<section class="ibloco"><h4 class="ibtit"><span class="ibnum" aria-hidden="true">${i+1}</span>${esc(b.titulo)}</h4><div class="ibody${side?" iside":""}"><div class="imain">${main}</div>${side}</div></section>`}
+function infoHTML(x,full){const c=x.cabecalho;
+ return`<article class="info${full?" ifull":""}" data-info="${x.id}" aria-label="Resumo ilustrado: ${esc(c.titulo)}">
+ <header class="ihead" ${full?"":`data-info-open role="button" tabindex="0" aria-label="Abrir o resumo em tela cheia"`}><div class="ihtxt"><span class="itrilho">${esc(c.trilho)}</span><h3 class="ititle">${esc(c.titulo)}</h3><p class="isub">${esc(c.subtitulo)}</p>${full?"":`<span class="ihint">Toque aqui para ampliar</span>`}</div>${nonnaSVG(c.nonna,"nonna hd")}</header>
+ ${x.blocos.map(infoBloco).join("")}</article>`}
+function infoBind(el,x){if(!el)return;tokenize(el);
+ el.querySelectorAll("[data-cena]").forEach((cn,i)=>{const items=[...cn.querySelectorAll(".ibub")].map(b=>({el:b,text:b.querySelector(".it").textContent}));audioAttach(cn,items)});
+ const h=el.querySelector("[data-info-open]");if(h){const go=ev=>{if(ev.target.closest("button"))return;openInfoFull(x)};h.onclick=go;h.onkeydown=ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();openInfoFull(x)}}}}
+function openInfoFull(x){audioStop();let ov=$("#infoOv");if(!ov){ov=document.createElement("div");ov.id="infoOv";ov.className="infoov";ov.setAttribute("role","dialog");ov.setAttribute("aria-modal","true");document.body.appendChild(ov)}
+ ov.setAttribute("aria-label","Resumo ilustrado em tela cheia");
+ ov.innerHTML=`<div class="iovbar"><span class="label">Resumo ilustrado</span><button class="btn" id="infoClose">Fechar ✕</button></div><div class="iovin">${infoHTML(x,true)}</div>`;
+ ov.hidden=false;document.documentElement.classList.add("noscroll");infoBind(ov.querySelector(".info"),x);ov.scrollTop=0;$("#infoClose").focus();$("#infoClose").onclick=closeInfoFull}
+function closeInfoFull(){const ov=$("#infoOv");if(!ov||ov.hidden)return;audioStop();ov.hidden=true;ov.innerHTML="";document.documentElement.classList.remove("noscroll");const h=document.querySelector("#cBody [data-info-open]");if(h)h.focus()}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#infoOv")&&!$("#infoOv").hidden&&$("#sheet").hidden)closeInfoFull()});
+function renderInfoTopic(t,body){const x=INFO_TOP[t.id];if(!x)return;const w=document.createElement("div");w.innerHTML=infoHTML(x);const el=w.firstElementChild;body.prepend(el);infoBind(el,x)}
 
 /* ============================ INÍCIO ============================ */
 syncFavCards();syncErrCards();syncSentCards();renderDecks();renderBoxes();renderHome();updateFavCount();

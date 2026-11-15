@@ -121,7 +121,7 @@ function tokenize(root){(root||document).querySelectorAll(".it").forEach(el=>{if
 
 /* ============================ ABAS ============================ */
 const VALID=["inicio","curso","news","preferiti","cartoes"];
-function showTab(name){if(!VALID.includes(name))name="inicio";cancelRange();stopLines();if(name!=="news"&&typeof READ!=="undefined"&&READ.state!=="idle")stopReading();$$("[data-view]").forEach(v=>v.hidden=v.dataset.view!==name);$$("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===name));
+function showTab(name){if(!VALID.includes(name))name="inicio";cancelRange();closeInfoFull();stopLines();if(name!=="news"&&typeof READ!=="undefined"&&READ.state!=="idle")stopReading();$$("[data-view]").forEach(v=>v.hidden=v.dataset.view!==name);$$("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===name));
  try{localStorage.setItem(KEY+".tab",name)}catch(e){}window.scrollTo(0,0);if(name==="cartoes")renderFlash();if(name==="inicio")renderHome();if(name==="curso")renderCourse();if(name==="preferiti"){$("#ps-duv").hidden?renderFavs():renderDuvidas()}if(name==="news"){renderNews();if(!$("#ns-cal").hidden)renderCal();if(!$("#ns-let").hidden)renderLet();if(!$("#ns-modi").hidden)renderModi()}}
 $$("nav.tabs button").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
 document.addEventListener("click",e=>{const g=e.target.closest("[data-goto]");if(g){showTab(g.dataset.goto);if(g.dataset.topic)openTopic(g.dataset.topic,g.dataset.part||"voc");if(g.dataset.let){setNS("let");g.dataset.let==="index"?closeLet():openLet(g.dataset.let)}}});
@@ -157,7 +157,7 @@ function renderTopic(){const t=CUR,c=tprog(t.id),idx=COURSE.indexOf(t),nxt=COURS
   const vc=typeof renderVocabCtx==="function"?renderVocabCtx(t):null;
   body.innerHTML=(vc?`<p class="muted small">${t.voc.length} palavras e expressões. Como no livro, o tópico começa por um diálogo em que elas aparecem; depois vêm os cartões, cada um com a frase do diálogo e um exemplo. Toque em qualquer palavra italiana para ver o significado.</p>`+vc:`<p class="muted small">${t.voc.length} palavras e expressões. Toque numa palavra para ver exemplos; o alto-falante pronuncia.</p>
   <div class="vgrid">${t.voc.map(v=>`<div class="vcell"><div><span class="it">${esc(v[0])}</span><span class="pt">${esc(v[1])}</span></div>${spkBtn(v[0])}</div>`).join("")}</div>`)+`
-  <button class="btn primary" data-part-go="gram">Ir para a gramática →</button>`;if(vc&&typeof dlgWire==="function")dlgWire(body,DLG[t.id])}
+  <button class="btn primary" data-part-go="gram">Ir para a gramática →</button>`;if(vc&&typeof dlgWire==="function")dlgWire(body,DLG[t.id]);renderInfoTopic(t,body)}
  else if(CPART==="gram"){markSeen("gram");
   body.innerHTML=t.gram.map(g=>`<section class="gsec"><h3>${esc(g.h)}</h3>${g.html}</section>`).join("")+`<button class="btn primary" data-part-go="hist">Ler a história do tópico →</button>`}
  else if(CPART==="hist"){markSeen("hist");renderStory(body)}
