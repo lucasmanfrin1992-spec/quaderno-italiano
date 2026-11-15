@@ -804,6 +804,12 @@ button.w.rsel{background:var(--saffron-soft);box-shadow:0 0 0 2px var(--saffron)
 .letnote>b{font-family:var(--display);font-weight:400;font-size:1.08rem;color:var(--cobalt)}
 #letQuiz .qq.it{font-style:normal;color:var(--ink)}
 .letnote .formbox .f{font-size:1rem}
+/* v2 fase 4: player de áudio */
+.aplayer{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.aplayer .btn{display:inline-flex;align-items:center;gap:8px}
+.aplayer [data-arate]{font-family:var(--mono);min-width:68px;justify-content:center}
+.lsent.reading{background:var(--saffron-soft);box-shadow:0 0 0 3px var(--saffron-soft);border-radius:4px}
+.letp.reading{background:none;box-shadow:none}
 </style>
 
 <div class="wrap">
@@ -2685,7 +2691,7 @@ const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random(
 const pick=a=>a[Math.random()*a.length|0];
 const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[’`]/g,"'").replace(/\s+/g," ").trim();
 const canSpeak="speechSynthesis" in window;
-function speak(t){if(!canSpeak)return;try{const u=new SpeechSynthesisUtterance(String(t).replace(/\(.*?\)/g,"").replace(/\.\.\./g,"").replace(/___/g,""));u.lang="it-IT";u.rate=.9;const bv=typeof bestVoice==="function"?bestVoice():null;if(bv)u.voice=bv;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+function speak(t){if(!canSpeak)return;audioPause();try{const u=new SpeechSynthesisUtterance(String(t).replace(/\(.*?\)/g,"").replace(/\.\.\./g,"").replace(/___/g,""));u.lang="it-IT";u.rate=.9;const bv=typeof bestVoice==="function"?bestVoice():null;if(bv)u.voice=bv;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
 function spkBtn(t){return canSpeak?`<button class="spk" data-say="${esc(t)}" aria-label="Ouvir pronúncia">${SPK_SVG}</button>`:""}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-say]");if(b){e.stopPropagation();speak(b.dataset.say)}});
 const TOPIC=Object.fromEntries(COURSE.map(t=>[t.id,t]));
@@ -4958,7 +4964,7 @@ function renderStoryQ(t,st,ans){const box=$("#stQ"),n=st.q.length,done=Object.ke
   if(Object.keys(ans.ans).length===n){const c=S.course[t.id]=S.course[t.id]||{};c.hist=1}save();renderStoryQ(t,st,ans)});
  if($("#stRedo"))$("#stRedo").onclick=()=>{STQ[t.id]={ans:{},ord:{}};renderStoryQ(t,st,STQ[t.id])}}
 let RL={tok:0};
-function stopLines(){RL.tok++;try{if(canSpeak)speechSynthesis.cancel()}catch(e){}$$(".reading").forEach(e=>{if(!e.closest("#newsBox"))e.classList.remove("reading")})}
+function stopLines(){audioStop();RL.tok++;try{if(canSpeak)speechSynthesis.cancel()}catch(e){}$$(".reading").forEach(e=>{if(!e.closest("#newsBox"))e.classList.remove("reading")})}
 function readLines(lines,els){if(!canSpeak)return;const tok=++RL.tok;let i=0;try{speechSynthesis.cancel()}catch(e){}
  const next=()=>{els.forEach(e=>e.classList.remove("reading"));if(tok!==RL.tok||i>=lines.length)return;const el=els[i];if(el)el.classList.add("reading");
   const u=new SpeechSynthesisUtterance(lines[i]);u.lang="it-IT";u.rate=.85;u.onend=()=>{if(tok!==RL.tok)return;i++;setTimeout(next,350)};u.onerror=()=>{};speechSynthesis.speak(u)};next()}
@@ -5091,12 +5097,51 @@ function toggleFav(){if(SH&&SH.mode==="phrase"){S.favs[SH.k]?removePhrase():save
   S.favs[key]={lemma:e.lemma||SH.surface,surface:SH.surface,pos:e.pos||"",meaning:e.meaning||"",synonyms:(e.synonyms||[]).slice(0,5),example:ex[0]||"",examplePt:ex[1]||"",context:SH.sentence,date:SH.btn&&SH.btn.closest("#newsBox")&&NEWS.cur?NEWS.cur.date:today(),added:today(),tipo:"palavra",origem:origemOf(SH.btn)};addFavCard(key)}
  save();renderSheet();refreshTokenMarks();updateFavCount();renderDecks();renderHome()}
 
+/* ============================ ÁUDIO: leitura em voz alta com velocidade ============================ */
+// Um player por vez. Lê frase por frase com a Web Speech API (voz it-IT), destaca a frase em leitura,
+// pausa e continua da mesma frase, e troca a velocidade em ciclo 0,75× → 1× → 1,25× (guardada por perfil em S.settings.rate).
+// Uso: colocar audioHTML() na tela e chamar audioMount(caixa, [{text, el}]) — el é o elemento que recebe o destaque.
+const AUDIO_RATES=[0.75,1,1.25];
+const AU={tok:0,on:false,i:0,items:[],box:null};
+const PLAY_SVG='<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></svg>';
+const PAUSE_SVG='<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>';
+function audioRate(){const r=S.settings&&S.settings.rate;return AUDIO_RATES.includes(r)?r:1}
+function rateLabel(r){return String(r).replace(".",",")+"×"}
+function hasItVoice(){return canSpeak&&!(VOICES_SEEN&&!IT_VOICES.length)} // enquanto o aparelho não informa as vozes, o player aparece
+function splitSents(p){const out=[];let buf="";(String(p).match(/[^.!?…]+[.!?…]+[»”"]?(?:\s+|$)|[^.!?…]+$/g)||[p]).forEach(x=>{buf+=x;if(/(?:^|\s)(?:Ing|Dott|Sig|Arch)\.\s*$/.test(buf))return;if(buf.trim())out.push(buf.trim());buf=""});if(buf.trim())out.push(buf.trim());return out}
+function audioHTML(){return hasItVoice()?`<div class="aplayer" data-aplayer><button class="btn primary" data-aplay></button><button class="btn" data-arate></button><span class="small muted" data-apos role="status"></span></div>`
+ :`<p class="small muted anovoice">Este aparelho não tem voz em italiano, por isso o áudio não aparece aqui.</p>`}
+function audioUI(){const b=AU.box;if(!b||!document.contains(b))return;const mine=AU.items.length>0,p=b.querySelector("[data-aplay]"),r=b.querySelector("[data-arate]"),s=b.querySelector("[data-apos]");if(!p)return;
+ p.innerHTML=AU.on?PAUSE_SVG+"Pausar":PLAY_SVG+(mine&&AU.i>0?"Continuar":"Ouvir");p.setAttribute("aria-pressed",AU.on);
+ r.textContent=rateLabel(audioRate());r.setAttribute("aria-label","Velocidade: "+rateLabel(audioRate())+". Toque para mudar.");
+ s.textContent=mine&&(AU.on||AU.i>0)?"frase "+Math.min(AU.i+1,AU.items.length)+" de "+AU.items.length:""}
+function audioMarks(){$$(".reading").forEach(e=>{if(!e.closest("#newsBox"))e.classList.remove("reading")})}
+function audioStep(){const tok=++AU.tok;audioMarks();
+ if(AU.i>=AU.items.length){AU.on=false;AU.i=0;audioUI();return}
+ const it=AU.items[AU.i];if(it.el&&document.contains(it.el)){it.el.classList.add("reading");try{const r=it.el.getBoundingClientRect();if(r.top<70||r.bottom>window.innerHeight-90)it.el.scrollIntoView({block:"center",behavior:"smooth"})}catch(e){}}
+ audioUI();
+ try{const u=new SpeechSynthesisUtterance(it.text);u.lang="it-IT";u.rate=audioRate();const bv=bestVoice();if(bv)u.voice=bv;
+  u.onend=()=>{if(tok!==AU.tok)return;AU.i++;setTimeout(()=>{if(tok===AU.tok)audioStep()},220)};
+  u.onerror=()=>{if(tok!==AU.tok)return;AU.on=false;audioMarks();audioUI()};
+  speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){AU.on=false;audioUI()}}
+function audioPlay(){if(!AU.items.length)return;AU.on=true;audioStep()}
+function audioPause(){if(!AU.on)return;AU.on=false;AU.tok++;try{speechSynthesis.cancel()}catch(e){}audioUI()}
+function audioStop(){const was=AU.on||AU.i>0;AU.on=false;AU.tok++;AU.i=0;if(was){try{if(canSpeak)speechSynthesis.cancel()}catch(e){}audioMarks()}audioUI()}
+function audioMount(box,items){audioStop();AU.box=box;AU.items=items.filter(x=>x&&x.text);const p=box&&box.querySelector("[data-aplay]");if(!p)return;
+ p.onclick=()=>AU.on?audioPause():audioPlay();
+ box.querySelector("[data-arate]").onclick=()=>{const r=AUDIO_RATES[(AUDIO_RATES.indexOf(audioRate())+1)%AUDIO_RATES.length];S.settings.rate=r;save();AU.on?audioStep():audioUI()};
+ audioUI()}
+let AU_VOICE=null;
+function audioVoicesChanged(){const v=hasItVoice();if(AU_VOICE===v)return;const first=AU_VOICE===null;AU_VOICE=v;if(first&&v)return; // só redesenha quando a disponibilidade muda de fato
+ if(typeof LT!=="undefined"&&LT.cur&&!AU.on&&!$("#v-news").hidden&&!$("#ns-let").hidden)renderLetText()}
+
 /* ============================ VOZ ITALIANA ============================ */
 // escolhe a melhor voz it-IT do aparelho para a pronúncia e a leitura em voz alta
 let IT_VOICES=[],VOICES_SEEN=false;
 function rankVoice(v){const n=v.name||"";let s=0;if(/^it[-_]IT/i.test(v.lang))s+=5;if(/natural|neural|premium|enhanced|siri/i.test(n))s+=4;if(/google/i.test(n))s+=3;if(/compact|eloquence|espeak/i.test(n))s-=4;return s}
 function loadVoices(){if(!canSpeak)return;try{const all=speechSynthesis.getVoices();if(all.length)VOICES_SEEN=true;
- IT_VOICES=all.filter(x=>/^it/i.test(x.lang)).map((v,i)=>({v,r:rankVoice(v),i})).sort((a,b)=>b.r-a.r||a.i-b.i).map(x=>x.v)}catch(e){}}
+ IT_VOICES=all.filter(x=>/^it/i.test(x.lang)).map((v,i)=>({v,r:rankVoice(v),i})).sort((a,b)=>b.r-a.r||a.i-b.i).map(x=>x.v)}catch(e){}
+ try{audioVoicesChanged()}catch(e){}}
 if(canSpeak){loadVoices();try{speechSynthesis.addEventListener("voiceschanged",loadVoices)}catch(e){}}
 function bestVoice(){return IT_VOICES[0]||null}
 
@@ -5744,8 +5789,8 @@ function renderLetText(){const t=LT.cur,box=$("#letBox"),i=LETTURE.indexOf(t),pr
  box.innerHTML=`<button class="back" id="letBack">← Textos</button>
  <div class="tophead"><span class="label">${t.nivel} · ${TEMAS[t.tema]||t.tema} · texto ${i+1} de ${LETTURE.length}</span><h2 class="it lettit">${esc(t.titulo)}</h2></div>
  ${vers.length>1?`<div class="seg" id="letVer" role="tablist" aria-label="Versão do texto">${vers.map(v=>`<button role="tab" data-lver="${v[0]}" class="${ver===v[0]?"on":""}" aria-selected="${ver===v[0]}">${v[1]}</button>`).join("")}</div>`:""}
- ${canSpeak?`<div class="row" id="letPlayer"><button class="btn" id="letRead">${SPK_SVG}Ouvir o texto</button><button class="btn ghost" id="letStop" hidden>Parar</button></div>`:`<p class="small muted">Este aparelho não tem voz em italiano para ouvir o texto.</p>`}
- <article class="card stack lettext">${paras.map(p=>`<p class="letp"><span class="it">${esc(p)}</span></p>`).join("")}</article>
+ <div id="letPlayer">${audioHTML()}</div>
+ <article class="card stack lettext">${paras.map(p=>`<p class="letp">${splitSents(p).map(s=>`<span class="it lsent">${esc(s)}</span>`).join(" ")}</p>`).join("")}</article>
  <p class="hint">Toque numa palavra para ver a tradução e salvar em Preferiti. Para salvar uma frase, use “Marcar um trecho” no painel da palavra.</p>
  <div class="stack" style="gap:12px"><h3>Note linguistiche</h3>
   <details class="exs" open><summary><span class="label">Vocabulário</span><span class="exn">${N.vocabulario.length}</span></summary><div class="exlist">${N.vocabulario.map(v=>`<div class="exrow"><div><i class="it">${esc(v.it)}</i><span>${esc(v.pt)}</span></div>${spkBtn(v.it)}</div>`).join("")}</div></details>
@@ -5758,7 +5803,7 @@ function renderLetText(){const t=LT.cur,box=$("#letBox"),i=LETTURE.indexOf(t),pr
  $("#letBack").onclick=closeLet;
  $$("#letVer [data-lver]").forEach(b=>b.onclick=()=>{if(S.letVersao===b.dataset.lver)return;S.letVersao=b.dataset.lver;save();stopLines();const y=window.scrollY;renderLetText();window.scrollTo(0,y)});
  $$("#letBox > .row [data-let-open]").forEach(b=>b.onclick=()=>openLet(b.dataset.letOpen));
- if($("#letRead")){$("#letRead").onclick=()=>{$("#letStop").hidden=false;readLines(paras.map(p=>p.replace(/^—\s*/,"")),$$("#letBox .letp"))};$("#letStop").onclick=()=>{stopLines();$("#letStop").hidden=true}}
+ audioMount($("#letPlayer"),$$("#letBox .lsent").map(el=>({el,text:el.textContent.replace(/^—\s*/,"").replace(/[«»]/g,"")})));
  renderLetQuiz()}
 
 /* ---------- Comprensione: 3 perguntas; o texto conta como lido com as 3 certas ---------- */

@@ -62,7 +62,7 @@ const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random(
 const pick=a=>a[Math.random()*a.length|0];
 const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[’`]/g,"'").replace(/\s+/g," ").trim();
 const canSpeak="speechSynthesis" in window;
-function speak(t){if(!canSpeak)return;try{const u=new SpeechSynthesisUtterance(String(t).replace(/\(.*?\)/g,"").replace(/\.\.\./g,"").replace(/___/g,""));u.lang="it-IT";u.rate=.9;const bv=typeof bestVoice==="function"?bestVoice():null;if(bv)u.voice=bv;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+function speak(t){if(!canSpeak)return;audioPause();try{const u=new SpeechSynthesisUtterance(String(t).replace(/\(.*?\)/g,"").replace(/\.\.\./g,"").replace(/___/g,""));u.lang="it-IT";u.rate=.9;const bv=typeof bestVoice==="function"?bestVoice():null;if(bv)u.voice=bv;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
 function spkBtn(t){return canSpeak?`<button class="spk" data-say="${esc(t)}" aria-label="Ouvir pronúncia">${SPK_SVG}</button>`:""}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-say]");if(b){e.stopPropagation();speak(b.dataset.say)}});
 const TOPIC=Object.fromEntries(COURSE.map(t=>[t.id,t]));

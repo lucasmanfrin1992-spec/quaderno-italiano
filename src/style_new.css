@@ -535,3 +535,9 @@ button.w.rsel{background:var(--saffron-soft);box-shadow:0 0 0 2px var(--saffron)
 .letnote>b{font-family:var(--display);font-weight:400;font-size:1.08rem;color:var(--cobalt)}
 #letQuiz .qq.it{font-style:normal;color:var(--ink)}
 .letnote .formbox .f{font-size:1rem}
+/* v2 fase 4: player de áudio */
+.aplayer{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.aplayer .btn{display:inline-flex;align-items:center;gap:8px}
+.aplayer [data-arate]{font-family:var(--mono);min-width:68px;justify-content:center}
+.lsent.reading{background:var(--saffron-soft);box-shadow:0 0 0 3px var(--saffron-soft);border-radius:4px}
+.letp.reading{background:none;box-shadow:none}

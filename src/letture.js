@@ -32,8 +32,8 @@ function renderLetText(){const t=LT.cur,box=$("#letBox"),i=LETTURE.indexOf(t),pr
  box.innerHTML=`<button class="back" id="letBack">← Textos</button>
  <div class="tophead"><span class="label">${t.nivel} · ${TEMAS[t.tema]||t.tema} · texto ${i+1} de ${LETTURE.length}</span><h2 class="it lettit">${esc(t.titulo)}</h2></div>
  ${vers.length>1?`<div class="seg" id="letVer" role="tablist" aria-label="Versão do texto">${vers.map(v=>`<button role="tab" data-lver="${v[0]}" class="${ver===v[0]?"on":""}" aria-selected="${ver===v[0]}">${v[1]}</button>`).join("")}</div>`:""}
- ${canSpeak?`<div class="row" id="letPlayer"><button class="btn" id="letRead">${SPK_SVG}Ouvir o texto</button><button class="btn ghost" id="letStop" hidden>Parar</button></div>`:`<p class="small muted">Este aparelho não tem voz em italiano para ouvir o texto.</p>`}
- <article class="card stack lettext">${paras.map(p=>`<p class="letp"><span class="it">${esc(p)}</span></p>`).join("")}</article>
+ <div id="letPlayer">${audioHTML()}</div>
+ <article class="card stack lettext">${paras.map(p=>`<p class="letp">${splitSents(p).map(s=>`<span class="it lsent">${esc(s)}</span>`).join(" ")}</p>`).join("")}</article>
  <p class="hint">Toque numa palavra para ver a tradução e salvar em Preferiti. Para salvar uma frase, use “Marcar um trecho” no painel da palavra.</p>
  <div class="stack" style="gap:12px"><h3>Note linguistiche</h3>
   <details class="exs" open><summary><span class="label">Vocabulário</span><span class="exn">${N.vocabulario.length}</span></summary><div class="exlist">${N.vocabulario.map(v=>`<div class="exrow"><div><i class="it">${esc(v.it)}</i><span>${esc(v.pt)}</span></div>${spkBtn(v.it)}</div>`).join("")}</div></details>
@@ -46,7 +46,7 @@ function renderLetText(){const t=LT.cur,box=$("#letBox"),i=LETTURE.indexOf(t),pr
  $("#letBack").onclick=closeLet;
  $$("#letVer [data-lver]").forEach(b=>b.onclick=()=>{if(S.letVersao===b.dataset.lver)return;S.letVersao=b.dataset.lver;save();stopLines();const y=window.scrollY;renderLetText();window.scrollTo(0,y)});
  $$("#letBox > .row [data-let-open]").forEach(b=>b.onclick=()=>openLet(b.dataset.letOpen));
- if($("#letRead")){$("#letRead").onclick=()=>{$("#letStop").hidden=false;readLines(paras.map(p=>p.replace(/^—\s*/,"")),$$("#letBox .letp"))};$("#letStop").onclick=()=>{stopLines();$("#letStop").hidden=true}}
+ audioMount($("#letPlayer"),$$("#letBox .lsent").map(el=>({el,text:el.textContent.replace(/^—\s*/,"").replace(/[«»]/g,"")})));
  renderLetQuiz()}
 
 /* ---------- Comprensione: 3 perguntas; o texto conta como lido com as 3 certas ---------- */
