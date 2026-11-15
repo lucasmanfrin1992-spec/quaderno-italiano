@@ -6,8 +6,9 @@ const LT={cur:null,lvl:"all",q:"",quiz:{}};
 function letDone(id){const r=(S.leituras||{})[id];return r&&r.done?r.done:""}
 function letDoneN(){return LETTURE.filter(t=>letDone(t.id)).length}
 function letNext(){return LETTURE.find(t=>!letDone(t.id))||null}
-function letGloss(k){const t=LT.cur;if(!t)return null;const kk=String(k).toLowerCase().replace(/’/g,"'").replace(/'$/,"");return t.glossario.find(g=>g.it.toLowerCase()===kk)||null}
-function letVersao(t){return"base"} // Fase 3: seletor Base / Intermedio / Avanzato
+function letGloss(k){const t=LT.cur;if(!t)return null;const kk=String(k).toLowerCase().replace(/’/g,"'").replace(/'$/,"");const g=t.glossario.find(g=>g.it.toLowerCase()===kk);if(g)return g;const x=LET_EXTRA[kk];return x?{it:kk,pt:x[0],classe:x[1]}:null}
+const LETV=[["base","Base"],["intermedio","Intermedio"],["avanzato","Avanzato"]];
+function letVersao(t){const v=S.letVersao;return v&&t.versoes[v]?v:"base"} // a última versão escolhida fica guardada por perfil em S.letVersao
 function openLet(id){const t=LETI[id];if(!t)return;stopLines();LT.cur=t;try{localStorage.setItem(KEY+".let",id)}catch(e){}renderLet();window.scrollTo(0,0)}
 function closeLet(){stopLines();LT.cur=null;try{localStorage.removeItem(KEY+".let")}catch(e){}renderLet();window.scrollTo(0,0)}
 function renderLet(){if(!$("#letBox"))return;LT.cur?renderLetText():renderLetIndex()}
@@ -27,9 +28,10 @@ function renderLetList(){const box=$("#letList");if(!box)return;const q=norm(LT.
  $$("#letList [data-let-open]").forEach(b=>b.onclick=()=>openLet(b.dataset.letOpen))}
 
 /* ---------- tela do texto ---------- */
-function renderLetText(){const t=LT.cur,box=$("#letBox"),i=LETTURE.indexOf(t),prev=LETTURE[i-1],next=LETTURE[i+1],paras=t.versoes[letVersao(t)].split("\n"),N=t.notas;
+function renderLetText(){const t=LT.cur,box=$("#letBox"),i=LETTURE.indexOf(t),prev=LETTURE[i-1],next=LETTURE[i+1],ver=letVersao(t),paras=t.versoes[ver].split("\n"),N=t.notas,vers=LETV.filter(v=>t.versoes[v[0]]);
  box.innerHTML=`<button class="back" id="letBack">← Textos</button>
  <div class="tophead"><span class="label">${t.nivel} · ${TEMAS[t.tema]||t.tema} · texto ${i+1} de ${LETTURE.length}</span><h2 class="it lettit">${esc(t.titulo)}</h2></div>
+ ${vers.length>1?`<div class="seg" id="letVer" role="tablist" aria-label="Versão do texto">${vers.map(v=>`<button role="tab" data-lver="${v[0]}" class="${ver===v[0]?"on":""}" aria-selected="${ver===v[0]}">${v[1]}</button>`).join("")}</div>`:""}
  ${canSpeak?`<div class="row" id="letPlayer"><button class="btn" id="letRead">${SPK_SVG}Ouvir o texto</button><button class="btn ghost" id="letStop" hidden>Parar</button></div>`:`<p class="small muted">Este aparelho não tem voz em italiano para ouvir o texto.</p>`}
  <article class="card stack lettext">${paras.map(p=>`<p class="letp"><span class="it">${esc(p)}</span></p>`).join("")}</article>
  <p class="hint">Toque numa palavra para ver a tradução e salvar em Preferiti. Para salvar uma frase, use “Marcar um trecho” no painel da palavra.</p>
@@ -42,6 +44,7 @@ function renderLetText(){const t=LT.cur,box=$("#letBox"),i=LETTURE.indexOf(t),pr
  <div class="row" style="justify-content:space-between">${prev?`<button class="btn" data-let-open="${prev.id}">← Anterior</button>`:"<span></span>"}${next?`<button class="btn" data-let-open="${next.id}">Próximo →</button>`:"<span></span>"}</div>`;
  tokenize(box);
  $("#letBack").onclick=closeLet;
+ $$("#letVer [data-lver]").forEach(b=>b.onclick=()=>{if(S.letVersao===b.dataset.lver)return;S.letVersao=b.dataset.lver;save();stopLines();const y=window.scrollY;renderLetText();window.scrollTo(0,y)});
  $$("#letBox > .row [data-let-open]").forEach(b=>b.onclick=()=>openLet(b.dataset.letOpen));
  if($("#letRead")){$("#letRead").onclick=()=>{$("#letStop").hidden=false;readLines(paras.map(p=>p.replace(/^—\s*/,"")),$$("#letBox .letp"))};$("#letStop").onclick=()=>{stopLines();$("#letStop").hidden=true}}
  renderLetQuiz()}

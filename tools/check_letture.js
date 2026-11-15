@@ -1,6 +1,6 @@
 // Valida os textos das Leituras: node tools/check_letture.js
 const fs=require('fs'),path=require('path');
-const src=fs.readFileSync(path.join(__dirname,'..','src','letture_data.js'),'utf8');
+const src=['letture_data.js','letture_versioni.js'].map(f=>fs.readFileSync(path.join(__dirname,'..','src',f),'utf8')).join('\n');
 const L=new Function(src+';return LETTURE')();
 const LET="A-Za-zÀ-ÖØ-öø-ÿ",wre=new RegExp("["+LET+"]+","g"),errs=[],ids=new Set();let tot=0;
 L.forEach(t=>{const w=t.id;if(ids.has(w))errs.push(w+': id repetido');ids.add(w);
@@ -20,5 +20,5 @@ if(L.length!==24)errs.push('total de textos: '+L.length);
 if(c(t=>t.nivel==='A1')!==12||c(t=>t.nivel==='A2')!==12)errs.push('devem ser 12 A1 e 12 A2');
 if(c(t=>t.tema==='lavoro')<14)errs.push('pelo menos 14 textos de trabalho');
 console.log(L.length+' textos · '+c(t=>t.tema==='lavoro')+' de trabalho · média de '+Math.round(tot/L.length)+' palavras');
-L.forEach(t=>console.log(' '+t.id,(t.versoes.base.match(wre)||[]).length));
+L.forEach(t=>{console.log(' '+t.id,['base','intermedio','avanzato'].map(v=>(t.versoes[v].match(wre)||[]).length).join(' / '));['intermedio','avanzato'].forEach(v=>{if(!t.versoes[v])errs.push(t.id+': falta a versão '+v)})});
 if(errs.length){console.log(errs.join('\n'));process.exit(1)}
