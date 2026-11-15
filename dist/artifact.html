@@ -844,6 +844,12 @@ nobr{white-space:nowrap}
 .pnstate .lvl{font-style:normal}
 .pntoday li{font-size:.94rem}
 @media (min-width:560px){.pnstats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+/* v2 fase 7: fichas de dúvida */
+.duvta{width:100%;font:inherit;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;resize:vertical;line-height:1.5}
+.duvprompt{background:var(--paper);font-size:.88rem;color:var(--muted)}
+.duvq{font-size:1.05rem}
+.duva{font-size:.95rem;line-height:1.6;overflow-wrap:anywhere}
+.btn.danger{border-color:var(--bad);color:var(--bad);background:var(--bad-soft)}
 </style>
 
 <div class="wrap">
@@ -920,9 +926,14 @@ nobr{white-space:nowrap}
   <!-- ===================== PREFERITI ===================== -->
   <section class="view" id="v-preferiti" data-view="preferiti" hidden>
     <div class="row" style="justify-content:space-between">
-      <div class="stack" style="gap:2px"><h2>Preferiti</h2><p class="muted small">Palavras e frases que você salvou com a estrela.</p></div>
+      <div class="stack" style="gap:2px"><h2>Preferiti</h2><p class="muted small">O que você salvou com a estrela e as suas fichas de dúvida.</p></div>
     </div>
-    <div id="favBox" class="stack"></div>
+    <div class="seg seg2" id="prefSeg" role="tablist" aria-label="Preferiti">
+      <button role="tab" data-ps="fav" class="on" aria-selected="true">Salvos</button>
+      <button role="tab" data-ps="duv" aria-selected="false">Dúvidas<span class="cnt" id="duvCount"></span></button>
+    </div>
+    <div id="ps-fav" class="stack"><div id="favBox" class="stack"></div></div>
+    <div id="ps-duv" class="stack" hidden><div id="duvBox" class="stack"></div></div>
   </section>
 
   <!-- ===================== CARTÕES ===================== -->
@@ -2697,10 +2708,10 @@ const KEY="quaderno.v1";
 const RESET_EPOCH="2026-11-02"; // muda este valor para zerar os cartões de todos
 const DECKS={err:"Meus erros",fav:"Preferiti (palavras e frases)",vA1:"Vocabulário A1",vA2:"Vocabulário A2",verb:"Verbos (presente, passato, futuro)"};
 const DATA_V=3; // versão do formato dos dados salvos; migrar() leva os dados antigos para a versão atual sem apagar nada
-function defState(){return{cards:{},settings:{decks:{err:true,frase:true,fav:true,vA1:true,vA2:true,verb:true},newPerDay:20,dir:"mix",typing:false},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},favs:{},newsDone:{},course:{},writing:{},shadow:{},errs:{},log:{},tests:{},sents:{},estat:{},diary:{},chats:{},bt:{},dict:{},pairs:{},leituras:{},modi:{},eventos:{},versaoDados:DATA_V,resetEpoch:RESET_EPOCH,updatedAt:0}}
+function defState(){return{cards:{},settings:{decks:{err:true,frase:true,fav:true,vA1:true,vA2:true,verb:true},newPerDay:20,dir:"mix",typing:false},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},favs:{},newsDone:{},course:{},writing:{},shadow:{},errs:{},log:{},tests:{},sents:{},estat:{},diary:{},chats:{},bt:{},dict:{},pairs:{},leituras:{},modi:{},eventos:{},duvidas:{},versaoDados:DATA_V,resetEpoch:RESET_EPOCH,updatedAt:0}}
 function hydrate(o){const d=defState();S=Object.assign(d,o);S.settings=Object.assign(defState().settings,o.settings||{});S.settings.decks=Object.assign(defState().settings.decks,(o.settings||{}).decks||{});
  migrar(o.versaoDados||1);
- S.leituras=S.leituras||{};S.modi=S.modi||{};S.eventos=S.eventos||{};S.favs=S.favs||{};S.newsDone=S.newsDone||{};S.cards=S.cards||{};S.course=S.course||{};S.writing=S.writing||{};S.shadow=S.shadow||{};S.errs=S.errs||{};S.log=S.log||{};S.tests=S.tests||{};
+ S.leituras=S.leituras||{};S.modi=S.modi||{};S.eventos=S.eventos||{};S.duvidas=S.duvidas||{};S.favs=S.favs||{};S.newsDone=S.newsDone||{};S.cards=S.cards||{};S.course=S.course||{};S.writing=S.writing||{};S.shadow=S.shadow||{};S.errs=S.errs||{};S.log=S.log||{};S.tests=S.tests||{};
  if(o.resetEpoch!==RESET_EPOCH){S.cards={};S.daily={date:"",newDone:0,reviewed:0};S.streak={last:"",count:0};delete S.best;S.resetEpoch=RESET_EPOCH;return true}return false}
 function migrar(de){try{
  if(de<2){Object.values(S.errs||{}).forEach(e=>{if(e&&e.f==="Escreva a frase que você ouviu")e.f="Ouça a frase e diga o que ela significa"}); // v2: sem perguntas escritas
@@ -2789,7 +2800,7 @@ function tokenize(root){(root||document).querySelectorAll(".it").forEach(el=>{if
 /* ============================ ABAS ============================ */
 const VALID=["inicio","curso","news","preferiti","cartoes"];
 function showTab(name){if(!VALID.includes(name))name="inicio";cancelRange();stopLines();if(name!=="news"&&typeof READ!=="undefined"&&READ.state!=="idle")stopReading();$$("[data-view]").forEach(v=>v.hidden=v.dataset.view!==name);$$("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===name));
- try{localStorage.setItem(KEY+".tab",name)}catch(e){}window.scrollTo(0,0);if(name==="cartoes")renderFlash();if(name==="inicio")renderHome();if(name==="curso")renderCourse();if(name==="preferiti")renderFavs();if(name==="news"){renderNews();if(!$("#ns-cal").hidden)renderCal();if(!$("#ns-let").hidden)renderLet();if(!$("#ns-modi").hidden)renderModi()}}
+ try{localStorage.setItem(KEY+".tab",name)}catch(e){}window.scrollTo(0,0);if(name==="cartoes")renderFlash();if(name==="inicio")renderHome();if(name==="curso")renderCourse();if(name==="preferiti"){$("#ps-duv").hidden?renderFavs():renderDuvidas()}if(name==="news"){renderNews();if(!$("#ns-cal").hidden)renderCal();if(!$("#ns-let").hidden)renderLet();if(!$("#ns-modi").hidden)renderModi()}}
 $$("nav.tabs button").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
 document.addEventListener("click",e=>{const g=e.target.closest("[data-goto]");if(g){showTab(g.dataset.goto);if(g.dataset.topic)openTopic(g.dataset.topic,g.dataset.part||"voc");if(g.dataset.let){setNS("let");g.dataset.let==="index"?closeLet():openLet(g.dataset.let)}}});
 
@@ -5348,7 +5359,7 @@ async function initCloud(){
   if(s.exists){const r=clone(s.data());if((r.updatedAt||0)>(S.updatedAt||0)){const wasReset=hydrate(r);saveLocal();if(wasReset)save();rerenderAll()}else if((S.updatedAt||0)>(r.updatedAt||0)||r.resetEpoch!==RESET_EPOCH)scheduleSync()}
   else if(S.updatedAt)scheduleSync()}catch(e){}}
 function rerenderAll(){rollDay();syncFavCards();syncErrCards();syncSentCards();SESSION=null;renderDecks();renderBoxes();renderHome();renderNewsAll();if(!$("#v-curso").hidden&&!CUR)renderCourse();
- if(!$("#v-cartoes").hidden)renderFlash();if(!$("#v-news").hidden){renderNews();if(!$("#ns-let").hidden)renderLet();if(!$("#ns-modi").hidden)renderModi()}if(!$("#v-preferiti").hidden)renderFavs()}
+ if(!$("#v-cartoes").hidden)renderFlash();if(!$("#v-news").hidden){renderNews();if(!$("#ns-let").hidden)renderLet();if(!$("#ns-modi").hidden)renderModi()}if(!$("#v-preferiti").hidden){$("#ps-duv").hidden?renderFavs():renderDuvidas()}}
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&syncDirty){clearTimeout(syncT);flushSync()}});
 
 /* ============================ PREFERITI (palavras e frases salvas) ============================ */
@@ -6031,9 +6042,54 @@ function renderPainel(){const el=$("#homePainel");if(!el)return;const s=perStart
   <div class="row">${due+nw?`<button class="btn primary" data-goto="cartoes">Ir para os cartões</button>`:""}${nl?`<button class="btn" data-goto="news" data-let="${nl.id}">Ler o próximo texto</button>`:""}</div></div>`;
  $$("#pnSeg [data-per]").forEach(b=>b.onclick=()=>{PN.per=b.dataset.per;renderPainel()})}
 
+/* ============================ DÚVIDAS: fichas com respostas obtidas fora do app ============================ */
+// O app não chama nenhuma IA e não abre nenhum serviço: só oferece um prompt pronto para copiar,
+// um campo para colar a resposta que a pessoa conseguiu onde quiser, e guarda tudo como ficha.
+// Fichas por perfil em S.duvidas: { <id>: { q: dúvida (opcional), a: resposta colada, d: "AAAA-MM-DD", t: criado em (ms) } }
+const DUV_PROMPT="Estou estudando italiano (nível A1–A2) e minha língua é o português do Brasil. Explique a minha dúvida abaixo em português, de forma curta e clara, em no máximo 120 palavras. Inclua 2 exemplos em italiano, cada um com a tradução em português. Não use termos técnicos sem explicar.\n\nDÚVIDA:";
+const DV={q:"",del:"",msg:""};
+function setPrefSeg(v){if(v!=="duv")v="fav";$$("#prefSeg button").forEach(b=>{const on=b.dataset.ps===v;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
+ $("#ps-fav").hidden=v!=="fav";$("#ps-duv").hidden=v!=="duv";try{localStorage.setItem(KEY+".ps",v)}catch(e){}if(v==="duv")renderDuvidas();else renderFavs()}
+function duvList(){return Object.keys(S.duvidas||{}).map(id=>Object.assign({id},S.duvidas[id])).sort((a,b)=>(b.t||0)-(a.t||0)||String(b.d).localeCompare(String(a.d)))}
+function duvCount(){const el=$("#duvCount");if(el){const n=Object.keys(S.duvidas||{}).length;el.textContent=n?String(n):""}}
+async function copyPrompt(){const ta=$("#duvPrompt");let ok=false;try{await navigator.clipboard.writeText(DUV_PROMPT);ok=true}catch(e){}
+ if(!ok){try{ta.focus();ta.select();ok=document.execCommand("copy")}catch(e){}}
+ DV.msg=ok?"Prompt copiado. Cole onde preferir, escreva a sua dúvida depois de “DÚVIDA:” e traga a resposta para cá.":"Não deu para copiar automaticamente. O texto está selecionado: copie com o menu do aparelho.";
+ const m=$("#duvCopyMsg");if(m)m.textContent=DV.msg;if(!ok){try{ta.focus();ta.select()}catch(e){}}}
+function saveDuvida(){const q=$("#duvQ").value.trim(),a=$("#duvA").value.trim(),msg=$("#duvSaveMsg");
+ if(!a){msg.textContent="Cole a resposta antes de salvar.";return}
+ S.duvidas=S.duvidas||{};const t=Date.now(),id="d"+t.toString(36);S.duvidas[id]={q,a,d:today(),t};save();
+ DV.msg="";renderDuvidas();const m=$("#duvSaveMsg");if(m)m.textContent="Ficha salva."}
+function renderDuvidas(){const box=$("#duvBox");if(!box)return;duvCount();
+ box.innerHTML=`<div class="card stack">
+  <div class="stack" style="gap:4px"><h3>Nova ficha</h3><p class="small muted">O app não responde dúvidas. Copie o prompt, use-o onde preferir e cole aqui a resposta que receber. Ela vira uma ficha que você pode buscar depois.</p></div>
+  <div class="stack" style="gap:6px"><span class="label">1 · Prompt</span><textarea id="duvPrompt" class="duvta duvprompt" readonly rows="6" aria-label="Prompt para copiar">${esc(DUV_PROMPT)}</textarea>
+   <div class="row"><button class="btn primary" id="duvCopy">Copiar prompt</button></div><p class="small muted" id="duvCopyMsg" role="status">${esc(DV.msg)}</p></div>
+  <div class="stack" style="gap:6px"><label class="label" for="duvQ">2 · Sua dúvida (opcional, ajuda na busca)</label><input type="text" id="duvQ" class="prefq" autocomplete="off" placeholder="Ex.: quando usar «c'è» e «ci sono»"></div>
+  <div class="stack" style="gap:6px"><label class="label" for="duvA">3 · Resposta</label><textarea id="duvA" class="duvta" rows="7" placeholder="Cole aqui a resposta"></textarea></div>
+  <div class="row"><button class="btn primary" id="duvSave">Salvar ficha</button><span class="small muted" id="duvSaveMsg" role="status"></span></div>
+ </div>
+ <div class="row" style="justify-content:space-between"><h3>Minhas fichas</h3><span class="chip">${Object.keys(S.duvidas||{}).length}</span></div>
+ ${Object.keys(S.duvidas||{}).length?`<input type="search" id="duvSearch" class="prefq" placeholder="Buscar nas fichas" aria-label="Buscar nas fichas" value="${esc(DV.q)}" autocomplete="off">`:""}
+ <div id="duvList" class="stack"></div>`;
+ $("#duvCopy").onclick=copyPrompt;$("#duvSave").onclick=saveDuvida;
+ if($("#duvSearch"))$("#duvSearch").oninput=e=>{DV.q=e.target.value;renderDuvList()};
+ renderDuvList()}
+function renderDuvList(){const box=$("#duvList");if(!box)return;const all=duvList(),q=norm(DV.q||"");
+ if(!all.length){box.innerHTML=`<div class="card"><p class="muted small">Nenhuma ficha ainda.</p></div>`;return}
+ const items=all.filter(x=>!q||norm(x.q||"").includes(q)||norm(x.a||"").includes(q));
+ if(!items.length){box.innerHTML=`<div class="card"><p class="muted small">Nenhuma ficha com essa busca.</p></div>`;return}
+ box.innerHTML=items.map(x=>`<article class="card stack duvcard"><div class="row" style="justify-content:space-between;align-items:flex-start;flex-wrap:nowrap"><div class="stack" style="gap:2px;min-width:0"><span class="label">${fmtBR(x.d)}</span>${x.q?`<h3 class="duvq">${esc(x.q)}</h3>`:""}</div>
+  <button class="btn ghost small${DV.del===x.id?" danger":""}" data-duvdel="${x.id}">${DV.del===x.id?"Confirmar":"Apagar"}</button></div>
+  <div class="duva">${esc(x.a).replace(/\n/g,"<br>")}</div></article>`).join("");
+ $$("#duvList [data-duvdel]").forEach(b=>b.onclick=()=>{const id=b.dataset.duvdel;if(DV.del!==id){DV.del=id;renderDuvList();setTimeout(()=>{if(DV.del===id){DV.del="";renderDuvList()}},4000);return}
+  delete S.duvidas[id];DV.del="";save();renderDuvidas()})}
+
 /* ============================ INÍCIO ============================ */
 syncFavCards();syncErrCards();syncSentCards();renderDecks();renderBoxes();renderHome();updateFavCount();
 try{const lt=localStorage.getItem(KEY+".let");if(lt&&LETI[lt])LT.cur=LETI[lt];const ns=localStorage.getItem(KEY+".ns");if(ns)setNS(ns)}catch(e){}
+$$("#prefSeg [data-ps]").forEach(b=>b.onclick=()=>setPrefSeg(b.dataset.ps));
+try{if(localStorage.getItem(KEY+".ps")==="duv")setPrefSeg("duv")}catch(e){}duvCount();
 initCloud();
 (function(){let start="inicio";const h=location.hash.slice(1);
  if(VALID.includes(h))start=h;else{try{const t=localStorage.getItem(KEY+".tab");if(VALID.includes(t))start=t}catch(e){}}

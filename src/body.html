@@ -72,9 +72,14 @@
   <!-- ===================== PREFERITI ===================== -->
   <section class="view" id="v-preferiti" data-view="preferiti" hidden>
     <div class="row" style="justify-content:space-between">
-      <div class="stack" style="gap:2px"><h2>Preferiti</h2><p class="muted small">Palavras e frases que você salvou com a estrela.</p></div>
+      <div class="stack" style="gap:2px"><h2>Preferiti</h2><p class="muted small">O que você salvou com a estrela e as suas fichas de dúvida.</p></div>
     </div>
-    <div id="favBox" class="stack"></div>
+    <div class="seg seg2" id="prefSeg" role="tablist" aria-label="Preferiti">
+      <button role="tab" data-ps="fav" class="on" aria-selected="true">Salvos</button>
+      <button role="tab" data-ps="duv" aria-selected="false">Dúvidas<span class="cnt" id="duvCount"></span></button>
+    </div>
+    <div id="ps-fav" class="stack"><div id="favBox" class="stack"></div></div>
+    <div id="ps-duv" class="stack" hidden><div id="duvBox" class="stack"></div></div>
   </section>
 
   <!-- ===================== CARTÕES ===================== -->
