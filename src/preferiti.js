@@ -3,7 +3,7 @@
 // Campos de um favorito em S.favs: lemma (it), meaning (pt), tipo ("palavra" | "frase"), origem ("noticia:<data>" | "curso:<tópico>"), added (criado em),
 // own (tradução digitada pelo usuário), auto (tradução palavra por palavra). Favoritos antigos, sem tipo, valem como "palavra".
 function origemOf(btn){if(!btn||!document.contains(btn))return"";if(btn.closest("#newsBox")&&NEWS.cur)return"noticia:"+NEWS.cur.date;if(btn.closest("#letBox")&&LT.cur)return"leitura:"+LT.cur.id;if(btn.closest("#v-curso")&&CUR)return"curso:"+CUR.id;return""}
-function origemLabel(o){if(!o)return"";const i=o.indexOf(":"),t=o.slice(0,i),id=o.slice(i+1);if(t==="noticia")return"notícia de "+fmtBR(id);if(t==="curso"&&TOPIC[id])return TOPIC[id].lvl+" · "+TOPIC[id].t;if(t==="leitura"&&LETI[id])return"texto: "+LETI[id].titulo;return""}
+function origemLabel(o){if(!o)return"";const i=o.indexOf(":"),t=o.slice(0,i),id=o.slice(i+1);if(t==="noticia")return"notícia de "+fmtBR(id);if(t==="curso"&&TOPIC[id])return TOPIC[id].lvl+" · "+TOPIC[id].t;if(t==="leitura"&&LETI[id])return"texto: "+LETI[id].titulo;if(t==="modi"&&MODII[id])return"modi di dire: "+MODII[id].titulo;return""}
 
 /* ---------- palavra sem tradução cadastrada: salva com a tradução do usuário ---------- */
 function saveOwn(v){v=String(v||"").trim();if(!v||!SH)return;const k=SH.k;

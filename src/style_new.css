@@ -542,3 +542,10 @@ button.w.rsel{background:var(--saffron-soft);box-shadow:0 0 0 2px var(--saffron)
 .lsent.reading{background:var(--saffron-soft);box-shadow:0 0 0 3px var(--saffron-soft);border-radius:4px}
 .letp.reading{background:none;box-shadow:none}
 nobr{white-space:nowrap}
+/* v2 fase 5: modi di dire */
+.seg.seg4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.seg.seg4 button{font-size:.78rem;padding:8px 2px;line-height:1.15;white-space:normal}
+.modit{font-style:normal;color:var(--cobalt);font-size:1.15rem}
+.modi .label{margin-right:6px}
+.spk.star.on{background:var(--saffron-soft);border-color:var(--saffron)}
+.spk.star.on svg{fill:var(--saffron);stroke:var(--saffron)}

@@ -52,9 +52,10 @@
 
   <!-- ===================== NOTÍCIA ===================== -->
   <section class="view" id="v-news" data-view="news" hidden>
-    <div class="seg" id="newsSeg" role="tablist" aria-label="Leitura">
+    <div class="seg seg4" id="newsSeg" role="tablist" aria-label="Leitura">
       <button role="tab" data-ns="read" class="on" aria-selected="true">Notícia</button>
       <button role="tab" data-ns="let" aria-selected="false">Textos</button>
+      <button role="tab" data-ns="modi" aria-selected="false">Modi di dire</button>
       <button role="tab" data-ns="cal" aria-selected="false">Calendário</button>
     </div>
     <div id="ns-read" class="stack" style="gap:20px">
@@ -62,6 +63,7 @@
       <div id="quizBox"></div>
     </div>
     <div id="ns-let" class="stack" style="gap:16px" hidden><div id="letBox" class="stack" style="gap:16px"></div></div>
+    <div id="ns-modi" class="stack" style="gap:16px" hidden><div id="modiBox" class="stack" style="gap:16px"></div></div>
     <div id="ns-cal" hidden><div class="card stack" id="calBox"></div></div>
   </section>
 
