@@ -59,7 +59,7 @@ function renderLetQuiz(){const t=LT.cur,box=$("#letQuiz");if(!t||!box)return;con
   h+=`<div class="qz"><span class="qn">Pergunta ${i+1} de ${n}</span><div class="qq it">${esc(q.pergunta)}</div><div class="opts">${st.ord[i].map(k=>`<button class="opt${a!=null?(k===q.correta?" right":k===a?" wrong":""):""}" data-lq="${i}" data-k="${k}" ${a!=null?"disabled":""}>${esc(q.opcoes[k])}</button>`).join("")}</div></div>`});
  if(answered===n)h+=right===n?`<div class="fb ok"><b>${n}/${n}: texto lido!</b><span>${done?"Concluído em "+fmtBR(done)+".":""}</span></div>`:`<div class="fb no"><b>${right}/${n} certas.</b><span>Releia o texto e toque em “Limpar” para tentar de novo.</span></div>`;
  box.innerHTML=h;tokenize(box);
- $$("#letQuiz [data-lq]").forEach(b=>b.onclick=()=>{const i=+b.dataset.lq;if(st.ans[i]!=null)return;st.ans[i]=+b.dataset.k;
+ $$("#letQuiz [data-lq]").forEach(b=>b.onclick=()=>{const i=+b.dataset.lq;if(st.ans[i]!=null)return;st.ans[i]=+b.dataset.k;{const q=t.quiz[i];errAnswer({id:"let:"+t.id+":"+i,k:"mc",cat:"leit",lbl:"Leitura · "+t.titulo,p:q.pergunta,pit:true,o:q.opcoes,a:q.correta,x:"",let:t.id},st.ans[i]===q.correta,"leitura")}
   if(Object.keys(st.ans).length===n&&t.quiz.every((q,j)=>st.ans[j]===q.correta)){S.leituras=S.leituras||{};if(!S.leituras[t.id]){S.leituras[t.id]={done:today()};logEvento("leitura",t.id)}logInc("n",1);save();renderHome()}
   renderLetQuiz()});
  if($("#letClear"))$("#letClear").onclick=()=>{LT.quiz[t.id]={ans:{},ord:{}};renderLetQuiz()}}

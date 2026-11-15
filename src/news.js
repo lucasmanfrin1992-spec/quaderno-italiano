@@ -101,7 +101,7 @@ function renderQuiz(){const n=NEWS.cur,box=$("#quizBox");if(!n||!Array.isArray(n
  box.innerHTML=h+"</div>";
  $$("#quizBox .opt").forEach(b=>b.onclick=()=>answerQ(+b.dataset.q,+b.dataset.k));
  if($("#qzRedo"))$("#qzRedo").onclick=()=>{QZ.ans={};QZ.order={};renderQuiz();$("#quizBox").scrollIntoView({block:"start"})}}
-function answerQ(i,k){const n=NEWS.cur;if(QZ.ans[i]!=null)return;QZ.ans[i]=k;
+function answerQ(i,k){const n=NEWS.cur;if(QZ.ans[i]!=null)return;QZ.ans[i]=k;try{const q=n.quiz[i];errAnswer({id:"news:"+n.date+":"+i,k:"mc",cat:"leit",lbl:"Notícia de "+fmtBR(n.date),p:q.q,o:q.options,a:q.answer,x:q.explanation||""},k===q.answer,"noticia")}catch(e){}
  if(Object.keys(QZ.ans).length===n.quiz.length){const sc=n.quiz.filter((q,j)=>QZ.ans[j]===q.answer).length,prev=S.newsDone[n.date];
   S.newsDone[n.date]={score:Math.max(sc,prev?prev.score:0),total:n.quiz.length,at:prev?prev.at:today()};logInc("n",1);save();renderHome()}
  renderQuiz()}

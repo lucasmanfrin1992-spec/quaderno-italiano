@@ -64,7 +64,7 @@ def main():
     size = sum(os.path.getsize(os.path.join(OUT, k + '.mp3')) for k in keys)
     import hashlib
     v = str(len(keys)) + '-' + hashlib.md5(' '.join(keys).encode()).hexdigest()[:6]
-    json.dump({'v': v, 'voz': 'Paola', 'keys': keys}, open(os.path.join(OUT, 'index.json'), 'w'), separators=(',', ':'))
+    json.dump({'v': v, 'voz': 'Paola', 'mb': round(size/1048576, 1), 'keys': keys}, open(os.path.join(OUT, 'index.json'), 'w'), separators=(',', ':'))
     print(f'gerados {done}, removidos {removed}; total {len(keys)} arquivos, {size/1048576:.1f} MB')
 
 if __name__ == '__main__':

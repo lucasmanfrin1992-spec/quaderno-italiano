@@ -6,13 +6,13 @@ const EX={lvl:"A1",run:null,tx:null,txAns:{}};
 function exStat(id){return(S.exerc||{})[id]||null}
 function exPool(lvl,cat){return EXQ.filter(q=>q.nivel===lvl&&(!cat||cat==="mix"?true:q.cat===cat))}
 function exCounts(list){let ok=0,wrong=0,seen=0;list.forEach(q=>{const s=exStat(q.id);if(!s)return;seen++;s.r?ok++:wrong++});return{ok,wrong,seen,tot:list.length}}
-function exRecord(q,ok){S.exerc=S.exerc||{};const s=S.exerc[q.id]=S.exerc[q.id]||{r:0,n:0,ok:0};s.n++;s.r=ok?1:0;if(ok)s.ok++;save()}
+function exRecord(q,ok){S.exerc=S.exerc||{};const s=S.exerc[q.id]=S.exerc[q.id]||{r:0,n:0,ok:0};s.n++;s.r=ok?1:0;if(ok)s.ok++;save();errAnswer(exItemOf(q),ok,"exercicios")}
 function exPick(list,n){const nunca=shuffle(list.filter(q=>!exStat(q.id))),erradas=shuffle(list.filter(q=>exStat(q.id)&&!exStat(q.id).r)),certas=shuffle(list.filter(q=>exStat(q.id)&&exStat(q.id).r));
  return[...nunca,...erradas,...certas].slice(0,n)}
 function exLevelSeg(){return`<div class="seg seg2" id="exLvl" role="tablist" aria-label="Nível">${["A1","A2"].map(l=>`<button role="tab" data-exlvl="${l}" class="${EX.lvl===l?"on":""}" aria-selected="${EX.lvl===l}">Nível ${l}</button>`).join("")}</div>`}
-function renderExerc(){const box=$("#exBox");if(!box)return;if(EX.run)return renderExRun();if(EX.tx)return renderExText();
+function renderExerc(){const box=$("#exBox");if(!box)return;if(EX.mode)return v3RenderMode();if(EX.run)return renderExRun();if(EX.tx)return renderExText();
  const all=exPool(EX.lvl),c=exCounts(all);
- box.innerHTML=`${exLevelSeg()}
+ box.innerHTML=`${v3HubHTML()}${exLevelSeg()}
  <div class="card stack" style="gap:8px"><div class="row" style="justify-content:space-between"><span class="label">Nível ${EX.lvl} · ${all.length} questões</span><span class="chip${c.seen?" hot":""}">${c.ok} certas</span></div>
   <div class="lvlbar"><i style="width:${all.length?c.ok/all.length*100:0}%"></i></div><p class="small muted">${c.seen?`${c.seen} respondidas · ${c.wrong} para refazer`:"Nenhuma respondida ainda. Tudo é de marcar: toque na opção certa."}</p>
   <div class="row"><button class="btn primary" data-exstart="mix">Rodada mista (10)</button>${c.wrong?`<button class="btn" data-exwrong="mix">Refazer erradas (${c.wrong})</button>`:""}</div></div>
@@ -24,7 +24,7 @@ function renderExerc(){const box=$("#exBox");if(!box)return;if(EX.run)return ren
  $$("#exBox [data-exstart]").forEach(b=>b.onclick=()=>exStart(b.dataset.exstart,false));
  $$("#exBox [data-exwrong]").forEach(b=>b.onclick=()=>exStart(b.dataset.exwrong,true));
  $$("#exBox [data-extexts]").forEach(b=>b.onclick=()=>{EX.showTexts=!EX.showTexts;renderExerc()});
- $$("#exBox [data-extx]").forEach(b=>b.onclick=()=>exOpenText(b.dataset.extx))}
+ $$("#exBox [data-extx]").forEach(b=>b.onclick=()=>exOpenText(b.dataset.extx));v3HubBind()}
 function exTextList(){return`<div class="tlist">${Object.values(EXTX).filter(t=>t.nivel===EX.lvl).map((t,i)=>{const qs=EXQ.filter(q=>q.tx===t.id),ok=qs.filter(q=>exStat(q.id)&&exStat(q.id).r).length;
  return`<button class="tcard${ok===qs.length?" done":""}" data-extx="${t.id}"><span class="tn">${ok===qs.length?"✓":i+1}</span><div><h3>${esc(t.titulo)}</h3><p>${qs.length} perguntas</p></div><span class="pill ${ok===qs.length?"ok":""}">${ok}/${qs.length}</span></button>`}).join("")}</div>`}
 

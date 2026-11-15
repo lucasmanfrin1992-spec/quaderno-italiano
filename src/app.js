@@ -29,16 +29,17 @@ const TENSES={pres:{n:"presente",f:pres},pass:{n:"passato prossimo",f:pass},fut:
 const KEY="quaderno.v1";
 const RESET_EPOCH="2026-11-02"; // muda este valor para zerar os cartões de todos
 const DECKS={err:"Meus erros",fav:"Preferiti (palavras e frases)",vA1:"Vocabulário A1",vA2:"Vocabulário A2",verb:"Verbos (presente, passato, futuro)"};
-const DATA_V=3; // versão do formato dos dados salvos; migrar() leva os dados antigos para a versão atual sem apagar nada
-function defState(){return{cards:{},settings:{decks:{err:true,frase:true,fav:true,vA1:true,vA2:true,verb:true},newPerDay:20,dir:"mix",typing:false},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},favs:{},newsDone:{},course:{},writing:{},shadow:{},errs:{},log:{},tests:{},sents:{},estat:{},diary:{},chats:{},bt:{},dict:{},pairs:{},leituras:{},modi:{},eventos:{},duvidas:{},exerc:{},versaoDados:DATA_V,resetEpoch:RESET_EPOCH,updatedAt:0}}
+const DATA_V=4; // versão do formato dos dados salvos; migrar() leva os dados antigos para a versão atual sem apagar nada
+function defState(){return{cards:{},settings:{decks:{err:true,frase:true,fav:true,vA1:true,vA2:true,verb:true},newPerDay:20,dir:"mix",typing:false},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},favs:{},newsDone:{},course:{},writing:{},shadow:{},errs:{},log:{},tests:{},sents:{},estat:{},diary:{},chats:{},bt:{},dict:{},pairs:{},leituras:{},modi:{},eventos:{},duvidas:{},exerc:{},erros:{},escuta:{},ordem:{},dialogos:{},simulados:{},caffe:{ult:"",dias:{}},versaoDados:DATA_V,resetEpoch:RESET_EPOCH,updatedAt:0}}
 function hydrate(o){const d=defState();S=Object.assign(d,o);S.settings=Object.assign(defState().settings,o.settings||{});S.settings.decks=Object.assign(defState().settings.decks,(o.settings||{}).decks||{});
  migrar(o.versaoDados||1);
- S.leituras=S.leituras||{};S.modi=S.modi||{};S.eventos=S.eventos||{};S.duvidas=S.duvidas||{};S.exerc=S.exerc||{};S.favs=S.favs||{};S.newsDone=S.newsDone||{};S.cards=S.cards||{};S.course=S.course||{};S.writing=S.writing||{};S.shadow=S.shadow||{};S.errs=S.errs||{};S.log=S.log||{};S.tests=S.tests||{};
+ S.leituras=S.leituras||{};S.modi=S.modi||{};S.eventos=S.eventos||{};S.duvidas=S.duvidas||{};S.exerc=S.exerc||{};S.erros=S.erros||{};S.escuta=S.escuta||{};S.ordem=S.ordem||{};S.dialogos=S.dialogos||{};S.simulados=S.simulados||{};S.caffe=S.caffe||{ult:"",dias:{}};S.favs=S.favs||{};S.newsDone=S.newsDone||{};S.cards=S.cards||{};S.course=S.course||{};S.writing=S.writing||{};S.shadow=S.shadow||{};S.errs=S.errs||{};S.log=S.log||{};S.tests=S.tests||{};
  if(o.resetEpoch!==RESET_EPOCH){S.cards={};S.daily={date:"",newDone:0,reviewed:0};S.streak={last:"",count:0};delete S.best;S.resetEpoch=RESET_EPOCH;return true}return false}
 function migrar(de){try{
  if(de<2){Object.values(S.errs||{}).forEach(e=>{if(e&&e.f==="Escreva a frase que você ouviu")e.f="Ouça a frase e diga o que ela significa"}); // v2: sem perguntas escritas
   if(S.settings)S.settings.typing=false}
  if(de<3)evBackfill(); // v3: log de eventos para o calendário e o painel
+ if(de<4){["erros","escuta","ordem","dialogos","simulados"].forEach(k=>{if(!S[k]||typeof S[k]!=="object")S[k]={}});if(!S.caffe||typeof S.caffe!=="object")S.caffe={ult:"",dias:{}}} // v4 (Nonna Dice v3): caderno de erros, escuta, montar a frase, diálogos, simulados e caffè
  }catch(e){}S.versaoDados=DATA_V}
 let S=defState();
 let DB=null,UID=null,stateRef=null,syncT=null,syncing=false,syncDirty=false,syncRetried=false;
@@ -188,7 +189,7 @@ function renderQ(){const r=RUN,q=r.qs[r.i],n=r.qs.length;
  if($("#lPlay")){const sp=()=>speak(q.say);$("#lPlay").onclick=sp;setTimeout(sp,250)}
  const right=qAns(q);
  $$("#cBody .opt").forEach(b=>b.onclick=()=>{const ch=q.opts[+b.dataset.k],ok=ch===right;q.chosen=ch;$$("#cBody .opt").forEach(x=>{x.disabled=true;if(q.opts[+x.dataset.k]===right)x.classList.add("right")});if(!ok)b.classList.add("wrong");feedback(ok,q)})}
-function feedback(ok,q){const r=RUN;q.ok=ok;recordCat(qCat(q),ok);if(ok)r.score++;else{r.wrong.push(q);addErrCard(q);save()}
+function feedback(ok,q){const r=RUN;q.ok=ok;recordCat(qCat(q),ok);try{errAnswer(curItemOf(q),ok,r.test?"teste":"curso")}catch(e){}if(ok)r.score++;else{r.wrong.push(q);addErrCard(q);save()}
  const full=q.type==="lf"||q.type==="lm"?q.say:q.type==="f"&&!q.q.includes("→")?q.q.replace("___",q.a.split("/")[0]).replace(/\s*\(.*?\)\s*$/,""):q.type==="x"?q.a:"";
  $("#fb").innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${ok?"Certo!":"Resposta: "+esc(q.a.split("/").join(" ou "))}</b>${full?`<div class="row" style="gap:8px;flex-wrap:nowrap"><i class="it" style="flex:1">${esc(full)}</i>${spkBtn(full)}</div>`:""}<div>${esc(q.exp)}</div></div>
  <button class="btn primary" id="nextQ" style="margin-top:12px">${r.i<r.qs.length-1?"Próxima":"Ver resultado"}</button>`;tokenize($("#fb"));

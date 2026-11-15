@@ -90,7 +90,7 @@ function renderModiQuiz(){const u=MD.cur,box=$("#modiQuiz");if(!u||!box)return;c
   h+=`<div class="qz"><span class="qn">${pos+1} de ${n} · o que quer dizer?</span><div class="qq it">${esc(m.it)}</div><div class="opts">${st.opts[k].map(j=>`<button class="opt${a!=null?(j===k?" right":j===a?" wrong":""):""}" data-mq="${k}" data-j="${j}" ${a!=null?"disabled":""}>${esc(u.itens[j].s)}</button>`).join("")}</div></div>`});
  if(answered===n)h+=right===n?`<div class="fb ok"><b>${n}/${n}: unidade feita!</b></div>`:`<div class="fb no"><b>${right}/${n} certas.</b><span>Releia as expressões e toque em “Limpar” para tentar de novo.</span></div>`;
  box.innerHTML=h;tokenize(box);
- $$("#modiQuiz [data-mq]").forEach(b=>b.onclick=()=>{const k=+b.dataset.mq;if(st.ans[k]!=null)return;st.ans[k]=+b.dataset.j;
+ $$("#modiQuiz [data-mq]").forEach(b=>b.onclick=()=>{const k=+b.dataset.mq;if(st.ans[k]!=null)return;st.ans[k]=+b.dataset.j;{const m=u.itens[k],op=st.opts[k];errAnswer({id:"modi:"+u.id+":"+k,k:"mc",cat:"voc",lbl:"Modi di dire · "+u.titulo,p:"O que quer dizer «"+m.it+"»?",o:op.map(j=>u.itens[j].s),a:op.indexOf(k),x:"Ao pé da letra: "+m.lit+".",say:m.it},st.ans[k]===k,"modi")}
   if(Object.keys(st.ans).length===n&&u.itens.every((_,j)=>st.ans[j]===j)){S.modi=S.modi||{};if(!S.modi[u.id]){S.modi[u.id]={done:today()};logEvento("unidade","modi:"+u.id)}logInc("e",1);save();renderHome()}
   renderModiQuiz()});
  if($("#modiClear"))$("#modiClear").onclick=()=>{delete MD.quiz[u.id];renderModiQuiz()}}

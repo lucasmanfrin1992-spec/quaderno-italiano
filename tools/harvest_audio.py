@@ -16,6 +16,10 @@ JS=r"""async()=>{const REC=new Map();const add=t=>{const n=audioNorm(t);if(!n||!
  mark('modi',()=>{for(const u of MODI){openModi(u.id);says(document)}});
  mark('exercicios',()=>{Object.values(EXTX).forEach(t=>add(t.texto.replace(/—/g,"")));for(const q of EXQ){EX.run={cat:q.cat,i:0,qs:[{q,ord:q.o.map((_,i)=>i),ans:null}]};renderExRun();says(document)}EX.run=null;EX.tx=null});
  mark('infograficos',()=>{for(const x of INFOGRAFICOS){openTopic(x.topico,'voc');says(document)}});
+ mark('v3',()=>{ASC.forEach(x=>add(x.audio));ORD.forEach(x=>x.aceitas.forEach(a=>add(joinBlocks(a))));
+   DIA.forEach(d=>d.turnos.forEach(t=>{add(t.outro.replace(/^\(.*?\)\s*/,""));add(t.opcoes.find(o=>o.ok).it)}));
+   FALSI.forEach(b=>b.itens.forEach(x=>{add(x.it);add(x.ex)}));CANT.forEach(u=>{u.termos.forEach(t=>{add(t[0]);add(t[2])});u.doc.texto.split("\n").forEach(add)});
+   VERBI40.forEach(add);MODI.forEach(u=>u.itens.forEach(m=>add(m.it)))});
  mark('palavras',()=>{[...WORDS].forEach(w=>speak(w))});
  mark('dicionario',()=>{[...WORDS].forEach(w=>{const k=w.toLowerCase().replace(/’/g,"'");let e=null;try{e=lookupLocal(k,k)}catch(x){}if(e){if(e.lemma)speak(e.lemma);if(e.example)speak(e.example)}})});
  return {items:[...REC].map(([k,t])=>[k,t]),src}}"""

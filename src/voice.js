@@ -20,7 +20,7 @@ function bestVoice(){if(!IT_VOICES.length)loadVoices();return IT_VOICES.find(v=>
 function audioNorm(t){return String(t).replace(/[«»“”"]/g,"").replace(/^\s*[—–-]\s*/,"").replace(/\s+/g," ").trim()}
 function audioKey(t){const s=audioNorm(t).toLowerCase();let h=0x811c9dc5;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,0x01000193)>>>0}return("0000000"+h.toString(16)).slice(-8)+s.length.toString(36)}
 const REC={keys:null,v:"",voz:"",base:"audio/",el:null};
-function recLoad(){try{fetch(REC.base+"index.json",{cache:"no-cache"}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.keys){REC.keys=new Set(j.keys);REC.v=j.v||"";REC.voz=j.voz||"";try{renderAudioCard()}catch(e){}}}).catch(()=>{})}catch(e){}}
+function recLoad(){try{fetch(REC.base+"index.json",{cache:"no-cache"}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.keys){REC.keys=new Set(j.keys);REC.v=j.v||"";REC.voz=j.voz||"";REC.mb=j.mb||0;try{renderAudioCard()}catch(e){}}}).catch(()=>{})}catch(e){}}
 function recHas(t){return!!(REC.keys&&REC.keys.has(audioKey(t)))}
 function recStop(){if(REC.el){try{REC.el.pause()}catch(e){}}}
 const SAY={u:null,tok:0,lastCancel:0};

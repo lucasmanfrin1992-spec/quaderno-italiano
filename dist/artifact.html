@@ -938,7 +938,7 @@ body.dragsel,body.dragsel *{-webkit-user-select:none;user-select:none}
 .excat .tlist{margin-top:4px}
 
 /* v3 fase 1: aviso "Sem som?" e tela de teste de áudio */
-.audwarn{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(78px + env(safe-area-inset-bottom,0px));z-index:46;width:min(94vw,520px);background:#2a211a;color:#fff;border:0;border-radius:12px;padding:11px 14px;font:inherit;font-size:14px;text-align:left;box-shadow:0 6px 24px rgba(0,0,0,.25);cursor:pointer}
+.audwarn{position:fixed;left:50%;transform:translateX(-50%);top:calc(8px + env(safe-area-inset-top,0px));z-index:46;width:min(94vw,520px);background:#2a211a;color:#fff;border:0;border-radius:12px;padding:11px 14px;font:inherit;font-size:14px;text-align:left;box-shadow:0 6px 24px rgba(0,0,0,.25);cursor:pointer}
 .audwarn[hidden]{display:none}
 .audov{position:fixed;inset:0;z-index:60;background:rgba(20,14,8,.45);display:flex;align-items:flex-end;justify-content:center}
 .audov[hidden]{display:none}
@@ -950,6 +950,56 @@ body.dragsel,body.dragsel *{-webkit-user-select:none;user-select:none}
 .atrow.ok .atic{background:#2f7a4a;color:#fff}.atrow.bad .atic{background:var(--accent,#C2402A);color:#fff}
 .atbtns{display:grid;gap:6px;margin:6px 0 10px}
 .linkbtn{background:none;border:0;padding:0;font:inherit;color:inherit;text-decoration:underline;cursor:pointer}
+
+/* ===================== Nonna Dice v3 ===================== */
+.v3ov{position:fixed;inset:0;z-index:36;background:var(--paper);overflow:auto;-webkit-overflow-scrolling:touch;padding:0 max(12px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.v3ov[hidden]{display:none}
+.v3bar{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 0 10px;background:var(--paper)}
+.v3in{max-width:760px;margin:0 auto}
+.v3hub{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (min-width:720px){.v3hub{grid-template-columns:repeat(3,1fr)}}
+.v3tile{display:flex;flex-direction:column;gap:4px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:12px 14px;color:var(--ink);font:inherit;cursor:pointer;min-height:92px}
+.v3tile b{font-family:var(--display);font-size:1.02rem;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.v3tile span{font-size:.82rem;color:var(--muted);line-height:1.3}
+.v3tile.hot{border-color:var(--cobalt);box-shadow:inset 0 0 0 1px var(--cobalt)}
+.v3sub{margin-top:6px}
+.opt.picked{outline:2px solid var(--masc);outline-offset:-2px}
+.rnaud{gap:8px}
+.ordline{min-height:58px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px;border:1.5px dashed var(--line);border-radius:14px;background:var(--surface)}
+.ordline.ok{border-style:solid;border-color:var(--ok)}.ordline.no{border-style:solid;border-color:var(--bad)}
+.ordpool{display:flex;flex-wrap:wrap;gap:8px}
+.ordb{font:inherit;font-family:var(--display);font-style:italic;font-size:1.05rem;padding:9px 13px;border-radius:12px;border:1.5px solid var(--ink);background:var(--surface);color:var(--ink);cursor:pointer;min-height:44px}
+.ordb.in{background:var(--masc-soft,#E3ECF7)}
+.ordb.ghost{border-style:dashed;border-color:var(--line);color:transparent;user-select:none}
+.ordb:disabled{cursor:default}
+.dlgscene{display:flex;flex-direction:column;gap:8px}
+.dlb{max-width:92%;padding-right:42px}.dlb .spk{position:absolute;right:4px;top:4px}
+.dlme{background:var(--surface)}
+.dlnonna{flex:none;width:30px;height:30px;border-radius:50%;background:var(--cobalt);color:#fff;display:grid;place-items:center;font-family:var(--display);font-weight:700}
+.vblist{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.vbitem{display:flex;flex-direction:column;gap:2px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;font:inherit;color:var(--ink);cursor:pointer}
+.vbitem span{font-size:.85rem}.vbitem small{font-size:.72rem;color:var(--muted)}
+.vbgrid{display:grid;grid-template-columns:1fr;gap:10px}
+@media (min-width:600px){.vbgrid{grid-template-columns:1fr 1fr}}
+.vbtab{width:100%;border-collapse:collapse}.vbtab td{padding:3px 4px;border-bottom:1px solid var(--line)}.vbtab td:first-child{width:72px}
+.simareas{display:grid;grid-template-columns:1fr 1fr;gap:10px}.simareas>div{display:flex;flex-direction:column;gap:4px}
+.fagrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fano,.faok{border-radius:12px;padding:8px 10px;font-size:.92rem;display:flex;flex-direction:column;gap:2px}
+.fano{background:rgba(158,42,30,.08)}
+.faok{background:rgba(47,107,58,.1)}
+.ctterms{display:grid;grid-template-columns:1fr;gap:10px}
+@media (min-width:640px){.ctterms{grid-template-columns:1fr 1fr}}
+.ctterm{border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;background:var(--surface)}
+.ctdoctext{display:flex;flex-direction:column;gap:8px;border-left:3px solid var(--saffron);padding-left:12px}
+.homecaffe{gap:10px}
+.caffebtn{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:linear-gradient(135deg,#C2402A,#A3341F);color:#fff;border:0;border-radius:18px;padding:10px 14px;font:inherit;cursor:pointer}
+.caffebtn b,.caffebtn b.it{font-family:var(--display);font-size:1.25rem;color:#fff}.caffebtn .small{color:#fff;opacity:.9}
+.caffebtn.done{background:linear-gradient(135deg,#2F6B3A,#25552E)}
+.nonna.sm{width:64px;flex:none}.nonna.xs{width:44px;flex:none}
+.caffe .nonna:not(.sm){width:150px}
+.bres{display:flex;flex-direction:column;gap:2px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;color:var(--ink);cursor:pointer}
+.chip.srch{display:inline-flex;align-items:center;justify-content:center;padding:5px 10px;cursor:pointer;color:var(--ink)}
+input[type=search]{width:100%;font:inherit;font-size:16px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
 </style>
 
 <div class="wrap">
@@ -961,6 +1011,7 @@ body.dragsel,body.dragsel *{-webkit-user-select:none;user-select:none}
       </div>
     </div>
     <div class="streak">
+      <button class="chip srch" id="srchBtn" aria-label="Buscar no app"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
       <span class="chip hot" id="chipStreak">0 dias seguidos</span>
       <span class="chip" id="chipDue">0 para hoje</span>
     </div>
@@ -970,6 +1021,7 @@ body.dragsel,body.dragsel *{-webkit-user-select:none;user-select:none}
   <!-- ===================== INÍCIO ===================== -->
   <section class="view" id="v-inicio" data-view="inicio">
     <div class="card stack" id="homeGoal"></div>
+    <div class="card stack homecaffe" id="homeCaffe"></div>
     <div class="card stack" id="homeCal"></div>
     <div class="today">
       <div class="label">Revisão de hoje</div>
@@ -2815,16 +2867,17 @@ const TENSES={pres:{n:"presente",f:pres},pass:{n:"passato prossimo",f:pass},fut:
 const KEY="quaderno.v1";
 const RESET_EPOCH="2026-11-02"; // muda este valor para zerar os cartões de todos
 const DECKS={err:"Meus erros",fav:"Preferiti (palavras e frases)",vA1:"Vocabulário A1",vA2:"Vocabulário A2",verb:"Verbos (presente, passato, futuro)"};
-const DATA_V=3; // versão do formato dos dados salvos; migrar() leva os dados antigos para a versão atual sem apagar nada
-function defState(){return{cards:{},settings:{decks:{err:true,frase:true,fav:true,vA1:true,vA2:true,verb:true},newPerDay:20,dir:"mix",typing:false},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},favs:{},newsDone:{},course:{},writing:{},shadow:{},errs:{},log:{},tests:{},sents:{},estat:{},diary:{},chats:{},bt:{},dict:{},pairs:{},leituras:{},modi:{},eventos:{},duvidas:{},exerc:{},versaoDados:DATA_V,resetEpoch:RESET_EPOCH,updatedAt:0}}
+const DATA_V=4; // versão do formato dos dados salvos; migrar() leva os dados antigos para a versão atual sem apagar nada
+function defState(){return{cards:{},settings:{decks:{err:true,frase:true,fav:true,vA1:true,vA2:true,verb:true},newPerDay:20,dir:"mix",typing:false},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},favs:{},newsDone:{},course:{},writing:{},shadow:{},errs:{},log:{},tests:{},sents:{},estat:{},diary:{},chats:{},bt:{},dict:{},pairs:{},leituras:{},modi:{},eventos:{},duvidas:{},exerc:{},erros:{},escuta:{},ordem:{},dialogos:{},simulados:{},caffe:{ult:"",dias:{}},versaoDados:DATA_V,resetEpoch:RESET_EPOCH,updatedAt:0}}
 function hydrate(o){const d=defState();S=Object.assign(d,o);S.settings=Object.assign(defState().settings,o.settings||{});S.settings.decks=Object.assign(defState().settings.decks,(o.settings||{}).decks||{});
  migrar(o.versaoDados||1);
- S.leituras=S.leituras||{};S.modi=S.modi||{};S.eventos=S.eventos||{};S.duvidas=S.duvidas||{};S.exerc=S.exerc||{};S.favs=S.favs||{};S.newsDone=S.newsDone||{};S.cards=S.cards||{};S.course=S.course||{};S.writing=S.writing||{};S.shadow=S.shadow||{};S.errs=S.errs||{};S.log=S.log||{};S.tests=S.tests||{};
+ S.leituras=S.leituras||{};S.modi=S.modi||{};S.eventos=S.eventos||{};S.duvidas=S.duvidas||{};S.exerc=S.exerc||{};S.erros=S.erros||{};S.escuta=S.escuta||{};S.ordem=S.ordem||{};S.dialogos=S.dialogos||{};S.simulados=S.simulados||{};S.caffe=S.caffe||{ult:"",dias:{}};S.favs=S.favs||{};S.newsDone=S.newsDone||{};S.cards=S.cards||{};S.course=S.course||{};S.writing=S.writing||{};S.shadow=S.shadow||{};S.errs=S.errs||{};S.log=S.log||{};S.tests=S.tests||{};
  if(o.resetEpoch!==RESET_EPOCH){S.cards={};S.daily={date:"",newDone:0,reviewed:0};S.streak={last:"",count:0};delete S.best;S.resetEpoch=RESET_EPOCH;return true}return false}
 function migrar(de){try{
  if(de<2){Object.values(S.errs||{}).forEach(e=>{if(e&&e.f==="Escreva a frase que você ouviu")e.f="Ouça a frase e diga o que ela significa"}); // v2: sem perguntas escritas
   if(S.settings)S.settings.typing=false}
  if(de<3)evBackfill(); // v3: log de eventos para o calendário e o painel
+ if(de<4){["erros","escuta","ordem","dialogos","simulados"].forEach(k=>{if(!S[k]||typeof S[k]!=="object")S[k]={}});if(!S.caffe||typeof S.caffe!=="object")S.caffe={ult:"",dias:{}}} // v4 (Nonna Dice v3): caderno de erros, escuta, montar a frase, diálogos, simulados e caffè
  }catch(e){}S.versaoDados=DATA_V}
 let S=defState();
 let DB=null,UID=null,stateRef=null,syncT=null,syncing=false,syncDirty=false,syncRetried=false;
@@ -2974,7 +3027,7 @@ function renderQ(){const r=RUN,q=r.qs[r.i],n=r.qs.length;
  if($("#lPlay")){const sp=()=>speak(q.say);$("#lPlay").onclick=sp;setTimeout(sp,250)}
  const right=qAns(q);
  $$("#cBody .opt").forEach(b=>b.onclick=()=>{const ch=q.opts[+b.dataset.k],ok=ch===right;q.chosen=ch;$$("#cBody .opt").forEach(x=>{x.disabled=true;if(q.opts[+x.dataset.k]===right)x.classList.add("right")});if(!ok)b.classList.add("wrong");feedback(ok,q)})}
-function feedback(ok,q){const r=RUN;q.ok=ok;recordCat(qCat(q),ok);if(ok)r.score++;else{r.wrong.push(q);addErrCard(q);save()}
+function feedback(ok,q){const r=RUN;q.ok=ok;recordCat(qCat(q),ok);try{errAnswer(curItemOf(q),ok,r.test?"teste":"curso")}catch(e){}if(ok)r.score++;else{r.wrong.push(q);addErrCard(q);save()}
  const full=q.type==="lf"||q.type==="lm"?q.say:q.type==="f"&&!q.q.includes("→")?q.q.replace("___",q.a.split("/")[0]).replace(/\s*\(.*?\)\s*$/,""):q.type==="x"?q.a:"";
  $("#fb").innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${ok?"Certo!":"Resposta: "+esc(q.a.split("/").join(" ou "))}</b>${full?`<div class="row" style="gap:8px;flex-wrap:nowrap"><i class="it" style="flex:1">${esc(full)}</i>${spkBtn(full)}</div>`:""}<div>${esc(q.exp)}</div></div>
  <button class="btn primary" id="nextQ" style="margin-top:12px">${r.i<r.qs.length-1?"Próxima":"Ver resultado"}</button>`;tokenize($("#fb"));
@@ -5318,7 +5371,7 @@ function bestVoice(){if(!IT_VOICES.length)loadVoices();return IT_VOICES.find(v=>
 function audioNorm(t){return String(t).replace(/[«»“”"]/g,"").replace(/^\s*[—–-]\s*/,"").replace(/\s+/g," ").trim()}
 function audioKey(t){const s=audioNorm(t).toLowerCase();let h=0x811c9dc5;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,0x01000193)>>>0}return("0000000"+h.toString(16)).slice(-8)+s.length.toString(36)}
 const REC={keys:null,v:"",voz:"",base:"audio/",el:null};
-function recLoad(){try{fetch(REC.base+"index.json",{cache:"no-cache"}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.keys){REC.keys=new Set(j.keys);REC.v=j.v||"";REC.voz=j.voz||"";try{renderAudioCard()}catch(e){}}}).catch(()=>{})}catch(e){}}
+function recLoad(){try{fetch(REC.base+"index.json",{cache:"no-cache"}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.keys){REC.keys=new Set(j.keys);REC.v=j.v||"";REC.voz=j.voz||"";REC.mb=j.mb||0;try{renderAudioCard()}catch(e){}}}).catch(()=>{})}catch(e){}}
 function recHas(t){return!!(REC.keys&&REC.keys.has(audioKey(t)))}
 function recStop(){if(REC.el){try{REC.el.pause()}catch(e){}}}
 const SAY={u:null,tok:0,lastCancel:0};
@@ -5537,7 +5590,7 @@ function renderQuiz(){const n=NEWS.cur,box=$("#quizBox");if(!n||!Array.isArray(n
  box.innerHTML=h+"</div>";
  $$("#quizBox .opt").forEach(b=>b.onclick=()=>answerQ(+b.dataset.q,+b.dataset.k));
  if($("#qzRedo"))$("#qzRedo").onclick=()=>{QZ.ans={};QZ.order={};renderQuiz();$("#quizBox").scrollIntoView({block:"start"})}}
-function answerQ(i,k){const n=NEWS.cur;if(QZ.ans[i]!=null)return;QZ.ans[i]=k;
+function answerQ(i,k){const n=NEWS.cur;if(QZ.ans[i]!=null)return;QZ.ans[i]=k;try{const q=n.quiz[i];errAnswer({id:"news:"+n.date+":"+i,k:"mc",cat:"leit",lbl:"Notícia de "+fmtBR(n.date),p:q.q,o:q.options,a:q.answer,x:q.explanation||""},k===q.answer,"noticia")}catch(e){}
  if(Object.keys(QZ.ans).length===n.quiz.length){const sc=n.quiz.filter((q,j)=>QZ.ans[j]===q.answer).length,prev=S.newsDone[n.date];
   S.newsDone[n.date]={score:Math.max(sc,prev?prev.score:0),total:n.quiz.length,at:prev?prev.at:today()};logInc("n",1);save();renderHome()}
  renderQuiz()}
@@ -5604,7 +5657,7 @@ document.addEventListener("visibilitychange",()=>{if(document.hidden&&syncDirty)
 // Campos de um favorito em S.favs: lemma (it), meaning (pt), tipo ("palavra" | "frase"), origem ("noticia:<data>" | "curso:<tópico>"), added (criado em),
 // own (tradução digitada pelo usuário), auto (tradução palavra por palavra). Favoritos antigos, sem tipo, valem como "palavra".
 function origemOf(btn){if(!btn||!document.contains(btn))return"";if(btn.closest("#newsBox")&&NEWS.cur)return"noticia:"+NEWS.cur.date;if(btn.closest("#letBox")&&LT.cur)return"leitura:"+LT.cur.id;if(btn.closest("#v-curso")&&CUR)return"curso:"+CUR.id;return""}
-function origemLabel(o){if(!o)return"";const i=o.indexOf(":"),t=o.slice(0,i),id=o.slice(i+1);if(t==="noticia")return"notícia de "+fmtBR(id);if(t==="curso"&&TOPIC[id])return TOPIC[id].lvl+" · "+TOPIC[id].t;if(t==="leitura"&&LETI[id])return"texto: "+LETI[id].titulo;if(t==="modi"&&MODII[id])return"modi di dire: "+MODII[id].titulo;return""}
+function origemLabel(o){if(!o)return"";const i=o.indexOf(":"),t=o.slice(0,i),id=o.slice(i+1);if(t==="noticia")return"notícia de "+fmtBR(id);if(t==="curso"&&TOPIC[id])return TOPIC[id].lvl+" · "+TOPIC[id].t;if(t==="leitura"&&LETI[id])return"texto: "+LETI[id].titulo;if(t==="modi"&&MODII[id])return"modi di dire: "+MODII[id].titulo;if(t==="falsi"&&typeof FALSII!=="undefined"&&FALSII[id])return"falsos amigos: "+FALSII[id].titulo;if(t==="cant"&&typeof CANTI!=="undefined"&&CANTI[id])return"cantiere: "+CANTI[id].titulo;return""}
 
 /* ---------- palavra sem tradução cadastrada: salva com a tradução do usuário ---------- */
 function saveOwn(v){v=String(v||"").trim();if(!v||!SH)return;const k=SH.k;
@@ -6132,7 +6185,7 @@ function renderLetQuiz(){const t=LT.cur,box=$("#letQuiz");if(!t||!box)return;con
   h+=`<div class="qz"><span class="qn">Pergunta ${i+1} de ${n}</span><div class="qq it">${esc(q.pergunta)}</div><div class="opts">${st.ord[i].map(k=>`<button class="opt${a!=null?(k===q.correta?" right":k===a?" wrong":""):""}" data-lq="${i}" data-k="${k}" ${a!=null?"disabled":""}>${esc(q.opcoes[k])}</button>`).join("")}</div></div>`});
  if(answered===n)h+=right===n?`<div class="fb ok"><b>${n}/${n}: texto lido!</b><span>${done?"Concluído em "+fmtBR(done)+".":""}</span></div>`:`<div class="fb no"><b>${right}/${n} certas.</b><span>Releia o texto e toque em “Limpar” para tentar de novo.</span></div>`;
  box.innerHTML=h;tokenize(box);
- $$("#letQuiz [data-lq]").forEach(b=>b.onclick=()=>{const i=+b.dataset.lq;if(st.ans[i]!=null)return;st.ans[i]=+b.dataset.k;
+ $$("#letQuiz [data-lq]").forEach(b=>b.onclick=()=>{const i=+b.dataset.lq;if(st.ans[i]!=null)return;st.ans[i]=+b.dataset.k;{const q=t.quiz[i];errAnswer({id:"let:"+t.id+":"+i,k:"mc",cat:"leit",lbl:"Leitura · "+t.titulo,p:q.pergunta,pit:true,o:q.opcoes,a:q.correta,x:"",let:t.id},st.ans[i]===q.correta,"leitura")}
   if(Object.keys(st.ans).length===n&&t.quiz.every((q,j)=>st.ans[j]===q.correta)){S.leituras=S.leituras||{};if(!S.leituras[t.id]){S.leituras[t.id]={done:today()};logEvento("leitura",t.id)}logInc("n",1);save();renderHome()}
   renderLetQuiz()});
  if($("#letClear"))$("#letClear").onclick=()=>{LT.quiz[t.id]={ans:{},ord:{}};renderLetQuiz()}}
@@ -6233,7 +6286,7 @@ function renderModiQuiz(){const u=MD.cur,box=$("#modiQuiz");if(!u||!box)return;c
   h+=`<div class="qz"><span class="qn">${pos+1} de ${n} · o que quer dizer?</span><div class="qq it">${esc(m.it)}</div><div class="opts">${st.opts[k].map(j=>`<button class="opt${a!=null?(j===k?" right":j===a?" wrong":""):""}" data-mq="${k}" data-j="${j}" ${a!=null?"disabled":""}>${esc(u.itens[j].s)}</button>`).join("")}</div></div>`});
  if(answered===n)h+=right===n?`<div class="fb ok"><b>${n}/${n}: unidade feita!</b></div>`:`<div class="fb no"><b>${right}/${n} certas.</b><span>Releia as expressões e toque em “Limpar” para tentar de novo.</span></div>`;
  box.innerHTML=h;tokenize(box);
- $$("#modiQuiz [data-mq]").forEach(b=>b.onclick=()=>{const k=+b.dataset.mq;if(st.ans[k]!=null)return;st.ans[k]=+b.dataset.j;
+ $$("#modiQuiz [data-mq]").forEach(b=>b.onclick=()=>{const k=+b.dataset.mq;if(st.ans[k]!=null)return;st.ans[k]=+b.dataset.j;{const m=u.itens[k],op=st.opts[k];errAnswer({id:"modi:"+u.id+":"+k,k:"mc",cat:"voc",lbl:"Modi di dire · "+u.titulo,p:"O que quer dizer «"+m.it+"»?",o:op.map(j=>u.itens[j].s),a:op.indexOf(k),x:"Ao pé da letra: "+m.lit+".",say:m.it},st.ans[k]===k,"modi")}
   if(Object.keys(st.ans).length===n&&u.itens.every((_,j)=>st.ans[j]===j)){S.modi=S.modi||{};if(!S.modi[u.id]){S.modi[u.id]={done:today()};logEvento("unidade","modi:"+u.id)}logInc("e",1);save();renderHome()}
   renderModiQuiz()});
  if($("#modiClear"))$("#modiClear").onclick=()=>{delete MD.quiz[u.id];renderModiQuiz()}}
@@ -6351,7 +6404,7 @@ function renderDuvList(){const box=$("#duvList");if(!box)return;const all=duvLis
   delete S.duvidas[id];DV.del="";save();renderDuvidas()})}
 
 /* ============================ INFOGRÁFICOS DE LIÇÃO: dados (conteúdo original) ============================ */
-// Um quadro-resumo por tópico do curso, mostrado no início da parte Vocabulário. Formato (validar com node tools/check_info.js):
+// Um quadro-resumo por tópico do curso (os 20 tópicos desde a v3), mostrado no início da parte Vocabulário. Formato (validar com node tools/check_info.js):
 //  id, topico (id do tópico do curso), cabecalho {trilho, titulo, subtitulo, nonna: acenando|apontando|pensando|comemorando}
 //  blocos (3 a 5), cada um com titulo (ação em português) e tipo:
 //   "tabela": linhas [[it, pt], ...] (até 9), dica (uma linha; **negrito** marca as palavras italianas), cena opcional
@@ -6462,7 +6515,219 @@ const INFOGRAFICOS=[
    exemplos:[["La riunione è alle quindici e trenta.","A reunião é às 15h30."],["L'ufficio è aperto dalle nove alle diciotto.","O escritório abre das 9h às 18h."],["Mandi il rapporto entro venerdì.","Mande o relatório até sexta."]]},
   {tipo:"tabela",titulo:"Leia os números da obra",
    linhas:[["tre virgola cinque metri","3,5 metros"],["duemilacinquecento euro","2.500 euros"],["il quindici marzo","15 de março"],["il primo aprile","1º de abril"],["al terzo piano","no terceiro andar"],["il dieci per cento","10%"]],
-   dica:"Nas datas, o número é cardinal (**il quindici marzo**); só o dia 1 é ordinal: **il primo**."}]}
+   dica:"Nas datas, o número é cardinal (**il quindici marzo**); só o dia 1 é ordinal: **il primo**."}]},
+/* ---------- v3: os 14 tópicos restantes ---------- */
+{id:"info-casa",topico:"a1-6",
+ cabecalho:{trilho:"NONNA DICE • A1 • LIÇÃO 6",titulo:"Casa dolce casa",subtitulo:"Cômodos, endereço e os verbos potere, volere e dovere",nonna:"apontando"},
+ blocos:[
+  {tipo:"tabela",titulo:"Nomeie os cômodos e os móveis",
+   linhas:[["la cucina","a cozinha"],["il soggiorno","a sala de estar"],["la camera da letto","o quarto"],["il bagno","o banheiro"],["il balcone","a sacada"],["il tavolo","a mesa"],["il divano","o sofá"],["l'armadio","o guarda-roupa"],["la scrivania","a escrivaninha"]],
+   dica:"**Camera** é quarto, não câmera. Diz-se **in cucina**, **in bagno**, sem artigo.",
+   cena:{nonna:"apontando",outro:"Luca",falas:[{quem:"outro",texto:"Scusi, dov'è il bagno?",pt:"Com licença, onde fica o banheiro?"},{quem:"nonna",texto:"In fondo al corridoio, a destra.",pt:"No fim do corredor, à direita."}]}},
+  {tipo:"tabela",titulo:"Diga o endereço e o andar",
+   linhas:[["Abito in via Roma 12.","Moro na Rua Roma, 12."],["al terzo piano","no terceiro andar"],["Qual è il tuo indirizzo?","Qual é o seu endereço?"],["il CAP","o CEP"],["il citofono","o interfone"],["l'ascensore","o elevador"],["cento · mille · duemila","cem · mil · dois mil"]],
+   dica:"O número vem depois do nome da rua: **via Verdi 8**."},
+  {tipo:"regra",titulo:"Use potere, volere e dovere + infinitivo",
+   formula:"posso / voglio / devo + infinitivo",
+   exemplos:[["Posso aprire la finestra?","Posso abrir a janela?"],["Voglio affittare un bilocale.","Quero alugar um apartamento de dois cômodos."],["Devo pagare l'affitto entro il cinque.","Tenho de pagar o aluguel até o dia 5."]]},
+  {tipo:"tabela",titulo:"Conjugue os três verbos no presente",
+   linhas:[["io posso · voglio · devo","eu posso · quero · devo"],["tu puoi · vuoi · devi","você pode · quer · deve"],["lui/lei può · vuole · deve","ele/ela pode · quer · deve"],["noi possiamo · vogliamo · dobbiamo","nós podemos · queremos · devemos"],["voi potete · volete · dovete","vocês podem · querem · devem"],["loro possono · vogliono · devono","eles podem · querem · devem"]],
+   dica:"Para pedir, **vorrei** (eu gostaria) é mais educado que **voglio**."}]},
+
+{id:"info-citta",topico:"a1-7",
+ cabecalho:{trilho:"NONNA DICE • A1 • LIÇÃO 7",titulo:"In città",subtitulo:"Lugares, transporte e direções com as preposições simples",nonna:"apontando"},
+ blocos:[
+  {tipo:"tabela",titulo:"Encontre os lugares da cidade",
+   linhas:[["la stazione","a estação"],["la fermata dell'autobus","o ponto de ônibus"],["la piazza","a praça"],["la farmacia","a farmácia"],["la banca","o banco"],["il Comune","a prefeitura"],["l'ospedale","o hospital"],["il parcheggio","o estacionamento"],["l'edicola","a banca de jornal"]],
+   dica:"**Banca** é o banco do dinheiro; o banco de sentar é **panchina**."},
+  {tipo:"tabela",titulo:"Peça e dê direções",
+   linhas:[["Scusi, dov'è…?","Com licença, onde fica…?"],["Vada dritto.","Siga reto."],["Giri a destra / a sinistra.","Vire à direita / à esquerda."],["al semaforo","no semáforo"],["all'incrocio","no cruzamento"],["di fronte a","em frente a"],["vicino a · lontano da","perto de · longe de"],["accanto a","ao lado de"]],
+   dica:"**Vada** e **giri** são o imperativo com Lei: o certo com um desconhecido.",
+   cena:{nonna:"apontando",outro:"Turista",falas:[{quem:"outro",texto:"Scusi, dov'è la stazione?",pt:"Com licença, onde fica a estação?"},{quem:"nonna",texto:"Vada dritto e al semaforo giri a sinistra.",pt:"Siga reto e no semáforo vire à esquerda."},{quem:"outro",texto:"Grazie mille!",pt:"Muito obrigado!"}]}},
+  {tipo:"regra",titulo:"Escolha a preposição certa",
+   formula:"a + cidade · in + país, meio de transporte, lugar · da + pessoa",
+   exemplos:[["Vado a Milano in treno.","Vou a Milão de trem."],["Lavoro in centro, in ufficio.","Trabalho no centro, no escritório."],["Stasera vado da Marco.","Hoje à noite vou à casa do Marco."]]},
+  {tipo:"tabela",titulo:"Diga como você vai",
+   linhas:[["in autobus","de ônibus"],["in treno","de trem"],["in macchina","de carro"],["in bici","de bicicleta"],["in metropolitana","de metrô"],["a piedi","a pé"],["prendere l'autobus","pegar o ônibus"],["il biglietto","o bilhete"]],
+   dica:"Só **a piedi** usa a; os outros meios de transporte usam **in**."}]},
+
+{id:"info-bar",topico:"a1-8",
+ cabecalho:{trilho:"NONNA DICE • A1 • LIÇÃO 8",titulo:"Al bar e al mercato",subtitulo:"Pedir, perguntar o preço e as preposições articuladas",nonna:"acenando"},
+ blocos:[
+  {tipo:"tabela",titulo:"Peça no bar",
+   linhas:[["un caffè","um café expresso"],["un cappuccino","um cappuccino"],["un cornetto","um croissant"],["un'acqua frizzante","uma água com gás"],["un tramezzino","um sanduíche de pão de forma"],["Vorrei…","Eu gostaria de…"],["Per me…","Para mim…"],["Quant'è?","Quanto é?"]],
+   dica:"Peça com **vorrei** ou **per me**; **quant'è?** pede a conta.",
+   cena:{nonna:"acenando",outro:"Barista",falas:[{quem:"outro",texto:"Prego, mi dica.",pt:"Pois não, diga."},{quem:"nonna",texto:"Per me un caffè e un cornetto, grazie.",pt:"Para mim um café e um croissant, obrigada."},{quem:"outro",texto:"Sono tre euro.",pt:"São três euros."}]}},
+  {tipo:"tabela",titulo:"Compre na feira com quantidades",
+   linhas:[["un chilo di","um quilo de"],["mezzo chilo di","meio quilo de"],["un etto di","cem gramas de"],["una bottiglia di","uma garrafa de"],["un pacco di","um pacote de"],["una scatola di","uma caixa de"],["Quanto costa?","Quanto custa?"],["Quanto costano?","Quanto custam?"]],
+   dica:"**Un etto** são 100 g: o presunto se pede por etto."},
+  {tipo:"tabela",titulo:"Junte preposição e artigo",
+   linhas:[["a + il → al","al bar = no bar"],["di + la → della","il prezzo della frutta = o preço da fruta"],["da + i → dai","vado dai nonni = vou à casa dos avós"],["in + il → nel","nel frigorifero = na geladeira"],["in + la → nella","nella borsa = na bolsa"],["su + il → sul","sul tavolo = sobre a mesa"],["di + gli → degli","il caffè degli amici = o café dos amigos"],["a + l' → all'","all'ufficio = ao escritório"]],
+   dica:"Só a, da, di, in e su se juntam ao artigo; **con** e **per** ficam separados."}]},
+
+{id:"info-famiglia",topico:"a1-9",
+ cabecalho:{trilho:"NONNA DICE • A1 • LIÇÃO 9",titulo:"La famiglia",subtitulo:"Parentes, datas e os possessivos",nonna:"comemorando"},
+ blocos:[
+  {tipo:"tabela",titulo:"Apresente a sua família",
+   linhas:[["il padre · la madre","o pai · a mãe"],["i genitori","os pais (pai e mãe)"],["il fratello · la sorella","o irmão · a irmã"],["il marito · la moglie","o marido · a esposa"],["il figlio · la figlia","o filho · a filha"],["il nonno · la nonna","o avô · a avó"],["lo zio · la zia","o tio · a tia"],["il cugino · la cugina","o primo · a prima"],["i parenti","os parentes"]],
+   dica:"**Genitori** são pai e mãe; **parenti** são os parentes em geral.",
+   cena:{nonna:"comemorando",outro:"Giulia",falas:[{quem:"outro",texto:"Hai fratelli?",pt:"Você tem irmãos?"},{quem:"nonna",texto:"Sì, ho un fratello e due sorelle.",pt:"Sim, tenho um irmão e duas irmãs."}]}},
+  {tipo:"regra",titulo:"Use o possessivo com ou sem artigo",
+   formula:"il mio libro · mia madre (parente no singular, sem artigo) · i miei genitori",
+   exemplos:[["Mia sorella abita a Roma.","Minha irmã mora em Roma."],["I miei fratelli lavorano a Torino.","Meus irmãos trabalham em Turim."],["La mia sorellina ha sei anni.","Minha irmãzinha tem seis anos."]]},
+  {tipo:"tabela",titulo:"Diga a data",
+   linhas:[["gennaio · febbraio · marzo","janeiro · fevereiro · março"],["aprile · maggio · giugno","abril · maio · junho"],["luglio · agosto · settembre","julho · agosto · setembro"],["ottobre · novembre · dicembre","outubro · novembro · dezembro"],["il primo maggio","1º de maio"],["il quindici agosto","15 de agosto"],["Quando è il tuo compleanno?","Quando é o seu aniversário?"],["Sono nato il tre marzo.","Nasci em 3 de março."]],
+   dica:"O dia 1 é **il primo**; os outros usam o número: **il due**, **il tre**."},
+  {tipo:"tabela",titulo:"Aponte com questo e quello",
+   linhas:[["questo libro","este livro"],["questa casa","esta casa"],["questi documenti","estes documentos"],["queste foto","estas fotos"],["quel progetto","aquele projeto"],["quello studio","aquele escritório"],["quella ragazza","aquela moça"],["quegli uffici","aqueles escritórios"]],
+   dica:"**Quello** muda como o artigo: quel (il), quello (lo), quell' (l'), quegli (gli)."}]},
+
+{id:"info-piace",topico:"a1-10",
+ cabecalho:{trilho:"NONNA DICE • A1 • LIÇÃO 10",titulo:"Mi piace!",subtitulo:"Gostos, rotina com os reflexivos e stare + gerúndio",nonna:"comemorando"},
+ blocos:[
+  {tipo:"regra",titulo:"Diga do que você gosta com piacere",
+   formula:"mi piace + singular ou infinitivo · mi piacciono + plural",
+   exemplos:[["Mi piace il caffè.","Gosto de café."],["Mi piace lavorare in squadra.","Gosto de trabalhar em equipe."],["Mi piacciono i film italiani.","Gosto de filmes italianos."]]},
+  {tipo:"tabela",titulo:"Fale de quem gosta",
+   linhas:[["mi piace","eu gosto"],["ti piace","você gosta"],["gli piace","ele gosta"],["le piace","ela gosta"],["Le piace","o senhor, a senhora gosta"],["ci piace","nós gostamos"],["vi piace","vocês gostam"],["gli piace","eles gostam"],["non mi piace","eu não gosto"]],
+   dica:"A coisa é o sujeito: **mi piacciono** porque «i film» está no plural.",
+   cena:{nonna:"comemorando",outro:"Marco",falas:[{quem:"outro",texto:"Ti piace la pizza?",pt:"Você gosta de pizza?"},{quem:"nonna",texto:"Sì, mi piace moltissimo!",pt:"Sim, gosto muitíssimo!"}]}},
+  {tipo:"tabela",titulo:"Conte a sua rotina",
+   linhas:[["mi sveglio","eu acordo"],["mi alzo","eu me levanto"],["mi lavo","eu me lavo"],["mi vesto","eu me visto"],["faccio colazione","tomo o café da manhã"],["esco di casa","saio de casa"],["mi riposo","eu descanso"],["vado a letto","vou para a cama"],["mi addormento","eu pego no sono"]],
+   dica:"Nos reflexivos o pronome vem antes: **mi sveglio**, **ti alzi**, **si veste**."},
+  {tipo:"regra",titulo:"Diga o que está fazendo agora",
+   formula:"stare + gerúndio (-ando / -endo)",
+   exemplos:[["Sto lavorando.","Estou trabalhando."],["Che cosa stai facendo?","O que você está fazendo?"],["Stiamo leggendo il verbale.","Estamos lendo a ata."]]}]},
+
+{id:"info-weekend",topico:"a2-1",
+ cabecalho:{trilho:"NONNA DICE • A2 • LIÇÃO 1",titulo:"Il fine settimana",subtitulo:"Contar o que você fez: passato prossimo com avere",nonna:"pensando"},
+ blocos:[
+  {tipo:"regra",titulo:"Monte o passato prossimo com avere",
+   formula:"avere no presente + particípio (-ato, -uto, -ito)",
+   exemplos:[["Ho lavorato tutto il giorno.","Trabalhei o dia todo."],["Abbiamo venduto la macchina.","Vendemos o carro."],["Hai dormito bene?","Você dormiu bem?"]]},
+  {tipo:"tabela",titulo:"Lembre os particípios irregulares",
+   linhas:[["fare → fatto","fazer → feito"],["vedere → visto","ver → visto"],["prendere → preso","pegar → pego"],["leggere → letto","ler → lido"],["scrivere → scritto","escrever → escrito"],["mettere → messo","colocar → colocado"],["aprire → aperto","abrir → aberto"],["chiedere → chiesto","perguntar → perguntado"],["dire → detto","dizer → dito"]],
+   dica:"Com **avere** o particípio não muda: **Giulia ha letto**, **noi abbiamo letto**."},
+  {tipo:"tabela",titulo:"Diga quando aconteceu",
+   linhas:[["ieri","ontem"],["ieri sera","ontem à noite"],["l'altro ieri","anteontem"],["sabato scorso","no sábado passado"],["la settimana scorsa","na semana passada"],["un mese fa","há um mês"],["stamattina","hoje de manhã"],["già","já"],["non… ancora","ainda não"]],
+   dica:"**Fa** vem depois do tempo: **due giorni fa** = há dois dias.",
+   cena:{nonna:"pensando",outro:"Paola",falas:[{quem:"outro",texto:"Che cosa hai fatto sabato?",pt:"O que você fez no sábado?"},{quem:"nonna",texto:"Ho visitato un museo e ho mangiato una pizza.",pt:"Visitei um museu e comi uma pizza."}]}}]},
+
+{id:"info-viaggio",topico:"a2-2",
+ cabecalho:{trilho:"NONNA DICE • A2 • LIÇÃO 2",titulo:"In viaggio",subtitulo:"Viagens, trem e hotel: passato prossimo com essere",nonna:"acenando"},
+ blocos:[
+  {tipo:"regra",titulo:"Use essere com os verbos de movimento",
+   formula:"essere + particípio que concorda: andato · andata · andati · andate",
+   exemplos:[["Sono partito alle sei.","Parti às seis (homem falando)."],["Giulia è arrivata a Roma.","A Giulia chegou a Roma."],["Siamo tornati ieri sera.","Voltamos ontem à noite."]]},
+  {tipo:"tabela",titulo:"Lembre os verbos que pedem essere",
+   linhas:[["andare","ir"],["venire","vir"],["partire","partir"],["arrivare","chegar"],["tornare","voltar"],["uscire","sair"],["entrare","entrar"],["restare · rimanere","ficar"],["nascere","nascer"]],
+   dica:"Com **essere** o particípio concorda: **lei è andata**, **loro sono andati**."},
+  {tipo:"tabela",titulo:"Compre o bilhete e faça o check-in",
+   linhas:[["un biglietto di andata e ritorno","uma passagem de ida e volta"],["il binario","a plataforma"],["in ritardo · in orario","atrasado · no horário"],["convalidare il biglietto","validar o bilhete"],["la prenotazione","a reserva"],["una camera singola · doppia","um quarto de solteiro · de casal"],["La colazione è inclusa?","O café da manhã está incluído?"],["il check-out","o check-out"]],
+   dica:"**Binario** é a plataforma: «il treno parte dal binario 4».",
+   cena:{nonna:"acenando",outro:"Reception",falas:[{quem:"outro",texto:"Buonasera, ha una prenotazione?",pt:"Boa noite, a senhora tem reserva?"},{quem:"nonna",texto:"Sì, a nome Manfrin, una camera doppia.",pt:"Sim, em nome de Manfrin, um quarto de casal."}]}}]},
+
+{id:"info-spesa",topico:"a2-3",
+ cabecalho:{trilho:"NONNA DICE • A2 • LIÇÃO 3",titulo:"Fare la spesa",subtitulo:"Embalagens, pronomes diretos, ne e ce l'ho",nonna:"pensando"},
+ blocos:[
+  {tipo:"tabela",titulo:"Troque o objeto pelo pronome",
+   linhas:[["lo","o (masculino singular)"],["la","a (feminino singular)"],["li","os (masculino plural)"],["le","as (feminino plural)"],["Il pane? Lo compro io.","O pão? Eu compro."],["La frutta? La prendo qui.","A fruta? Pego aqui."],["I documenti? Li porto domani.","Os documentos? Trago amanhã."],["Le chiavi? Le ho io.","As chaves? Estão comigo."]],
+   dica:"O pronome vem antes do verbo conjugado: **lo compro**, **la prendo**."},
+  {tipo:"regra",titulo:"Use ne para falar de quantidades",
+   formula:"ne + verbo + quantidade",
+   exemplos:[["Quante mele vuoi? Ne voglio tre.","Quantas maçãs você quer? Quero três."],["Quanti mattoni servono? Ne servono duecento.","Quantos tijolos são precisos? São precisos duzentos."],["Hai del latte? Sì, ne ho un litro.","Você tem leite? Sim, tenho um litro."]]},
+  {tipo:"tabela",titulo:"Diga se você tem algo à mão",
+   linhas:[["Ce l'hai?","Você tem (aí)?"],["Sì, ce l'ho.","Sim, tenho."],["No, non ce l'ho.","Não, não tenho."],["Ce li hai?","Você os tem?"],["Ce le ho.","Eu as tenho."],["il carrello","o carrinho"],["la cassa","o caixa"],["lo scontrino","o cupom fiscal"]],
+   dica:"Com **avere** no sentido de ter em mãos, junta-se **ce**: **ce l'ho**.",
+   cena:{nonna:"pensando",outro:"Cassiera",falas:[{quem:"outro",texto:"Ha la tessera del supermercato?",pt:"A senhora tem o cartão do supermercado?"},{quem:"nonna",texto:"Sì, ce l'ho. Eccola!",pt:"Sim, tenho. Aqui está!"}]}}]},
+
+{id:"info-regali",topico:"a2-4",
+ cabecalho:{trilho:"NONNA DICE • A2 • LIÇÃO 4",titulo:"Regali e auguri",subtitulo:"Festas, presentes e os pronomes indiretos e combinados",nonna:"comemorando"},
+ blocos:[
+  {tipo:"tabela",titulo:"Diga a quem com os pronomes indiretos",
+   linhas:[["mi","a mim, me"],["ti","a você, te"],["gli","a ele (e a eles)"],["le","a ela"],["Le","ao senhor, à senhora"],["ci","a nós"],["vi","a vocês"],["Gli scrivo una mail.","Escrevo um e-mail para ele."],["Le mando gli auguri.","Mando os parabéns para ela."]],
+   dica:"**Telefonare**, **scrivere** e **dare** pedem pronome indireto: **gli telefono**."},
+  {tipo:"regra",titulo:"Combine os dois pronomes",
+   formula:"mi, ti, ci, vi + lo → me lo, te lo, ce lo, ve lo · gli, le + lo → glielo",
+   exemplos:[["Il regalo? Te lo do domani.","O presente? Te dou amanhã."],["Il libro? Gliel'ho prestato.","O livro? Emprestei para ele."],["Le foto? Ce le mandi?","As fotos? Você manda para nós?"]]},
+  {tipo:"tabela",titulo:"Deseje felicidades",
+   linhas:[["Buon compleanno!","Feliz aniversário!"],["Tanti auguri!","Parabéns! Felicidades!"],["Buon Natale!","Feliz Natal!"],["Buone feste!","Boas festas!"],["Buon anno!","Feliz ano-novo!"],["Congratulazioni!","Parabéns (por uma conquista)!"],["In bocca al lupo!","Boa sorte!"],["Crepi!","resposta a «in bocca al lupo»"]],
+   dica:"A **in bocca al lupo** não se responde grazie: responde-se **crepi!**",
+   cena:{nonna:"comemorando",outro:"Collega",falas:[{quem:"outro",texto:"Domani ho l'esame di abilitazione.",pt:"Amanhã tenho o exame de habilitação."},{quem:"nonna",texto:"In bocca al lupo!",pt:"Boa sorte!"},{quem:"outro",texto:"Crepi! Grazie.",pt:"Crepi! Obrigado."}]}}]},
+
+{id:"info-imperfetto",topico:"a2-5",
+ cabecalho:{trilho:"NONNA DICE • A2 • LIÇÃO 5",titulo:"Quando ero piccolo",subtitulo:"Imperfetto e passato prossimo: hábitos e fatos",nonna:"pensando"},
+ blocos:[
+  {tipo:"regra",titulo:"Forme o imperfetto",
+   formula:"radical + -avo (-are) · -evo (-ere) · -ivo (-ire)",
+   exemplos:[["Da piccolo giocavo a calcio.","Quando pequeno, eu jogava futebol."],["Mia nonna cucinava benissimo.","Minha avó cozinhava muito bem."],["Dormivamo sempre fino a tardi.","Sempre dormíamos até tarde."]]},
+  {tipo:"tabela",titulo:"Conjugue o imperfetto",
+   linhas:[["io parlavo · avevo · ero","eu falava · tinha · era"],["tu parlavi · avevi · eri","você falava · tinha · era"],["lui/lei parlava · aveva · era","ele/ela falava · tinha · era"],["noi parlavamo · avevamo · eravamo","nós falávamos · tínhamos · éramos"],["voi parlavate · avevate · eravate","vocês falavam · tinham · eram"],["loro parlavano · avevano · erano","eles falavam · tinham · eram"]],
+   dica:"**Essere** é irregular: ero, eri, era, eravamo, eravate, erano."},
+  {tipo:"tabela",titulo:"Escolha entre imperfetto e passato prossimo",
+   linhas:[["Ogni estate andavamo al mare.","hábito → imperfetto"],["Era una bella giornata.","descrição → imperfetto"],["Mentre lavoravo…","ação em andamento → imperfetto"],["… è squillato il telefono.","fato pontual → passato prossimo"],["Nel 2015 sono andato in Italia.","fato com data → passato prossimo"]],
+   dica:"Pense num filme: o **imperfetto** é o cenário; o **passato prossimo**, a ação.",
+   cena:{nonna:"pensando",outro:"Nipote",falas:[{quem:"outro",texto:"Nonna, com'eri da piccola?",pt:"Vovó, como você era quando pequena?"},{quem:"nonna",texto:"Ero molto vivace e giocavo sempre in cortile.",pt:"Eu era muito agitada e brincava sempre no pátio."}]}}]},
+
+{id:"info-futuro",topico:"a2-6",
+ cabecalho:{trilho:"NONNA DICE • A2 • LIÇÃO 6",titulo:"Progetti e vacanze",subtitulo:"Planos e previsões: futuro semplice e o se do futuro",nonna:"apontando"},
+ blocos:[
+  {tipo:"regra",titulo:"Forme o futuro",
+   formula:"infinitivo sem o -e final + ò, ai, à, emo, ete, anno (o -are vira -er-)",
+   exemplos:[["Domani finirò la relazione.","Amanhã vou terminar o relatório."],["L'anno prossimo lavoreremo a Milano.","No ano que vem vamos trabalhar em Milão."],["Partiranno lunedì.","Vão partir na segunda."]]},
+  {tipo:"tabela",titulo:"Lembre os futuros irregulares",
+   linhas:[["essere → sarò","ser → serei"],["avere → avrò","ter → terei"],["andare → andrò","ir → irei"],["fare → farò","fazer → farei"],["venire → verrò","vir → virei"],["potere → potrò","poder → poderei"],["dovere → dovrò","dever → deverei"],["vedere → vedrò","ver → verei"],["volere → vorrò","querer → quererei"]],
+   dica:"Muitos irregulares perdem uma vogal: **andrò**, **potrò**, **vedrò**."},
+  {tipo:"regra",titulo:"Use se + futuro para condições",
+   formula:"se + futuro, futuro",
+   exemplos:[["Se pioverà, resteremo a casa.","Se chover, ficaremos em casa."],["Se avrò tempo, ti chiamerò.","Se eu tiver tempo, te ligo."],["Se finiremo presto, andremo al cinema.","Se terminarmos cedo, vamos ao cinema."]]},
+  {tipo:"tabela",titulo:"Fale do tempo e da previsão",
+   linhas:[["C'è il sole.","Faz sol."],["Piove.","Está chovendo."],["Nevica.","Está nevando."],["Fa caldo · fa freddo.","Faz calor · faz frio."],["È nuvoloso.","Está nublado."],["il temporale","a tempestade"],["le previsioni del tempo","a previsão do tempo"],["Domani pioverà.","Amanhã vai chover."]],
+   dica:"Para o tempo, o italiano usa **fare**: **fa caldo**, **fa freddo**.",
+   cena:{nonna:"apontando",outro:"Marco",falas:[{quem:"outro",texto:"Che cosa farai ad agosto?",pt:"O que você vai fazer em agosto?"},{quem:"nonna",texto:"Andrò in Sicilia, se farà bel tempo!",pt:"Vou para a Sicília, se fizer tempo bom!"}]}}]},
+
+{id:"info-spese",topico:"a2-7",
+ cabecalho:{trilho:"NONNA DICE • A2 • LIÇÃO 7",titulo:"Andiamo a fare spese",subtitulo:"Roupas e pagamento: ci, volerci e o si impessoal",nonna:"acenando"},
+ blocos:[
+  {tipo:"tabela",titulo:"Peça roupa na loja",
+   linhas:[["la taglia","o tamanho (roupa)"],["il numero","o número (sapato)"],["provare","experimentar"],["il camerino","o provador"],["È troppo stretto · largo.","Está apertado · largo demais."],["Posso pagare con la carta?","Posso pagar com cartão?"],["in contanti","em dinheiro"],["i saldi","as liquidações"],["lo sconto","o desconto"]],
+   dica:"**Taglia** é para roupa; para sapato é **numero**.",
+   cena:{nonna:"acenando",outro:"Commessa",falas:[{quem:"outro",texto:"Che taglia porta?",pt:"Que tamanho a senhora usa?"},{quem:"nonna",texto:"La quarantaquattro. Posso provarla?",pt:"O 44. Posso experimentá-la?"}]}},
+  {tipo:"regra",titulo:"Diga quanto tempo leva com volerci",
+   formula:"ci vuole + singular · ci vogliono + plural",
+   exemplos:[["Ci vuole un'ora per arrivare.","Leva uma hora para chegar."],["Ci vogliono due settimane per i permessi.","São precisas duas semanas para as licenças."],["Quanto ci vuole?","Quanto tempo leva?"]]},
+  {tipo:"tabela",titulo:"Fale de forma impessoal com si e use o ci",
+   linhas:[["si dice","diz-se"],["Si paga alla cassa.","Paga-se no caixa."],["Qui si parla italiano.","Aqui se fala italiano."],["Si vendono case.","Vendem-se casas."],["Non si fuma.","Não se fuma."],["Si può entrare?","Pode-se entrar?"],["Ci vado domani.","Vou lá amanhã."],["Ci penso io.","Deixa comigo."]],
+   dica:"Com plural, o verbo vai para o plural: **si vendono case**."}]},
+
+{id:"info-ristorante",topico:"a2-8",
+ cabecalho:{trilho:"NONNA DICE • A2 • LIÇÃO 8",titulo:"Al ristorante",subtitulo:"Menu, pedidos e o imperativo",nonna:"comemorando"},
+ blocos:[
+  {tipo:"tabela",titulo:"Peça no restaurante",
+   linhas:[["Un tavolo per due, per favore.","Uma mesa para dois, por favor."],["il menù","o cardápio"],["l'antipasto","a entrada"],["il primo","o primeiro prato (massa, risoto)"],["il secondo","o segundo prato (carne, peixe)"],["il contorno","o acompanhamento"],["il dolce","a sobremesa"],["Il conto, per favore.","A conta, por favor."],["il coperto","a taxa de mesa"]],
+   dica:"**Primo** é a massa ou o risoto; **secondo** é a carne ou o peixe.",
+   cena:{nonna:"comemorando",outro:"Cameriere",falas:[{quem:"outro",texto:"Avete deciso?",pt:"Já decidiram?"},{quem:"nonna",texto:"Sì, come primo prendo gli gnocchi al pomodoro.",pt:"Sim, de primeiro prato quero o nhoque ao sugo."}]}},
+  {tipo:"regra",titulo:"Passe instruções com o imperativo (tu e voi)",
+   formula:"-are: parla! · -ere / -ire: prendi! senti! · voi: parlate! prendete! · não: non + infinitivo",
+   exemplos:[["Assaggia questo vino!","Prove este vinho!"],["Prendete il tiramisù!","Peçam o tiramisù!"],["Non mangiare troppo!","Não coma demais!"]]},
+  {tipo:"tabela",titulo:"Use o imperativo com Lei",
+   linhas:[["parli","fale"],["prenda","pegue, peça"],["senta","ouça"],["venga","venha"],["vada","vá"],["faccia","faça"],["dica","diga"],["Mi dica.","Pois não, diga."],["Si accomodi.","Sente-se, fique à vontade."]],
+   dica:"Com **Lei** as vogais se trocam: -are → **-i** (parli), -ere/-ire → **-a** (prenda)."}]},
+
+{id:"info-salute",topico:"a2-9",
+ cabecalho:{trilho:"NONNA DICE • A2 • LIÇÃO 9",titulo:"Salute e benessere",subtitulo:"Corpo, sintomas, comparativos e advérbios",nonna:"pensando"},
+ blocos:[
+  {tipo:"tabela",titulo:"Diga onde dói",
+   linhas:[["la testa","a cabeça"],["la gola","a garganta"],["la schiena","as costas"],["lo stomaco","o estômago"],["il braccio · le braccia","o braço · os braços"],["la gamba","a perna"],["il ginocchio · le ginocchia","o joelho · os joelhos"],["Ho mal di testa.","Estou com dor de cabeça."],["Mi fa male la schiena.","Minhas costas doem."]],
+   dica:"Alguns plurais do corpo terminam em **-a**: **le braccia**, **le ginocchia**, **le dita**.",
+   cena:{nonna:"pensando",outro:"Medico",falas:[{quem:"outro",texto:"Che cosa si sente?",pt:"O que a senhora está sentindo?"},{quem:"nonna",texto:"Ho la febbre e mi fa male la gola.",pt:"Estou com febre e minha garganta dói."}]}},
+  {tipo:"regra",titulo:"Compare com più, meno e come",
+   formula:"più / meno + adjetivo + di · (tanto)… quanto / come",
+   exemplos:[["Marco è più alto di Luca.","Marco é mais alto que Luca."],["Il treno è meno caro dell'aereo.","O trem é menos caro que o avião."],["Lucas è alto come suo padre.","Lucas é tão alto quanto o pai."]]},
+  {tipo:"tabela",titulo:"Use as formas especiais e os advérbios",
+   linhas:[["buono → migliore","bom → melhor"],["cattivo → peggiore","ruim → pior"],["bene → meglio","bem → melhor (advérbio)"],["male → peggio","mal → pior (advérbio)"],["il migliore","o melhor"],["benissimo","muito bem, ótimo"],["lento → lentamente","lento → lentamente"],["facile → facilmente","fácil → facilmente"],["regolare → regolarmente","regular → regularmente"]],
+   dica:"**Mi sento meglio** (advérbio), mas **è il migliore** (adjetivo)."}]}
+
 ];
 const INFO_TOP=Object.fromEntries(INFOGRAFICOS.map(x=>[x.topico,x]));
 
@@ -6830,13 +7095,13 @@ const EX={lvl:"A1",run:null,tx:null,txAns:{}};
 function exStat(id){return(S.exerc||{})[id]||null}
 function exPool(lvl,cat){return EXQ.filter(q=>q.nivel===lvl&&(!cat||cat==="mix"?true:q.cat===cat))}
 function exCounts(list){let ok=0,wrong=0,seen=0;list.forEach(q=>{const s=exStat(q.id);if(!s)return;seen++;s.r?ok++:wrong++});return{ok,wrong,seen,tot:list.length}}
-function exRecord(q,ok){S.exerc=S.exerc||{};const s=S.exerc[q.id]=S.exerc[q.id]||{r:0,n:0,ok:0};s.n++;s.r=ok?1:0;if(ok)s.ok++;save()}
+function exRecord(q,ok){S.exerc=S.exerc||{};const s=S.exerc[q.id]=S.exerc[q.id]||{r:0,n:0,ok:0};s.n++;s.r=ok?1:0;if(ok)s.ok++;save();errAnswer(exItemOf(q),ok,"exercicios")}
 function exPick(list,n){const nunca=shuffle(list.filter(q=>!exStat(q.id))),erradas=shuffle(list.filter(q=>exStat(q.id)&&!exStat(q.id).r)),certas=shuffle(list.filter(q=>exStat(q.id)&&exStat(q.id).r));
  return[...nunca,...erradas,...certas].slice(0,n)}
 function exLevelSeg(){return`<div class="seg seg2" id="exLvl" role="tablist" aria-label="Nível">${["A1","A2"].map(l=>`<button role="tab" data-exlvl="${l}" class="${EX.lvl===l?"on":""}" aria-selected="${EX.lvl===l}">Nível ${l}</button>`).join("")}</div>`}
-function renderExerc(){const box=$("#exBox");if(!box)return;if(EX.run)return renderExRun();if(EX.tx)return renderExText();
+function renderExerc(){const box=$("#exBox");if(!box)return;if(EX.mode)return v3RenderMode();if(EX.run)return renderExRun();if(EX.tx)return renderExText();
  const all=exPool(EX.lvl),c=exCounts(all);
- box.innerHTML=`${exLevelSeg()}
+ box.innerHTML=`${v3HubHTML()}${exLevelSeg()}
  <div class="card stack" style="gap:8px"><div class="row" style="justify-content:space-between"><span class="label">Nível ${EX.lvl} · ${all.length} questões</span><span class="chip${c.seen?" hot":""}">${c.ok} certas</span></div>
   <div class="lvlbar"><i style="width:${all.length?c.ok/all.length*100:0}%"></i></div><p class="small muted">${c.seen?`${c.seen} respondidas · ${c.wrong} para refazer`:"Nenhuma respondida ainda. Tudo é de marcar: toque na opção certa."}</p>
   <div class="row"><button class="btn primary" data-exstart="mix">Rodada mista (10)</button>${c.wrong?`<button class="btn" data-exwrong="mix">Refazer erradas (${c.wrong})</button>`:""}</div></div>
@@ -6848,7 +7113,7 @@ function renderExerc(){const box=$("#exBox");if(!box)return;if(EX.run)return ren
  $$("#exBox [data-exstart]").forEach(b=>b.onclick=()=>exStart(b.dataset.exstart,false));
  $$("#exBox [data-exwrong]").forEach(b=>b.onclick=()=>exStart(b.dataset.exwrong,true));
  $$("#exBox [data-extexts]").forEach(b=>b.onclick=()=>{EX.showTexts=!EX.showTexts;renderExerc()});
- $$("#exBox [data-extx]").forEach(b=>b.onclick=()=>exOpenText(b.dataset.extx))}
+ $$("#exBox [data-extx]").forEach(b=>b.onclick=()=>exOpenText(b.dataset.extx));v3HubBind()}
 function exTextList(){return`<div class="tlist">${Object.values(EXTX).filter(t=>t.nivel===EX.lvl).map((t,i)=>{const qs=EXQ.filter(q=>q.tx===t.id),ok=qs.filter(q=>exStat(q.id)&&exStat(q.id).r).length;
  return`<button class="tcard${ok===qs.length?" done":""}" data-extx="${t.id}"><span class="tn">${ok===qs.length?"✓":i+1}</span><div><h3>${esc(t.titulo)}</h3><p>${qs.length} perguntas</p></div><span class="pill ${ok===qs.length?"ok":""}">${ok}/${qs.length}</span></button>`}).join("")}</div>`}
 
@@ -6901,6 +7166,915 @@ function renderExText(){const t=EX.tx,box=$("#exBox"),st=EX.txAns[t.id],qs=EXQ.f
  $$("#exBox [data-txq]").forEach(b=>b.onclick=()=>{const q=EXQI[b.dataset.txq];if(st.ans[q.id]!=null)return;st.ans[q.id]=+b.dataset.j;exRecord(q,st.ans[q.id]===q.a);
   if(Object.keys(st.ans).length===qs.length){logInc("e");logEvento("exercicio",t.id)}
   const y=window.scrollY;renderExText();window.scrollTo(0,y)})}
+
+/* ============================ V3: NÚCLEO (caderno de erros, rodadas, sorteio com semente) ============================ */
+// Tudo aqui é de tocar: múltipla escolha, blocos para montar a frase e cartões. Nenhum campo de texto.
+// Formato de uma questão de marcar usada nas rodadas (item "mc"):
+//  {id, k:"mc", cat:"gram"|"voc"|"leit"|"esc"|"dia", lbl (rótulo curto), p (enunciado), pit (enunciado em italiano, tocável),
+//   o:[opções], a (índice da certa), x (explicação), say (texto para tocar), hide (o enunciado só aparece depois da resposta),
+//   pt (tradução mostrada depois), ctx (texto de apoio), let (id de uma leitura para mostrar como apoio)}
+// Item "ord": um item de Montar a frase (ORDI[id]); item "card": um cartão do baralho (id do cartão).
+
+/* ---------- utilidades ---------- */
+function profId(){try{return typeof CURP!=="undefined"&&CURP?CURP.id:"eu"}catch(e){return"eu"}}
+function profName(){try{return typeof CURP!=="undefined"&&CURP?CURP.name:""}catch(e){return""}}
+function seedRng(str){let h=1779033703^str.length;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=h<<13|h>>>19}
+ let a=h>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function shuffleR(a,r){a=a.slice();for(let i=a.length-1;i>0;i--){const j=r()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
+// junta blocos de palavras numa frase: sem espaço antes de pontuação nem depois de apóstrofo
+function joinBlocks(bs){let s="";bs.forEach((b,i)=>{if(i&&!/^[?!.,;:»)]/.test(b)&&!/['’]$/.test(bs[i-1]))s+=" ";s+=b});return s}
+// Revisão do italiano pela professora (folha gerada por tools/revisao_italiano.js): ao aplicar as correções pelos ids, registrar a data aqui.
+const REVISAO_IT={data:"",folha:"tools/revisao_italiano.csv"};
+const CATN={gram:"Gramática",voc:"Vocabulário",leit:"Leitura",esc:"Escuta",dia:"Diálogos"};
+
+/* ---------- tela cheia (Caffè, busca e consultas) ---------- */
+function v3Open(titulo,onClose){let ov=$("#v3Ov");if(!ov){ov=document.createElement("div");ov.id="v3Ov";ov.className="v3ov";ov.setAttribute("role","dialog");ov.setAttribute("aria-modal","true");document.body.appendChild(ov)}
+ ov.innerHTML=`<div class="v3bar"><span class="label" id="v3Tit"></span><button class="btn small" id="v3X">Fechar ✕</button></div><div class="v3in stack" id="v3Box" style="gap:16px"></div>`;
+ $("#v3Tit").textContent=titulo;ov.hidden=false;document.documentElement.classList.add("noscroll");ov.scrollTop=0;
+ $("#v3X").onclick=()=>{v3Close();if(onClose)onClose()};return $("#v3Box")}
+function v3Close(){const ov=$("#v3Ov");if(!ov||ov.hidden)return;try{audioStop();sayStop()}catch(e){}ov.hidden=true;ov.innerHTML="";document.documentElement.classList.remove("noscroll");if(RN.cur&&RN.cur.box==="#v3Box")RN.cur=null}
+function v3Top(){const ov=$("#v3Ov");if(ov&&!ov.hidden)ov.scrollTop=0;else window.scrollTo(0,0)}
+
+/* ============================ CADERNO DE ERROS ============================ */
+// Por perfil em S.erros: { <idQuestao>: {idQuestao, tipo, origem, data, acertosSeguidos, ult (dia do último acerto), q (a questão, para refazer)} }
+// A questão sai do caderno depois de 2 acertos em dias diferentes; um erro novo zera a contagem.
+function errSnap(it){if(it.k==="ord")return{k:"ord",id:it.id};const o={k:"mc",p:it.p,pit:!!it.pit,o:it.o.slice(),a:it.a,x:it.x||""};
+ ["say","hide","pt","lbl","ctx","let"].forEach(k=>{if(it[k])o[k]=it[k]});return o}
+function errAnswer(it,ok,origem){try{if(!it)return;const id=it.eid||it.id;if(!id)return;S.erros=S.erros||{};const e=S.erros[id],t=today();
+ if(!ok){S.erros[id]={idQuestao:id,tipo:it.cat||"gram",origem:origem||it.origem||"",data:e?e.data:t,acertosSeguidos:0,ult:"",q:errSnap(it)};save();errBadge();return}
+ if(!e||e.ult===t)return;e.acertosSeguidos=(e.acertosSeguidos||0)+1;e.ult=t;if(e.acertosSeguidos>=2)delete S.erros[id];save();errBadge()}catch(x){}}
+function errList(tipo){return Object.values(S.erros||{}).filter(e=>e&&e.q&&(!tipo||e.tipo===tipo)).sort((a,b)=>(a.data||"").localeCompare(b.data||"")||(a.idQuestao>b.idQuestao?1:-1))}
+function errN(){return errList().length}
+function errItem(e){const q=e.q;if(q.k==="ord"){const o=ORDI[q.id];return o?Object.assign({k:"ord",cat:e.tipo,eid:e.idQuestao},o):null}
+ return Object.assign({},q,{id:e.idQuestao,cat:e.tipo,k:"mc"})}
+function errBadge(){$$("[data-errn]").forEach(el=>el.textContent=errN())}
+function errRound(box,onBack,tipo){const its=errList(tipo).slice(0,10).map(errItem).filter(Boolean);if(!its.length)return false;
+ rnStart({box,titulo:"Rever meus erros",items:its,origem:"caderno",onQuit:onBack,again:()=>errRound(box,onBack,tipo)||onBack()});return true}
+const ERRV={tipo:""};
+function renderErrList(box,onBack){const all=errList(),tipos=[...new Set(all.map(e=>e.tipo))],list=errList(ERRV.tipo);
+ $(box).innerHTML=`<button class="back" id="erBack">← Voltar</button>
+ <div class="tophead"><span class="label">Caderno de erros</span><h2>${all.length} ${all.length===1?"questão":"questões"} para rever</h2><p class="muted small">Cada questão sai daqui depois de 2 acertos em dias diferentes.</p></div>
+ ${all.length?`<div class="row"><button class="btn primary" id="erGo">Rever ${ERRV.tipo?CATN[ERRV.tipo].toLowerCase()+" ":""}(${Math.min(10,list.length)})</button></div>
+ <div class="chips" role="tablist" aria-label="Filtrar por tipo"><button class="chip${ERRV.tipo?"":" hot"}" data-ert="">Todos (${all.length})</button>${Object.keys(CATN).filter(k=>tipos.includes(k)).map(k=>`<button class="chip${ERRV.tipo===k?" hot":""}" data-ert="${k}">${CATN[k]} (${all.filter(e=>e.tipo===k).length})</button>`).join("")}</div>
+ <div class="stack" style="gap:8px">${list.map(e=>{const q=e.q,txt=q.k==="ord"?(ORDI[q.id]?ORDI[q.id].pt:"(frase)"):q.hide?"(escuta) "+(q.say||""):q.p;
+  return`<div class="exwrong"><div class="small${q.pit?" it":""}">${esc(txt)}</div><div class="small muted">${CATN[e.tipo]||e.tipo} · desde ${fmtBR(e.data)} · ${e.acertosSeguidos?e.acertosSeguidos+" acerto, falta 1":"0 de 2 acertos"}</div></div>`}).join("")}</div>`
+ :`<div class="card"><p>Nenhum erro guardado. Quando você errar uma questão, ela aparece aqui para treinar de novo.</p></div>`}`;
+ tokenize($(box));$("#erBack").onclick=onBack;
+ if($("#erGo"))$("#erGo").onclick=()=>errRound(box,()=>renderErrList(box,onBack),ERRV.tipo);
+ $$(box+" [data-ert]").forEach(b=>b.onclick=()=>{ERRV.tipo=b.dataset.ert;renderErrList(box,onBack)})}
+
+/* ============================ RODADAS (motor comum) ============================ */
+// rnStart({box:"#seletor", titulo, items, prova (sem correção até o fim), origem, onQuit, onEnd(res) (tela final própria), again})
+const RN={cur:null};
+function rnStart(cfg){audioStop();RN.cur=Object.assign({i:0,res:[]},cfg);RN.cur.items=cfg.items.map(it=>Object.assign({},it));
+ RN.cur.items.forEach(it=>{if(it.k==="mc")it.ord=it.fixa?it.o.map((_,i)=>i):shuffle(it.o.map((_,i)=>i));if(it.k==="ord"){it.pool=shuffle([...it.blocos,...(it.extras||[])].map((w,i)=>({w,i})));it.sel=[]}});
+ v3Top();rnRender()}
+function rnSay(t,slow){audioPause();sayIt(t,{rate:slow?.75:1})}
+function rnHead(R,it){return`<div class="row" style="justify-content:space-between"><button class="back" id="rnQuit">← Sair</button><span class="chip">${R.i+1} de ${R.items.length}</span></div>
+ <div class="lvlbar"><i style="width:${R.i/R.items.length*100}%"></i></div>`}
+function rnRender(){const R=RN.cur;if(!R)return;const box=$(R.box);if(!box){RN.cur=null;return}
+ if(R.i>=R.items.length)return rnEnd();const it=R.items[R.i];
+ if(it.k==="card")return rnCard(box,R,it);if(it.k==="ord")return rnOrd(box,R,it);
+ const done=it.ans!=null,show=done&&!R.prova,lt=it.let&&typeof LETI!=="undefined"?LETI[it.let]:null;
+ let h=rnHead(R,it)+`<div class="qz exqz"><span class="qn">${esc(it.lbl||CATN[it.cat]||"")}</span>
+ ${it.ctx?`<div class="card stack extext"><p class="it exparas">${esc(it.ctx).replace(/ — /g,"<br>— ")}</p></div>`:""}
+ ${lt?`<details class="exs"><summary><span class="small">Reler o texto “${esc(lt.titulo)}”</span></summary><p class="it" style="padding:0 14px 12px">${esc(String(lt.versoes.base||"").replace(/\n/g," "))}</p></details>`:""}
+ ${it.say?`<div class="row rnaud"><button class="btn primary" id="rnPlay">${SPK_SVG} Ouvir de novo</button><button class="btn" id="rnSlow">Mais devagar</button></div>`:""}
+ ${it.hide&&!done?"":it.p?`<div class="qq exq${it.pit?" it":""}">${esc(it.p).replace(/___/g,'<span class="exgap">___</span>')}</div>`:""}
+ ${it.hide&&done&&it.say?`<div class="qq exq it">${esc(it.say)}</div>${it.pt&&!R.prova?`<p class="small muted">${esc(it.pt)}</p>`:""}`:""}
+ <div class="opts${it.o.length===2?" optsvf":""}">${it.ord.map(k=>`<button class="opt${show?(k===it.a?" right":k===it.ans?" wrong":""):done&&k===it.ans?" picked":""}" data-rno="${k}" ${done?"disabled":""}>${esc(it.o[k])}</button>`).join("")}</div>
+ ${show?`<div class="fb ${it.ans===it.a?"ok":"no"}"><b>${it.ans===it.a?"Certo!":"Não foi dessa vez."}</b>${it.ans!==it.a?`<span>Resposta: <b>${esc(it.o[it.a])}</b></span>`:""}${it.x?`<span>${esc(it.x)}</span>`:""}${it.pt&&!it.hide?`<span class="muted">${esc(it.pt)}</span>`:""}</div>`:""}
+ ${done?`<button class="btn primary" id="rnNext">${R.i+1<R.items.length?"Próxima →":R.prova?"Ver o resultado":"Ver resultado"}</button>`:""}</div>`;
+ box.innerHTML=h;tokenize(box);
+ $("#rnQuit").onclick=()=>{audioStop();sayStop();const q=R.onQuit;RN.cur=null;if(q)q()};
+ if(it.say){const p=$("#rnPlay"),s=$("#rnSlow");p.onclick=()=>rnSay(it.say);s.onclick=()=>rnSay(it.say,true);if(!done&&!it.played){it.played=1;rnSay(it.say)}}
+ $$(R.box+" [data-rno]").forEach(b=>b.onclick=()=>{if(it.ans!=null)return;it.ans=+b.dataset.rno;const ok=it.ans===it.a;R.res[R.i]={it,ok};
+  if(!R.prova)errAnswer(it,ok,R.origem);if(R.prova){R.i++;v3Top();rnRender();return}rnRender()});
+ if($("#rnNext"))$("#rnNext").onclick=()=>{audioStop();R.i++;v3Top();rnRender()}}
+
+/* ---------- Montar a frase ---------- */
+function ordNorm(a){return a.map(w=>w.toLowerCase().replace(/’/g,"'")).join(" ")}
+function ordOk(it,sel){const s=ordNorm(sel);return(it.aceitas||[it.blocos]).some(a=>ordNorm(a)===s)}
+function rnOrd(box,R,it){const done=it.ans!=null,show=done&&!R.prova,sel=it.sel.map(i=>it.pool.find(p=>p.i===i).w);
+ let h=rnHead(R,it)+`<div class="qz exqz"><span class="qn">Montar a frase · ${esc(it.nivel||"")}</span>
+ <div class="qq exq">${esc(it.pt)}</div>
+ <div class="ordline${done?(show?(it.ans?" ok":" no"):""):""}" aria-label="Sua frase">${sel.length?it.sel.map(i=>`<button class="ordb in" data-ordout="${i}" ${done?"disabled":""}>${esc(it.pool.find(p=>p.i===i).w)}</button>`).join(""):`<span class="small muted">Toque nos blocos na ordem certa.</span>`}</div>
+ <div class="ordpool">${it.pool.map(p=>it.sel.includes(p.i)?`<span class="ordb ghost" aria-hidden="true">${esc(p.w)}</span>`:`<button class="ordb" data-ordin="${p.i}" ${done?"disabled":""}>${esc(p.w)}</button>`).join("")}</div>
+ ${!done?`<div class="row"><button class="btn primary" id="ordCheck" ${sel.length?"":"disabled"}>Conferir</button>${sel.length?`<button class="btn ghost" id="ordClear">Limpar</button>`:""}</div>`:""}
+ ${show?`<div class="fb ${it.ans?"ok":"no"}"><b>${it.ans?"Certo!":"Ainda não."}</b>${it.ans?"":`<span>Uma ordem certa: <b class="it">${esc(joinBlocks(it.aceitas[0]))}</b></span>`}${(it.aceitas||[]).length>1?`<span class="small">Também vale: ${it.aceitas.slice(it.ans?0:1).filter(a=>ordNorm(a)!==ordNorm(sel)).map(a=>"«"+esc(joinBlocks(a))+"»").join(" · ")}</span>`:""}${it.x?`<span>${esc(it.x)}</span>`:""}
+  <div class="row" style="gap:8px;flex-wrap:nowrap"><i class="it" style="flex:1">${esc(joinBlocks(it.ans?sel:it.aceitas[0]))}</i>${spkBtn(joinBlocks(it.ans?sel:it.aceitas[0]))}</div></div>`:""}
+ ${done?`<button class="btn primary" id="rnNext">${R.i+1<R.items.length?"Próxima →":"Ver resultado"}</button>`:""}</div>`;
+ box.innerHTML=h;
+ $("#rnQuit").onclick=()=>{audioStop();const q=R.onQuit;RN.cur=null;if(q)q()};
+ $$(R.box+" [data-ordin]").forEach(b=>b.onclick=()=>{it.sel.push(+b.dataset.ordin);rnOrd(box,R,it)});
+ $$(R.box+" [data-ordout]").forEach(b=>b.onclick=()=>{it.sel=it.sel.filter(i=>i!==+b.dataset.ordout);rnOrd(box,R,it)});
+ if($("#ordClear"))$("#ordClear").onclick=()=>{it.sel=[];rnOrd(box,R,it)};
+ if($("#ordCheck"))$("#ordCheck").onclick=()=>{const ok=ordOk(it,sel);it.ans=ok;R.res[R.i]={it,ok};
+  if(!R.prova){errAnswer(it,ok,R.origem);if(ok)speak(joinBlocks(sel))}if(R.prova){R.i++;v3Top();rnRender();return}rnOrd(box,R,it)};
+ if($("#rnNext"))$("#rnNext").onclick=()=>{audioStop();R.i++;v3Top();rnRender()}}
+
+/* ---------- cartão do baralho (usado no Caffè con la Nonna) ---------- */
+function rnCard(box,R,it){if(!CARDS[it.id]){R.i++;return rnRender()}if(!SESSION)buildSession();
+ const f=cardFace(it.id),c=CARDS[it.id];
+ box.innerHTML=rnHead(R,it)+`<div class="flash"><span class="deck label">${esc(DECKS[c.deck]||"")}</span>${spkBtn(f.say)}<span class="label">${esc(f.sub||"")}</span>
+ <div class="front">${f.blank?blankify(f.front):esc(f.front)}</div>${it.shown?`<div class="back"><b>${esc(f.back)}</b>${f.note?`<div class="note">${esc(f.note)}</div>`:""}</div>`:""}</div>
+ ${it.shown?`<div class="rate">${[["r0",0,"Errei"],["",1,"Difícil"],["",2,"Bom"],["r3",3,"Fácil"]].map(([cl,r,l])=>`<button class="${cl}" data-rnr="${r}">${l}<span>${intervalLabel(it.id,r)}</span></button>`).join("")}</div>`:`<button class="btn primary" id="rnRev">Mostrar resposta</button>`}`;
+ $("#rnQuit").onclick=()=>{audioStop();const q=R.onQuit;RN.cur=null;if(q)q()};
+ if($("#rnRev"))$("#rnRev").onclick=()=>{it.shown=true;rnCard(box,R,it);if(!f.sayFront)speak(f.say)};
+ $$(R.box+" [data-rnr]").forEach(b=>b.onclick=()=>{const r=+b.dataset.rnr;logInc("c");S.cards[it.id]=sched(S.cards[it.id],r);logEvento("revisao",it.id);S.daily.reviewed++;
+  const t=today();if(S.streak.last!==t){S.streak.count=S.streak.last===addDays(-1)?S.streak.count+1:1;S.streak.last=t}save();
+  R.res[R.i]={it,ok:r>0};if(r===0&&!it.again){R.items.splice(Math.min(R.i+4,R.items.length),0,{k:"card",id:it.id,again:1})}R.i++;v3Top();rnRender()})}
+
+/* ---------- fim da rodada ---------- */
+function rnEnd(){const R=RN.cur,box=$(R.box);const scored=R.res.filter(x=>x&&x.it.k!=="card"),ok=scored.filter(x=>x.ok).length,n=scored.length;
+ if(!R.logged){R.logged=1;if(n){logInc("e");logEvento("exercicio",(R.origem||"rodada")+":"+(R.tag||""))}save();try{renderHome()}catch(e){}}
+ if(R.onEnd){R.onEnd(R);return}
+ const wrong=scored.filter(x=>!x.ok);
+ box.innerHTML=`<div class="card stack"><span class="label">${esc(R.titulo||"Resultado")}</span><h2>${n?ok+"/"+n+" · "+Math.round(ok/n*100)+"%":"Pronto!"}</h2>
+ <p class="muted small">${!n?"":ok===n?"Tudo certo!":"As erradas foram para o caderno de erros."}</p>
+ ${wrong.length?`<div class="stack" style="gap:8px">${wrong.map(x=>`<div class="exwrong"><div class="small${x.it.pit||x.it.k==="ord"?" it":""}">${esc(x.it.k==="ord"?x.it.pt:x.it.hide?x.it.say:x.it.p)}</div><div class="small">Certa: <b>${esc(x.it.k==="ord"?joinBlocks(x.it.aceitas[0]):x.it.o[x.it.a])}</b></div></div>`).join("")}</div>`:""}
+ <div class="row">${R.again?`<button class="btn primary" id="rnAgain">Nova rodada</button>`:""}<button class="btn ghost" id="rnBack">Voltar</button></div></div>`;
+ tokenize(box);if($("#rnAgain"))$("#rnAgain").onclick=()=>{const a=R.again;RN.cur=null;a()};
+ $("#rnBack").onclick=()=>{const q=R.onQuit;RN.cur=null;if(q)q()}}
+
+/* ---------- ganchos nos exercícios que já existiam ---------- */
+function exItemOf(q){const tx=q.tx&&EXTX[q.tx];return{id:q.id,k:"mc",cat:q.cat==="int"?"leit":q.cat,lbl:q.nivel+" · "+((EXCATS.find(c=>c[0]===q.cat)||[])[1]||"")+" · "+EXTIPO[q.tipo],p:q.q,pit:q.tipo==="comp"||q.tipo==="it",o:q.o,a:q.a,x:q.x,ctx:tx?tx.texto:"",fixa:q.tipo==="vf"}}
+function curItemOf(q){const right=qAns(q),c=qCat(q);return{id:"cur:"+hashStr(q.q+"|"+right),k:"mc",cat:c==="voc"?"voc":c==="list"?"esc":"gram",lbl:"Curso",p:q.type==="lm"?"":q.q,pit:!q.voc,o:q.opts.slice(),a:q.opts.indexOf(right),x:q.exp||"",say:q.type==="lf"||q.type==="lm"?q.say:"",hide:q.type==="lm"?1:0}}
+
+/* ============================ ESCUTA (ASCOLTO): dados (conteúdo original) ============================ */
+// Formatos (tudo de marcar): "ouviu" (3 frases em italiano que diferem num ponto), "pares" (palavras que confundem, dentro de uma frase; 2 opções),
+// "significa" (3 traduções em português). A primeira opção é a certa; o app embaralha. nota = explicação curta.
+// Validar com node tools/check_v3.js
+const ASC_SRC={
+A1:[
+["ouviu","La riunione è alle nove.",["La riunione è alle nove.","La riunione è alle dieci.","La riunione era alle nove."],"A reunião é às nove.","nove (9) e dieci (10); è (é) e era (era)."],
+["ouviu","Sono ingegnere civile.",["Sono ingegnere civile.","Sono ingegneri civili.","Sono un ingegnere civile."],"Sou engenheiro civil.","Com sono, a profissão vem sem artigo."],
+["ouviu","Lavoro in uno studio tecnico.",["Lavoro in uno studio tecnico.","Lavoro in un ufficio tecnico.","Lavoro in uno studio medico."],"Trabalho num escritório técnico.","uno studio: uno antes de s + consoante."],
+["ouviu","Il cantiere apre alle sette.",["Il cantiere apre alle sette.","Il cantiere chiude alle sette.","Il cantiere apre alle sei."],"O canteiro abre às sete.","apre (abre) × chiude (fecha); sette (7) × sei (6)."],
+["ouviu","Abito vicino alla stazione.",["Abito vicino alla stazione.","Abito lontano dalla stazione.","Abito vicino alla piazza."],"Moro perto da estação.","vicino a (perto de) × lontano da (longe de)."],
+["ouviu","Ti chiami Lucas e sei brasiliano.",["Ti chiami Lucas e sei brasiliano.","Mi chiamo Lucas e sono brasiliano.","Ti chiami Lucas e sei brasiliana."],"Você se chama Lucas e é brasileiro.","ti chiami / sei = você; mi chiamo / sono = eu."],
+["ouviu","Prendo un caffè al bar.",["Prendo un caffè al bar.","Prendo due caffè al bar.","Prendo un cappuccino al bar."],"Tomo um café no bar.","caffè não muda no plural: un caffè, due caffè."],
+["ouviu","Il mio ufficio è al terzo piano.",["Il mio ufficio è al terzo piano.","Il mio ufficio è al quarto piano.","Il tuo ufficio è al terzo piano."],"Meu escritório fica no terceiro andar.","piano = andar; terzo (3º), quarto (4º)."],
+["ouviu","Oggi lavoro da casa.",["Oggi lavoro da casa.","Oggi lavoro in ufficio.","Domani lavoro da casa."],"Hoje trabalho de casa.","lavorare da casa = trabalhar de casa."],
+["ouviu","Quanto costa il biglietto?",["Quanto costa il biglietto?","Quanto costano i biglietti?","Quanto costa la bottiglia?"],"Quanto custa o bilhete?","costa (singular) × costano (plural)."],
+["ouviu","La mia collega si chiama Giulia.",["La mia collega si chiama Giulia.","La mia collega si chiama Giuliana.","Mia sorella si chiama Giulia."],"Minha colega se chama Giulia.","collega serve para homem e mulher: il collega, la collega."],
+["ouviu","Ci vediamo lunedì mattina.",["Ci vediamo lunedì mattina.","Ci vediamo lunedì sera.","Ci vediamo martedì mattina."],"Nos vemos segunda de manhã.","mattina (manhã), sera (noite); lunedì, martedì."],
+["pares","L'ingegnere è in cantiere.",["L'ingegnere è in cantiere.","L'ingegnere e in cantiere."],"O engenheiro está no canteiro.","è (verbo essere) e e (conjunção) soam quase iguais: aqui precisa do verbo."],
+["pares","Mi presti una penna?",["Mi presti una penna?","Mi presti una pena?"],"Você me empresta uma caneta?","penna (caneta) tem n dobrado: o som do n dura mais. pena = pena, castigo."],
+["pares","Pago alla cassa.",["Pago alla cassa.","Pago alla casa."],"Pago no caixa.","cassa (caixa) tem s dobrado, mais forte; casa tem um s só."],
+["pares","Ho sonno.",["Ho sonno.","Ho sono."],"Estou com sono.","sonno = sono, vontade de dormir; sono = sou / são."],
+["pares","Loro hanno due figli.",["Loro hanno due figli.","Loro anno due figli."],"Eles têm dois filhos.","hanno e anno soam igual (o h não se pronuncia): o contexto decide. Aqui é o verbo avere."],
+["pares","Porta sempre il cappello.",["Porta sempre il cappello.","Porta sempre il capello."],"Ele sempre usa chapéu.","cappello (chapéu) tem p dobrado; capello = um fio de cabelo."],
+["pares","Mio nonno ha ottant'anni.",["Mio nonno ha ottant'anni.","Mio nono ha ottant'anni."],"Meu avô tem oitenta anos.","nonno (avô) tem n dobrado; nono = nono (9º)."],
+["significa","Che ore sono?",["Que horas são?","Quantos anos você tem?","Onde vocês estão?"],"","Che ore sono? pergunta a hora."],
+["significa","Lavoro in cantiere da lunedì a venerdì.",["Trabalho na obra de segunda a sexta.","Trabalho no escritório de segunda a sexta.","Trabalho na obra só na segunda e na sexta."],"","da… a… = de… a…; cantiere = obra, canteiro."],
+["significa","Dov'è il bagno, per favore?",["Onde fica o banheiro, por favor?","Onde fica o banco, por favor?","O banheiro está ocupado?"],"","bagno = banheiro; banca = banco."],
+["significa","Il capocantiere arriva alle otto.",["O encarregado da obra chega às oito.","O encarregado da obra sai às oito.","O engenheiro chega às oito."],"","capocantiere = encarregado, mestre de obras."],
+["significa","Posso pagare con la carta?",["Posso pagar com cartão?","Posso pagar em dinheiro?","Posso ver o cardápio?"],"","la carta = o cartão; em dinheiro = in contanti."],
+["significa","Scusi, non ho capito.",["Desculpe, não entendi.","Desculpe, não ouvi o telefone.","Desculpe, agora não posso."],"","capire = entender; non ho capito = não entendi."],
+["significa","Domani c'è una riunione con il cliente.",["Amanhã há uma reunião com o cliente.","Ontem houve uma reunião com o cliente.","Amanhã o cliente não vem à reunião."],"","c'è = há, tem; domani = amanhã."],
+["significa","Mi piace molto questa città.",["Gosto muito desta cidade.","Esta cidade é muito grande.","Não conheço bem esta cidade."],"","mi piace = eu gosto (literalmente: me agrada)."],
+["significa","Il progetto è quasi pronto.",["O projeto está quase pronto.","O projeto está atrasado.","O projeto ainda não começou."],"","quasi = quase; pronto = pronto."],
+["significa","Sono stanco, vado a casa.",["Estou cansado, vou para casa.","Estou com fome, vou para casa.","Estou cansado, fico em casa."],"","stanco = cansado; fome = fame."],
+["significa","Quanti anni hai?",["Quantos anos você tem?","Há quantos anos você mora aqui?","Quando é o seu aniversário?"],"","Em italiano a idade se diz com avere: ho trent'anni."]
+],
+A2:[
+["ouviu","Ieri ho finito la relazione.",["Ieri ho finito la relazione.","Ieri ho finito la riunione.","Ieri hai finito la relazione."],"Ontem terminei o relatório.","relazione (relatório) × riunione (reunião); ho (eu) × hai (você)."],
+["ouviu","Siamo arrivati in cantiere alle otto.",["Siamo arrivati in cantiere alle otto.","Sono arrivati in cantiere alle otto.","Siamo arrivati in cantiere alle sette."],"Chegamos ao canteiro às oito.","siamo arrivati (nós) × sono arrivati (eles)."],
+["ouviu","Le mando il preventivo domani.",["Le mando il preventivo domani.","Le mando il preventivo oggi.","Gli mando il preventivo domani."],"Mando o orçamento para o senhor (a senhora) amanhã.","Le = para o senhor / a senhora (Lei); gli = para ele."],
+["ouviu","Quando ero piccolo, abitavo a Curitiba.",["Quando ero piccolo, abitavo a Curitiba.","Quando ero piccola, abitavo a Curitiba.","Quando ero piccolo, abitavamo a Curitiba."],"Quando eu era pequeno, morava em Curitiba.","piccolo (ele) × piccola (ela); abitavo (eu) × abitavamo (nós)."],
+["ouviu","Il geometra ci ha mandato le misure.",["Il geometra ci ha mandato le misure.","Il geometra ci ha mandato le foto.","Il geometra ti ha mandato le misure."],"O técnico nos mandou as medidas.","ci = para nós; ti = para você."],
+["ouviu","Potrebbe ripetere, per favore?",["Potrebbe ripetere, per favore?","Può ripetere, per favore?","Potrebbe ripeterlo, per favore?"],"Poderia repetir, por favor?","potrebbe (poderia) é mais gentil que può (pode)."],
+["ouviu","Il getto del solaio è previsto per giovedì.",["Il getto del solaio è previsto per giovedì.","Il getto del solaio è previsto per venerdì.","Il getto della platea è previsto per giovedì."],"A concretagem da laje está prevista para quinta.","getto = concretagem; solaio = laje; platea = radier."],
+["ouviu","Ne abbiamo comprati tre.",["Ne abbiamo comprati tre.","Ne abbiamo comprate tre.","Ne avete comprati tre."],"Compramos três (deles).","Com ne, o particípio concorda com o que foi comprado: comprati (m.), comprate (f.)."],
+["ouviu","Domani andrò dal medico.",["Domani andrò dal medico.","Domani andrei dal medico.","Domani andrà dal medico."],"Amanhã vou ao médico.","andrò (vou, futuro) × andrei (iria) × andrà (ele vai)."],
+["ouviu","Vorrei spostare la riunione a lunedì.",["Vorrei spostare la riunione a lunedì.","Vorrei spostare la riunione a mercoledì.","Vorrei anticipare la riunione a lunedì."],"Gostaria de passar a reunião para segunda.","spostare = mudar de data; anticipare = antecipar."],
+["ouviu","Ci vogliono due ore per arrivare.",["Ci vogliono due ore per arrivare.","Ci vuole un'ora per arrivare.","Ci vogliono due ore per finire."],"São precisas duas horas para chegar.","ci vuole (singular) × ci vogliono (plural)."],
+["ouviu","Mi scusi per il ritardo.",["Mi scusi per il ritardo.","Mi scusi per il disturbo.","Ci scusi per il ritardo."],"Desculpe o atraso.","ritardo = atraso; disturbo = incômodo."],
+["pares","Il verbale è pronto e firmato.",["Il verbale è pronto e firmato.","Il verbale e pronto è firmato."],"A ata está pronta e assinada.","è é o verbo (está); e liga duas palavras (e)."],
+["pares","Non vale la pena aspettare.",["Non vale la pena aspettare.","Non vale la penna aspettare."],"Não vale a pena esperar.","valere la pena = valer a pena: pena com um n só."],
+["pares","Ho lasciato le chiavi a casa.",["Ho lasciato le chiavi a casa.","Ho lasciato le chiavi a cassa."],"Deixei as chaves em casa.","casa tem um s só; cassa (caixa) tem s dobrado."],
+["pares","Stanotte non ho preso sonno.",["Stanotte non ho preso sonno.","Stanotte non ho preso sono."],"Esta noite não consegui pegar no sono.","prendere sonno = pegar no sono; sonno com n dobrado."],
+["pares","L'anno scorso hanno rifatto il tetto.",["L'anno scorso hanno rifatto il tetto.","L'hanno scorso anno rifatto il tetto."],"No ano passado refizeram o telhado.","anno (ano) e hanno (verbo avere) soam igual; o sentido decide."],
+["pares","C'è un capello nel piatto!",["C'è un capello nel piatto!","C'è un cappello nel piatto!"],"Tem um fio de cabelo no prato!","capello (fio de cabelo) tem um p só; cappello = chapéu."],
+["pares","L'ufficio è al nono piano.",["L'ufficio è al nono piano.","L'ufficio è al nonno piano."],"O escritório fica no nono andar.","nono (9º) tem um n no meio; nonno = avô."],
+["significa","Abbiamo dovuto rimandare il sopralluogo.",["Tivemos que adiar a vistoria.","Tivemos que antecipar a vistoria.","Fizemos a vistoria duas vezes."],"","rimandare = adiar; sopralluogo = vistoria."],
+["significa","Se piove, il getto slitta a lunedì.",["Se chover, a concretagem passa para segunda.","Se chover, a concretagem é cancelada.","Choveu, e a concretagem foi na segunda."],"","slittare = escorregar; aqui, ser adiado."],
+["significa","Me lo può mandare per email?",["Pode me mandar isso por e-mail?","Posso mandar isso por e-mail?","Ele me mandou isso por e-mail?"],"","me lo = me + lo (para mim + isso)."],
+["significa","Non me l'aspettavo.",["Eu não esperava por isso.","Não espere por mim.","Eu não estava esperando ninguém."],"","aspettarsi qualcosa = esperar, prever algo."],
+["significa","Ci sentiamo la settimana prossima.",["Nos falamos na semana que vem.","Nós nos vimos na semana passada.","Sentimos muito pela semana."],"","sentirsi = falar-se (por telefone ou mensagem)."],
+["significa","Il cliente vorrebbe uno sconto.",["O cliente gostaria de um desconto.","O cliente deu um desconto.","O cliente quer pagar à vista."],"","vorrebbe = gostaria; sconto = desconto."],
+["significa","Da piccolo giocavo sempre a calcio.",["Quando pequeno, eu sempre jogava futebol.","Quando pequeno, joguei futebol uma vez.","Hoje sempre jogo futebol."],"","O imperfetto (giocavo) conta hábitos do passado."],
+["significa","Le misure non tornano.",["As medidas não batem.","As medidas não voltaram.","As medidas não chegaram."],"","tornare, com contas e medidas, = bater, fechar."],
+["significa","Sarebbe meglio aspettare la conferma.",["Seria melhor esperar a confirmação.","Foi melhor esperar a confirmação.","É melhor não esperar a confirmação."],"","sarebbe = seria (condizionale)."],
+["significa","Ho mal di testa da stamattina.",["Estou com dor de cabeça desde hoje de manhã.","Tive dor de cabeça ontem de manhã.","Minha cabeça dói toda manhã."],"","da stamattina = desde hoje de manhã."],
+["significa","L'impresa ha consegnato i lavori in anticipo.",["A construtora entregou a obra adiantada.","A construtora entregou a obra atrasada.","A construtora começou a obra antes."],"","in anticipo = adiantado; in ritardo = atrasado."]
+]};
+const ASC_FMT={ouviu:"O que você ouviu?",pares:"Pares que confundem",significa:"O que significa?"};
+const ASC=[],ASCI={};
+Object.keys(ASC_SRC).forEach(lvl=>ASC_SRC[lvl].forEach((r,i)=>{const id="asc-"+lvl.toLowerCase()+"-"+String(i+1).padStart(2,"0");
+ const x={id,nivel:lvl,formato:r[0],audio:r[1],opcoes:r[2],correta:0,pt:r[3]||(r[0]==="significa"?r[2][0]:""),nota:r[4]};ASC.push(x);ASCI[id]=x}));
+function ascItem(x){return{id:x.id,k:"mc",cat:"esc",lbl:"Escuta "+x.nivel+" · "+ASC_FMT[x.formato],say:x.audio,hide:1,p:"",o:x.opcoes,a:x.correta,x:x.nota,pt:x.formato==="significa"?"":x.pt}}
+
+/* ============================ MONTAR A FRASE: dados (conteúdo original) ============================ */
+// [tópico, frase em português, blocos na ordem certa, extras (só A2: blocos de distração), ordens alternativas aceitas, explicação opcional]
+// "aceitas" sempre inclui a ordem dos blocos; o italiano admite mais de uma ordem em várias frases. Validar com node tools/check_v3.js
+const ORD_SRC={
+A1:[
+["a1-1","Eu me chamo Lucas e sou brasileiro.",["Mi","chiamo","Lucas","e","sono","brasiliano"],[],[]],
+["a1-1","De onde você é?",["Di","dove","sei","?"],[],[]],
+["a1-1","Sou engenheiro civil.",["Sono","ingegnere","civile"],[],[],"Com sono, a profissão vem sem artigo."],
+["a1-1","Muito prazer, sou a Giulia.",["Piacere",",","sono","Giulia"],[],[]],
+["a1-2","Eu tenho trinta e dois anos.",["Ho","trentadue","anni"],[],[],"A idade se diz com avere."],
+["a1-2","Os engenheiros estão no escritório.",["Gli","ingegneri","sono","in","ufficio"],[],[],"gli antes de vogal no plural masculino."],
+["a1-2","Você tem uma caneta?",["Hai","una","penna","?"],[],[]],
+["a1-2","Os desenhos estão sobre a mesa.",["I","disegni","sono","sul","tavolo"],[],[]],
+["a1-3","A Giulia é uma colega muito simpática.",["Giulia","è","una","collega","molto","simpatica"],[],[]],
+["a1-3","O senhor é o novo diretor?",["Lei","è","il","nuovo","direttore","?"],[],[["È","Lei","il","nuovo","direttore","?"]],"Lei com maiúscula = o senhor, a senhora."],
+["a1-3","O escritório é pequeno mas bonito.",["L'ufficio","è","piccolo","ma","bello"],[],[]],
+["a1-3","Tenho um carro vermelho.",["Ho","una","macchina","rossa"],[],[],"O adjetivo de cor vem depois do substantivo."],
+["a1-4","Trabalho das oito às cinco.",["Lavoro","dalle","otto","alle","cinque"],[],[]],
+["a1-4","A que horas começa a reunião?",["A","che","ora","comincia","la","riunione","?"],[],[["La","riunione","a","che","ora","comincia","?"]]],
+["a1-4","Almoçamos ao meio-dia.",["Pranziamo","a","mezzogiorno"],[],[]],
+["a1-4","Você mora em Curitiba?",["Abiti","a","Curitiba","?"],[],[],"Com cidades usa-se a: abito a Curitiba."],
+["a1-5","No sábado vou ao cinema.",["Sabato","vado","al","cinema"],[],[["Vado","al","cinema","sabato"]]],
+["a1-5","O que você faz no fim de semana?",["Che","cosa","fai","nel","fine","settimana","?"],[],[["Nel","fine","settimana","che","cosa","fai","?"]]],
+["a1-5","Hoje saio tarde do escritório.",["Oggi","esco","tardi","dall'ufficio"],[],[["Esco","tardi","dall'ufficio","oggi"]]],
+["a1-5","Vocês vêm à festa?",["Venite","alla","festa","?"],[],[]],
+["a1-6","Posso abrir a janela?",["Posso","aprire","la","finestra","?"],[],[]],
+["a1-6","Hoje devo terminar o projeto.",["Oggi","devo","finire","il","progetto"],[],[["Devo","finire","il","progetto","oggi"]]],
+["a1-6","A cozinha fica ao lado da sala.",["La","cucina","è","accanto","al","soggiorno"],[],[]],
+["a1-6","Queremos alugar um apartamento.",["Vogliamo","affittare","un","appartamento"],[],[]],
+["a1-7","Vou ao trabalho de ônibus.",["Vado","al","lavoro","in","autobus"],[],[["Vado","in","autobus","al","lavoro"]],"Meio de transporte com in: in autobus, in treno."],
+["a1-7","A farmácia fica em frente ao banco.",["La","farmacia","è","di","fronte","alla","banca"],[],[]],
+["a1-7","O canteiro fica perto da estação.",["Il","cantiere","è","vicino","alla","stazione"],[],[]],
+["a1-7","Siga reto e depois vire à direita.",["Vada","dritto","e","poi","giri","a","destra"],[],[],"Vada, giri: imperativo com Lei, para dar direções a um desconhecido."],
+["a1-8","Um café e um croissant, por favor.",["Un","caffè","e","un","cornetto",",","per","favore"],[],[]],
+["a1-8","Quanto custa um quilo de tomates?",["Quanto","costa","un","chilo","di","pomodori","?"],[],[]],
+["a1-8","O leite está na geladeira.",["Il","latte","è","nel","frigorifero"],[],[],"nel = in + il."],
+["a1-8","Pago no caixa.",["Pago","alla","cassa"],[],[]],
+["a1-9","Minha irmã mora em Milão.",["Mia","sorella","abita","a","Milano"],[],[],"Com parente no singular, o possessivo vem sem artigo."],
+["a1-9","Meus pais são aposentados.",["I","miei","genitori","sono","in","pensione"],[],[]],
+["a1-9","Esta é a nossa sala de reuniões.",["Questa","è","la","nostra","sala","riunioni"],[],[]],
+["a1-9","Meu aniversário é em maio.",["Il","mio","compleanno","è","a","maggio"],[],[]],
+["a1-10","Gosto muito de café.",["Mi","piace","molto","il","caffè"],[],[["Il","caffè","mi","piace","molto"]]],
+["a1-10","Acordo às seis e meia.",["Mi","sveglio","alle","sei","e","mezza"],[],[]],
+["a1-10","Estou lendo o relatório.",["Sto","leggendo","la","relazione"],[],[],"stare + gerúndio = estar fazendo agora."],
+["a1-10","Você gosta de trabalhar em equipe?",["Ti","piace","lavorare","in","squadra","?"],[],[]]
+],
+A2:[
+["a2-1","Ontem terminei o relatório.",["Ieri","ho","finito","la","relazione"],["sono","finita"],[["Ho","finito","la","relazione","ieri"]]],
+["a2-1","Você já leu o e-mail do cliente?",["Hai","già","letto","l'email","del","cliente","?"],["leggi","dal"],[]],
+["a2-1","No sábado trabalhamos no canteiro.",["Sabato","abbiamo","lavorato","in","cantiere"],["siamo","lavorata"],[["Abbiamo","lavorato","in","cantiere","sabato"]]],
+["a2-1","Não entendi a pergunta.",["Non","ho","capito","la","domanda"],["sono","il"],[]],
+["a2-2","Chegamos tarde à reunião.",["Siamo","arrivati","tardi","alla","riunione"],["abbiamo","arrivato"],[],"arrivare usa essere, e o particípio concorda: siamo arrivati."],
+["a2-2","A Giulia foi a Roma de trem.",["Giulia","è","andata","a","Roma","in","treno"],["ha","andato"],[]],
+["a2-2","A que horas o trem partiu?",["A","che","ora","è","partito","il","treno","?"],["ha","partita"],[["Il","treno","a","che","ora","è","partito","?"]]],
+["a2-2","Fiquei em casa o dia todo.",["Sono","rimasto","a","casa","tutto","il","giorno"],["ho","rimanuto"],[]],
+["a2-3","Eu o mando amanhã (o relatório: il rapporto).",["Lo","mando","domani"],["La","gli"],[["Domani","lo","mando"]],"Il rapporto é masculino: lo."],
+["a2-3","São precisos cem (tijolos).",["Ne","servono","cento"],["Li","serve"],[],"ne substitui uma quantidade: ne servono cento."],
+["a2-3","Você tem a chave? Sim, tenho.",["Sì",",","ce","l'ho"],["la","ho"],[],"Para ter algo à mão: ce l'ho."],
+["a2-3","Comprei-as ontem (as cerâmicas: le piastrelle).",["Le","ho","comprate","ieri"],["comprato","Li"],[["Ieri","le","ho","comprate"]],"Com lo, la, li, le, o particípio concorda: le ho comprate."],
+["a2-4","Posso enviar o orçamento amanhã?",["Posso","inviare","il","preventivo","domani","?"],["lo","ieri"],[["Domani","posso","inviare","il","preventivo","?"]]],
+["a2-4","Ligo para o cliente e explico tudo a ele.",["Telefono","al","cliente","e","gli","spiego","tutto"],["lo","le"],[],"telefonare a qualcuno: o pronome é indireto (gli)."],
+["a2-4","Mando os desenhos para a senhora.",["Le","mando","i","disegni"],["La","Lo"],[["Le","mando","i","disegni"]]],
+["a2-4","Ele me deu um presente.",["Mi","ha","dato","un","regalo"],["è","dati"],[]],
+["a2-5","Quando eu era criança, morava no interior.",["Quando","ero","piccolo",",","abitavo","in","campagna"],["sono","abitato"],[]],
+["a2-5","Enquanto eu trabalhava, o telefone tocou.",["Mentre","lavoravo",",","il","telefono","ha","squillato"],["lavorato","sono"],[],"imperfetto para o pano de fundo, passato prossimo para o fato."],
+["a2-5","Antes o escritório ficava no centro.",["Prima","l'ufficio","era","in","centro"],["è","ero"],[]],
+["a2-5","Todo verão íamos à praia.",["Ogni","estate","andavamo","al","mare"],["andavano","nel"],[]],
+["a2-6","Amanhã terminaremos a laje.",["Domani","finiremo","il","solaio"],["finiremmo","la"],[["Finiremo","il","solaio","domani"]]],
+["a2-6","Se chover, ficaremos em casa.",["Se","pioverà",",","resteremo","a","casa"],["pioverebbe","restavamo"],[]],
+["a2-6","No ano que vem irei à Itália.",["L'anno","prossimo","andrò","in","Italia"],["andrei","a"],[["Andrò","in","Italia","l'anno","prossimo"]]],
+["a2-6","O cliente chegará às dez.",["Il","cliente","arriverà","alle","dieci"],["arriverebbe","le"],[]],
+["a2-7","Quanto tempo leva para chegar ao canteiro?",["Quanto","ci","vuole","per","arrivare","in","cantiere","?"],["vogliono","al"],[]],
+["a2-7","São precisas duas horas.",["Ci","vogliono","due","ore"],["vuole","Si"],[],"ci vuole + singular, ci vogliono + plural."],
+["a2-7","Aqui se fala italiano.",["Qui","si","parla","italiano"],["parlano","ci"],[["Si","parla","italiano","qui"]]],
+["a2-7","Pode-se pagar com cartão?",["Si","può","pagare","con","la","carta","?"],["possono","per"],[]],
+["a2-8","Feche a porta, por favor (tu).",["Chiudi","la","porta",",","per","favore"],["Chiude","il"],[]],
+["a2-8","Sente-se aqui, por favor (Lei).",["Si","accomodi","qui"],["Accomodati","ti"],[],"Com Lei: si accomodi; com tu: accomodati."],
+["a2-8","Não use o celular no canteiro (tu).",["Non","usare","il","cellulare","in","cantiere"],["usa","al"],[],"Imperativo negativo com tu: non + infinitivo."],
+["a2-8","Coloque o capacete antes de entrar (Lei).",["Metta","il","casco","prima","di","entrare"],["Mette","a"],[]],
+["a2-9","Este projeto é mais simples que o outro.",["Questo","progetto","è","più","semplice","dell'altro"],["che","molto"],[]],
+["a2-9","O Lucas é tão alto quanto o Marco.",["Lucas","è","alto","come","Marco"],["di","più"],[]],
+["a2-9","Hoje me sinto muito melhor.",["Oggi","mi","sento","molto","meglio"],["migliore","più"],[["Mi","sento","molto","meglio","oggi"]],"meglio (advérbio) com sentirsi; migliore é adjetivo."],
+["a2-9","Este é o melhor restaurante da cidade.",["Questo","è","il","ristorante","migliore","della","città"],["meglio","di"],[["Questo","è","il","migliore","ristorante","della","città"]]],
+["a2-10","Eu gostaria de falar com o diretor.",["Vorrei","parlare","con","il","direttore"],["Vorrò","al"],[]],
+["a2-10","O senhor poderia me mandar a planta?",["Potrebbe","mandarmi","la","pianta","?"],["mandami","mi"],[]],
+["a2-10","O engenheiro que trabalha conosco é italiano.",["L'ingegnere","che","lavora","con","noi","è","italiano"],["cui","il"],[]],
+["a2-10","A empresa com a qual trabalhamos é de Milão.",["L'azienda","con","cui","lavoriamo","è","di","Milano"],["che","la"],[],"Depois de preposição, o relativo é cui."]
+]};
+const ORD=[],ORDI={};
+Object.keys(ORD_SRC).forEach(lvl=>ORD_SRC[lvl].forEach((r,i)=>{const id="ord-"+lvl.toLowerCase()+"-"+String(i+1).padStart(2,"0");
+ const ac=[r[2]];(r[4]||[]).forEach(a=>{if(!ac.some(b=>b.join(" ")===a.join(" ")))ac.push(a)});
+ const x={id,nivel:lvl,topico:r[0],pt:r[1],blocos:r[2],extras:r[3]||[],aceitas:ac,x:r[5]||""};ORD.push(x);ORDI[id]=x}));
+function ordItem(x){return Object.assign({k:"ord",cat:"gram"},x)}
+
+/* ============================ DIÁLOGOS COM ESCOLHA: dados (conteúdo original) ============================ */
+// Cada turno: [fala do outro, resposta certa, certa no sentido mas errada no registro, errada no sentido, nota (o porquê)].
+// registro = "Lei" (formal) ou "tu" (informal). No app, as três respostas aparecem embaralhadas. Validar com node tools/check_v3.js
+const DIA_SRC=[
+{id:"dia-01",nivel:"A1",titulo:"Il primo giorno",pt:"Apresentar-se à diretora",registro:"Lei",outro:"Dott.ssa Conti",t:[
+["Buongiorno! Lei è il nuovo ingegnere?","Buongiorno, sì. Sono Lucas Manfrin, piacere.","Ciao! Sì, sono io.","Buongiorno, no, sono di Curitiba.","Com a diretora, no primeiro dia, use Lei e cumprimente com buongiorno; ciao é para quem você trata por tu."],
+["Piacere mio. Di dov'è?","Sono brasiliano, di Curitiba.","Sono di Curitiba. E tu?","Sono ingegnere civile.","Di dov'è? (Lei) pergunta a origem. Para devolver a pergunta, é «E Lei?», não «E tu?»."],
+["Benvenuto! Le presento il nostro geometra, Paolo Bassi.","Molto piacere, geometra.","Ehi Paolo, come va?","Grazie, non ho fame.","Na apresentação formal, «molto piacere» basta. Na Itália é comum chamar pelo título: geometra, ingegnere, architetto."],
+["Il suo ufficio è al secondo piano. Ha bisogno di qualcosa?","Sì, grazie: mi servirebbe la password del computer.","Sì, dammi la password del computer.","Sì, il secondo piano è molto lontano da Curitiba.","Para pedir algo à chefe, use o condizionale: mi servirebbe, vorrei. «Dammi» é imperativo com tu e soa brusco."],
+["Certo, gliela mando subito per email. Buon lavoro!","Grazie mille, buona giornata!","Ok, ciao ciao!","Prego, si accomodi.","Para se despedir com Lei: «Grazie, buona giornata» ou «ArrivederLa». «Si accomodi» é o que diz quem recebe a visita."]]},
+{id:"dia-02",nivel:"A1",titulo:"Un nuovo collega",pt:"Conhecer um colega",registro:"tu",outro:"Marco",t:[
+["Ciao! Sei Lucas, vero? Io sono Marco.","Ciao Marco, sì, sono io. Piacere!","Buongiorno, signore. Sì, sono io. È un piacere conoscerLa.","Ciao, no, sono stanco.","Entre colegas da mesma idade, o tu é o normal na Itália. «ConoscerLa» aqui cria distância."],
+["Da quanto tempo sei in Italia?","Da tre mesi. E tu, sei di qui?","Da tre mesi. E Lei, è di qui?","Fra tre mesi vado in vacanza.","Da quanto tempo…? = há quanto tempo. Responda com da + tempo: da tre mesi."],
+["Sì, sono bolognese. Ti piace la città?","Sì, molto! È bella e si mangia benissimo.","Sì, molto, La ringrazio per la domanda.","Sì, mi piace il caffè senza zucchero.","Ti piace…? pede uma opinião sobre a cidade: responda com «sì, molto» e diga por quê."],
+["Senti, a pranzo andiamo in trattoria. Vieni con noi?","Volentieri! A che ora?","Sarebbe un onore accompagnarvi, se Lei permette.","No, grazie, ho già cenato.","Volentieri = com prazer: é o jeito natural de aceitar um convite."],
+["All'una. Ci vediamo giù all'ingresso!","Perfetto, a dopo!","Perfetto. ArrivederLa, a più tardi.","Perfetto, buona notte!","A dopo = até daqui a pouco. ArrivederLa é só com Lei."]]},
+{id:"dia-03",nivel:"A2",titulo:"Telefonata al fornitore",pt:"Ligar para um fornecedor",registro:"Lei",outro:"Studio Bianchi",t:[
+["Pronto, studio Bianchi.","Buongiorno, sono l'ingegner Manfrin. Potrei parlare con il geometra Rossi?","Ciao, c'è Rossi?","Buongiorno, sono a casa.","Ao telefone com um escritório, use Lei e apresente-se pelo título."],
+["Un attimo, glielo passo… Rossi, buongiorno.","Buongiorno, geometra. La chiamo per la consegna dei mattoni.","Ciao Rossi! Ti chiamo per i mattoni.","Buongiorno, geometra. La chiamo dopo, adesso non posso.","Diga logo o motivo: «La chiamo per…» (Lei). «Ti chiamo» é com tu."],
+["Sì, mi dica. Dovevano arrivare martedì, giusto?","Esatto, ma in cantiere non è arrivato niente.","Esatto, ma qui non è arrivato un bel niente, eh!","Esatto, sono arrivati martedì, grazie.","Para reclamar, seja direto e educado: «non è arrivato niente». «Un bel niente, eh!» soa irritado e informal."],
+["Mi dispiace, c'è stato un problema con il camion. Le va bene giovedì mattina?","Giovedì va bene, ma entro le dieci, per favore.","Giovedì? Vabbè, fai tu.","Sì, il camion è molto bello.","Le va bene…? = Está bom para o senhor? Aceite e marque o limite: entro le dieci = até as dez."],
+["D'accordo, entro le dieci. Le mando una conferma per email.","Perfetto, grazie. ArrivederLa.","Ok, grazie, ciao!","Perfetto, non mi mandi niente.","Feche a ligação com «ArrivederLa» ou «Buona giornata»."]]},
+{id:"dia-04",nivel:"A2",titulo:"Fissare una riunione",pt:"Marcar uma reunião com o cliente",registro:"Lei",outro:"Ing. Galli",t:[
+["Buongiorno, ingegnere. Vorrei vedere a che punto è il progetto.","Certo. Possiamo fissare una riunione questa settimana?","Certo, vieni quando vuoi.","Certo, il progetto è finito l'anno scorso.","fissare una riunione = marcar uma reunião. Com o cliente, Lei."],
+["Sì. Per Lei va bene giovedì pomeriggio?","Giovedì pomeriggio va benissimo. Alle tre?","Giovedì? Sì, dai, alle tre.","Sì, ieri pomeriggio è andata bene.","Per Lei va bene…? Confirme o dia e proponha a hora. «Dai» é informal."],
+["Alle tre è perfetto. Da Lei in studio o da me?","Venga pure da noi, in via Mazzini 12.","Vieni da noi, in via Mazzini 12.","Sì, alle tre.","Venga pure = pode vir: imperativo de cortesia com Lei. «Vieni» é com tu."],
+["D'accordo. Devo portare qualcosa?","Se può, porti le misure aggiornate del terreno.","Porta le misure del terreno, così facciamo prima.","Se può, porti il terreno.","Se può + imperativo de cortesia (porti) = pedido educado."],
+["Benissimo. Allora a giovedì!","A giovedì, buona giornata!","Ciao, a giovedì!","A martedì, allora!","A giovedì = até quinta. Com Lei, prefira «buona giornata» a «ciao»."]]},
+{id:"dia-05",nivel:"A2",titulo:"Spostare la riunione",pt:"Remarcar uma reunião",registro:"Lei",outro:"Dott.ssa Neri",t:[
+["Pronto?","Buongiorno, dottoressa Neri, sono Lucas Manfrin. La disturbo?","Ciao, sono Lucas. Disturbo?","Buongiorno, chi parla?","La disturbo? = Estou incomodando? É uma abertura educada ao telefone. Quem ligou foi você: não pergunte «chi parla?»."],
+["No, si figuri. Mi dica.","Purtroppo devo spostare la riunione di domani: ho un imprevisto in cantiere.","Senti, domani salta tutto, ho un casino in cantiere.","Volevo confermare la riunione di domani.","Si figuri = imagine, não incomoda. Para remarcar: devo spostare la riunione. «Un casino» é gíria."],
+["Capisco. Quando Le andrebbe bene?","Lunedì mattina, se per Lei va bene.","Lunedì mattina, se ti va.","Domani alle dieci, come previsto.","Ofereça outra data e devolva a escolha: se per Lei va bene."],
+["Lunedì alle dieci posso.","Perfetto, allora lunedì alle dieci. Mi scuso ancora per il cambiamento.","Ok, lunedì alle dieci. Scusa, eh.","Peccato, lunedì alle dieci non posso.","Mi scuso per… = peço desculpas por…, forma educada."],
+["Non si preoccupi. A lunedì!","Grazie per la comprensione. A lunedì, arrivederci.","Grazie mille, ciao ciao!","Sì, mi preoccupo molto.","Non si preoccupi = não se preocupe (Lei). Agradeça a compreensão."]]},
+{id:"dia-06",nivel:"A2",titulo:"Sono in ritardo",pt:"Avisar que vai atrasar",registro:"Lei",outro:"Sig. Ferrari",t:[
+["Pronto, Ferrari.","Buongiorno, signor Ferrari, sono l'ingegner Manfrin. Mi scusi, sono in ritardo di un quarto d'ora.","Ehi, ciao! Arrivo tardi, eh.","Buongiorno, sono già arrivato in anticipo.","Avise o atraso logo no começo e diga quanto: in ritardo di un quarto d'ora (15 minutos)."],
+["Ah, nessun problema. È successo qualcosa?","C'è molto traffico sulla tangenziale.","Ma niente, il solito traffico, che palle.","Sì, è successo ieri sera.","Explique em uma frase: c'è traffico, c'è stato un incidente. «Che palle» é vulgar."],
+["Capisco. Allora La aspetto in cantiere?","Sì, grazie. Se vuole, intanto può cominciare a guardare i disegni.","Sì, grazie. Se vuoi, intanto guarda i disegni.","No, oggi il cantiere è chiuso.","intanto = enquanto isso. Se vuole + può: sugestão educada com Lei."],
+["Va bene. A che ora pensa di arrivare?","Verso le dieci e un quarto, al massimo.","Boh, tipo le dieci e un quarto.","Sono arrivato alle nove.","verso = por volta de; al massimo = no máximo. «Boh, tipo» é coloquial demais."],
+["D'accordo, a dopo.","Grazie per la pazienza, a dopo.","Grazie, bello, a dopo!","Prego, a domani.","Agradeça a paciência: grazie per la pazienza."]]},
+{id:"dia-07",nivel:"A2",titulo:"Chiedere un preventivo",pt:"Pedir um orçamento",registro:"Lei",outro:"Serramenti Lodi",t:[
+["Serramenti Lodi, buongiorno.","Buongiorno. Vorrei chiedere un preventivo per sei finestre.","Ciao, mi fai un preventivo per sei finestre?","Buongiorno. Vorrei pagare la fattura delle finestre.","Vorrei chiedere un preventivo = gostaria de pedir um orçamento."],
+["Certo. Ha già le misure?","Sì, le ho qui: un metro e venti per un metro e quaranta.","Sì, ce l'ho, te le mando.","Sì, ho sei finestre in casa.","Medidas: un metro e venti per un metro e quaranta (1,20 × 1,40). «Te le mando» é com tu."],
+["Perfetto. Le preferisce in legno o in PVC?","In PVC, per favore, con il vetro doppio.","PVC, dai, che costa meno.","Le preferisco aperte.","Responda à escolha: in legno (madeira) ou in PVC."],
+["Bene. Entro quando Le serve il preventivo?","Se possibile, entro venerdì.","Mandamelo entro venerdì.","Mi serve una finestra in più.","entro venerdì = até sexta-feira, no máximo. «Mandamelo» é ordem com tu."],
+["Va bene. A chi lo mando?","All'indirizzo manfrin@studio.it. La ringrazio.","Mandalo a manfrin@studio.it, grazie!","Lo mando io, grazie.","La ringrazio = agradeço ao senhor, à senhora."]]},
+{id:"dia-08",nivel:"A2",titulo:"Sopralluogo in cantiere",pt:"Vistoria com o encarregado",registro:"tu",outro:"Franco, capocantiere",t:[
+["Ciao, ingegnere! Hai il casco?","Ciao Franco, sì, ce l'ho. Possiamo cominciare dal primo piano?","Buongiorno, signor capocantiere. Sì, La ringrazio. Gradirei cominciare dal primo piano.","Ciao Franco, no, il casco non serve.","No canteiro, com o encarregado que já te trata por tu, responda com tu. E o capacete é obrigatório."],
+["Certo. Ecco, qui abbiamo finito le tramezze.","Bene. E gli impianti elettrici quando li fate?","Bene. E gli impianti elettrici quando li fa, Lei?","Bene. Quando cominciate le tramezze?","tramezze = paredes divisórias. As tramezze já estão prontas: pergunte pelo próximo serviço."],
+["La settimana prossima. Ma guarda qui: c'è una crepa sul solaio.","La vedo. Facciamo una foto e la misuriamo.","La vedo. Se Lei permette, procederei a fotografarla.","Che bella crepa, la lasciamo così.","crepa = fissura, trinca. Primeiro registrar: foto e medida."],
+["È larga circa due millimetri. È grave?","Non credo, ma la segnalo al direttore dei lavori.","Non credo, ma La informo che la segnalerò al direttore dei lavori.","Sì, è larga due metri.","segnalare = comunicar, apontar. Quem decide é o direttore dei lavori."],
+["Ok. Ci vediamo giovedì per il getto?","Sì, giovedì alle sette sono qui. Ciao, Franco!","Sì, giovedì alle sette. ArrivederLa, signor Franco.","Sì, il getto è finito ieri.","getto = concretagem. Com tu, «ciao» fecha bem."]]},
+{id:"dia-09",nivel:"A2",titulo:"Non sono d'accordo",pt:"Discordar com educação",registro:"Lei",outro:"Avv. Marini",t:[
+["Ingegnere, vorrei togliere questo pilastro: rovina il soggiorno.","Capisco, ma purtroppo non è possibile: il pilastro è strutturale.","Ma sei matto? Quel pilastro non si tocca!","Va bene, lo togliamo domani.","Para discordar com educação: «Capisco, ma…» e o motivo."],
+["Ma non si può proprio fare niente?","Si potrebbe spostare, ma servirebbe una trave nuova e il costo aumenterebbe.","Si può, ma ti costa un occhio della testa.","No, il pilastro è molto bello.","Use o condizionale para propor alternativas: si potrebbe, servirebbe."],
+["Quanto costerebbe, più o meno?","Non saprei dirLe subito. Le preparo un preventivo entro lunedì.","Boh, non lo so. Ti faccio sapere.","È costato molto l'anno scorso.","Non saprei = eu não saberia (dizer). Prometa um prazo."],
+["Secondo me, però, il soggiorno così è troppo piccolo.","La capisco. Se vuole, Le mostro una soluzione con un'apertura più ampia.","Eh, ma è così, che ci vuoi fare.","Sì, il soggiorno è troppo grande.","«La capisco» mostra empatia antes de propor outra solução."],
+["Va bene, vediamo il preventivo e poi decidiamo.","Perfetto. Le mando tutto entro lunedì.","Ok, ci sentiamo, ciao!","Perfetto, abbiamo già deciso.","Feche com a próxima ação e o prazo."]]},
+{id:"dia-10",nivel:"A1",titulo:"Può ripetere?",pt:"Pedir que repitam",registro:"Lei",outro:"Sig. Conte",t:[
+["Buongiorno, sono Conte della ditta Edilcasa, chiamo per l'ordine di cemento.","Buongiorno. Scusi, può parlare più piano, per favore?","Eh? Parla più piano!","Buongiorno, sì, parlo italiano molto bene.","più piano = mais devagar. Peça com scusi + può + per favore."],
+["Certo. Chiamo per l'ordine di cemento.","Grazie. Non ho capito il suo nome: può ripetere?","Grazie. Come ti chiami?","Grazie. Il cemento è grigio.","Può ripetere? = Pode repetir? Com Lei, «il suo nome»."],
+["Conte. C-O-N-T-E.","Perfetto, signor Conte. Quanti sacchi sono?","Ok, Conte. Quanti sacchi, bello?","Perfetto. Come si chiama?","Ele acabou de soletrar o nome: agora pergunte o que falta saber."],
+["Sono centoventi sacchi da venticinque chili.","Scusi, centoventi o centodue?","Eh? Ripeti un po'.","Va bene, venticinque sacchi da centoventi chili.","Confirme números parecidos: centoventi (120) × centodue (102)."],
+["Centoventi. Arrivano domani mattina.","Benissimo, grazie. Buona giornata.","Ok, grazie, ciao!","Benissimo, allora arrivano ieri.","Com Lei, «buona giornata» fecha a conversa."]]},
+{id:"dia-11",nivel:"A1",titulo:"Pranzo con i colleghi",pt:"Almoço com colegas",registro:"tu",outro:"Sara",t:[
+["Allora, Lucas, che cosa prendi?","Prendo le lasagne. E tu?","Prenderei le lasagne, se Lei permette. E Lei?","Prendo il treno delle sei.","Entre colegas, «E tu?» devolve a pergunta."],
+["Io un'insalata. Da bere?","Un'acqua frizzante, grazie.","Gradirei un'acqua frizzante, gentile signora.","Da bere una pizza.","acqua frizzante (com gás) ou naturale (sem gás)."],
+["Ti trovi bene in ufficio?","Sì, benissimo. Siete tutti molto gentili.","Sì, La ringrazio, mi trovo molto bene presso il Vostro ufficio.","Sì, l'ufficio si trova in centro.","trovarsi bene = sentir-se bem num lugar, com as pessoas."],
+["Domenica andiamo in montagna. Vieni anche tu?","Mi piacerebbe! A che ora partite?","Mi piacerebbe, se non disturbo Lei e la Sua famiglia.","Mi piace la pizza.","Mi piacerebbe = eu gostaria: aceita com entusiasmo."],
+["Alle otto. Ah, il caffè lo offro io!","Grazie, sei gentilissima!","Grazie, Lei è gentilissima!","No, il caffè qui non è buono.","offrire = pagar para o outro: «offro io» = eu pago."]]},
+{id:"dia-12",nivel:"A2",titulo:"Saluti per email e al telefono",pt:"Despedir-se por e-mail e por telefone",registro:"Lei",outro:"Dott. Ricci",t:[
+["(e-mail) Gentile ingegner Manfrin, Le invio in allegato il verbale della riunione.","Gentile dottor Ricci, La ringrazio per il verbale.","Ciao Ricci, grazie per il verbale!","Gentile dottor Ricci, non ho ricevuto la riunione.","Num e-mail formal, abra com «Gentile» + título + sobrenome."],
+["(e-mail) Se ha osservazioni, me le può segnalare entro venerdì.","Certo, Le scrivo entro venerdì se ci sono correzioni.","Ok, ti scrivo venerdì.","Certo, le osservazioni sono finite giovedì.","entro venerdì = até sexta. «Le scrivo» = escrevo ao senhor."],
+["(e-mail) Resto in attesa di un Suo riscontro. Cordiali saluti, Mario Ricci.","Cordiali saluti, Lucas Manfrin.","Un bacio, Lucas.","Cordiali saluti, Mario Ricci.","Fechos formais: Cordiali saluti, Distinti saluti. «Un bacio» só com amigos e família. E assine com o seu nome."],
+["(telefone) Pronto, Ricci.","Buongiorno, dottore, sono Manfrin. La chiamo per il verbale.","Ciao, sono Lucas, ti chiamo per il verbale.","Buongiorno, sono Ricci.","Ao telefone: cumprimente, diga quem é e o motivo."],
+["(telefone) Benissimo, allora ci sentiamo la settimana prossima.","Va bene, grazie. ArrivederLa!","Va bene, ciao, a presto!","Va bene, ci vediamo ieri.","Ao telefone com Lei: «ArrivederLa» ou «Buona giornata»."]]}
+];
+const DIA=DIA_SRC.map(d=>({id:d.id,nivel:d.nivel,titulo:d.titulo,pt:d.pt,registro:d.registro,outro:d.outro,
+ turnos:d.t.map(r=>({outro:r[0],opcoes:[{it:r[1],ok:true},{it:r[2],ok:false,motivo:"registro"},{it:r[3],ok:false,motivo:"sentido"}],nota:r[4]}))}));
+const DIAI=Object.fromEntries(DIA.map(d=>[d.id,d]));
+
+/* ============================ FALSOS AMIGOS: dados (conteúdo original) ============================ */
+// [palavra italiana, o que parece em português, o que é, exemplo em italiano, tradução do exemplo, palavra italiana para o sentido que o brasileiro esperava]
+// 4 blocos de 10. Validar com node tools/check_v3.js
+const FALSI_SRC=[
+{id:"fa-1",titulo:"Na mesa e no dia a dia",itens:[
+["burro","burro (asno, pouco inteligente)","manteiga","Pane, burro e marmellata.","Pão, manteiga e geleia.","asino (o animal); stupido (pouco inteligente)"],
+["salire","sair","subir","Salgo al terzo piano a piedi.","Subo ao terceiro andar a pé.","uscire"],
+["camera","câmera","quarto (de dormir, de hotel)","Ho prenotato una camera doppia.","Reservei um quarto de casal.","macchina fotografica; telecamera"],
+["guardare","guardar","olhar, assistir","Guardo il cantiere dalla finestra.","Olho o canteiro pela janela.","mettere via; conservare"],
+["prendere","prender","pegar, tomar","Prendo un caffè e torno subito.","Tomo um café e já volto.","arrestare (a polícia); legare (amarrar)"],
+["pronto","só «pronto»","alô (ao atender o telefone); também pronto","Pronto, chi parla?","Alô, quem fala?","pronto também significa pronto: la cena è pronta"],
+["subito","súbito, repentino","logo, imediatamente","Arrivo subito!","Chego já!","improvviso"],
+["caldo","caldo (sopa)","quente; calor","Oggi fa molto caldo.","Hoje está muito quente.","brodo"],
+["birra","birra (teimosia, manha)","cerveja","Una birra media, per favore.","Uma cerveja média, por favor.","capriccio; testardaggine"],
+["squisito","esquisito","delicioso","La torta della nonna è squisita.","A torta da vovó é deliciosa.","strano"]]},
+{id:"fa-2",titulo:"Pessoas, lugares e coisas",itens:[
+["firma","firma (empresa)","assinatura","Serve la sua firma qui in basso.","É preciso a sua assinatura aqui embaixo.","azienda; ditta"],
+["esperto","esperto (espertalhão)","experiente, especialista","È un geometra molto esperto.","É um técnico muito experiente.","furbo"],
+["morbido","mórbido","macio","Questo cuscino è morbido.","Este travesseiro é macio.","morboso"],
+["cane","cana","cachorro","Il cane del vicino abbaia tutta la notte.","O cachorro do vizinho late a noite toda.","canna (cana)"],
+["palestra","palestra","academia de ginástica","La sera vado in palestra.","À noite vou à academia.","conferenza"],
+["aceto","aceito","vinagre","Olio, aceto e sale.","Azeite, vinagre e sal.","accettato"],
+["tasca","tasca (taberna)","bolso","Ho le chiavi in tasca.","Estou com as chaves no bolso.","osteria"],
+["salsa","salsa (erva)","molho","Pasta con salsa di pomodoro.","Massa com molho de tomate.","prezzemolo"],
+["carta","carta (de correio)","papel; também cartão e mapa","Mi dai un foglio di carta?","Você me dá uma folha de papel?","lettera"],
+["negozio","negócio","loja","Il negozio apre alle nove.","A loja abre às nove.","affare"]]},
+{id:"fa-3",titulo:"Verbos e qualidades",itens:[
+["pulire","pular","limpar","Puliamo il cantiere il venerdì.","Limpamos o canteiro às sextas.","saltare"],
+["intendere","entender","querer dizer; ter a intenção de","Che cosa intendi con «subito»?","O que você quer dizer com «subito»?","capire"],
+["tirare","tirar","puxar; jogar","Per aprire, tira la porta.","Para abrir, puxe a porta.","togliere (tirar, remover)"],
+["assistere","assistir (TV)","estar presente; dar assistência","Ho assistito alla riunione.","Estive presente na reunião.","guardare (la TV)"],
+["pretendere","pretender","exigir","Il cliente pretende uno sconto.","O cliente exige um desconto.","avere intenzione di"],
+["bravo","bravo (zangado)","bom, competente","È un bravo capocantiere.","É um bom encarregado.","arrabbiato"],
+["costume","costume (hábito)","maiô, sunga; fantasia","Ho dimenticato il costume da bagno.","Esqueci o maiô.","abitudine"],
+["grosso","grosso (grosseiro)","grande","Abbiamo un grosso problema.","Temos um problema grande.","maleducato"],
+["presto","presto, rápido","cedo; logo","Domani mi alzo presto.","Amanhã acordo cedo.","veloce; in fretta"],
+["cattivo","cativo (prisioneiro)","mau, ruim","C'è un cattivo odore.","Há um cheiro ruim.","prigioniero"]]},
+{id:"fa-4",titulo:"No trabalho e na obra",itens:[
+["cantina","cantina (refeitório)","adega, porão","Il vino è in cantina.","O vinho está na adega.","mensa"],
+["licenziare","licenciar","demitir","L'azienda ha licenziato due operai.","A empresa demitiu dois operários.","autorizzare; concedere un permesso"],
+["rata","rata (rato)","parcela, prestação","Pago la rata ogni mese.","Pago a parcela todo mês.","ratto; topo"],
+["mutuo","mútuo","financiamento imobiliário","Ho chiesto un mutuo in banca.","Pedi um financiamento ao banco.","reciproco"],
+["preventivo","preventivo (que previne)","orçamento","Ci mandi il preventivo entro venerdì.","Mande-nos o orçamento até sexta.","preventivo existe também no sentido de prevenção"],
+["getto","jeito","concretagem; jato","Il getto del solaio è domani.","A concretagem da laje é amanhã.","modo; maniera"],
+["piano","piano (instrumento)","andar; plano; devagar","L'ufficio è al secondo piano.","O escritório fica no segundo andar.","pianoforte"],
+["tetto","teto","telhado","Il tetto perde acqua.","O telhado está vazando.","soffitto (teto interno)"],
+["solaio","solário","laje entre pavimentos","Il solaio del primo piano è pronto.","A laje do primeiro pavimento está pronta.","solarium"],
+["cartella","carteira","pasta de documentos","I disegni sono nella cartella blu.","Os desenhos estão na pasta azul.","portafoglio"]]}
+];
+const FALSI=FALSI_SRC.map(b=>({id:b.id,titulo:b.titulo,itens:b.itens.map((r,i)=>({id:b.id+"-"+(i+1),it:r[0],parece:r[1],e:r[2],ex:r[3],expt:r[4],certo:r[5]}))}));
+const FALSII=Object.fromEntries(FALSI.map(b=>[b.id,b]));
+
+/* ============================ TRILHA DE ENGENHARIA "CANTIERE E UFFICIO TECNICO": dados (conteúdo original) ============================ */
+// 6 unidades. Cada uma: 15 termos [italiano, português, exemplo em italiano], um documento-modelo original (leitura tocável)
+// e 5 questões de interpretação [pergunta, [certa, errada, errada], explicação]. As traduções seguem o uso da obra italiana.
+// Validar com node tools/check_v3.js
+const CANT=[
+{id:"ct-1",titulo:"Il cantiere",pt:"O canteiro de obras",
+termos:[
+["il cantiere","o canteiro de obras, a obra","Il cantiere apre alle sette e mezza."],
+["il capocantiere","o encarregado, o mestre de obras","Il capocantiere organizza le squadre ogni mattina."],
+["il direttore dei lavori","o responsável pela fiscalização da obra (DL)","Il direttore dei lavori ha approvato le armature."],
+["l'impresa edile","a construtora, a empreiteira","L'impresa edile ha cinquanta operai."],
+["l'operaio","o operário","Gli operai iniziano alle otto."],
+["la gru","a grua","La gru solleva i casseri al terzo piano."],
+["il ponteggio","o andaime (fachadeiro)","Il ponteggio copre tutta la facciata."],
+["lo scavo","a escavação","Lo scavo per le fondazioni è profondo due metri."],
+["le fondazioni","as fundações","Le fondazioni sono su pali."],
+["il calcestruzzo","o concreto","Il calcestruzzo arriva con l'autobetoniera."],
+["il getto","a concretagem","Il getto del solaio è previsto per giovedì."],
+["i ferri / l'armatura","as ferragens, a armadura","I ferri del pilastro sono già in opera."],
+["il cassero","a fôrma","Togliamo i casseri dopo ventotto giorni."],
+["la betoniera","a betoneira","La betoniera si è rotta di nuovo."],
+["la recinzione di cantiere","o tapume, o fechamento do canteiro","La recinzione di cantiere deve essere chiusa la sera."]],
+doc:{tipo:"E-mail",titulo:"Getto del solaio – piano primo",texto:"Oggetto: Getto del solaio del primo piano\nBuongiorno ingegner Manfrin,\nLe confermo che il getto del solaio del primo piano è previsto per giovedì mattina alle 7:30. Le armature sono state completate ieri e il direttore dei lavori le ha controllate oggi.\nL'autobetoniera arriverà alle 7:15. Sono previsti circa 38 metri cubi di calcestruzzo. Se piove, il getto sarà rimandato a lunedì.\nLa prego di essere presente in cantiere almeno per la prima ora.\nCordiali saluti,\nFranco Neri, capocantiere"},
+q:[
+["Quando é a concretagem da laje?",["Quinta-feira de manhã, às 7h30.","Quinta-feira à tarde.","Segunda-feira às 7h15."],"«previsto per giovedì mattina alle 7:30»."],
+["Quem conferiu as ferragens?",["O direttore dei lavori.","O capocantiere.","O engenheiro Manfrin."],"«il direttore dei lavori le ha controllate oggi»."],
+["O que acontece se chover?",["A concretagem passa para segunda-feira.","A concretagem começa mais cedo.","A obra é paralisada por uma semana."],"rimandare = adiar: «sarà rimandato a lunedì»."],
+["Quantos metros cúbicos de concreto estão previstos?",["Cerca de 38.","Cerca de 7.","Cerca de 15."],"«circa 38 metri cubi di calcestruzzo»."],
+["O que o encarregado pede ao engenheiro?",["Que esteja no canteiro pelo menos na primeira hora.","Que leve o concreto.","Que mande as armaduras."],"«La prego di essere presente in cantiere almeno per la prima ora»."]]},
+{id:"ct-2",titulo:"Il progetto e gli elaborati",pt:"O projeto e as pranchas",
+termos:[
+["il progetto esecutivo","o projeto executivo","Il progetto esecutivo è stato approvato a marzo."],
+["l'elaborato grafico","o desenho, a prancha","Mancano due elaborati grafici dell'impianto elettrico."],
+["la tavola","a prancha (numerada)","Guarda la tavola 5, quella delle sezioni."],
+["la pianta","a planta baixa","Nella pianta del piano terra c'è un errore."],
+["il prospetto","a fachada (vista, elevação)","Il prospetto nord ha finestre più piccole."],
+["la sezione","o corte","La sezione A-A mostra l'altezza dei solai."],
+["il particolare costruttivo","o detalhe construtivo","Serve un particolare costruttivo del nodo trave-pilastro."],
+["la scala","a escala","La pianta è in scala 1:50."],
+["la quota","a cota","Controlla la quota del pavimento finito."],
+["la planimetria","a planta de situação, de implantação","La planimetria mostra i confini del lotto."],
+["la relazione tecnica","o memorial descritivo","La relazione tecnica descrive i materiali."],
+["la relazione di calcolo","a memória de cálculo","Allego la relazione di calcolo delle travi."],
+["il progettista","o projetista","Il progettista strutturale è l'ingegner Galli."],
+["la revisione","a revisão (do desenho)","Questa è la revisione C della tavola 3."],
+["il permesso di costruire","o alvará de construção","Il Comune ha rilasciato il permesso di costruire."]],
+doc:{tipo:"E-mail",titulo:"Invio tavole aggiornate",texto:"Oggetto: Tavole strutturali – revisione B\nGentile ingegnere,\nin allegato Le invio le tavole strutturali aggiornate (revisione B). Le modifiche principali sono due: nella tavola S3 abbiamo spostato il pilastro P7 di 40 centimetri verso est; nella tavola S5 abbiamo aggiunto il particolare costruttivo della scala.\nLa relazione di calcolo è stata aggiornata di conseguenza. Le piante architettoniche non cambiano.\nLa prego di controllare le quote del vano scala e di farmi sapere entro venerdì se ci sono osservazioni.\nCordiali saluti,\nIng. Marta Galli – progettista strutturale"},
+q:[
+["Qual é a revisão das pranchas enviadas?",["Revisão B.","Revisão S3.","Revisão C."],"«revisione B»."],
+["O que mudou na prancha S3?",["O pilar P7 foi deslocado 40 cm para leste.","Foi incluído o detalhe da escada.","O pilar P7 foi eliminado."],"«abbiamo spostato il pilastro P7 di 40 centimetri verso est»."],
+["O que foi acrescentado na prancha S5?",["O detalhe construtivo da escada.","Uma nova planta baixa.","O memorial descritivo."],"«il particolare costruttivo della scala»."],
+["As plantas de arquitetura mudaram?",["Não.","Sim, todas.","Só a do térreo."],"«Le piante architettoniche non cambiano»."],
+["O que a projetista pede?",["Que confira as cotas da caixa de escada até sexta.","Que refaça a memória de cálculo.","Que mande o alvará."],"«controllare le quote del vano scala… entro venerdì»."]]},
+{id:"ct-3",titulo:"Computo metrico e preventivo",pt:"Planilha de quantitativos e orçamento",
+termos:[
+["il computo metrico estimativo","a planilha orçamentária (quantitativos com preços)","Il computo metrico estimativo è allegato al progetto."],
+["la voce di computo","o item da planilha","La voce 12 riguarda il calcestruzzo per i pilastri."],
+["l'unità di misura","a unidade de medida","L'unità di misura è il metro cubo."],
+["la quantità","a quantidade","La quantità è stata ricalcolata dopo la revisione."],
+["il prezzo unitario","o preço unitário","Il prezzo unitario comprende la manodopera."],
+["l'importo","o valor (total do item ou da obra)","L'importo dei lavori è di 480.000 euro."],
+["il prezzario regionale","a tabela de preços de referência da região","Usiamo il prezzario regionale dell'anno in corso."],
+["l'elenco prezzi","a lista de preços unitários do contrato","Il nuovo prezzo non è nell'elenco prezzi."],
+["l'analisi prezzi","a composição de preço unitário","Per i nuovi prezzi serve l'analisi prezzi."],
+["il preventivo","o orçamento (proposta de preço)","Il fornitore ci ha mandato il preventivo."],
+["il ribasso","o desconto oferecido na licitação","L'impresa ha offerto un ribasso del 12%."],
+["gli oneri della sicurezza","os custos de segurança (não sujeitos a desconto)","Gli oneri della sicurezza non sono soggetti a ribasso."],
+["le spese generali","as despesas indiretas","Le spese generali sono il 15% del costo."],
+["l'utile d'impresa","o lucro da construtora","L'utile d'impresa è calcolato al 10%."],
+["a corpo / a misura","por preço global / por preço unitário medido","Gli scavi sono pagati a misura, le finiture a corpo."]],
+doc:{tipo:"Voce di computo",titulo:"Voce n. 14 – Calcestruzzo per pilastri",texto:"Voce n. 14 – Calcestruzzo per strutture in elevazione (pilastri e setti), classe di resistenza C25/30, fornito con autobetoniera e messo in opera con pompa, compresa la vibrazione. Esclusi i casseri e le armature, compensati con voci a parte.\nUnità di misura: metro cubo (m³).\nQuantità: 42,50 m³.\nPrezzo unitario: 165,00 euro/m³.\nImporto: 7.012,50 euro.\nNota: il prezzo unitario deriva dal prezzario regionale; la quantità è stata ricalcolata dopo la revisione B delle tavole strutturali."},
+q:[
+["A que elementos se refere o item 14?",["Pilares e paredes de concreto (setti).","Fundações e radier.","Lajes e vigas."],"«strutture in elevazione (pilastri e setti)»."],
+["O que NÃO está incluído no preço do item?",["As fôrmas e as armaduras.","O bombeamento.","A vibração do concreto."],"«Esclusi i casseri e le armature, compensati con voci a parte»."],
+["Qual é a unidade de medida?",["Metro cúbico.","Metro quadrado.","Quilograma."],"«Unità di misura: metro cubo (m³)»."],
+["Como se chega ao valor de 7.012,50 euros?",["42,50 m³ × 165,00 euros/m³.","165 m³ × 42,50 euros/m³.","Pelo desconto da licitação."],"importo = quantità × prezzo unitario."],
+["Por que a quantidade foi recalculada?",["Por causa da revisão B das pranchas estruturais.","Porque o preço mudou.","Porque choveu."],"«ricalcolata dopo la revisione B delle tavole strutturali»."]]},
+{id:"ct-4",titulo:"Capitolato e contratto",pt:"Caderno de encargos e contrato",
+termos:[
+["il capitolato speciale d'appalto","o caderno de encargos (especificações e regras do contrato)","Il capitolato speciale d'appalto fissa le penali."],
+["l'appalto","a contratação da obra, a empreitada","L'appalto è stato aggiudicato a un'impresa di Modena."],
+["la stazione appaltante","o órgão contratante","La stazione appaltante è il Comune di Bologna."],
+["l'appaltatore","a contratada, a empreiteira","L'appaltatore deve rispettare il cronoprogramma."],
+["il subappalto","a subempreitada","Il subappalto degli impianti è stato autorizzato."],
+["la gara d'appalto","a licitação","La gara d'appalto si chiude il 30 giugno."],
+["l'aggiudicazione","a adjudicação","L'aggiudicazione è avvenuta con il criterio del prezzo più basso."],
+["la variante","a alteração contratual de projeto (aditivo)","La variante aumenta l'importo del 6%."],
+["la penale","a multa contratual por atraso","La penale è dell'uno per mille al giorno."],
+["il termine dei lavori","o prazo de execução","Il termine dei lavori è di 365 giorni."],
+["la proroga","a prorrogação de prazo","L'impresa ha chiesto una proroga di trenta giorni."],
+["la sospensione dei lavori","a paralisação da obra","La sospensione dei lavori è durata due settimane."],
+["lo stato di avanzamento lavori (SAL)","a medição (boletim de medição)","Il terzo SAL sarà pagato a fine mese."],
+["il cronoprogramma","o cronograma","Il cronoprogramma prevede la fine a dicembre."],
+["il collaudo","o recebimento definitivo, com ensaios","Il collaudo statico è previsto in primavera."]],
+doc:{tipo:"Estratto di capitolato",titulo:"Art. 18 – Termini, proroghe e penali",texto:"Art. 18 – Termini per l'esecuzione, proroghe e penali\n1. Il termine per ultimare i lavori è di 300 giorni naturali e consecutivi dalla data del verbale di consegna.\n2. L'appaltatore può chiedere una proroga per cause a lui non imputabili, con domanda motivata presentata almeno 15 giorni prima della scadenza. Le normali condizioni meteorologiche non giustificano la proroga.\n3. Per ogni giorno di ritardo si applica una penale pari all'uno per mille dell'importo contrattuale, fino a un massimo del 10%.\n4. I pagamenti avvengono per stati di avanzamento lavori, ogni volta che l'importo dei lavori eseguiti raggiunge 100.000 euro."},
+q:[
+["De quanto é o prazo para terminar a obra?",["300 dias corridos a partir do auto de entrega.","300 dias úteis a partir da assinatura do contrato.","15 dias antes do vencimento."],"«300 giorni naturali e consecutivi dalla data del verbale di consegna»."],
+["Até quando a contratada deve pedir a prorrogação?",["Pelo menos 15 dias antes do fim do prazo.","Até 15 dias depois do fim do prazo.","A qualquer momento."],"«almeno 15 giorni prima della scadenza»."],
+["Chuvas normais para a época justificam prorrogação?",["Não.","Sim, sempre.","Só se durarem mais de 15 dias."],"«Le normali condizioni meteorologiche non giustificano la proroga»."],
+["Qual é o limite máximo da multa?",["10% do valor do contrato.","1% do valor do contrato.","100.000 euros."],"«fino a un massimo del 10%»."],
+["Quando a contratada recebe os pagamentos?",["A cada medição, quando os serviços executados somam 100.000 euros.","Uma vez por mês, qualquer que seja o valor.","Só no fim da obra."],"Pagamentos «per stati di avanzamento lavori» a cada 100.000 euros executados."]]},
+{id:"ct-5",titulo:"Sicurezza",pt:"Segurança do trabalho",
+termos:[
+["la sicurezza sul lavoro","a segurança do trabalho","La sicurezza sul lavoro viene prima di tutto."],
+["il casco","o capacete","Senza casco non si entra in cantiere."],
+["le scarpe antinfortunistiche","as botinas de segurança","Le scarpe antinfortunistiche hanno la punta in acciaio."],
+["i guanti","as luvas","Metti i guanti per tagliare i ferri."],
+["il giubbotto ad alta visibilità","o colete refletivo","Vicino alla strada serve il giubbotto ad alta visibilità."],
+["l'imbracatura","o cinto de segurança tipo paraquedista","Sul tetto è obbligatoria l'imbracatura."],
+["i DPI","os EPIs (equipamentos de proteção individual)","Il capocantiere controlla i DPI ogni mattina."],
+["il PSC (piano di sicurezza e coordinamento)","o plano de segurança da obra, do contratante","Il PSC è allegato al contratto."],
+["il POS (piano operativo di sicurezza)","o plano de segurança de cada empresa","Ogni subappaltatore consegna il proprio POS."],
+["il coordinatore per la sicurezza","o coordenador de segurança","Il coordinatore per la sicurezza ha sospeso i lavori in quota."],
+["l'infortunio","o acidente de trabalho","Per fortuna l'infortunio non è stato grave."],
+["il parapetto","o guarda-corpo","Manca il parapetto sul bordo del solaio."],
+["la caduta dall'alto","a queda de altura","La caduta dall'alto è il rischio principale."],
+["la segnaletica","a sinalização","La segnaletica indica l'uscita di emergenza."],
+["il primo soccorso","os primeiros socorros","La cassetta di primo soccorso è nella baracca."]],
+doc:{tipo:"Ordine di servizio",titulo:"Ordine di servizio n. 7 – Lavori in quota",texto:"Ordine di servizio n. 7\nOggetto: Lavori in quota e uso dei DPI\nDurante il sopralluogo di oggi il coordinatore per la sicurezza ha rilevato che sul solaio del secondo piano mancano i parapetti sul lato sud e che due operai lavoravano senza imbracatura.\nSi ordina all'impresa di:\n– sospendere subito i lavori sul lato sud del secondo piano;\n– installare i parapetti entro domani alle ore 12;\n– verificare che tutti gli operai usino casco, scarpe antinfortunistiche e, in quota, l'imbracatura.\nI lavori potranno riprendere solo dopo il controllo del coordinatore.\nIl direttore dei lavori"},
+q:[
+["O que faltava no lado sul da laje do 2º pavimento?",["Os guarda-corpos.","A sinalização.","O andaime."],"«mancano i parapetti sul lato sud»."],
+["Qual foi o outro problema encontrado?",["Dois operários trabalhavam sem cinto de segurança.","Dois operários estavam sem capacete.","O canteiro estava sem tapume."],"«due operai lavoravano senza imbracatura»."],
+["Até quando os guarda-corpos devem ser instalados?",["Até amanhã às 12h.","Até o fim da semana.","Imediatamente, em uma hora."],"«entro domani alle ore 12»."],
+["O que a empreiteira deve fazer imediatamente?",["Paralisar os serviços no lado sul do 2º pavimento.","Paralisar toda a obra.","Demitir os dois operários."],"«sospendere subito i lavori sul lato sud del secondo piano»."],
+["Quando os serviços podem ser retomados?",["Depois da verificação do coordenador de segurança.","Assim que os guarda-corpos chegarem.","Na segunda-feira seguinte."],"«solo dopo il controllo del coordinatore»."]]},
+{id:"ct-6",titulo:"Verbale e comunicazioni",pt:"Atas e comunicações",
+termos:[
+["il verbale","a ata, o termo","Firmiamo il verbale alla fine della riunione."],
+["il verbale di riunione","a ata de reunião","Il verbale di riunione è stato inviato a tutti."],
+["l'ordine del giorno","a pauta","Al primo punto dell'ordine del giorno c'è il cronoprogramma."],
+["l'ordine di servizio","a ordem de serviço (instrução do DL à empresa)","Il direttore dei lavori ha emesso un ordine di servizio."],
+["il giornale dei lavori","o diário de obra","Ogni giorno si aggiorna il giornale dei lavori."],
+["il sopralluogo","a vistoria","Il sopralluogo è fissato per martedì alle dieci."],
+["la consegna dei lavori","o auto de entrega da área, a ordem de início","Il verbale di consegna dei lavori è del 3 marzo."],
+["la ripresa dei lavori","a retomada da obra","Il verbale di ripresa dei lavori è firmato."],
+["i presenti","os presentes","Tra i presenti c'era anche il geometra Bassi."],
+["la PEC","o e-mail certificado (com valor legal)","Mandiamo la comunicazione via PEC."],
+["in allegato","em anexo","In allegato trova il verbale firmato."],
+["prendere visione","tomar ciência","La prego di prendere visione del documento."],
+["il riscontro","a resposta, o retorno","Attendo un Suo riscontro entro lunedì."],
+["il protocollo","o protocolo, o número de registro","La lettera ha il protocollo n. 2154."],
+["distinti saluti","atenciosamente","Distinti saluti, Lucas Manfrin."]],
+doc:{tipo:"Verbale di riunione",titulo:"Verbale di riunione n. 4",texto:"Verbale di riunione n. 4 – Cantiere scuola via Verdi\nData: 12 novembre, ore 10:00, in cantiere.\nPresenti: ing. Manfrin (direttore dei lavori), geom. Bassi (impresa), arch. Conti (stazione appaltante).\nOrdine del giorno: 1) avanzamento dei lavori; 2) variante del vano scala; 3) varie.\n1) L'impresa dichiara un ritardo di 10 giorni sulle tramezze del primo piano a causa della consegna tardiva dei blocchi. L'impresa recupererà il ritardo con una squadra in più dal 18 novembre.\n2) L'arch. Conti approva la variante del vano scala. L'ing. Manfrin preparerà la perizia entro il 30 novembre.\n3) La prossima riunione è fissata per il 26 novembre alle 10:00.\nLetto, confermato e sottoscritto."},
+q:[
+["Quem representa o órgão contratante na reunião?",["A arquiteta Conti.","O técnico Bassi.","O engenheiro Manfrin."],"«arch. Conti (stazione appaltante)»."],
+["Qual é o motivo do atraso nas paredes do 1º pavimento?",["A entrega atrasada dos blocos.","A chuva.","A falta de projeto."],"«a causa della consegna tardiva dei blocchi»."],
+["Como a empreiteira vai recuperar o atraso?",["Com uma equipe a mais a partir de 18 de novembro.","Trabalhando aos domingos.","Pedindo uma prorrogação."],"«con una squadra in più dal 18 novembre»."],
+["O que o engenheiro Manfrin vai preparar até 30 de novembro?",["A perícia (documento técnico) da variante da escada.","O pagamento da medição.","O novo cronograma."],"«preparerà la perizia entro il 30 novembre»."],
+["Quando é a próxima reunião?",["26 de novembro, às 10h.","18 de novembro, às 10h.","30 de novembro, às 10h."],"«fissata per il 26 novembre alle 10:00»."]]}
+];
+const CANTI=Object.fromEntries(CANT.map(u=>[u.id,u]));
+
+/* ============================ V3: MODOS DA ABA EXERCÍCIOS E UNIDADES EXTRAS DO CURSO ============================ */
+// Progresso por perfil: S.escuta, S.ordem ({id: {r, n, ok}}), S.dialogos ({id: {best, done, n}}), S.simulados ({A1: [tentativas], A2: [...]}).
+// Falsos amigos e Cantiere guardam a melhor nota em S.course["fa-…"] / S.course["ct-…"].
+
+function v3Stat(key,id){return((S[key]||{})[id])||null}
+function v3Rec(key,id,ok){S[key]=S[key]||{};const s=S[key][id]=S[key][id]||{r:0,n:0,ok:0};s.n++;s.r=ok?1:0;if(ok)s.ok++}
+function v3Pick(list,key,n){const st=x=>v3Stat(key,x.id),nunca=shuffle(list.filter(x=>!st(x))),err=shuffle(list.filter(x=>st(x)&&!st(x).r)),ok=shuffle(list.filter(x=>st(x)&&st(x).r));return[...nunca,...err,...ok].slice(0,n)}
+// o motor de rodadas chama isto a cada resposta quando cfg.stat existe
+const _rnStatHook=errAnswer;
+errAnswer=function(it,ok,origem){_rnStatHook(it,ok,origem);try{const R=RN.cur;if(R&&R.stat&&it&&!R.prova){v3Rec(R.stat,it.eid||it.id,ok);save()}}catch(e){}};
+
+/* ---------- hub no topo da aba Exercícios ---------- */
+const V3MODES=[["erros","Rever meus erros","Questões que você errou, as mais antigas primeiro"],["escuta","Escuta","Ouça e marque: frases, pares que confundem e sentido"],["ordem","Montar a frase","Toque nos blocos na ordem certa"],["dialogos","Diálogos com escolha","Escolha a resposta certa, no registro certo"],["verbos","Verbos","Consulta de 40 verbos e treino de marcar"],["simulado","Simulado","30 questões por nível, sem correção durante a prova"]];
+function v3HubHTML(){const n=errN();return`<div class="v3hub">${V3MODES.map(([k,t,d])=>`<button class="v3tile${k==="erros"&&n?" hot":""}" data-v3mode="${k}"><b>${t}${k==="erros"?` <span class="chip${n?" hot":""}" data-errn>${n}</span>`:""}</b><span>${d}</span></button>`).join("")}</div>
+ ${n?`<button class="btn ghost small" data-v3list>Ver a lista do caderno de erros</button>`:""}<h3 class="v3sub">Banco de questões</h3>`}
+function v3HubBind(){$$("#exBox [data-v3mode]").forEach(b=>b.onclick=()=>v3Mode(b.dataset.v3mode));$$("#exBox [data-v3list]").forEach(b=>b.onclick=()=>{EX.mode="erros";window.scrollTo(0,0);renderErrList("#exBox",v3Back)})}
+function v3Mode(m){EX.mode=m;window.scrollTo(0,0);if(m==="erros"&&errN()){errRound("#exBox",()=>renderErrList("#exBox",v3Back));return}renderExerc()}
+function v3Back(){EX.mode=null;RN.cur=null;DL.cur=null;window.scrollTo(0,0);renderExerc()}
+function v3RenderMode(){if(RN.cur&&RN.cur.box==="#exBox")return rnRender();
+ const m=EX.mode;if(m==="erros"){if(!errN()){renderErrList("#exBox",v3Back);return}renderErrList("#exBox",v3Back);return}
+ if(m==="escuta")return renderEscuta();if(m==="ordem")return renderOrdem();if(m==="dialogos")return DL.cur?renderDlg():renderDlgList();
+ if(m==="verbos")return renderVerbi();if(m==="simulado")return renderSimHome();v3Back()}
+function v3LvlSeg(){return`<div class="seg seg2" id="v3Lvl" role="tablist" aria-label="Nível">${["A1","A2"].map(l=>`<button role="tab" data-v3lvl="${l}" class="${EX.lvl===l?"on":""}" aria-selected="${EX.lvl===l}">Nível ${l}</button>`).join("")}</div>`}
+function v3LvlBind(fn){$$("#v3Lvl [data-v3lvl]").forEach(b=>b.onclick=()=>{EX.lvl=b.dataset.v3lvl;try{localStorage.setItem(KEY+".exlvl",EX.lvl)}catch(e){}fn()})}
+function v3Counts(list,key){let ok=0,wrong=0;list.forEach(x=>{const s=v3Stat(key,x.id);if(s)s.r?ok++:wrong++});return{ok,wrong,seen:ok+wrong,tot:list.length}}
+function v3ModeHead(t,sub){return`<button class="back" id="v3Back">← Exercícios</button><div class="tophead"><span class="label">Exercícios</span><h2>${t}</h2><p class="muted small">${sub}</p></div>`}
+
+/* ---------- Escuta ---------- */
+const ESC={fmt:""};
+function renderEscuta(){const box=$("#exBox"),all=ASC.filter(x=>x.nivel===EX.lvl),list=all.filter(x=>!ESC.fmt||x.formato===ESC.fmt),c=v3Counts(all,"escuta");
+ box.innerHTML=v3ModeHead("Escuta (Ascolto)","Toque para ouvir e marque. Use “Ouvir de novo” e “Mais devagar” quantas vezes quiser.")+v3LvlSeg()+`
+ <div class="card stack" style="gap:8px"><div class="row" style="justify-content:space-between"><span class="label">Nível ${EX.lvl} · ${all.length} itens</span><span class="chip${c.seen?" hot":""}">${c.ok} certos</span></div>
+ <div class="lvlbar"><i style="width:${c.ok/all.length*100}%"></i></div>
+ <div class="chips">${[["","Todos"],...Object.entries(ASC_FMT)].map(([k,n])=>`<button class="chip${ESC.fmt===k?" hot":""}" data-escf="${k}">${n} (${all.filter(x=>!k||x.formato===k).length})</button>`).join("")}</div>
+ <div class="row"><button class="btn primary" id="escGo">Rodada de 10</button>${c.wrong?`<button class="btn" id="escWrong">Refazer erradas (${c.wrong})</button>`:""}</div></div>
+ <div class="card stack" style="gap:6px"><span class="label">Os três formatos</span><p class="small"><b>O que você ouviu?</b> Três frases escritas que mudam num ponto só.</p><p class="small"><b>Pares que confundem:</b> e/è, pena/penna, casa/cassa, sono/sonno, anno/hanno, capello/cappello, nono/nonno.</p><p class="small"><b>O que significa?</b> Três traduções em português.</p></div>`;
+ $("#v3Back").onclick=v3Back;v3LvlBind(renderEscuta);
+ $$("#exBox [data-escf]").forEach(b=>b.onclick=()=>{ESC.fmt=b.dataset.escf;renderEscuta()});
+ const go=only=>{let l=list;if(only)l=l.filter(x=>v3Stat("escuta",x.id)&&!v3Stat("escuta",x.id).r);const its=(only?shuffle(l):v3Pick(l,"escuta",10)).slice(0,10).map(ascItem);if(!its.length)return;
+  rnStart({box:"#exBox",titulo:"Escuta "+EX.lvl,items:its,origem:"escuta",stat:"escuta",tag:EX.lvl,onQuit:renderEscuta,again:()=>go(false)})};
+ $("#escGo").onclick=()=>go(false);if($("#escWrong"))$("#escWrong").onclick=()=>go(true)}
+
+/* ---------- Montar a frase ---------- */
+function renderOrdem(){const box=$("#exBox"),all=ORD.filter(x=>x.nivel===EX.lvl),c=v3Counts(all,"ordem");
+ box.innerHTML=v3ModeHead("Montar a frase","Leia a frase em português e toque nos blocos em italiano na ordem certa. Tocar num bloco já colocado o devolve."+(EX.lvl==="A2"?" No A2 há blocos a mais, de distração.":""))+v3LvlSeg()+`
+ <div class="card stack" style="gap:8px"><div class="row" style="justify-content:space-between"><span class="label">Nível ${EX.lvl} · ${all.length} frases</span><span class="chip${c.seen?" hot":""}">${c.ok} certas</span></div>
+ <div class="lvlbar"><i style="width:${c.ok/all.length*100}%"></i></div>
+ <div class="row"><button class="btn primary" id="ordGo">Rodada de 10</button>${c.wrong?`<button class="btn" id="ordWrong">Refazer erradas (${c.wrong})</button>`:""}</div>
+ <p class="small muted">Quando o italiano admite mais de uma ordem, todas as ordens certas valem.</p></div>`;
+ $("#v3Back").onclick=v3Back;v3LvlBind(renderOrdem);
+ const go=only=>{let l=all;if(only)l=l.filter(x=>v3Stat("ordem",x.id)&&!v3Stat("ordem",x.id).r);const its=(only?shuffle(l):v3Pick(l,"ordem",10)).slice(0,10).map(ordItem);if(!its.length)return;
+  rnStart({box:"#exBox",titulo:"Montar a frase "+EX.lvl,items:its,origem:"ordem",stat:"ordem",tag:EX.lvl,onQuit:renderOrdem,again:()=>go(false)})};
+ $("#ordGo").onclick=()=>go(false);if($("#ordWrong"))$("#ordWrong").onclick=()=>go(true)}
+
+/* ---------- Diálogos com escolha ---------- */
+const DL={cur:null,i:0,picks:[],ord:[]};
+const NONNA_MINI='<span class="dlnonna" aria-hidden="true">N</span>';
+function dlgDone(id){const r=(S.dialogos||{})[id];return r&&r.done?r:null}
+function renderDlgList(){const box=$("#exBox"),done=DIA.filter(d=>dlgDone(d.id)).length;
+ box.innerHTML=v3ModeHead("Diálogos com escolha","Cenas curtas de trabalho. A cada fala, escolha a resposta: uma é certa, uma erra no sentido e outra acerta o sentido mas erra o registro (tu × Lei).")+`
+ <div class="row" style="justify-content:space-between"><span class="label">${done} de ${DIA.length} cenas feitas</span></div>
+ <div class="tlist">${DIA.map((d,i)=>{const r=dlgDone(d.id);return`<button class="tcard${r?" done":""}" data-dlg="${d.id}"><span class="tn">${r?"✓":i+1}</span><div><h3 class="it" style="font-style:normal">${esc(d.titulo)}</h3><p>${esc(d.pt)} · ${d.nivel} · ${d.registro==="Lei"?"formal (Lei)":"informal (tu)"}</p></div><span class="pill ${r?"ok":""}">${r?r.best+"/"+d.turnos.length:"novo"}</span></button>`}).join("")}</div>`;
+ $("#v3Back").onclick=v3Back;$$("#exBox [data-dlg]").forEach(b=>b.onclick=()=>dlgOpen(b.dataset.dlg))}
+function dlgOpen(id){DL.cur=DIAI[id];DL.i=0;DL.picks=[];DL.ord=DL.cur.turnos.map(t=>shuffle(t.opcoes.map((_,k)=>k)));window.scrollTo(0,0);renderDlg()}
+function dlgMotivo(o,d){if(!o||o.ok)return"";return o.motivo==="registro"?(d.registro==="Lei"?"Registro errado: com esta pessoa cabe Lei (formal). A frase tem o sentido certo, mas soa íntima ou brusca demais.":"Registro errado: aqui o normal é tu (informal). A frase está certa, mas soa distante e cerimoniosa demais.")
+ :"Sentido errado: a frase não responde ao que foi dito."}
+function renderDlg(){const d=DL.cur,box=$("#exBox"),n=d.turnos.length;if(DL.i>=n)return renderDlgEnd();
+ let h=`<button class="back" id="dlBack">← Diálogos</button><div class="tophead"><span class="label">${d.nivel} · ${d.registro==="Lei"?"formal (Lei)":"informal (tu)"} · fala ${DL.i+1} de ${n}</span><h2 class="it lettit">${esc(d.titulo)}</h2><p class="muted small">${esc(d.pt)}</p></div>
+ <div class="lvlbar"><i style="width:${DL.i/n*100}%"></i></div><div class="dlgscene">`;
+ for(let k=0;k<=DL.i;k++){const t=d.turnos[k],p=DL.picks[k];
+  h+=`<div class="ibub ib-o dlb"><span class="ibwho">${esc(d.outro)}</span><span class="it">${esc(t.outro)}</span>${spkBtn(t.outro.replace(/^\(.*?\)\s*/,""))}</div>`;
+  if(p!=null&&k<DL.i)h+=`<div class="ibub ib-n dlb dlme"><span class="ibwho">Você</span><span class="it">${esc(t.opcoes.find(o=>o.ok).it)}</span></div>`}
+ const t=d.turnos[DL.i],p=DL.picks[DL.i];h+=`</div>`;
+ h+=`<div class="qz exqz"><span class="qn">Escolha a sua resposta</span><div class="opts">${DL.ord[DL.i].map(k=>{const o=t.opcoes[k];return`<button class="opt${p!=null?(o.ok?" right":k===p?" wrong":""):""}" data-dlo="${k}" ${p!=null?"disabled":""}>${esc(o.it)}</button>`}).join("")}</div>
+ ${p!=null?`<div class="fb ${t.opcoes[p].ok?"ok":"no"}"><div class="row" style="gap:8px;flex-wrap:nowrap;align-items:flex-start">${NONNA_MINI}<div class="stack" style="gap:4px"><b>${t.opcoes[p].ok?"Certo!":"A Nonna explica:"}</b>${t.opcoes[p].ok?"":`<span>${esc(dlgMotivo(t.opcoes[p],d))}</span>`}<span>${esc(t.nota)}</span></div></div></div>
+ <button class="btn primary" id="dlNext">${DL.i+1<n?"Continuar →":"Ver o diálogo inteiro"}</button>`:""}</div>`;
+ box.innerHTML=h;tokenize(box);
+ $("#dlBack").onclick=()=>{audioStop();DL.cur=null;renderDlgList();window.scrollTo(0,0)};
+ $$("#exBox [data-dlo]").forEach(b=>b.onclick=()=>{if(DL.picks[DL.i]!=null)return;const k=+b.dataset.dlo;DL.picks[DL.i]=k;const ok=t.opcoes[k].ok;
+  errAnswer({id:d.id+"-t"+(DL.i+1),k:"mc",cat:"dia",lbl:"Diálogo · "+d.titulo,p:t.outro,pit:true,o:t.opcoes.map(o=>o.it),a:t.opcoes.findIndex(o=>o.ok),x:t.nota},ok,"dialogos");
+  if(ok)speak(t.opcoes[k].it);renderDlg();const f=box.querySelector(".fb");if(f)f.scrollIntoView({block:"nearest",behavior:"smooth"})});
+ if($("#dlNext"))$("#dlNext").onclick=()=>{audioStop();DL.i++;renderDlg();const q=box.querySelector(".qz");if(q)q.scrollIntoView({block:"center"})}}
+function renderDlgEnd(){const d=DL.cur,box=$("#exBox"),n=d.turnos.length,ok=DL.picks.filter((p,k)=>d.turnos[k].opcoes[p].ok).length;
+ if(!DL.logged||DL.logged!==d.id){DL.logged=d.id;S.dialogos=S.dialogos||{};const r=S.dialogos[d.id]=S.dialogos[d.id]||{best:0,done:"",n:0};r.n++;r.best=Math.max(r.best,ok);if(!r.done)r.done=today();logInc("e");logEvento("exercicio","dialogo:"+d.id);save();renderHome()}
+ const lines=[];d.turnos.forEach(t=>{lines.push({quem:d.outro,text:t.outro.replace(/^\(.*?\)\s*/,"")});lines.push({quem:"Você",text:t.opcoes.find(o=>o.ok).it})});
+ box.innerHTML=`<button class="back" id="dlBack">← Diálogos</button><div class="card stack"><span class="label">${esc(d.titulo)}</span><h2>${ok}/${n} respostas certas</h2><p class="muted small">${ok===n?"Perfeito, inclusive no registro.":"As falas que você errou foram para o caderno de erros."}</p></div>
+ <div class="card stack" data-dlfull><span class="label">O diálogo inteiro</span>${audioHTML()}<div class="dlgscene">${lines.map((l,k)=>`<div class="ibub ${k%2?"ib-n dlme":"ib-o"} dlb" data-dll="${k}"><span class="ibwho">${esc(l.quem)}</span><span class="it">${esc(l.text)}</span></div>`).join("")}</div></div>
+ <div class="row"><button class="btn primary" id="dlAgain">Fazer de novo</button>${DIA[DIA.indexOf(d)+1]?`<button class="btn" id="dlNextScene">Próxima cena →</button>`:""}</div>`;
+ tokenize(box);const full=box.querySelector("[data-dlfull]");audioAttach(full,lines.map((l,k)=>({el:full.querySelector(`[data-dll="${k}"]`),text:l.text})));
+ $("#dlBack").onclick=()=>{audioStop();DL.cur=null;renderDlgList();window.scrollTo(0,0)};
+ $("#dlAgain").onclick=()=>{audioStop();DL.logged=null;dlgOpen(d.id)};if($("#dlNextScene"))$("#dlNextScene").onclick=()=>{audioStop();DL.logged=null;dlgOpen(DIA[DIA.indexOf(d)+1].id)}}
+
+/* ---------- Verbos: consulta e treino ---------- */
+const VERBI40=["essere","avere","parlare","lavorare","mangiare","cercare","pagare","prendere","vedere","leggere","scrivere","mettere","chiudere","chiedere","rispondere","conoscere","dormire","partire","aprire","sentire","finire","capire","preferire","andare","fare","venire","stare","dire","uscire","dare","bere","rimanere","salire","scegliere","tenere","piacere","potere","volere","dovere","sapere"];
+const VB_GRUPO={essere:"auxiliar",avere:"auxiliar",parlare:"modelo -are",prendere:"modelo -ere",dormire:"modelo -ire",finire:"modelo -ire (-isc-)",potere:"modal",volere:"modal",dovere:"modal",sapere:"irregular"};
+const VBT=["pres","pass","imp","fut","cond"];
+const VB={q:"",cur:null,tense:""};
+function vbList(){return VERBI40.map(n=>VERBMAP[n]).filter(Boolean)}
+function vbGrupo(v){return VB_GRUPO[v.inf]||(IRR_PRES[v.inf]||IRR_FUT[v.inf]?"irregular":/are$/.test(v.inf)?"regular -are":/ere$/.test(v.inf)?"-ere":"-ire")}
+function renderVerbi(){const box=$("#exBox");if(VB.cur)return renderVerbo();
+ box.innerHTML=v3ModeHead("Verbos","40 verbos com presente, passato prossimo, imperfetto, futuro e condizionale. Treino de marcar com filtro por tempo.")+`
+ <div class="card stack" style="gap:10px"><span class="label">Treino de marcar</span><p class="small muted">Ex.: «noi ___ (andare) · presente» com 4 formas. Rodadas de 10.</p>
+ <div class="chips">${[["","Todos os tempos"],...VBT.map(k=>[k,TENSES[k].n])].map(([k,n])=>`<button class="chip${VB.tense===k?" hot":""}" data-vbt="${k}">${n}</button>`).join("")}</div>
+ <div class="row"><button class="btn primary" id="vbGo">Começar (10)</button></div></div>
+ <div class="card stack" style="gap:10px"><span class="label">Consulta</span><input type="search" id="vbQ" placeholder="Buscar em italiano ou português (ex.: andar, scrivere)" value="${esc(VB.q)}" autocomplete="off" enterkeyhint="search">
+ <div class="vblist" id="vbList"></div></div>`;
+ $("#v3Back").onclick=v3Back;$$("#exBox [data-vbt]").forEach(b=>b.onclick=()=>{VB.tense=b.dataset.vbt;renderVerbi()});
+ $("#vbGo").onclick=vbTrain;$("#vbQ").oninput=e=>{VB.q=e.target.value;vbFill()};vbFill()}
+function vbFill(){const q=norm(VB.q||""),el=$("#vbList");if(!el)return;const l=vbList().filter(v=>!q||norm(v.inf).includes(q)||norm(v.pt).includes(q));
+ el.innerHTML=l.length?l.map(v=>`<button class="vbitem" data-vb="${v.inf}"><b class="it">${esc(v.inf)}</b><span>${esc(v.pt)}</span><small>${esc(vbGrupo(v))}</small></button>`).join(""):`<p class="small muted">Nenhum verbo encontrado.</p>`;
+ $$("#vbList [data-vb]").forEach(b=>b.onclick=()=>{VB.cur=VERBMAP[b.dataset.vb];window.scrollTo(0,0);renderVerbi()})}
+function renderVerbo(){const v=VB.cur,box=$("#exBox");
+ box.innerHTML=`<button class="back" id="vbBack">← Verbos</button><div class="tophead"><span class="label">${esc(vbGrupo(v))}${v.aux?" · auxiliar no passato: "+(v.aux==="e"?"essere":"avere"):""}</span><div class="row" style="gap:8px"><h2 class="it lettit">${esc(v.inf)}</h2>${spkBtn(v.inf)}</div><p class="muted small">${esc(v.pt)}</p></div>
+ <div class="vbgrid">${VBT.map(k=>{const f=TENSES[k].f(v);return`<div class="card vbcard"><span class="label">${TENSES[k].n}</span><table class="vbtab">${P.map((p,i)=>`<tr><td class="muted small">${p}</td><td><b class="it">${esc(f[i])}</b></td></tr>`).join("")}</table></div>`}).join("")}</div>
+ <button class="btn" id="vbTrainOne">Treinar só este verbo (10)</button>`;
+ tokenize(box);$("#vbBack").onclick=()=>{VB.cur=null;renderVerbi();window.scrollTo(0,0)};$("#vbTrainOne").onclick=()=>vbTrain(v)}
+function vbQ(v,tk,i){const f=TENSES[tk].f(v),right=f[i],cand=[];
+ [0,1,2,3,4,5].filter(j=>j!==i).forEach(j=>cand.push(f[j]));VBT.filter(t=>t!==tk).forEach(t=>cand.push(TENSES[t].f(v)[i]));
+ const wrong=shuffle([...new Set(cand)].filter(x=>x!==right));const o=[right,...shuffle([...wrong.filter(x=>f.includes(x)).slice(0,2),...wrong.filter(x=>!f.includes(x)).slice(0,2)]).slice(0,3)];
+ return{id:"verb:"+v.inf+":"+tk+":"+i,k:"mc",cat:"gram",lbl:"Verbos · "+TENSES[tk].n,p:P[i]+" ___ ("+v.inf+") · "+TENSES[tk].n,o,a:0,x:P[i]+" "+right+" — "+v.pt+", "+TENSES[tk].n+"."}}
+function vbTrain(one){const its=[];const vs=one&&one.inf?[one]:vbList();for(let k=0;k<10;k++){const v=pick(vs),tk=VB.tense||pick(VBT),i=Math.random()*6|0;its.push(vbQ(v,tk,i))}
+ rnStart({box:"#exBox",titulo:"Treino de verbos",items:its,origem:"verbos",tag:VB.tense||"todos",onQuit:renderVerbi,again:()=>vbTrain(one)})}
+
+/* ---------- Simulado por nível ---------- */
+// Banco de 90 por nível: gramática 30, vocabulário 25, leitura 20, escuta 15. Cada prova sorteia 10 + 8 + 6 + 6 = 30.
+const SIM_AREAS=[["gram","Gramática",30,10],["voc","Vocabulário",25,8],["leit","Leitura",20,6],["esc","Escuta",15,6]];
+function simBank(lvl){const by=a=>a.slice().sort((x,y)=>x.id<y.id?-1:1);return{
+ gram:by(EXQ.filter(q=>q.nivel===lvl&&q.cat==="gram")).slice(0,30).map(exItemOf),
+ voc:by(EXQ.filter(q=>q.nivel===lvl&&q.cat==="voc")).slice(0,25).map(exItemOf),
+ leit:by(EXQ.filter(q=>q.nivel===lvl&&q.cat==="int")).slice(0,20).map(exItemOf),
+ esc:by(ASC.filter(x=>x.nivel===lvl)).filter((x,i)=>i%2===0).slice(0,15).map(ascItem)}}
+function simHist(lvl){return((S.simulados||{})[lvl])||[]}
+function simBest(lvl){return simHist(lvl).reduce((m,t)=>Math.max(m,t.pct),0)}
+function renderSimHome(){const box=$("#exBox");
+ box.innerHTML=v3ModeHead("Simulado por nível","30 questões sorteadas de um banco de 90: gramática 10, vocabulário 8, leitura 6 e escuta 6. Sem correção durante a prova; no fim, a nota por área e o que você errou, que vai para o caderno de erros.")+
+ ["A1","A2"].map(l=>{const h=simHist(l),b=simBest(l);return`<div class="card stack" style="gap:8px"><div class="row" style="justify-content:space-between"><h3>Simulado ${l}</h3>${b>=80?`<span class="chip hot">Selo da Nonna ✓</span>`:b?`<span class="chip">melhor: ${b}%</span>`:""}</div>
+ ${h.length?`<div class="stack" style="gap:4px">${h.slice(-5).reverse().map(t=>`<div class="row small" style="justify-content:space-between"><span>${fmtBR(t.d)}</span><span>${SIM_AREAS.map(a=>a[1].slice(0,4)+". "+(t.areas[a[0]]||"0/0")).join(" · ")}</span><b>${t.pct}%</b></div>`).join("")}</div>`:`<p class="small muted">Nenhuma tentativa ainda. Com 80% ou mais, você ganha o selo da Nonna no painel.</p>`}
+ <div class="row"><button class="btn primary" data-sim="${l}">Começar o simulado ${l}</button></div></div>`}).join("");
+ $("#v3Back").onclick=v3Back;$$("#exBox [data-sim]").forEach(b=>b.onclick=()=>simStart(b.dataset.sim))}
+function simStart(lvl){const B=simBank(lvl),its=[];SIM_AREAS.forEach(([k,,,n])=>shuffle(B[k]).slice(0,n).forEach(it=>its.push(Object.assign({},it,{area:k}))));
+ rnStart({box:"#exBox",titulo:"Simulado "+lvl,items:its,prova:true,origem:"simulado",tag:lvl,onQuit:renderSimHome,onEnd:R=>simEnd(R,lvl)})}
+function simEnd(R,lvl){const res=R.res.filter(Boolean),ok=res.filter(x=>x.ok).length,n=R.items.length,pct=Math.round(ok/n*100),areas={};
+ SIM_AREAS.forEach(([k])=>{const a=res.filter(x=>x.it.area===k);areas[k]=a.filter(x=>x.ok).length+"/"+R.items.filter(x=>x.area===k).length});
+ if(!R.saved){R.saved=1;res.forEach(x=>{if(!x.ok)errAnswer(x.it,false,"simulado")});S.simulados=S.simulados||{};const h=S.simulados[lvl]=S.simulados[lvl]||[];h.push({d:today(),pct,ok,n,areas});if(h.length>30)h.splice(0,h.length-30);save();renderHome()}
+ const wrong=res.filter(x=>!x.ok);
+ $("#exBox").innerHTML=`<div class="card stack"><span class="label">Simulado ${lvl} · resultado</span><h2>${ok}/${n} · ${pct}%</h2>
+ ${pct>=80?`<div class="fb ok"><b>Selo da Nonna conquistado!</b><span>Ele aparece no painel da tela Início.</span></div>`:`<p class="small muted">Com 80% ou mais você ganha o selo da Nonna.</p>`}
+ <div class="simareas">${SIM_AREAS.map(([k,nm])=>{const [a,b]=areas[k].split("/").map(Number);return`<div><span class="label">${nm}</span><b>${areas[k]}</b><div class="lvlbar"><i style="width:${b?a/b*100:0}%"></i></div></div>`}).join("")}</div>
+ ${wrong.length?`<h3>O que você errou (${wrong.length})</h3><p class="small muted">Estas questões foram para o caderno de erros.</p><div class="stack" style="gap:8px">${wrong.map(x=>`<div class="exwrong"><div class="small${x.it.pit?" it":""}">${esc(x.it.hide?x.it.say:x.it.p)}</div><div class="small">Sua resposta: ${esc(x.it.o[x.it.ans])}</div><div class="small">Certa: <b>${esc(x.it.o[x.it.a])}</b>${x.it.x?" — "+esc(x.it.x):""}</div></div>`).join("")}</div>`:""}
+ <div class="row"><button class="btn ghost" id="simBack">Voltar</button></div></div>`;
+ tokenize($("#exBox"));$("#simBack").onclick=()=>{RN.cur=null;renderSimHome();window.scrollTo(0,0)}}
+
+/* ============================ CURSO: falsos amigos e trilha de engenharia ============================ */
+function v3CourseExtra(){const fa=FALSI.filter(b=>(S.course[b.id]||{}).best>=70).length,ct=CANT.filter(u=>(S.course[u.id]||{}).best>=70).length;
+ return`<div class="v3extra stack" style="gap:10px"><h3 class="v3sub">Unidades extras</h3>
+ <button class="tcard" data-v3c="falsi"><span class="tn">≠</span><div><h3>Falsos amigos</h3><p>40 palavras que enganam o brasileiro, em 4 blocos com quiz</p></div><span class="pill ${fa===4?"ok":""}">${fa}/4</span></button>
+ <button class="tcard" data-v3c="cant"><span class="tn">⛑</span><div><h3>Cantiere e ufficio tecnico</h3><p>Trilha de engenharia: 6 unidades com termos, documento-modelo e interpretação</p></div><span class="pill ${ct===6?"ok":""}">${ct}/6</span></button></div>`}
+const _renderCourse=renderCourse;
+renderCourse=function(){_renderCourse();if(CUR&&!$("#cTopic").hidden)return;const tl=$("#tlist");if(!tl)return;const w=document.createElement("div");w.innerHTML=v3CourseExtra();tl.appendChild(w.firstElementChild);
+ $$("#tlist [data-v3c]").forEach(b=>b.onclick=()=>b.dataset.v3c==="falsi"?openFalsi():openCant())};
+const CX={kind:"",id:""};
+function cxShow(){CUR=null;RUN=null;TEST=null;$("#cHome").hidden=true;$("#cTopic").hidden=false;window.scrollTo(0,0)}
+function cxClose(){RN.cur=null;CX.kind="";CX.id="";closeTopic()}
+function v3Fav(k,lemma,meaning,ex,expt,origem){if(S.favs[k]){delete S.favs[k];removeFavCard(k)}
+ else{S.favs[k]={lemma,surface:lemma,pos:"",meaning,synonyms:[],example:ex||"",examplePt:expt||"",context:ex||"",date:today(),added:today(),tipo:/\s/.test(lemma)?"frase":"palavra",origem};addFavCard(k);logEvento("favorito",k)}
+ save();updateFavCount();renderDecks()}
+function favBtn(k,attrs){const on=!!S.favs[k];return`<button class="spk star${on?" on":""}" ${attrs} aria-pressed="${on}" aria-label="${on?"Remover de Preferiti":"Salvar em Preferiti"}">${STAR_SVG}</button>`}
+/* falsos amigos */
+function openFalsi(id){CX.kind="falsi";CX.id=id||"";cxShow();renderFalsi()}
+function renderFalsi(){const box=$("#cTopic");if(RN.cur&&RN.cur.box==="#cTopic")return rnRender();
+ if(!CX.id){box.innerHTML=`<button class="back" id="cxBack">← Curso</button><div class="tophead"><span class="label">Unidade extra</span><h2>Falsos amigos</h2><p class="muted small">Palavras italianas que parecem portuguesas, mas querem dizer outra coisa. Cada bloco tem 10 palavras e um quiz de marcar.</p></div>
+  <div class="tlist">${FALSI.map((b,i)=>{const c=S.course[b.id]||{};return`<button class="tcard${c.best>=70?" done":""}" data-fa="${b.id}"><span class="tn">${c.best>=70?"✓":i+1}</span><div><h3>${esc(b.titulo)}</h3><p>${b.itens.map(x=>x.it).join(", ")}</p></div><span class="pill ${c.best>=70?"ok":c.best!=null?"todo":""}">${c.best!=null?c.best+"%":"novo"}</span></button>`}).join("")}</div>`;
+  $("#cxBack").onclick=cxClose;$$("#cTopic [data-fa]").forEach(b=>b.onclick=()=>{CX.id=b.dataset.fa;renderFalsi();window.scrollTo(0,0)});return}
+ const b=FALSII[CX.id],i=FALSI.indexOf(b),y=window.scrollY;
+ box.innerHTML=`<button class="back" id="cxBack">← Falsos amigos</button><div class="tophead"><span class="label">Bloco ${i+1} de ${FALSI.length}</span><h2>${esc(b.titulo)}</h2></div>
+ <div class="stack" style="gap:12px">${b.itens.map((x,k)=>`<div class="card stack fa"><div class="row" style="justify-content:space-between;flex-wrap:nowrap;align-items:flex-start"><h3 class="it modit">${esc(x.it)}</h3><div class="row" style="gap:6px;flex-wrap:nowrap">${spkBtn(x.it)}${favBtn(x.it.toLowerCase(),`data-fafav="${k}"`)}</div></div>
+  <div class="fagrid"><div class="fano"><span class="label">Não é</span>${esc(x.parece)}</div><div class="faok"><span class="label">Mas é</span><b>${esc(x.e)}</b></div></div>
+  <div class="exi"><div><i class="it">${esc(x.ex)}</i><span>${esc(x.expt)}</span></div>${spkBtn(x.ex)}</div>
+  <p class="small"><span class="label">Para dizer o que o brasileiro esperava</span> <span class="it">${esc(x.certo)}</span></p></div>`).join("")}</div>
+ <div class="row"><button class="btn primary" id="faQuiz">Fazer o quiz do bloco (10)</button></div>
+ <div class="row" style="justify-content:space-between">${FALSI[i-1]?`<button class="btn" data-fanav="${FALSI[i-1].id}">← Anterior</button>`:"<span></span>"}${FALSI[i+1]?`<button class="btn" data-fanav="${FALSI[i+1].id}">Próximo →</button>`:"<span></span>"}</div>`;
+ tokenize(box);$("#cxBack").onclick=()=>{CX.id="";renderFalsi();window.scrollTo(0,0)};
+ $$("#cTopic [data-fanav]").forEach(e=>e.onclick=()=>{CX.id=e.dataset.fanav;renderFalsi();window.scrollTo(0,0)});
+ $$("#cTopic [data-fafav]").forEach(e=>e.onclick=()=>{const x=b.itens[+e.dataset.fafav];v3Fav(x.it.toLowerCase(),x.it,x.e+" (falso amigo: não é "+x.parece+")",x.ex,x.expt,"falsi:"+b.id);renderFalsi();window.scrollTo(0,y)});
+ $("#faQuiz").onclick=()=>{const its=shuffle(b.itens).map(x=>{const outro=pick(b.itens.filter(z=>z!==x));return{id:"fa:"+x.id,k:"mc",cat:"voc",lbl:"Falsos amigos · "+b.titulo,p:"O que significa «"+x.it+"» em italiano?",o:[x.e,x.parece,outro.e],a:0,x:"«"+x.it+"» = "+x.e+". Para «"+x.parece+"», use: "+x.certo+"."}});
+  rnStart({box:"#cTopic",titulo:"Quiz · "+b.titulo,items:its,origem:"falsi",tag:b.id,onQuit:()=>{renderFalsi()},onEnd:R=>{const ok=R.res.filter(r=>r&&r.ok).length,pct=Math.round(ok/R.items.length*100),c=S.course[b.id]=S.course[b.id]||{};const was=c.best>=70;c.best=Math.max(c.best||0,pct);c.last=today();if(!was&&c.best>=70)logEvento("unidade","falsi:"+b.id);save();R.onEnd=null;rnEnd()}})}}
+/* trilha de engenharia */
+function openCant(id){CX.kind="cant";CX.id=id||"";cxShow();renderCant()}
+function renderCant(){const box=$("#cTopic");if(RN.cur&&RN.cur.box==="#cTopic")return rnRender();
+ if(!CX.id){box.innerHTML=`<button class="back" id="cxBack">← Curso</button><div class="tophead"><span class="label">Trilha de engenharia</span><h2 class="it" style="font-style:normal">Cantiere e ufficio tecnico</h2><p class="muted small">O italiano da obra e do escritório técnico: 15 termos por unidade, um documento-modelo para ler e 5 questões de interpretação.</p></div>
+  <div class="tlist">${CANT.map((u,i)=>{const c=S.course[u.id]||{};return`<button class="tcard${c.best>=70?" done":""}" data-ct="${u.id}"><span class="tn">${c.best>=70?"✓":i+1}</span><div><h3 class="it" style="font-style:normal">${esc(u.titulo)}</h3><p>${esc(u.pt)} · ${esc(u.doc.tipo)}</p></div><span class="pill ${c.best>=70?"ok":c.best!=null?"todo":""}">${c.best!=null?c.best+"%":"novo"}</span></button>`}).join("")}</div>`;
+  $("#cxBack").onclick=cxClose;$$("#cTopic [data-ct]").forEach(b=>b.onclick=()=>{CX.id=b.dataset.ct;renderCant();window.scrollTo(0,0)});return}
+ const u=CANTI[CX.id],i=CANT.indexOf(u),y=window.scrollY,paras=u.doc.texto.split("\n");
+ box.innerHTML=`<button class="back" id="cxBack">← Cantiere e ufficio tecnico</button><div class="tophead"><span class="label">Unidade ${i+1} de ${CANT.length} · ${esc(u.pt)}</span><h2 class="it lettit">${esc(u.titulo)}</h2></div>
+ <div class="card stack" style="gap:6px"><span class="label">15 termos</span><div class="ctterms">${u.termos.map((t,k)=>`<div class="ctterm"><div class="row" style="justify-content:space-between;flex-wrap:nowrap;align-items:flex-start;gap:6px"><div><b class="it">${esc(t[0])}</b><div class="small">${esc(t[1])}</div></div><div class="row" style="gap:4px;flex-wrap:nowrap">${spkBtn(t[0])}${favBtn(t[0].toLowerCase(),`data-ctfav="${k}"`)}</div></div><div class="exi"><div><i class="it">${esc(t[2])}</i></div>${spkBtn(t[2])}</div></div>`).join("")}</div></div>
+ <div class="card stack ctdoc" data-ctdoc><span class="label">Documento-modelo · ${esc(u.doc.tipo)}</span><h3 class="it" style="font-style:normal">${esc(u.doc.titulo)}</h3>${audioHTML()}<div class="ctdoctext">${paras.map((p,k)=>`<p class="it" data-ctp="${k}">${esc(p)}</p>`).join("")}</div></div>
+ <div class="row"><button class="btn primary" id="ctQuiz">Responder as 5 questões</button></div>
+ <div class="row" style="justify-content:space-between">${CANT[i-1]?`<button class="btn" data-ctnav="${CANT[i-1].id}">← Anterior</button>`:"<span></span>"}${CANT[i+1]?`<button class="btn" data-ctnav="${CANT[i+1].id}">Próxima →</button>`:"<span></span>"}</div>`;
+ tokenize(box);const d=box.querySelector("[data-ctdoc]");audioAttach(d,paras.map((p,k)=>({el:d.querySelector(`[data-ctp="${k}"]`),text:p})));
+ $("#cxBack").onclick=()=>{audioStop();CX.id="";renderCant();window.scrollTo(0,0)};
+ $$("#cTopic [data-ctnav]").forEach(e=>e.onclick=()=>{audioStop();CX.id=e.dataset.ctnav;renderCant();window.scrollTo(0,0)});
+ $$("#cTopic [data-ctfav]").forEach(e=>e.onclick=()=>{const t=u.termos[+e.dataset.ctfav];v3Fav(t[0].toLowerCase(),t[0],t[1],t[2],"","cant:"+u.id);renderCant();window.scrollTo(0,y)});
+ $("#ctQuiz").onclick=()=>{audioStop();const its=u.q.map((q,k)=>({id:"ct:"+u.id+":"+(k+1),k:"mc",cat:"leit",lbl:u.doc.tipo+" · "+u.titulo,p:q[0],o:q[1],a:0,x:q[2],ctx:u.doc.texto.replace(/\n/g," — ")}));
+  rnStart({box:"#cTopic",titulo:"Interpretação · "+u.titulo,items:its,origem:"cantiere",tag:u.id,onQuit:renderCant,onEnd:R=>{const ok=R.res.filter(r=>r&&r.ok).length,pct=Math.round(ok/R.items.length*100),c=S.course[u.id]=S.course[u.id]||{};const was=c.best>=70;c.best=Math.max(c.best||0,pct);c.last=today();if(!was&&c.best>=70)logEvento("unidade","cant:"+u.id);save();R.onEnd=null;rnEnd()}})}}
+
+/* ============================ V3: CAFFÈ CON LA NONNA, BUSCA, RESUMO SEMANAL, INÍCIO E ÁUDIO OFFLINE ============================ */
+
+/* ---------- Caffè con la Nonna: sessão de ~5 minutos montada sozinha ---------- */
+// Cartões vencidos (até 8), 1 modo di dire, 2 itens de escuta, 3 exercícios (o caderno de erros primeiro) e 1 frase para montar.
+// O sorteio usa uma semente feita da data e do perfil: reabrir o app no mesmo dia monta a mesma sessão. S.caffe = {ult, dias:{data:1}}
+function caffeLvl(){const a2=COURSE.filter(t=>t.lvl==="A2").some(t=>S.course[t.id]&&(S.course[t.id].voc||S.course[t.id].best!=null));return a2?"A2":EX.lvl||"A1"}
+function caffeItems(){const r=seedRng(today()+"|"+profId()+"|caffe"),lvl=caffeLvl(),its=[];
+ if(!SESSION)buildSession();
+ shuffleR(dueIds().sort(),r).slice(0,8).forEach(id=>its.push({k:"card",id}));
+ const md=[];MODI.forEach(u=>u.itens.forEach((m,k)=>md.push({u,m,k})));const mm=md[r()*md.length|0],outros=shuffleR(md.filter(x=>x!==mm),r).slice(0,2);
+ its.push({id:"modi:"+mm.u.id+":"+mm.k,k:"mc",cat:"voc",lbl:"Modo di dire",p:"O que quer dizer «"+mm.m.it+"»?",o:[mm.m.s,...outros.map(x=>x.m.s)],a:0,x:"Ao pé da letra: "+mm.m.lit+". Exemplo: "+mm.m.es,say:mm.m.it});
+ const asc=ASC.filter(x=>x.nivel===lvl),nv=asc.filter(x=>!v3Stat("escuta",x.id));shuffleR(nv.length>=2?nv:asc,r).slice(0,2).forEach(x=>its.push(ascItem(x)));
+ const errs=errList().filter(e=>e.q&&e.q.k==="mc").slice(0,3).map(errItem).filter(Boolean);
+ const pool=EXQ.filter(q=>q.nivel===lvl&&q.cat!=="int"),fill=shuffleR(pool,r).filter(q=>!errs.some(e=>e.id===q.id)).slice(0,3-errs.length).map(exItemOf);[...errs,...fill].forEach(x=>its.push(x));
+ const od=ORD.filter(x=>x.nivel===lvl);its.push(ordItem(od[r()*od.length|0]));return its}
+function caffeDone(){return((S.caffe||{}).ult)===today()}
+function caffeStreak(){const d=(S.caffe||{}).dias||{};let c=0,x=new Date();if(!d[fmt(x)])x.setDate(x.getDate()-1);while(d[fmt(x)]){c++;x.setDate(x.getDate()-1)}return c}
+function openCaffe(){const box=v3Open("Caffè con la Nonna",()=>renderHome());const its=caffeItems(),nc=its.filter(x=>x.k==="card").length;
+ box.innerHTML=`<div class="card stack caffe"><div class="row" style="gap:12px;flex-wrap:nowrap;align-items:center">${nonnaSVG(caffeDone()?"comemorando":"acenando","nonna sm")}<div class="stack" style="gap:4px"><h2 class="it" style="font-style:normal">Un caffè con la Nonna</h2><p class="small muted">Uns 5 minutos: ${nc?nc+" cartões, ":""}1 modo di dire, 2 escutas, 3 exercícios e 1 frase para montar.</p></div></div>
+ ${caffeDone()?`<div class="fb ok"><b>A sessão de hoje já está feita.</b><span>Pode fazer de novo para treinar: o calendário já está marcado.</span></div>`:""}
+ <button class="btn primary" id="cfGo">${caffeDone()?"Fazer de novo":"Começar"}</button></div>`;
+ $("#cfGo").onclick=()=>rnStart({box:"#v3Box",titulo:"Caffè con la Nonna",items:its,origem:"caffe",tag:today(),onQuit:()=>{v3Close();renderHome()},onEnd:caffeEnd})}
+function caffeEnd(R){const first=!caffeDone();S.caffe=S.caffe||{ult:"",dias:{}};S.caffe.dias=S.caffe.dias||{};S.caffe.ult=today();S.caffe.dias[today()]=1;
+ const ds=Object.keys(S.caffe.dias).sort();if(ds.length>400)ds.slice(0,ds.length-400).forEach(d=>delete S.caffe.dias[d]);
+ if(first)logEvento("exercicio","caffe");save();
+ const sc=R.res.filter(x=>x&&x.it.k!=="card"),ok=sc.filter(x=>x.ok).length,st=caffeStreak();
+ $("#v3Box").innerHTML=`<div class="card stack caffe" style="align-items:center;text-align:center">${nonnaSVG("comemorando","nonna")}<h2>Brava! Sessão feita.</h2>
+ <p>${ok}/${sc.length} certas${R.res.some(x=>x&&x.it.k==="card")?" · "+R.res.filter(x=>x&&x.it.k==="card").length+" cartões revisados":""}</p>
+ <div class="row" style="justify-content:center"><span class="chip hot">${st} ${st===1?"dia":"dias"} de caffè seguidos</span><span class="chip">${activeStreak()} ${activeStreak()===1?"dia":"dias"} de estudo seguidos</span></div>
+ <p class="small muted">O dia ficou marcado no calendário.</p><button class="btn primary" id="cfClose">Fechar</button></div>`;
+ $("#cfClose").onclick=()=>{v3Close();renderHome()}}
+
+/* ---------- Início: Caffè e caderno de erros ---------- */
+function renderHomeV3(){const el=$("#homeCaffe");if(!el)return;const n=errN(),d=caffeDone(),st=caffeStreak();
+ el.innerHTML=`<button class="caffebtn${d?" done":""}" id="cfOpen">${nonnaSVG(d?"comemorando":"acenando","nonna sm")}<span class="stack" style="gap:2px;text-align:left"><b class="it" style="font-style:normal">Caffè con la Nonna</b><span class="small">${d?"Feito hoje ✓"+(st>1?" · "+st+" dias seguidos":""):"Sessão de 5 minutos montada para hoje"}</span></span></button>
+ <button class="btn${n?"":" ghost"}" id="errHome" ${n?"":"disabled"}>Rever meus erros (<span data-errn>${n}</span>)</button>`;
+ $("#cfOpen").onclick=openCaffe;$("#errHome").onclick=()=>{if(!errN())return;showTab("exerc");EX.mode="erros";errRound("#exBox",()=>renderErrList("#exBox",v3Back))}}
+const _renderHome=renderHome;
+renderHome=function(){_renderHome();try{renderHomeV3()}catch(e){}};
+
+/* ---------- painel: selo do simulado e resumo semanal ---------- */
+const _renderPainel=renderPainel;
+renderPainel=function(){_renderPainel();const el=$("#homePainel");if(!el)return;const selos=["A1","A2"].filter(l=>simBest(l)>=80);
+ const w=document.createElement("div");w.className="stack v3painel";w.style.gap="10px";
+ w.innerHTML=`${selos.length?`<div class="row" style="gap:10px;align-items:center;flex-wrap:nowrap">${nonnaSVG("comemorando","nonna xs")}<div class="stack" style="gap:2px"><b>Selo da Nonna</b><span class="small">${selos.map(l=>"Simulado "+l+" com "+simBest(l)+"%").join(" · ")}</span></div></div>`:""}
+ <button class="btn" id="shareWeek">Compartilhar minha semana</button><p class="small muted" id="shareMsg" role="status"></p>`;
+ el.appendChild(w);$("#shareWeek").onclick=shareWeek};
+function weekStats(){const days=[];for(let i=6;i>=0;i--){const d=addDays(-i);days.push({d,on:dayActive(d)})}
+ let let_=0,rev=0;days.forEach(({d})=>((S.eventos||{})[d]||[]).forEach(e=>{if(e[0]==="leitura")let_++;if(e[0]==="revisao")rev+=evCount(e)}));
+ return{days,n:days.filter(x=>x.on).length,streak:activeStreak(),let:let_,rev}}
+function svgImg(svg){return new Promise(res=>{const s=svg.replace("<svg ",'<svg xmlns="http://www.w3.org/2000/svg" width="500" height="472" ');const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);im.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(s)})}
+async function weekPNG(){const W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;const g=c.getContext("2d"),st=weekStats(),nm=profName()||"Minha semana";
+ g.fillStyle="#FBF5EA";g.fillRect(0,0,W,H);g.fillStyle="#C2402A";g.fillRect(0,0,W,250);
+ const im=await svgImg(nonnaSVG(st.n>=4?"comemorando":"acenando","nonna"));
+ g.fillStyle="#FBF5EA";g.font="600 44px Georgia, serif";g.fillText("NONNA DICE",70,110);g.font="400 34px Georgia, serif";g.fillText("La mia settimana · minha semana",70,165);
+ if(im)g.drawImage(im,680,40,380,359);
+ g.fillStyle="#2B1D16";g.font="700 64px Georgia, serif";g.fillText(nm.length>22?nm.slice(0,21)+"…":nm,70,350);
+ g.font="400 30px sans-serif";g.fillStyle="#6b5a4e";const d0=st.days[0].d.split("-").reverse().join("/"),d1=st.days[6].d.split("-").reverse().join("/");g.fillText(d0+" a "+d1,70,400);
+ const box=(x,y,num,lab)=>{g.fillStyle="#fff";g.strokeStyle="#E7E1D6";g.lineWidth=3;g.beginPath();g.roundRect?g.roundRect(x,y,450,230,28):g.rect(x,y,450,230);g.fill();g.stroke();
+  g.fillStyle="#C2402A";g.font="700 96px Georgia, serif";g.fillText(String(num),x+36,y+125);g.fillStyle="#2B1D16";g.font="500 32px sans-serif";g.fillText(lab,x+36,y+185)};
+ box(70,460,st.n+"/7","dias estudados");box(560,460,st.streak,st.streak===1?"dia seguido":"dias seguidos");box(70,730,st.let,st.let===1?"leitura concluída":"leituras concluídas");box(560,730,st.rev,"cartões revisados");
+ const lbl=["D","S","T","Q","Q","S","S"];st.days.forEach((x,i)=>{const cx=130+i*136,cy=1080;g.beginPath();g.arc(cx,cy,46,0,Math.PI*2);g.fillStyle=x.on?"#2F6B3A":"#E7E1D6";g.fill();
+  g.fillStyle=x.on?"#fff":"#6b5a4e";g.font="600 30px sans-serif";g.textAlign="center";g.fillText(lbl[new Date(x.d+"T12:00").getDay()],cx,cy+11);g.textAlign="left"});
+ g.fillStyle="#2B1D16";g.font="italic 38px Georgia, serif";g.textAlign="center";g.fillText(st.n>=5?"«Brava! Continua così.»":st.n>=3?"«Piano piano si va lontano.»":"«Ogni giorno un passo.»",W/2,1240);g.textAlign="left";
+ return new Promise(res=>c.toBlob(b=>res(b),"image/png"))}
+async function shareWeek(){const m=$("#shareMsg");if(m)m.textContent="Preparando a imagem…";let b=null;try{b=await weekPNG()}catch(e){}
+ if(!b){if(m)m.textContent="Não consegui gerar a imagem neste aparelho.";return}
+ const f=new File([b],"nonna-dice-semana.png",{type:"image/png"});
+ try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:"Minha semana no Nonna Dice"});if(m)m.textContent="";return}}catch(e){if(e&&e.name==="AbortError"){if(m)m.textContent="";return}}
+ const u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download="nonna-dice-semana.png";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);if(m)m.textContent="Imagem baixada."}
+
+/* ---------- busca geral ---------- */
+// Índice em memória (montado na primeira busca): vocabulário, leituras, modi di dire, falsos amigos, termos técnicos, verbos, Preferiti e dúvidas.
+let BIDX=null;
+function buscaIdx(){const o=[],add=(sec,it,pt,go,extra)=>o.push({sec,it,pt,go,n:norm((it||"")+" "+(pt||"")+" "+(extra||""))});
+ COURSE.forEach(t=>t.voc.forEach(v=>add("Vocabulário",v[0],v[1]+" · "+t.lvl+" "+t.t,()=>{v3Close();showTab("curso");openTopic(t.id,"voc")})));
+ LETTURE.forEach(t=>add("Leituras",t.titulo,t.nivel+" · "+(TEMAS[t.tema]||""),()=>{v3Close();showTab("news");setNS("let");openLet(t.id)},String(t.versoes.base||"")));
+ MODI.forEach(u=>u.itens.forEach(m=>add("Modi di dire",m.it,m.pt,()=>{v3Close();showTab("news");setNS("modi");openModi(u.id)},m.es)));
+ FALSI.forEach(b=>b.itens.forEach(x=>add("Falsos amigos",x.it,"é "+x.e+" (não "+x.parece+")",()=>{v3Close();showTab("curso");openFalsi(b.id)})));
+ CANT.forEach(u=>u.termos.forEach(t=>add("Cantiere e ufficio tecnico",t[0],t[1],()=>{v3Close();showTab("curso");openCant(u.id)},t[2])));
+ VERBS.forEach(v=>add("Verbos",v.inf,v.pt,()=>{v3Close();showTab("exerc");EX.mode="verbos";VB.cur=v;renderExerc()}));
+ return o}
+function buscaDyn(){const o=[];Object.keys(S.favs||{}).forEach(k=>{const f=S.favs[k];o.push({sec:"Preferiti",it:f.lemma||k,pt:f.meaning||"",go:()=>{v3Close();showTab("preferiti");setPrefSeg("fav")},n:norm((f.lemma||k)+" "+(f.meaning||"")+" "+(f.example||""))})});
+ duvList().forEach(d=>o.push({sec:"Dúvidas",it:d.q||String(d.a||"").slice(0,60),pt:fmtBR(d.d||today()),go:()=>{v3Close();showTab("preferiti");setPrefSeg("duv")},n:norm((d.q||"")+" "+(d.a||""))}));return o}
+const BQ={q:""};
+function openBusca(){const box=v3Open("Buscar");if(!BIDX)BIDX=buscaIdx();
+ box.innerHTML=`<input type="search" id="bQ" placeholder="Palavra em italiano ou português" autocomplete="off" enterkeyhint="search" value="${esc(BQ.q)}"><p class="small muted">Sem diferença de acentos nem de maiúsculas. Toque num resultado para abrir.</p><div id="bRes" class="stack" style="gap:14px"></div>`;
+ const q=$("#bQ");q.oninput=()=>{BQ.q=q.value;buscaFill()};buscaFill();setTimeout(()=>{try{q.focus()}catch(e){}},50)}
+function buscaFill(){const el=$("#bRes");if(!el)return;const q=norm(BQ.q||"");if(q.length<2){el.innerHTML="";return}
+ const all=[...BIDX,...buscaDyn()].filter(x=>x.n.includes(q)),secs=[...new Set(all.map(x=>x.sec))];
+ if(!all.length){el.innerHTML=`<p class="small">Nada encontrado para «${esc(BQ.q)}».</p>`;return}
+ const shown=[];
+ el.innerHTML=secs.map(s=>{const l=all.filter(x=>x.sec===s).sort((a,b)=>(norm(a.it).startsWith(q)?0:1)-(norm(b.it).startsWith(q)?0:1)),top=l.slice(0,8);
+  return`<div class="stack" style="gap:6px"><span class="label">${esc(s)} · ${l.length}</span>${top.map(x=>{shown.push(x);return`<button class="bres" data-b="${shown.length-1}"><b class="it">${esc(x.it)}</b><span class="small">${esc(x.pt)}</span></button>`}).join("")}${l.length>8?`<span class="small muted">e mais ${l.length-8}</span>`:""}</div>`}).join("");
+ $$("#bRes [data-b]").forEach(b=>b.onclick=()=>{const x=shown[+b.dataset.b];x.go();window.scrollTo(0,0)})}
+
+/* ---------- Fase 4: baixar todos os áudios gravados para usar offline (PWA) ---------- */
+const DLA={on:false,done:0,tot:0,msg:""};
+async function audioDownload(){if(DLA.on){DLA.on=false;return}if(!REC.keys||!("caches" in window))return;DLA.on=true;DLA.msg="";
+ const c=await caches.open("quaderno-audio"),keys=[...REC.keys];DLA.tot=keys.length;DLA.done=0;renderAudioCard();
+ let i=0,fail=0;const one=async()=>{while(DLA.on&&i<keys.length){const k=keys[i++],u=REC.base+k+".mp3";
+   try{const hit=await c.match(u,{ignoreSearch:true});if(!hit){const r=await fetch(u);if(r.ok)await c.put(u,r);else fail++}}catch(e){fail++}
+   DLA.done++;if(DLA.done%40===0)audioDlUI()}};
+ await Promise.all([one(),one(),one(),one(),one(),one()]);
+ DLA.msg=!DLA.on?"Download pausado. Toque de novo para continuar de onde parou.":fail?"Terminou, mas "+fail+" arquivos falharam (sem internet?). Toque de novo para tentar.":"Pronto: todos os áudios estão guardados neste aparelho.";
+ DLA.on=false;renderAudioCard()}
+function audioDlUI(){const e=$("#audDlMsg");if(e)e.textContent=DLA.on?"Baixando… "+DLA.done.toLocaleString("pt-BR")+" de "+DLA.tot.toLocaleString("pt-BR"):DLA.msg;const b=$("#audDl");if(b)b.textContent=DLA.on?"Pausar download":"Baixar áudios para usar offline"+(REC.mb?" ("+String(REC.mb).replace(".",",")+" MB)":"")}
+const _renderAudioCard=renderAudioCard;
+renderAudioCard=function(){_renderAudioCard();const el=$("#homeAudio");if(!el||!REC.keys||!("caches" in window))return;
+ const w=document.createElement("div");w.className="stack";w.style.gap="6px";w.innerHTML=`<p class="small muted">Cada áudio fica guardado depois que toca pela primeira vez. Para ter todos sem internet:</p><div class="row"><button class="btn" id="audDl"></button></div><p class="small" id="audDlMsg" role="status"></p>`;
+ const d=el.querySelector("details");el.insertBefore(w,d||null);$("#audDl").onclick=audioDownload;audioDlUI()};
+
+/* ---------- lupa no cabeçalho e Esc ---------- */
+(function(){const b=$("#srchBtn");if(b)b.onclick=openBusca})();
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#v3Ov")&&!$("#v3Ov").hidden&&$("#sheet").hidden){v3Close();try{renderHome()}catch(x){}}});
 
 /* ============================ INÍCIO ============================ */
 syncFavCards();syncErrCards();syncSentCards();renderDecks();renderBoxes();renderHome();updateFavCount();
