@@ -506,7 +506,7 @@ figure.ig{border-radius:24px}
 .sbst.ok{color:var(--ok);font-weight:700}.sbst.error{color:var(--bad)}
 .pcloud{color:var(--ok);font-weight:800}
 /* v2: cinco abas, múltipla escolha e Preferiti */
-nav.tabs .in{grid-template-columns:repeat(5,minmax(0,1fr))}
+nav.tabs .in{grid-template-columns:repeat(6,minmax(0,1fr))}
 .opts.optsw{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .opts.optsw .opt{text-align:center;font-weight:700;overflow-wrap:anywhere}
 .shword.phrase{font-size:1.2rem;line-height:1.3}
@@ -652,3 +652,18 @@ html.noscroll,html.noscroll body{overflow:hidden}
 .updbar span{flex:1;min-width:0}
 .updbar .btn{background:var(--saffron);border-color:var(--saffron);color:#1a1405;flex:none}
 .updx{background:none;border:0;color:var(--paper);font-size:1rem;padding:6px 8px;flex:none;opacity:.8}
+/* seleção por arraste */
+button.w{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body.dragsel,body.dragsel *{-webkit-user-select:none;user-select:none}
+/* aba Exercícios */
+.exq{font-size:1.05rem;line-height:1.5}
+.exq.it{font-style:normal;color:var(--ink)}
+.exq b.it{font-style:normal;color:var(--itc)}
+.exgap{display:inline-block;min-width:2.6em;border-bottom:2px solid var(--cobalt);color:transparent;line-height:1}
+.opts.optsvf{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opts.optsvf .opt{text-align:center;font-weight:700}
+.extext .exparas{font-style:normal;color:var(--ink);font-size:1.02rem;line-height:1.7}
+.exwrong{border-left:3px solid var(--bad);background:var(--bad-soft);border-radius:0 8px 8px 0;padding:8px 12px;display:flex;flex-direction:column;gap:2px}
+.exwrong .it{font-style:normal;color:var(--ink)}
+.extext .aplayer .btn{padding:7px 12px;font-size:.86rem}
+.excat .tlist{margin-top:4px}

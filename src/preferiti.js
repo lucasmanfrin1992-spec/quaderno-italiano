@@ -23,11 +23,11 @@ function finishRange(btn){const R=RANGE;if(!R||!document.contains(R.start)){canc
  if(!R.block.contains(btn)){rangeBar("Toque numa palavra do mesmo parágrafo.");return true}
  const ws=[...R.block.querySelectorAll("button.w")],i=ws.indexOf(R.start),j=ws.indexOf(btn);
  if(i===j){cancelRange();return false}
- const a=Math.min(i,j),b=Math.max(i,j),r=document.createRange();r.setStartBefore(ws[a]);r.setEndAfter(ws[b]);
+ cancelRange();openPhrase(ws,i,j,R.block);return true}
+function openPhrase(ws,i,j,block){const a=Math.min(i,j),b=Math.max(i,j),r=document.createRange();r.setStartBefore(ws[a]);r.setEndAfter(ws[b]);
  const text=r.toString().replace(/\s+/g," ").trim(),words=ws.slice(a,b+1);
- cancelRange();words.forEach(x=>x.classList.add("rsel"));
- SH={mode:"phrase",k:text.toLowerCase(),surface:text,words,sentence:((ws[a].closest(".it")||R.block).textContent||"").replace(/\s+/g," ").trim(),btn:ws[a],entry:null,src:"phrase"};
- renderSheet();showSheet(true);words.forEach(x=>x.classList.add("rsel"));speak(text);return true}
+ SH={mode:"phrase",k:text.toLowerCase(),surface:text,words,sentence:((ws[a].closest(".it")||block).textContent||"").replace(/\s+/g," ").trim(),btn:ws[a],entry:null,src:"phrase"};
+ renderSheet();showSheet(true);words.forEach(x=>x.classList.add("rsel"));speak(text)}
 function phraseGloss(){return SH.words.map(b=>{const k=b.dataset.w,lg=b.closest("#letBox")?letGloss(k):null,g=lg?{meaning:lg.pt}:b.closest("#newsBox")?gloss(k):null,e=g||lookupLocal(k,b.textContent.toLowerCase());
  return{w:b.textContent,m:e&&e.meaning?String(e.meaning).split(/[;,]/)[0].trim():""}})}
 function renderPhrase(){const fav=S.favs[SH.k],gl=phraseGloss(),star=$("#shFav");
@@ -81,3 +81,31 @@ function renderPrefList(all){const box=$("#prefList");if(!box)return;const q=nor
 function renderHomePref(){const el=$("#homePref");if(!el)return;const all=prefItems(),dueN=all.filter(x=>prefDue(x.id)).length;
  el.innerHTML=`<span class="label">Preferiti · ${all.length} ${all.length===1?"salvo":"salvos"}</span><p class="small muted">${all.length?"Palavras e frases que você guardou com a estrela.":"Toque numa palavra italiana e na estrela para guardar aqui."}</p><div class="row">${dueN?`<button class="btn" id="homePrefGo">Revisar hoje (${dueN})</button>`:`<button class="btn" data-goto="preferiti">Abrir Preferiti</button>`}</div>`;
  if($("#homePrefGo"))$("#homePrefGo").onclick=prefReview}
+
+/* ---------- segurar uma palavra e arrastar para marcar uma expressão ---------- */
+// Toque: segure a palavra (~0,35 s) até ela ficar amarela e arraste até a última palavra; ao soltar, abre o painel da expressão.
+// Mouse: clique numa palavra e arraste até outra. Arrastar sem segurar antes continua rolando a tela normalmente.
+const DRAG={st:null,suppress:0};
+function wordAt(x,y){const el=document.elementFromPoint(x,y);return el&&el.closest?el.closest("button.w"):null}
+function dragMark(w){const d=DRAG.st;if(!w||!d.block.contains(w))return;const ws=[...d.block.querySelectorAll("button.w")],i=ws.indexOf(d.start),j=ws.indexOf(w);if(j<0)return;
+ d.end=w;clearRangeMarks();ws.slice(Math.min(i,j),Math.max(i,j)+1).forEach(x=>x.classList.add("rsel"));
+ const n=Math.abs(j-i)+1;rangeBar(n>1?`${n} palavras marcadas. Solte para abrir.`:"Arraste até a última palavra e solte.")}
+function dragBegin(b,x,y,type){if(!b||b.closest("#sheet")||!canRange(b))return;DRAG.st={start:b,end:b,block:rangeBlock(b),x,y,type,active:false}}
+function dragActivate(){const d=DRAG.st;if(!d||d.active)return;d.active=true;cancelRange();document.body.classList.add("dragsel");d.start.classList.add("rsel");try{navigator.vibrate&&navigator.vibrate(12)}catch(e){}rangeBar("Arraste até a última palavra e solte.")}
+function dragEnd(){const d=DRAG.st;DRAG.st=null;if(!d)return;clearTimeout(d.timer);if(!d.active)return;document.body.classList.remove("dragsel");
+ const el=$("#rangeBar");if(el)el.hidden=true;DRAG.suppress=Date.now()+600;
+ const ws=[...d.block.querySelectorAll("button.w")],i=ws.indexOf(d.start),j=ws.indexOf(d.end);clearRangeMarks();
+ if(i<0||j<0)return;if(i===j){openWord(d.start);return}openPhrase(ws,i,j,d.block)}
+function dragCancel(){const d=DRAG.st;DRAG.st=null;if(!d)return;clearTimeout(d.timer);if(d.active){document.body.classList.remove("dragsel");clearRangeMarks();const el=$("#rangeBar");if(el)el.hidden=true}}
+document.addEventListener("touchstart",e=>{if(e.touches.length!==1){dragCancel();return}const b=e.target.closest&&e.target.closest("button.w");if(!b)return;const t=e.touches[0];dragBegin(b,t.clientX,t.clientY,"touch");if(DRAG.st)DRAG.st.timer=setTimeout(dragActivate,350)},{passive:true});
+document.addEventListener("touchmove",e=>{const d=DRAG.st;if(!d||d.type!=="touch")return;const t=e.touches[0];
+ if(!d.active){if(Math.hypot(t.clientX-d.x,t.clientY-d.y)>10)dragCancel();return}
+ e.preventDefault();dragMark(wordAt(t.clientX,t.clientY))},{passive:false});
+document.addEventListener("touchend",e=>{const d=DRAG.st;if(!d||d.type!=="touch")return;if(d.active)e.preventDefault();dragEnd()},{passive:false});
+document.addEventListener("touchcancel",dragCancel);
+document.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse"||e.button!==0)return;const b=e.target.closest&&e.target.closest("button.w");if(b)dragBegin(b,e.clientX,e.clientY,"mouse")});
+document.addEventListener("pointermove",e=>{const d=DRAG.st;if(!d||d.type!=="mouse")return;if(!(e.buttons&1)){dragCancel();return}const w=wordAt(e.clientX,e.clientY);
+ if(!d.active){if(w&&w!==d.start&&d.block.contains(w))dragActivate();else return}dragMark(w)});
+document.addEventListener("pointerup",e=>{const d=DRAG.st;if(!d||d.type!=="mouse")return;dragEnd()});
+document.addEventListener("contextmenu",e=>{if(e.target.closest&&e.target.closest("button.w"))e.preventDefault()});
+window.addEventListener("click",e=>{if(Date.now()<DRAG.suppress&&e.target.closest&&e.target.closest("button.w")){e.preventDefault();e.stopPropagation()}},true);

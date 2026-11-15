@@ -34,7 +34,7 @@ function renderLetText(){const t=LT.cur,box=$("#letBox"),i=LETTURE.indexOf(t),pr
  ${vers.length>1?`<div class="seg" id="letVer" role="tablist" aria-label="Versão do texto">${vers.map(v=>`<button role="tab" data-lver="${v[0]}" class="${ver===v[0]?"on":""}" aria-selected="${ver===v[0]}">${v[1]}</button>`).join("")}</div>`:""}
  <div id="letPlayer">${audioHTML()}</div>
  <article class="card stack lettext">${paras.map(p=>`<p class="letp">${splitSents(p).map(s=>`<span class="it lsent">${esc(s)}</span>`).join(" ")}</p>`).join("")}</article>
- <p class="hint">Toque numa palavra para ver a tradução e salvar em Preferiti. Para salvar uma frase, use “Marcar um trecho” no painel da palavra.</p>
+ <p class="hint">Toque numa palavra para ver a tradução e salvar em Preferiti. Para uma expressão, segure a primeira palavra e arraste até a última.</p>
  <div class="stack" style="gap:12px"><h3>Note linguistiche</h3>
   <details class="exs" open><summary><span class="label">Vocabulário</span><span class="exn">${N.vocabulario.length}</span></summary><div class="exlist">${N.vocabulario.map(v=>`<div class="exrow"><div><i class="it">${esc(v.it)}</i><span>${esc(v.pt)}</span></div>${spkBtn(v.it)}</div>`).join("")}</div></details>
   <details class="exs"><summary><span class="label">Gramática</span><span class="exn">${N.gramatica.length}</span></summary><div class="exlist">${N.gramatica.map(g=>`<div class="letnote"><b>${esc(g.titulo)}</b><p class="it">${esc(g.trecho)}</p><p class="small">${esc(g.explicacao)}</p><div class="formbox"><span class="label">Regra</span><div class="f">${esc(g.regra)}</div></div><div class="exi"><div><i class="it">${esc(g.exemplo)}</i></div>${spkBtn(g.exemplo)}</div></div>`).join("")}</div></details>

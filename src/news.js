@@ -60,7 +60,7 @@ function renderNews(){const box=$("#newsBox"),n=NEWS.cur;NEWS.rendered=n;
   <h2 class="ntitle">${tok(n.title||"",-1)}</h2>
   ${n.titlePt?`<p class="ptpara" hidden>${esc(n.titlePt)}</p>`:""}
   <div class="row">${canSpeak?`<button class="btn" id="readAll"></button><button class="btn ghost" id="readStop" hidden><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>Parar</button>`:""}<button class="btn ghost" id="togglePt" aria-pressed="false">Mostrar tradução</button>${!isLatest&&NEWS.latest?`<button class="btn ghost" id="toLatest">Ir para a mais recente</button>`:""}</div>
-  <p class="hint">Toque numa palavra para ouvir a pronúncia e ver significado, sinônimos e exemplo. A estrela salva a palavra em Preferiti; “Marcar um trecho” salva uma frase.</p>
+  <p class="hint">Toque numa palavra para ouvir a pronúncia e ver significado, sinônimos e exemplo. A estrela salva a palavra em Preferiti. Para uma expressão, segure uma palavra e arraste.</p>
   ${paras}
   ${srcs?`<p class="src">Texto adaptado para o nível ${esc(n.level||"A2")} a partir de: ${srcs}</p>`:""}
  </article>`;
@@ -160,5 +160,5 @@ async function initCloud(){
   if(s.exists){const r=clone(s.data());if((r.updatedAt||0)>(S.updatedAt||0)){const wasReset=hydrate(r);saveLocal();if(wasReset)save();rerenderAll()}else if((S.updatedAt||0)>(r.updatedAt||0)||r.resetEpoch!==RESET_EPOCH)scheduleSync()}
   else if(S.updatedAt)scheduleSync()}catch(e){}}
 function rerenderAll(){rollDay();syncFavCards();syncErrCards();syncSentCards();SESSION=null;renderDecks();renderBoxes();renderHome();renderNewsAll();if(!$("#v-curso").hidden&&!CUR)renderCourse();
- if(!$("#v-cartoes").hidden)renderFlash();if(!$("#v-news").hidden){renderNews();if(!$("#ns-let").hidden)renderLet();if(!$("#ns-modi").hidden)renderModi()}if(!$("#v-preferiti").hidden){$("#ps-duv").hidden?renderFavs():renderDuvidas()}}
+ if(!$("#v-cartoes").hidden)renderFlash();if(!$("#v-news").hidden){renderNews();if(!$("#ns-let").hidden)renderLet();if(!$("#ns-modi").hidden)renderModi()}if(!$("#v-preferiti").hidden){$("#ps-duv").hidden?renderFavs():renderDuvidas()}if(!$("#v-exerc").hidden)renderExerc()}
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&syncDirty){clearTimeout(syncT);flushSync()}});

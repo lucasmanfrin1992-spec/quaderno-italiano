@@ -3,7 +3,7 @@
 // tipos: "leitura" (texto concluído com 3/3), "unidade" (tópico do curso ou unidade de modi di dire concluída),
 //        "revisao" (cartão revisado; um por cartão por dia), "favorito" (item salvo em Preferiti).
 // Revisões com mais de 60 dias viram uma entrada só por dia: ["revisao", "", quantidade].
-const EV_TIPOS=["leitura","unidade","revisao","favorito"];
+const EV_TIPOS=["leitura","unidade","revisao","favorito","exercicio"];
 function logEvento(tipo,id){try{if(!EV_TIPOS.includes(tipo))return;S.eventos=S.eventos||{};const t=today(),d=S.eventos[t]=S.eventos[t]||[];id=String(id||"");
  if((tipo==="revisao"||tipo==="favorito")&&d.some(e=>e[0]===tipo&&e[1]===id))return;d.push([tipo,id]);evCompact()}catch(e){}}
 function evCompact(){const lim=addDays(-60);Object.keys(S.eventos).forEach(day=>{if(day>=lim)return;const d=S.eventos[day];if(!d.some(e=>e[0]==="revisao"&&e[1]!==""))return;

@@ -29,10 +29,11 @@ async function sbRest(method,q,body,extra){const t=await sbToken();if(!t)throw{c
  return r.status===204?null:r.json().catch(()=>null)}
 /* junta dois estados quando os dois aparelhos mudaram desde a última sincronização */
 function mergeStates(a,b){const n=(a.updatedAt||0)>=(b.updatedAt||0)?a:b,o=n===a?b:a,out=JSON.parse(JSON.stringify(n));
- const maps=["cards","favs","newsDone","course","writing","shadow","errs","log","tests","sents","estat","diary","chats","bt","dict","pairs","leituras","modi","eventos","duvidas"];
+ const maps=["cards","favs","newsDone","course","writing","shadow","errs","log","tests","sents","estat","diary","chats","bt","dict","pairs","leituras","modi","eventos","duvidas","exerc"];
  maps.forEach(k=>{const x=o[k]||{},y=out[k]=out[k]||{};Object.keys(x).forEach(id=>{
   if(!(id in y)){y[id]=x[id];return}
   if(k==="cards"){const c=x[id],d=y[id],w=v=>((v&&v.reps)||0)+((v&&v.lapses)||0);if(w(c)>w(d)||(w(c)===w(d)&&(c&&c.due||"")>(d&&d.due||"")))y[id]=c}
+  else if(k==="exerc"&&x[id]&&y[id]){if((x[id].n||0)>(y[id].n||0))y[id]=x[id]}
   else if(k==="eventos"&&Array.isArray(x[id])&&Array.isArray(y[id])){const seen=new Set(y[id].map(e=>JSON.stringify(e)));x[id].forEach(e=>{const j=JSON.stringify(e);if(!seen.has(j)){seen.add(j);y[id].push(e)}})}
   else if(k==="log"&&x[id]&&typeof x[id]==="object"){Object.keys(x[id]).forEach(f=>{if(typeof x[id][f]==="number")y[id][f]=Math.max(y[id][f]||0,x[id][f])})}
   else if(k==="course"&&x[id]&&y[id]&&typeof x[id]==="object"){const m=Object.assign({},x[id],y[id]);if(x[id].best!=null||y[id].best!=null)m.best=Math.max(x[id].best||0,y[id].best||0);y[id]=m}})});

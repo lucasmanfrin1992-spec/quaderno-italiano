@@ -13,9 +13,20 @@ function loadVoices(){if(!canSpeak)return;try{const all=speechSynthesis.getVoice
 if(canSpeak){loadVoices();try{speechSynthesis.addEventListener("voiceschanged",loadVoices)}catch(e){try{speechSynthesis.onvoiceschanged=loadVoices}catch(e2){}}}
 function bestVoice(){if(!IT_VOICES.length)loadVoices();return IT_VOICES.find(v=>!BAD_VOICES.has(v.name))||null}
 const SAY={u:null,tok:0,lastCancel:0};
+const IS_IOS=/iPhone|iPad|iPod/.test(navigator.userAgent||"")||(/Macintosh/.test(navigator.userAgent||"")&&navigator.maxTouchPoints>1);
+// iPhone: a voz do navegador segue a chave do silencioso. Pedir a sessão de áudio de "reprodução" (iOS 17+) e tocar um
+// som mudo dentro do toque faz o iPhone tratar o app como player de mídia, e a voz passa a sair mesmo no silencioso.
+try{if(navigator.audioSession)navigator.audioSession.type="playback"}catch(e){}
+let SILENT=null;
+function silentWav(){const n=1600,b=new Uint8Array(44+n),v=new DataView(b.buffer),w=(o,s)=>{for(let i=0;i<s.length;i++)b[o+i]=s.charCodeAt(i)};
+ w(0,"RIFF");v.setUint32(4,36+n,true);w(8,"WAVEfmt ");v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,8000,true);v.setUint32(28,8000,true);v.setUint16(32,1,true);v.setUint16(34,8,true);w(36,"data");v.setUint32(40,n,true);b.fill(128,44);
+ return URL.createObjectURL(new Blob([b],{type:"audio/wav"}))}
+function iosKick(){if(!IS_IOS)return;try{if(navigator.audioSession&&navigator.audioSession.type!=="playback")navigator.audioSession.type="playback"}catch(e){}
+ try{if(!SILENT){SILENT=new Audio(silentWav());SILENT.setAttribute("playsinline","");SILENT.preload="auto"}SILENT.currentTime=0;const p=SILENT.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}}
+if(IS_IOS)document.addEventListener("touchend",function first(){iosKick();document.removeEventListener("touchend",first,true)},true);
 function sayCancel(){try{speechSynthesis.cancel()}catch(e){}SAY.lastCancel=Date.now()}
 // fala um texto; o: {rate, onstart, onend, onerror(código)}
-function sayIt(text,o){o=o||{};if(!canSpeak){o.onerror&&o.onerror("unsupported");return}const tok=++SAY.tok;let busy=false;
+function sayIt(text,o){o=o||{};if(!canSpeak){o.onerror&&o.onerror("unsupported");return}const tok=++SAY.tok;let busy=false;iosKick();
  try{busy=speechSynthesis.speaking||speechSynthesis.pending}catch(e){}if(busy)sayCancel();
  const go=(useVoice,retry)=>{if(tok!==SAY.tok)return;let started=false,done=false;
   try{if(speechSynthesis.paused)speechSynthesis.resume()}catch(e){}
@@ -28,8 +39,8 @@ function sayIt(text,o){o=o||{};if(!canSpeak){o.onerror&&o.onerror("unsupported")
   try{speechSynthesis.speak(u)}catch(e){if(o.onerror)o.onerror("erro");return}
   // alguns Androids não começam nem avisam erro: se nada aconteceu, tenta mais uma vez com a voz padrão
   setTimeout(()=>{if(tok!==SAY.tok||started||done)return;let sp=false;try{sp=speechSynthesis.speaking}catch(e){}if(sp)return;
-   if(!retry){if(v)BAD_VOICES.add(v.name);sayCancel();setTimeout(()=>go(false,true),150)}else if(o.onerror)o.onerror("silencio")},2500)};
- const wait=150-(Date.now()-SAY.lastCancel); // espera um instante depois de qualquer cancelamento recente
+   if(!retry){if(v)BAD_VOICES.add(v.name);sayCancel();setTimeout(()=>go(false,true),IS_IOS?0:150)}else if(o.onerror)o.onerror("silencio")},2500)};
+ const wait=IS_IOS?0:150-(Date.now()-SAY.lastCancel); // espera um instante depois de um cancelamento recente (problema do Android; no iPhone a fala precisa sair já, dentro do toque)
  wait>0?setTimeout(()=>go(true,false),wait):go(true,false)}
 function sayStop(){SAY.tok++;try{if(canSpeak&&(speechSynthesis.speaking||speechSynthesis.pending))sayCancel()}catch(e){}}
 
@@ -37,7 +48,7 @@ function sayStop(){SAY.tok++;try{if(canSpeak&&(speechSynthesis.speaking||speechS
 const AUD={msg:""};
 function audioPlatform(){const ua=navigator.userAgent||"";return/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)?"ios":/Android/.test(ua)?"android":"outro"}
 function audioHelp(){const p=audioPlatform();
- return p==="ios"?"No iPhone: desligue o modo silencioso (chave na lateral) e aumente o volume. Para uma voz melhor: Ajustes › Acessibilidade › Conteúdo Falado › Vozes › Italiano."
+ return p==="ios"?"No iPhone: 1) desligue o modo silencioso (chave na lateral, sem a faixa laranja); 2) aumente o volume com os botões laterais enquanto o teste fala; 3) confira se o Bluetooth não está mandando o som para um fone; 4) em Ajustes › Acessibilidade › Conteúdo Falado › Vozes › Italiano, baixe uma voz (por exemplo, Alice)."
   :p==="android"?"No Android: aumente o volume de mídia. Se não houver voz italiana: Configurações › Sistema › Idiomas › Saída de texto para fala › motor do Google › Instalar dados de voz › Italiano."
   :"No computador: confira o volume e se o navegador não está sem som. Vozes italianas podem ser instaladas nas configurações de voz do sistema."}
 function renderAudioCard(){const el=$("#homeAudio");if(!el)return;
@@ -48,6 +59,6 @@ function renderAudioCard(){const el=$("#homeAudio");if(!el)return;
  <div class="row"><button class="btn" id="audTest">Testar áudio</button></div><p class="small" id="audMsg" role="status">${esc(AUD.msg)}</p>
  <details class="exs"><summary><span class="small">Não sai som?</span></summary><p class="small" style="padding:0 14px 12px">${esc(audioHelp())}</p></details>`;
  $("#audTest").onclick=()=>{const m=$("#audMsg");audioPause();AUD.msg="Preparando…";m.textContent=AUD.msg;
-  sayIt("Ciao! Sono la Nonna. Mi senti bene?",{rate:1,onstart:vv=>{AUD.msg="Falando"+(vv?" com a voz "+vv.name:" com a voz padrão do aparelho")+"… Você está ouvindo?";const x=$("#audMsg");if(x)x.textContent=AUD.msg},
+  sayIt("Ciao! Sono la Nonna. Mi senti bene?",{rate:1,onstart:vv=>{AUD.msg="Falando"+(vv?" com a voz "+vv.name:" com a voz padrão do aparelho")+"… Se não ouvir nada, o problema é de volume ou do modo silencioso.";const x=$("#audMsg");if(x)x.textContent=AUD.msg},
    onend:()=>{AUD.msg="Terminou. Se não ouviu nada, veja “Não sai som?” abaixo.";const x=$("#audMsg");if(x)x.textContent=AUD.msg},
    onerror:c=>{AUD.msg=c==="silencio"?"O aparelho não começou a falar. Veja “Não sai som?” abaixo.":c==="not-allowed"?"O navegador bloqueou o som. Toque de novo em Testar áudio.":"O aparelho não conseguiu falar (erro: "+c+"). Veja “Não sai som?” abaixo.";const x=$("#audMsg");if(x)x.textContent=AUD.msg}})}}

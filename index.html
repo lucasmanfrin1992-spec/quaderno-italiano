@@ -789,7 +789,7 @@ figure.ig{border-radius:24px}
 .sbst.ok{color:var(--ok);font-weight:700}.sbst.error{color:var(--bad)}
 .pcloud{color:var(--ok);font-weight:800}
 /* v2: cinco abas, múltipla escolha e Preferiti */
-nav.tabs .in{grid-template-columns:repeat(5,minmax(0,1fr))}
+nav.tabs .in{grid-template-columns:repeat(6,minmax(0,1fr))}
 .opts.optsw{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .opts.optsw .opt{text-align:center;font-weight:700;overflow-wrap:anywhere}
 .shword.phrase{font-size:1.2rem;line-height:1.3}
@@ -935,6 +935,21 @@ html.noscroll,html.noscroll body{overflow:hidden}
 .updbar span{flex:1;min-width:0}
 .updbar .btn{background:var(--saffron);border-color:var(--saffron);color:#1a1405;flex:none}
 .updx{background:none;border:0;color:var(--paper);font-size:1rem;padding:6px 8px;flex:none;opacity:.8}
+/* seleção por arraste */
+button.w{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body.dragsel,body.dragsel *{-webkit-user-select:none;user-select:none}
+/* aba Exercícios */
+.exq{font-size:1.05rem;line-height:1.5}
+.exq.it{font-style:normal;color:var(--ink)}
+.exq b.it{font-style:normal;color:var(--itc)}
+.exgap{display:inline-block;min-width:2.6em;border-bottom:2px solid var(--cobalt);color:transparent;line-height:1}
+.opts.optsvf{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opts.optsvf .opt{text-align:center;font-weight:700}
+.extext .exparas{font-style:normal;color:var(--ink);font-size:1.02rem;line-height:1.7}
+.exwrong{border-left:3px solid var(--bad);background:var(--bad-soft);border-radius:0 8px 8px 0;padding:8px 12px;display:flex;flex-direction:column;gap:2px}
+.exwrong .it{font-style:normal;color:var(--ink)}
+.extext .aplayer .btn{padding:7px 12px;font-size:.86rem}
+.excat .tlist{margin-top:4px}
 
 /* perfis */
 .pchip{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:var(--ink)}
@@ -1010,7 +1025,7 @@ html.noscroll,html.noscroll body{overflow:hidden}
       <div class="row"><button class="btn" id="updCheck">Verificar atualizações</button><button class="btn primary" id="updGo" hidden>Atualizar agora</button></div>
     </div>
     <div class="card stack" id="homeAudio"></div>
-    <p class="hint">Dica: em qualquer texto, toque numa palavra em italiano para ver o significado e os exemplos. A estrela salva a palavra em Preferiti; “Marcar um trecho” salva uma frase inteira.</p>
+    <p class="hint">Dica: em qualquer texto, toque numa palavra em italiano para ver o significado e os exemplos. A estrela salva a palavra em Preferiti. Para uma expressão, segure a primeira palavra até ela ficar amarela e arraste até a última.</p>
   </section>
 
   <!-- ===================== CURSO ===================== -->
@@ -1057,6 +1072,12 @@ html.noscroll,html.noscroll body{overflow:hidden}
   </section>
 
   <!-- ===================== CARTÕES ===================== -->
+  <!-- ===================== EXERCÍCIOS ===================== -->
+  <section class="view" id="v-exerc" data-view="exerc" hidden>
+    <div class="stack" style="gap:2px"><h2>Exercícios</h2><p class="muted small">Gramática, vocabulário e interpretação de texto. Tudo de marcar, sem escrever.</p></div>
+    <div id="exBox" class="stack" style="gap:16px"></div>
+  </section>
+
   <section class="view" id="v-cartoes" data-view="cartoes" hidden>
     <div class="row" style="justify-content:space-between">
       <h2>Cartões do dia</h2>
@@ -1115,6 +1136,7 @@ html.noscroll,html.noscroll body{overflow:hidden}
   <button role="tab" data-tab="inicio" aria-selected="true"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Início</button>
   <button role="tab" data-tab="curso" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M8 7h7M8 11h5"/></svg>Curso</button>
   <button role="tab" data-tab="news" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 5h13v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v10a2 2 0 0 1-2 2"/><path d="M7 9h7M7 13h7M7 17h4"/></svg>Leitura</button>
+  <button role="tab" data-tab="exerc" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8l1.5 1.5L12 7M8 14l1.5 1.5L12 13M14 8.5h3M14 14.5h3"/></svg>Exercícios</button>
   <button role="tab" data-tab="preferiti" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>Preferiti</button>
   <button role="tab" data-tab="cartoes" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="14" height="13" rx="2"/><path d="M7 7V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-2"/></svg>Cartões</button>
 </div></nav>
@@ -2845,10 +2867,10 @@ const KEY=CURP?"quaderno.v1:"+CURP.id:"quaderno.v1:__sem-perfil";
 const RESET_EPOCH="2026-11-02"; // muda este valor para zerar os cartões de todos
 const DECKS={err:"Meus erros",fav:"Preferiti (palavras e frases)",vA1:"Vocabulário A1",vA2:"Vocabulário A2",verb:"Verbos (presente, passato, futuro)"};
 const DATA_V=3; // versão do formato dos dados salvos; migrar() leva os dados antigos para a versão atual sem apagar nada
-function defState(){return{cards:{},settings:{decks:{err:true,frase:true,fav:true,vA1:true,vA2:true,verb:true},newPerDay:20,dir:"mix",typing:false},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},favs:{},newsDone:{},course:{},writing:{},shadow:{},errs:{},log:{},tests:{},sents:{},estat:{},diary:{},chats:{},bt:{},dict:{},pairs:{},leituras:{},modi:{},eventos:{},duvidas:{},versaoDados:DATA_V,resetEpoch:RESET_EPOCH,updatedAt:0}}
+function defState(){return{cards:{},settings:{decks:{err:true,frase:true,fav:true,vA1:true,vA2:true,verb:true},newPerDay:20,dir:"mix",typing:false},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},favs:{},newsDone:{},course:{},writing:{},shadow:{},errs:{},log:{},tests:{},sents:{},estat:{},diary:{},chats:{},bt:{},dict:{},pairs:{},leituras:{},modi:{},eventos:{},duvidas:{},exerc:{},versaoDados:DATA_V,resetEpoch:RESET_EPOCH,updatedAt:0}}
 function hydrate(o){const d=defState();S=Object.assign(d,o);S.settings=Object.assign(defState().settings,o.settings||{});S.settings.decks=Object.assign(defState().settings.decks,(o.settings||{}).decks||{});
  migrar(o.versaoDados||1);
- S.leituras=S.leituras||{};S.modi=S.modi||{};S.eventos=S.eventos||{};S.duvidas=S.duvidas||{};S.favs=S.favs||{};S.newsDone=S.newsDone||{};S.cards=S.cards||{};S.course=S.course||{};S.writing=S.writing||{};S.shadow=S.shadow||{};S.errs=S.errs||{};S.log=S.log||{};S.tests=S.tests||{};
+ S.leituras=S.leituras||{};S.modi=S.modi||{};S.eventos=S.eventos||{};S.duvidas=S.duvidas||{};S.exerc=S.exerc||{};S.favs=S.favs||{};S.newsDone=S.newsDone||{};S.cards=S.cards||{};S.course=S.course||{};S.writing=S.writing||{};S.shadow=S.shadow||{};S.errs=S.errs||{};S.log=S.log||{};S.tests=S.tests||{};
  if(o.resetEpoch!==RESET_EPOCH){S.cards={};S.daily={date:"",newDone:0,reviewed:0};S.streak={last:"",count:0};delete S.best;S.resetEpoch=RESET_EPOCH;return true}return false}
 function migrar(de){try{
  if(de<2){Object.values(S.errs||{}).forEach(e=>{if(e&&e.f==="Escreva a frase que você ouviu")e.f="Ouça a frase e diga o que ela significa"}); // v2: sem perguntas escritas
@@ -2935,9 +2957,9 @@ function tokenize(root){(root||document).querySelectorAll(".it").forEach(el=>{if
  nodes.forEach(n=>{if(!n.nodeValue.trim())return;const span=document.createElement("span");span.innerHTML=tokText(n.nodeValue);n.replaceWith(...span.childNodes)})})}
 
 /* ============================ ABAS ============================ */
-const VALID=["inicio","curso","news","preferiti","cartoes"];
+const VALID=["inicio","curso","news","exerc","preferiti","cartoes"];
 function showTab(name){if(!VALID.includes(name))name="inicio";cancelRange();closeInfoFull();stopLines();if(name!=="news"&&typeof READ!=="undefined"&&READ.state!=="idle")stopReading();$$("[data-view]").forEach(v=>v.hidden=v.dataset.view!==name);$$("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===name));
- try{localStorage.setItem(KEY+".tab",name)}catch(e){}window.scrollTo(0,0);if(name==="cartoes")renderFlash();if(name==="inicio")renderHome();if(name==="curso")renderCourse();if(name==="preferiti"){$("#ps-duv").hidden?renderFavs():renderDuvidas()}if(name==="news"){renderNews();if(!$("#ns-cal").hidden)renderCal();if(!$("#ns-let").hidden)renderLet();if(!$("#ns-modi").hidden)renderModi()}}
+ try{localStorage.setItem(KEY+".tab",name)}catch(e){}window.scrollTo(0,0);if(name==="cartoes")renderFlash();if(name==="inicio")renderHome();if(name==="curso")renderCourse();if(name==="exerc")renderExerc();if(name==="preferiti"){$("#ps-duv").hidden?renderFavs():renderDuvidas()}if(name==="news"){renderNews();if(!$("#ns-cal").hidden)renderCal();if(!$("#ns-let").hidden)renderLet();if(!$("#ns-modi").hidden)renderModi()}}
 $$("nav.tabs button").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
 document.addEventListener("click",e=>{const g=e.target.closest("[data-goto]");if(g){showTab(g.dataset.goto);if(g.dataset.topic)openTopic(g.dataset.topic,g.dataset.part||"voc");if(g.dataset.let){setNS("let");g.dataset.let==="index"?closeLet():openLet(g.dataset.let)}}});
 
@@ -5340,9 +5362,20 @@ function loadVoices(){if(!canSpeak)return;try{const all=speechSynthesis.getVoice
 if(canSpeak){loadVoices();try{speechSynthesis.addEventListener("voiceschanged",loadVoices)}catch(e){try{speechSynthesis.onvoiceschanged=loadVoices}catch(e2){}}}
 function bestVoice(){if(!IT_VOICES.length)loadVoices();return IT_VOICES.find(v=>!BAD_VOICES.has(v.name))||null}
 const SAY={u:null,tok:0,lastCancel:0};
+const IS_IOS=/iPhone|iPad|iPod/.test(navigator.userAgent||"")||(/Macintosh/.test(navigator.userAgent||"")&&navigator.maxTouchPoints>1);
+// iPhone: a voz do navegador segue a chave do silencioso. Pedir a sessão de áudio de "reprodução" (iOS 17+) e tocar um
+// som mudo dentro do toque faz o iPhone tratar o app como player de mídia, e a voz passa a sair mesmo no silencioso.
+try{if(navigator.audioSession)navigator.audioSession.type="playback"}catch(e){}
+let SILENT=null;
+function silentWav(){const n=1600,b=new Uint8Array(44+n),v=new DataView(b.buffer),w=(o,s)=>{for(let i=0;i<s.length;i++)b[o+i]=s.charCodeAt(i)};
+ w(0,"RIFF");v.setUint32(4,36+n,true);w(8,"WAVEfmt ");v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,8000,true);v.setUint32(28,8000,true);v.setUint16(32,1,true);v.setUint16(34,8,true);w(36,"data");v.setUint32(40,n,true);b.fill(128,44);
+ return URL.createObjectURL(new Blob([b],{type:"audio/wav"}))}
+function iosKick(){if(!IS_IOS)return;try{if(navigator.audioSession&&navigator.audioSession.type!=="playback")navigator.audioSession.type="playback"}catch(e){}
+ try{if(!SILENT){SILENT=new Audio(silentWav());SILENT.setAttribute("playsinline","");SILENT.preload="auto"}SILENT.currentTime=0;const p=SILENT.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}}
+if(IS_IOS)document.addEventListener("touchend",function first(){iosKick();document.removeEventListener("touchend",first,true)},true);
 function sayCancel(){try{speechSynthesis.cancel()}catch(e){}SAY.lastCancel=Date.now()}
 // fala um texto; o: {rate, onstart, onend, onerror(código)}
-function sayIt(text,o){o=o||{};if(!canSpeak){o.onerror&&o.onerror("unsupported");return}const tok=++SAY.tok;let busy=false;
+function sayIt(text,o){o=o||{};if(!canSpeak){o.onerror&&o.onerror("unsupported");return}const tok=++SAY.tok;let busy=false;iosKick();
  try{busy=speechSynthesis.speaking||speechSynthesis.pending}catch(e){}if(busy)sayCancel();
  const go=(useVoice,retry)=>{if(tok!==SAY.tok)return;let started=false,done=false;
   try{if(speechSynthesis.paused)speechSynthesis.resume()}catch(e){}
@@ -5355,8 +5388,8 @@ function sayIt(text,o){o=o||{};if(!canSpeak){o.onerror&&o.onerror("unsupported")
   try{speechSynthesis.speak(u)}catch(e){if(o.onerror)o.onerror("erro");return}
   // alguns Androids não começam nem avisam erro: se nada aconteceu, tenta mais uma vez com a voz padrão
   setTimeout(()=>{if(tok!==SAY.tok||started||done)return;let sp=false;try{sp=speechSynthesis.speaking}catch(e){}if(sp)return;
-   if(!retry){if(v)BAD_VOICES.add(v.name);sayCancel();setTimeout(()=>go(false,true),150)}else if(o.onerror)o.onerror("silencio")},2500)};
- const wait=150-(Date.now()-SAY.lastCancel); // espera um instante depois de qualquer cancelamento recente
+   if(!retry){if(v)BAD_VOICES.add(v.name);sayCancel();setTimeout(()=>go(false,true),IS_IOS?0:150)}else if(o.onerror)o.onerror("silencio")},2500)};
+ const wait=IS_IOS?0:150-(Date.now()-SAY.lastCancel); // espera um instante depois de um cancelamento recente (problema do Android; no iPhone a fala precisa sair já, dentro do toque)
  wait>0?setTimeout(()=>go(true,false),wait):go(true,false)}
 function sayStop(){SAY.tok++;try{if(canSpeak&&(speechSynthesis.speaking||speechSynthesis.pending))sayCancel()}catch(e){}}
 
@@ -5364,7 +5397,7 @@ function sayStop(){SAY.tok++;try{if(canSpeak&&(speechSynthesis.speaking||speechS
 const AUD={msg:""};
 function audioPlatform(){const ua=navigator.userAgent||"";return/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)?"ios":/Android/.test(ua)?"android":"outro"}
 function audioHelp(){const p=audioPlatform();
- return p==="ios"?"No iPhone: desligue o modo silencioso (chave na lateral) e aumente o volume. Para uma voz melhor: Ajustes › Acessibilidade › Conteúdo Falado › Vozes › Italiano."
+ return p==="ios"?"No iPhone: 1) desligue o modo silencioso (chave na lateral, sem a faixa laranja); 2) aumente o volume com os botões laterais enquanto o teste fala; 3) confira se o Bluetooth não está mandando o som para um fone; 4) em Ajustes › Acessibilidade › Conteúdo Falado › Vozes › Italiano, baixe uma voz (por exemplo, Alice)."
   :p==="android"?"No Android: aumente o volume de mídia. Se não houver voz italiana: Configurações › Sistema › Idiomas › Saída de texto para fala › motor do Google › Instalar dados de voz › Italiano."
   :"No computador: confira o volume e se o navegador não está sem som. Vozes italianas podem ser instaladas nas configurações de voz do sistema."}
 function renderAudioCard(){const el=$("#homeAudio");if(!el)return;
@@ -5375,7 +5408,7 @@ function renderAudioCard(){const el=$("#homeAudio");if(!el)return;
  <div class="row"><button class="btn" id="audTest">Testar áudio</button></div><p class="small" id="audMsg" role="status">${esc(AUD.msg)}</p>
  <details class="exs"><summary><span class="small">Não sai som?</span></summary><p class="small" style="padding:0 14px 12px">${esc(audioHelp())}</p></details>`;
  $("#audTest").onclick=()=>{const m=$("#audMsg");audioPause();AUD.msg="Preparando…";m.textContent=AUD.msg;
-  sayIt("Ciao! Sono la Nonna. Mi senti bene?",{rate:1,onstart:vv=>{AUD.msg="Falando"+(vv?" com a voz "+vv.name:" com a voz padrão do aparelho")+"… Você está ouvindo?";const x=$("#audMsg");if(x)x.textContent=AUD.msg},
+  sayIt("Ciao! Sono la Nonna. Mi senti bene?",{rate:1,onstart:vv=>{AUD.msg="Falando"+(vv?" com a voz "+vv.name:" com a voz padrão do aparelho")+"… Se não ouvir nada, o problema é de volume ou do modo silencioso.";const x=$("#audMsg");if(x)x.textContent=AUD.msg},
    onend:()=>{AUD.msg="Terminou. Se não ouviu nada, veja “Não sai som?” abaixo.";const x=$("#audMsg");if(x)x.textContent=AUD.msg},
    onerror:c=>{AUD.msg=c==="silencio"?"O aparelho não começou a falar. Veja “Não sai som?” abaixo.":c==="not-allowed"?"O navegador bloqueou o som. Toque de novo em Testar áudio.":"O aparelho não conseguiu falar (erro: "+c+"). Veja “Não sai som?” abaixo.";const x=$("#audMsg");if(x)x.textContent=AUD.msg}})}}
 
@@ -5442,7 +5475,7 @@ function renderNews(){const box=$("#newsBox"),n=NEWS.cur;NEWS.rendered=n;
   <h2 class="ntitle">${tok(n.title||"",-1)}</h2>
   ${n.titlePt?`<p class="ptpara" hidden>${esc(n.titlePt)}</p>`:""}
   <div class="row">${canSpeak?`<button class="btn" id="readAll"></button><button class="btn ghost" id="readStop" hidden><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>Parar</button>`:""}<button class="btn ghost" id="togglePt" aria-pressed="false">Mostrar tradução</button>${!isLatest&&NEWS.latest?`<button class="btn ghost" id="toLatest">Ir para a mais recente</button>`:""}</div>
-  <p class="hint">Toque numa palavra para ouvir a pronúncia e ver significado, sinônimos e exemplo. A estrela salva a palavra em Preferiti; “Marcar um trecho” salva uma frase.</p>
+  <p class="hint">Toque numa palavra para ouvir a pronúncia e ver significado, sinônimos e exemplo. A estrela salva a palavra em Preferiti. Para uma expressão, segure uma palavra e arraste.</p>
   ${paras}
   ${srcs?`<p class="src">Texto adaptado para o nível ${esc(n.level||"A2")} a partir de: ${srcs}</p>`:""}
  </article>`;
@@ -5535,7 +5568,7 @@ async function initCloud(){try{let real={};try{const r=await fetch("news/index.j
 window.addEventListener("online",()=>{if(NEWS.state!=="ok")initCloud()});
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&NEWS.latest&&NEWS.latest.date!==today())initCloud()});
 function rerenderAll(){rollDay();syncFavCards();syncErrCards();syncSentCards();SESSION=null;renderDecks();renderBoxes();renderHome();renderNewsAll();if(!$("#v-curso").hidden&&!CUR)renderCourse();
- if(!$("#v-cartoes").hidden)renderFlash();if(!$("#v-news").hidden){renderNews();if(!$("#ns-let").hidden)renderLet();if(!$("#ns-modi").hidden)renderModi()}if(!$("#v-preferiti").hidden){$("#ps-duv").hidden?renderFavs():renderDuvidas()}}
+ if(!$("#v-cartoes").hidden)renderFlash();if(!$("#v-news").hidden){renderNews();if(!$("#ns-let").hidden)renderLet();if(!$("#ns-modi").hidden)renderModi()}if(!$("#v-preferiti").hidden){$("#ps-duv").hidden?renderFavs():renderDuvidas()}if(!$("#v-exerc").hidden)renderExerc()}
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&syncDirty){clearTimeout(syncT);flushSync()}});
 
 /* ============================ PREFERITI (palavras e frases salvas) ============================ */
@@ -5563,11 +5596,11 @@ function finishRange(btn){const R=RANGE;if(!R||!document.contains(R.start)){canc
  if(!R.block.contains(btn)){rangeBar("Toque numa palavra do mesmo parágrafo.");return true}
  const ws=[...R.block.querySelectorAll("button.w")],i=ws.indexOf(R.start),j=ws.indexOf(btn);
  if(i===j){cancelRange();return false}
- const a=Math.min(i,j),b=Math.max(i,j),r=document.createRange();r.setStartBefore(ws[a]);r.setEndAfter(ws[b]);
+ cancelRange();openPhrase(ws,i,j,R.block);return true}
+function openPhrase(ws,i,j,block){const a=Math.min(i,j),b=Math.max(i,j),r=document.createRange();r.setStartBefore(ws[a]);r.setEndAfter(ws[b]);
  const text=r.toString().replace(/\s+/g," ").trim(),words=ws.slice(a,b+1);
- cancelRange();words.forEach(x=>x.classList.add("rsel"));
- SH={mode:"phrase",k:text.toLowerCase(),surface:text,words,sentence:((ws[a].closest(".it")||R.block).textContent||"").replace(/\s+/g," ").trim(),btn:ws[a],entry:null,src:"phrase"};
- renderSheet();showSheet(true);words.forEach(x=>x.classList.add("rsel"));speak(text);return true}
+ SH={mode:"phrase",k:text.toLowerCase(),surface:text,words,sentence:((ws[a].closest(".it")||block).textContent||"").replace(/\s+/g," ").trim(),btn:ws[a],entry:null,src:"phrase"};
+ renderSheet();showSheet(true);words.forEach(x=>x.classList.add("rsel"));speak(text)}
 function phraseGloss(){return SH.words.map(b=>{const k=b.dataset.w,lg=b.closest("#letBox")?letGloss(k):null,g=lg?{meaning:lg.pt}:b.closest("#newsBox")?gloss(k):null,e=g||lookupLocal(k,b.textContent.toLowerCase());
  return{w:b.textContent,m:e&&e.meaning?String(e.meaning).split(/[;,]/)[0].trim():""}})}
 function renderPhrase(){const fav=S.favs[SH.k],gl=phraseGloss(),star=$("#shFav");
@@ -5621,6 +5654,34 @@ function renderPrefList(all){const box=$("#prefList");if(!box)return;const q=nor
 function renderHomePref(){const el=$("#homePref");if(!el)return;const all=prefItems(),dueN=all.filter(x=>prefDue(x.id)).length;
  el.innerHTML=`<span class="label">Preferiti · ${all.length} ${all.length===1?"salvo":"salvos"}</span><p class="small muted">${all.length?"Palavras e frases que você guardou com a estrela.":"Toque numa palavra italiana e na estrela para guardar aqui."}</p><div class="row">${dueN?`<button class="btn" id="homePrefGo">Revisar hoje (${dueN})</button>`:`<button class="btn" data-goto="preferiti">Abrir Preferiti</button>`}</div>`;
  if($("#homePrefGo"))$("#homePrefGo").onclick=prefReview}
+
+/* ---------- segurar uma palavra e arrastar para marcar uma expressão ---------- */
+// Toque: segure a palavra (~0,35 s) até ela ficar amarela e arraste até a última palavra; ao soltar, abre o painel da expressão.
+// Mouse: clique numa palavra e arraste até outra. Arrastar sem segurar antes continua rolando a tela normalmente.
+const DRAG={st:null,suppress:0};
+function wordAt(x,y){const el=document.elementFromPoint(x,y);return el&&el.closest?el.closest("button.w"):null}
+function dragMark(w){const d=DRAG.st;if(!w||!d.block.contains(w))return;const ws=[...d.block.querySelectorAll("button.w")],i=ws.indexOf(d.start),j=ws.indexOf(w);if(j<0)return;
+ d.end=w;clearRangeMarks();ws.slice(Math.min(i,j),Math.max(i,j)+1).forEach(x=>x.classList.add("rsel"));
+ const n=Math.abs(j-i)+1;rangeBar(n>1?`${n} palavras marcadas. Solte para abrir.`:"Arraste até a última palavra e solte.")}
+function dragBegin(b,x,y,type){if(!b||b.closest("#sheet")||!canRange(b))return;DRAG.st={start:b,end:b,block:rangeBlock(b),x,y,type,active:false}}
+function dragActivate(){const d=DRAG.st;if(!d||d.active)return;d.active=true;cancelRange();document.body.classList.add("dragsel");d.start.classList.add("rsel");try{navigator.vibrate&&navigator.vibrate(12)}catch(e){}rangeBar("Arraste até a última palavra e solte.")}
+function dragEnd(){const d=DRAG.st;DRAG.st=null;if(!d)return;clearTimeout(d.timer);if(!d.active)return;document.body.classList.remove("dragsel");
+ const el=$("#rangeBar");if(el)el.hidden=true;DRAG.suppress=Date.now()+600;
+ const ws=[...d.block.querySelectorAll("button.w")],i=ws.indexOf(d.start),j=ws.indexOf(d.end);clearRangeMarks();
+ if(i<0||j<0)return;if(i===j){openWord(d.start);return}openPhrase(ws,i,j,d.block)}
+function dragCancel(){const d=DRAG.st;DRAG.st=null;if(!d)return;clearTimeout(d.timer);if(d.active){document.body.classList.remove("dragsel");clearRangeMarks();const el=$("#rangeBar");if(el)el.hidden=true}}
+document.addEventListener("touchstart",e=>{if(e.touches.length!==1){dragCancel();return}const b=e.target.closest&&e.target.closest("button.w");if(!b)return;const t=e.touches[0];dragBegin(b,t.clientX,t.clientY,"touch");if(DRAG.st)DRAG.st.timer=setTimeout(dragActivate,350)},{passive:true});
+document.addEventListener("touchmove",e=>{const d=DRAG.st;if(!d||d.type!=="touch")return;const t=e.touches[0];
+ if(!d.active){if(Math.hypot(t.clientX-d.x,t.clientY-d.y)>10)dragCancel();return}
+ e.preventDefault();dragMark(wordAt(t.clientX,t.clientY))},{passive:false});
+document.addEventListener("touchend",e=>{const d=DRAG.st;if(!d||d.type!=="touch")return;if(d.active)e.preventDefault();dragEnd()},{passive:false});
+document.addEventListener("touchcancel",dragCancel);
+document.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse"||e.button!==0)return;const b=e.target.closest&&e.target.closest("button.w");if(b)dragBegin(b,e.clientX,e.clientY,"mouse")});
+document.addEventListener("pointermove",e=>{const d=DRAG.st;if(!d||d.type!=="mouse")return;if(!(e.buttons&1)){dragCancel();return}const w=wordAt(e.clientX,e.clientY);
+ if(!d.active){if(w&&w!==d.start&&d.block.contains(w))dragActivate();else return}dragMark(w)});
+document.addEventListener("pointerup",e=>{const d=DRAG.st;if(!d||d.type!=="mouse")return;dragEnd()});
+document.addEventListener("contextmenu",e=>{if(e.target.closest&&e.target.closest("button.w"))e.preventDefault()});
+window.addEventListener("click",e=>{if(Date.now()<DRAG.suppress&&e.target.closest&&e.target.closest("button.w")){e.preventDefault();e.stopPropagation()}},true);
 
 /* ============================ LETTURE: textos graduados (conteúdo original) ============================ */
 // Formato compacto de cada texto:
@@ -6018,7 +6079,7 @@ function renderLetText(){const t=LT.cur,box=$("#letBox"),i=LETTURE.indexOf(t),pr
  ${vers.length>1?`<div class="seg" id="letVer" role="tablist" aria-label="Versão do texto">${vers.map(v=>`<button role="tab" data-lver="${v[0]}" class="${ver===v[0]?"on":""}" aria-selected="${ver===v[0]}">${v[1]}</button>`).join("")}</div>`:""}
  <div id="letPlayer">${audioHTML()}</div>
  <article class="card stack lettext">${paras.map(p=>`<p class="letp">${splitSents(p).map(s=>`<span class="it lsent">${esc(s)}</span>`).join(" ")}</p>`).join("")}</article>
- <p class="hint">Toque numa palavra para ver a tradução e salvar em Preferiti. Para salvar uma frase, use “Marcar um trecho” no painel da palavra.</p>
+ <p class="hint">Toque numa palavra para ver a tradução e salvar em Preferiti. Para uma expressão, segure a primeira palavra e arraste até a última.</p>
  <div class="stack" style="gap:12px"><h3>Note linguistiche</h3>
   <details class="exs" open><summary><span class="label">Vocabulário</span><span class="exn">${N.vocabulario.length}</span></summary><div class="exlist">${N.vocabulario.map(v=>`<div class="exrow"><div><i class="it">${esc(v.it)}</i><span>${esc(v.pt)}</span></div>${spkBtn(v.it)}</div>`).join("")}</div></details>
   <details class="exs"><summary><span class="label">Gramática</span><span class="exn">${N.gramatica.length}</span></summary><div class="exlist">${N.gramatica.map(g=>`<div class="letnote"><b>${esc(g.titulo)}</b><p class="it">${esc(g.trecho)}</p><p class="small">${esc(g.explicacao)}</p><div class="formbox"><span class="label">Regra</span><div class="f">${esc(g.regra)}</div></div><div class="exi"><div><i class="it">${esc(g.exemplo)}</i></div>${spkBtn(g.exemplo)}</div></div>`).join("")}</div></details>
@@ -6154,7 +6215,7 @@ function renderModiQuiz(){const u=MD.cur,box=$("#modiQuiz");if(!u||!box)return;c
 // tipos: "leitura" (texto concluído com 3/3), "unidade" (tópico do curso ou unidade de modi di dire concluída),
 //        "revisao" (cartão revisado; um por cartão por dia), "favorito" (item salvo em Preferiti).
 // Revisões com mais de 60 dias viram uma entrada só por dia: ["revisao", "", quantidade].
-const EV_TIPOS=["leitura","unidade","revisao","favorito"];
+const EV_TIPOS=["leitura","unidade","revisao","favorito","exercicio"];
 function logEvento(tipo,id){try{if(!EV_TIPOS.includes(tipo))return;S.eventos=S.eventos||{};const t=today(),d=S.eventos[t]=S.eventos[t]||[];id=String(id||"");
  if((tipo==="revisao"||tipo==="favorito")&&d.some(e=>e[0]===tipo&&e[1]===id))return;d.push([tipo,id]);evCompact()}catch(e){}}
 function evCompact(){const lim=addDays(-60);Object.keys(S.eventos).forEach(day=>{if(day>=lim)return;const d=S.eventos[day];if(!d.some(e=>e[0]==="revisao"&&e[1]!==""))return;
@@ -6445,11 +6506,380 @@ function closeInfoFull(){const ov=$("#infoOv");if(!ov||ov.hidden)return;audioSto
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#infoOv")&&!$("#infoOv").hidden&&$("#sheet").hidden)closeInfoFull()});
 function renderInfoTopic(t,body){const x=INFO_TOP[t.id];if(!x)return;const w=document.createElement("div");w.innerHTML=infoHTML(x);const el=w.firstElementChild;body.prepend(el);infoBind(el,x)}
 
+/* ============================ BANCO DE EXERCÍCIOS (conteúdo original, tudo de marcar) ============================ */
+// Formato compacto de cada questão:
+//  ["comp", frase com ___, [certa, errada, errada, errada], explicação]   → complete a frase (em italiano)
+//  ["mc",   pergunta em português, [certa, ...], explicação]              → escolha (palavras em «» ficam tocáveis)
+//  ["frase", pergunta, [frase certa, ...], explicação]                    → qual frase está correta
+//  ["it",   pergunta em italiano sobre o texto, [certa, ...], explicação]
+//  ["vf",   afirmação em português, true|false, explicação]               → verdadeiro ou falso
+// A primeira opção é sempre a certa; o app embaralha na hora de mostrar. Validar com node tools/check_exercicios.js
+const EXB_SRC={
+A1:{
+gram:[
+["comp","Io ___ ingegnere.",["sono","ho","è","sei"],"Para profissão e identidade usa-se essere: io sono."],
+["comp","Marco ___ trent'anni.",["ha","è","hai","sono"],"A idade se diz com avere: Marco ha trent'anni."],
+["comp","Noi ___ di Curitiba.",["siamo","sono","siete","abbiamo"],"Essere na 1ª pessoa do plural: noi siamo."],
+["comp","Voi ___ fame?",["avete","siete","hanno","abbiamo"],"Fome também se “tem”: voi avete fame."],
+["comp","___ studente si chiama Paolo.",["Lo","Il","La","L'"],"Antes de s + consoante, o artigo masculino é lo."],
+["comp","___ ufficio è al secondo piano.",["L'","Il","Lo","La"],"Antes de vogal, o artigo singular vira l'."],
+["comp","Ho ___ zaino nuovo.",["uno","un","una","un'"],"Antes de z (e de s + consoante), o artigo indefinido masculino é uno."],
+["comp","Giulia è ___ amica di Paola.",["un'","una","un","uno"],"Feminino antes de vogal: un' (com apóstrofo)."],
+["mc","Qual é o plural de «il libro»?",["i libri","gli libri","le libre","i libro"],"Masculino em -o faz o plural em -i, com o artigo i."],
+["mc","Qual é o plural de «lo studente»?",["gli studenti","i studenti","lo studenti","le studente"],"O plural de lo é gli; -e vira -i."],
+["mc","Qual é o plural de «la casa»?",["le case","la case","le casi","i case"],"Feminino em -a faz o plural em -e, com o artigo le."],
+["comp","Le ragazze sono molto ___. (simpatico)",["simpatiche","simpatici","simpatica","simpatico"],"Feminino plural: -che (o h mantém o som de “k”)."],
+["comp","I colleghi sono ___. (gentile)",["gentili","gentile","gentila","gentilo"],"Adjetivos em -e fazem o plural em -i, para os dois gêneros."],
+["comp","Io ___ in ufficio alle nove. (arrivare)",["arrivo","arriva","arrivi","arriviamo"],"Verbos em -are, 1ª pessoa: io arrivo."],
+["comp","Tu ___ italiano? (parlare)",["parli","parla","parlo","parlate"],"2ª pessoa do singular termina em -i: tu parli."],
+["comp","Loro ___ la televisione. (guardare)",["guardano","guardono","guardate","guarda"],"Verbos em -are, loro: -ano."],
+["comp","Noi ___ un caffè. (prendere)",["prendiamo","prendemo","prendete","prendono"],"Na 1ª pessoa do plural, todos os verbos terminam em -iamo."],
+["comp","Il treno ___ alle otto. (partire)",["parte","parta","parti","partono"],"Verbos em -ire, lui/lei: -e."],
+["comp","Il sabato io ___ la spesa. (fare)",["faccio","fo","fa","fai"],"Fare é irregular: io faccio."],
+["comp","Tu ___ al cinema stasera? (andare)",["vai","vado","va","andi"],"Andare é irregular: tu vai."],
+["comp","Loro ___ da Milano. (venire)",["vengono","venono","vienono","vengano"],"Venire é irregular: loro vengono."],
+["comp","Ciao, come ___? (stare)",["stai","sta","sto","state"],"Com tu: come stai? Com Lei: come sta?"],
+["comp","Oggi io ___ finire il rapporto. (dovere)",["devo","deve","devi","dobbiamo"],"Dovere + infinitivo: io devo finire."],
+["comp","___ aprire la finestra? (potere, io)",["Posso","Può","Puoi","Possiamo"],"Para pedir licença: posso + infinitivo."],
+["comp","In ufficio ___ quattro scrivanie.",["ci sono","c'è","è","sono"],"Com plural, “há” se diz ci sono."],
+["comp","Nel frigo ___ una bottiglia d'acqua.",["c'è","ci sono","ci ha","è"],"Com singular, “há” se diz c'è."],
+["comp","Abito ___ Bologna.",["a","in","di","da"],"Com cidade usa-se a: abito a Bologna."],
+["comp","A maggio vado ___ Italia.",["in","a","di","per"],"Com país usa-se in: vado in Italia."],
+["comp","Il libro è ___ tavolo. (su + il)",["sul","sullo","sulla","su il"],"Su + il forma sul."],
+["comp","Esco ___ ufficio alle sei. (da + l')",["dall'","dal","dallo","dalla"],"Da + l' forma dall'."],
+["comp","Questa è ___ sorella. (minha)",["mia","la mia","mio","la mio"],"Com parente no singular, o possessivo vem sem artigo: mia sorella."],
+["comp","___ genitori abitano a Roma. (meus)",["I miei","Miei","Le mie","I mio"],"No plural, o artigo volta: i miei genitori."],
+["comp","Mi ___ la pizza.",["piace","piacciono","piaci","piaccio"],"Piacere concorda com o que agrada: la pizza (singular) → piace."],
+["comp","Ti ___ i film italiani?",["piacciono","piace","piacete","piaccio"],"I film (plural) → piacciono."],
+["comp","La mattina io mi ___ alle sette. (svegliarsi)",["sveglio","sveglia","svegli","svegliamo"],"Reflexivo: io mi sveglio."],
+["frase","Qual frase está correta?",["Non parlo tedesco.","Parlo non tedesco.","No parlo tedesco.","Non parlo no tedesco."],"A negação é non, sempre antes do verbo."],
+["comp","___ abiti? — A Curitiba.",["Dove","Come","Quando","Chi"],"Para perguntar o lugar: dove."],
+["comp","___ costa il biglietto?",["Quanto","Quale","Chi","Come"],"Para perguntar o preço: quanto costa?"],
+["mc","Como se diz 14h30 em italiano?",["le due e mezza","le due meno mezza","la due e mezza","le tre e mezza"],"As horas são femininas no plural: le due; “e meia” é e mezza."],
+["comp","___ libro è mio, quello è tuo.",["Questo","Quello","Questa","Quel"],"Para o que está perto: questo (masculino)."]],
+voc:[
+["mc","«la scrivania» é:",["a mesa de trabalho","a escrita","a cadeira","a estante"],"La scrivania é a mesa do escritório."],
+["mc","Como se diz “reunião”?",["la riunione","la reunione","la riuscita","la raccolta"],"Reunião é la riunione."],
+["mc","«il collega» é:",["o colega de trabalho","o colégio","a cola","o chefe"],"Il collega / la collega: colega de trabalho."],
+["mc","Qual é o contrário de «aperto»?",["chiuso","largo","pieno","alto"],"Aperto (aberto) × chiuso (fechado)."],
+["mc","«il fratello» é:",["o irmão","o pai","o primo","o tio"],"Fratello é irmão; sorella é irmã."],
+["mc","«la nonna» é:",["a avó","a mãe","a tia","a neta"],"Nonna é avó; nonno é avô."],
+["mc","Como se diz “segunda-feira”?",["lunedì","domenica","martedì","sabato"],"Lunedì é segunda; os dias da semana são escritos com minúscula."],
+["mc","«dicembre» é:",["dezembro","dezessete","dez","domingo"],"Dicembre é dezembro."],
+["mc","«il formaggio» é:",["o queijo","a forma","o forno","o fermento"],"Formaggio é queijo."],
+["mc","Qual destes é uma bebida?",["il succo","il pane","il prosciutto","il riso"],"Il succo (suco) é bebida; pane é pão, prosciutto é presunto, riso é arroz."],
+["mc","«la cucina» é:",["a cozinha","o quarto","o banheiro","a sala"],"Cucina é a cozinha (e também a culinária)."],
+["mc","Numa casa, «il bagno» é:",["o banheiro","o quarto","o quintal","o corredor"],"Il bagno é o banheiro; fare il bagno é tomar banho."],
+["mc","Qual palavra é um meio de transporte?",["il treno","il tetto","il tavolo","il tempo"],"Il treno é o trem; tetto é telhado."],
+["mc","«la fermata» é:",["o ponto de ônibus","a fermentação","o fechamento","a farmácia"],"La fermata: parada de ônibus ou bonde."],
+["mc","«sinistra» significa:",["esquerda","direita","sinistro","reto"],"A sinistra: à esquerda; a destra: à direita."],
+["mc","Como se diz “siga reto”?",["vada dritto","vada a destra","vada dietro","vada sotto"],"Dritto é reto, em frente."],
+["mc","«rosso» é a cor:",["vermelho","rosa","roxo","laranja"],"Rosso é vermelho; rosa é rosa."],
+["mc","«giallo» é:",["amarelo","verde","cinza","azul"],"Giallo é amarelo."],
+["mc","Qual é o contrário de «grande»?",["piccolo","alto","lungo","vecchio"],"Grande × piccolo."],
+["mc","«stanco» significa:",["cansado","estranho","triste","forte"],"Stanco é cansado."],
+["mc","«l'avvocato» é:",["o advogado","o abacate","o aviador","o vereador"],"Avvocato é advogado; abacate é avocado."],
+["mc","Quem trabalha num hospital cuidando dos doentes?",["l'infermiere","l'ingegnere","il commesso","il cuoco"],"Infermiere é o enfermeiro."],
+["mc","Como se diz “cedo”?",["presto","tardi","sempre","spesso"],"Presto é cedo (e também logo); tardi é tarde."],
+["mc","«Vado spesso al cinema»: «spesso» significa:",["com frequência","raramente","às vezes","nunca"],"Como advérbio, spesso = com frequência. Como adjetivo, quer dizer grosso (un muro spesso)."],
+["mc","Qual é o contrário de «sempre»?",["mai","spesso","ancora","già"],"Sempre × mai (nunca)."],
+["mc","«la colazione» é:",["o café da manhã","o lanche da tarde","o almoço","o jantar"],"Colazione é o café da manhã."],
+["mc","«la cena» é:",["o jantar","a cena de teatro","o almoço","o café da manhã"],"Cena é o jantar; a cena de teatro é la scena."],
+["mc","Qual destas palavras é uma fruta?",["la mela","la carota","la cipolla","la patata"],"La mela é a maçã."],
+["mc","No restaurante, «il conto» é:",["a conta","o conto","o troco","o cardápio"],"Il conto é a conta; il resto é o troco."],
+["mc","Como se pede a conta?",["Il conto, per favore.","La conta, per favore.","Il resto, per favore.","Il menù, per favore."],"Il conto, per favore."],
+["mc","Ao conhecer alguém, «Piacere!» significa:",["Muito prazer!","Por favor!","De nada!","Com licença!"],"Piacere! = muito prazer."],
+["mc","«Prego», em resposta a «Grazie», significa:",["De nada","Por favor","Eu rezo","Obrigado"],"Prego responde a grazie: de nada."],
+["mc","«Come stai?» significa:",["Como você está?","Onde você está?","Como você se chama?","De onde você é?"],"Come stai? = como vai você?"],
+["mc","«l'orologio» é:",["o relógio","o horóscopo","a orelha","o ouro"],"Orologio é relógio."],
+["mc","«la settimana» é:",["a semana","setembro","o sétimo dia","a sétima vez"],"Settimana é semana; setembro é settembre."],
+["mc","«il giorno libero» é:",["o dia de folga","o livro do dia","o dia útil","o dia seguinte"],"Giorno libero: dia de folga."],
+["mc","«affittare una casa» significa:",["alugar uma casa","afetar uma casa","vender uma casa","consertar uma casa"],"Affittare é alugar; l'affitto é o aluguel."],
+["mc","Num prédio, «il piano» é:",["o andar","o plano","o porteiro","a escada"],"Primo piano: primeiro andar; piano terra: térreo."],
+["mc","Qual é o contrário de «caldo»?",["freddo","calmo","caro","secco"],"Caldo (quente) × freddo (frio)."],
+["mc","«caldo» significa:",["quente","caldo de sopa","frio","molhado"],"Falso amigo: caldo é quente; o caldo de sopa é il brodo."]]},
+A2:{
+gram:[
+["comp","Ieri io ___ mangiato la pizza.",["ho","sono","è","hai"],"Mangiare forma o passato prossimo com avere: ho mangiato."],
+["comp","Giulia ___ arrivata in ritardo.",["è","ha","sono","hai"],"Arrivare usa essere, e o particípio concorda: è arrivata."],
+["comp","I ragazzi sono ___ al mare. (andare)",["andati","andato","andate","andata"],"Com essere, o particípio concorda: masculino plural -i."],
+["comp","Le colleghe sono ___ alle sei. (uscire)",["uscite","usciti","uscita","uscito"],"Feminino plural com essere: -e."],
+["mc","Qual é o particípio de «fare»?",["fatto","facciato","fato","faciuto"],"Fare → fatto (irregular)."],
+["mc","Qual é o particípio de «scrivere»?",["scritto","scrivuto","scriviuto","scrito"],"Scrivere → scritto (irregular)."],
+["mc","Qual é o particípio de «prendere»?",["preso","prenduto","presso","presto"],"Prendere → preso (irregular)."],
+["mc","Qual é o particípio de «vedere»?",["visto","vedito","visso","vidto"],"Vedere → visto (veduto também existe, mais raro)."],
+["comp","Da bambino ___ a calcio ogni giorno. (giocare)",["giocavo","ho giocato","giocherò","giocassi"],"Hábito no passado: imperfetto."],
+["comp","Mentre ___ la cena, è suonato il telefono. (preparare, io)",["preparavo","ho preparato","preparerò","prepari"],"Ação em andamento interrompida por outra: imperfetto."],
+["comp","Domani ___ a Roma in treno. (andare, io)",["andrò","andavo","sono andato","andrei"],"Futuro de andare: andrò."],
+["comp","L'anno prossimo ___ una casa nuova. (comprare, noi)",["compreremo","compravamo","abbiamo comprato","compreremmo"],"Futuro, noi: compreremo (um só m)."],
+["comp","Forma educada: ___ un caffè, per favore. (volere)",["Vorrei","Vorrò","Volli","Vuoi"],"O condicional vorrei é a forma educada de pedir."],
+["comp","Al tuo posto, io ___ con il direttore. (parlare)",["parlerei","parlerò","parlavo","parlassi"],"Conselho hipotético: condizionale, parlerei."],
+["comp","___ aiutarmi, per favore? (potere, Lei)",["Potrebbe","Potrei","Potresti","Possono"],"Pedido formal com Lei: potrebbe + infinitivo."],
+["comp","Il libro? ___ leggo stasera.",["Lo","La","Li","Gli"],"Il libro é masculino singular: lo."],
+["comp","Le chiavi? ___ ho dimenticate a casa.",["Le","Li","La","Gli"],"Le chiavi é feminino plural: le."],
+["comp","Vedi Marco domani? Sì, ___ vedo alle dieci.",["lo","gli","la","le"],"Vedere qualcuno: objeto direto, lo."],
+["comp","Telefono a Giulia: ___ telefono stasera.",["le","la","gli","lo"],"Telefonare a lei: objeto indireto feminino, le."],
+["comp","Scrivo ai clienti: ___ scrivo una mail.",["gli","li","ne","lo"],"Scrivere a loro: no italiano falado, gli."],
+["comp","Il documento? Te ___ mando subito.",["lo","la","li","gli"],"Te + lo = te lo (o documento, masculino)."],
+["comp","Quanti caffè bevi? ___ bevo tre al giorno.",["Ne","Li","Ci","Lo"],"Ne substitui uma quantidade: ne bevo tre."],
+["comp","Vai spesso a Roma? Sì, ___ vado ogni mese.",["ci","ne","lo","la"],"Ci substitui o lugar: ci vado."],
+["comp","Signora, ___ pure! (entrare)",["entri","entra","entrate","entrò"],"Imperativo formal (Lei) de verbos em -are: entri."],
+["comp","Marco, ___ la porta, per favore! (chiudere)",["chiudi","chiuda","chiude","chiudete"],"Imperativo com tu, verbos em -ere: chiudi."],
+["comp","Roma è ___ grande di Firenze.",["più","molto","così","tanto"],"Comparativo de superioridade: più … di."],
+["comp","Questo progetto è ___ difficile di tutti.",["il più","più","molto","tanto"],"Superlativo relativo: il più … di tutti."],
+["comp","Oggi mi sento ___ di ieri.",["meglio","migliore","più bene","più buono"],"Com o verbo sentirsi (advérbio): meglio."],
+["comp","Questo vino è ___ di quello.",["migliore","meglio","più bene","buonissimo"],"Comparativo do adjetivo buono: migliore."],
+["comp","La collega ___ lavora con me è spagnola.",["che","cui","chi","quale"],"Pronome relativo sujeito: che."],
+["comp","L'ufficio in ___ lavoro è in centro.",["cui","che","quale","dove"],"Depois de preposição, usa-se cui: in cui."],
+["comp","In Italia ___ mangia la pasta a pranzo.",["si","ci","se","ne"],"Si impessoal: si mangia = come-se."],
+["comp","Studio italiano ___ due anni.",["da","fa","tra","a"],"Ação que continua até hoje: presente + da."],
+["comp","Sono arrivato in Italia tre mesi ___.",["fa","da","tra","prima"],"Fa vem depois do tempo e indica “atrás”."],
+["comp","Il treno parte ___ dieci minuti.",["tra","fa","da","per"],"Tra (ou fra) indica “daqui a”."],
+["comp","Hai ___ finito il rapporto? — Sì, l'ho finito.",["già","mai","ancora","sempre"],"Già = já."],
+["comp","Non sono ___ stato a Venezia.",["mai","già","sempre","spesso"],"Non … mai = nunca."],
+["comp","Sto ___ un'email al cliente. (scrivere)",["scrivendo","scritto","scrivere","scrivo"],"Stare + gerúndio: sto scrivendo."],
+["frase","Qual frase está correta?",["Ho visto Giulia e l'ho salutata.","Ho visto Giulia e l'ho salutato.","Ho visto Giulia e la ho salutato.","Sono visto Giulia e l'ho salutata."],"Com lo / la antes de avere, o particípio concorda: l'ho salutata."],
+["comp","Se domani piove, ___ a casa. (restare, io)",["resterò","restavo","resterei","sono restato"],"Se + presente, futuro: se piove, resterò."]],
+voc:[
+["mc","«il cantiere» é:",["o canteiro de obras","o cantor","a cantina","o canto"],"Il cantiere é a obra, o canteiro."],
+["mc","«il sopralluogo» é:",["a vistoria no local","o sobrado","o almoço","o luto"],"Fare un sopralluogo: fazer uma vistoria."],
+["mc","«il preventivo» é:",["o orçamento, a cotação","o remédio preventivo","o prazo","o contrato"],"Chiedere un preventivo: pedir uma cotação."],
+["mc","«la scadenza» é:",["o prazo final","a escada","a cadência","o desconto"],"Scadenza é o prazo, o vencimento."],
+["mc","«il calcestruzzo» é:",["o concreto","o calcário","o cálculo","o calçado"],"Calcestruzzo é o concreto."],
+["mc","«l'acciaio» é:",["o aço","a ação","o açúcar","o acesso"],"Acciaio é o aço."],
+["mc","«la trave» é:",["a viga","a trava","a travessa","a parede"],"Trave é viga."],
+["mc","«il pilastro» é:",["o pilar","o pilão","a pilha","o piloto"],"Pilastro é o pilar."],
+["mc","«il capocantiere» é:",["o encarregado da obra","o dono da obra","o arquiteto","o cliente"],"Capocantiere: quem comanda a equipe na obra."],
+["mc","Num e-mail, «l'allegato» é:",["o anexo","o alegado","o assunto","o destinatário"],"In allegato: em anexo."],
+["mc","Num e-mail, «l'oggetto» é:",["o assunto","o objeto","o remetente","a assinatura"],"Oggetto: o assunto da mensagem."],
+["mc","«Cordiali saluti» equivale a:",["Atenciosamente","Bom dia","Com licença","Parabéns"],"Fórmula de fechamento de e-mail formal."],
+["mc","«fissare una riunione» significa:",["marcar uma reunião","fixar um cartaz","cancelar uma reunião","olhar fixamente"],"Fissare: marcar (uma data, um horário)."],
+["mc","«rimandare» significa:",["adiar","remar","devolver","remendar"],"Rimandare: adiar para outro dia."],
+["mc","«il verbale» de uma reunião é:",["a ata","o verbo","o vereador","o recibo"],"Il verbale: a ata."],
+["mc","«l'ordine del giorno» é:",["a pauta","a encomenda do dia","o pedido","o horário"],"Ordine del giorno: a pauta da reunião."],
+["mc","Falso amigo: «salire» significa:",["subir","sair","saltar","salgar"],"Salire = subir; sair é uscire."],
+["mc","«uscire» significa:",["sair","usar","ouvir","gritar"],"Uscire = sair."],
+["mc","«il burro» é:",["a manteiga","o burro","o borrão","o pão"],"Falso amigo: burro é manteiga; o burro é l'asino."],
+["mc","«squisito» significa:",["delicioso","esquisito","estranho","azedo"],"Falso amigo: squisito é delicioso."],
+["mc","«fermare» significa:",["parar","fermentar","fechar","ferver"],"Fermare = parar; la fermata = o ponto."],
+["mc","«guardare» significa:",["olhar","guardar","esperar","vigiar"],"Falso amigo: guardare = olhar; guardar é mettere via."],
+["mc","«la stazione» é:",["a estação de trem","a estação do ano","o estacionamento","a estátua"],"Stazione: estação de trem; a estação do ano é la stagione."],
+["mc","«il parcheggio» é:",["o estacionamento","o parque","o pedágio","a passagem"],"Parcheggio é o estacionamento."],
+["mc","«la prenotazione» é:",["a reserva","a nota","a prenda","o prêmio"],"Prenotare = reservar."],
+["mc","Na estação, «il binario» é:",["a plataforma do trem","o binóculo","o bilhete","o banco"],"Binario: a plataforma (os trilhos)."],
+["mc","«lo sciopero» é:",["a greve","o xarope","o sopro","o chope"],"Sciopero dei treni: greve dos trens."],
+["mc","«il rimborso» é:",["o reembolso","o rebordo","o rímel","o rumo"],"Chiedere il rimborso: pedir o reembolso."],
+["mc","«la febbre» é:",["a febre","a fibra","a fábrica","fevereiro"],"Avere la febbre: estar com febre."],
+["mc","«il mal di testa» é:",["a dor de cabeça","a testa machucada","a dor de estômago","a tontura"],"Testa é cabeça; a testa (do rosto) é la fronte."],
+["mc","Do médico, «la ricetta» é:",["a receita","a recepção","o recibo","a recaída"],"Ricetta: receita médica ou de cozinha."],
+["mc","«lo sconto» é:",["o desconto","o escândalo","a esquina","o escuro"],"Sconto: desconto."],
+["mc","Numa loja de roupas, «la taglia» é:",["o tamanho","a talha","o corte de cabelo","a etiqueta"],"Che taglia porta? Que tamanho você usa?"],
+["mc","«il camerino» é:",["o provador","a camareira","o quarto","a câmera"],"Camerino: o provador da loja (ou camarim)."],
+["mc","«felice» significa:",["feliz","felino","fiel","fértil"],"Felice = feliz."],
+["mc","«arrabbiato» significa:",["irritado","arranhado","apressado","aliviado"],"Arrabbiato = bravo, irritado."],
+["mc","«preoccupato» significa:",["preocupado","ocupado","preparado","prevenido"],"Preoccupato = preocupado."],
+["mc","«il comune» é:",["a prefeitura","o comércio","a comunidade","o condomínio"],"Il comune: a prefeitura, o município."],
+["mc","«l'azienda» é:",["a empresa","a fazenda","a agenda","a azeitona"],"Falso amigo: azienda é empresa."],
+["mc","«lo stipendio» é:",["o salário","o estágio","o expediente","a estabilidade"],"Stipendio: o salário mensal."]]}
+};
+// Interpretação de texto: 10 textos por nível, 4 perguntas cada
+const EXT_SRC={
+A1:[
+{titulo:"Un messaggio di Paola",texto:"Ciao Lucas! Oggi pranzo con Marco all'una e mezza al ristorante «Il Portico», vicino all'ufficio. Vieni anche tu? Il ristorante è piccolo, quindi prenoto un tavolo per tre. Rispondi entro mezzogiorno, per favore! Paola",
+ q:[["it","A che ora è il pranzo?",["All'una e mezza","A mezzogiorno","Alle tre","Alle due e mezza"],"«pranzo … all'una e mezza»."],
+  ["it","Dov'è il ristorante?",["Vicino all'ufficio","In centro","Vicino alla stazione","A casa di Paola"],"«al ristorante … vicino all'ufficio»."],
+  ["it","Perché Paola prenota un tavolo?",["Perché il ristorante è piccolo","Perché è il compleanno di Marco","Perché il ristorante è caro","Perché piove"],"«Il ristorante è piccolo, quindi prenoto un tavolo»."],
+  ["vf","Lucas deve responder até o meio-dia.",true,"«Rispondi entro mezzogiorno»."]]},
+{titulo:"La palestra",texto:"Palestra «Forma»: aperta dal lunedì al venerdì dalle 7 alle 22, il sabato dalle 9 alle 18. La domenica è chiusa. La prima lezione è gratis! Abbonamento mensile: 40 euro.",
+ q:[["it","Quando è chiusa la palestra?",["La domenica","Il sabato","Il lunedì","Mai"],"«La domenica è chiusa»."],
+  ["it","Quanto costa l'abbonamento di un mese?",["40 euro","22 euro","18 euro","Niente"],"«Abbonamento mensile: 40 euro»."],
+  ["vf","A primeira aula é grátis.",true,"«La prima lezione è gratis»."],
+  ["it","A che ora apre il sabato?",["Alle 9","Alle 7","Alle 18","Alle 22"],"«il sabato dalle 9 alle 18»."]]},
+{titulo:"La famiglia di Marco",texto:"Marco ha trentadue anni e lavora in una banca. È sposato con Elena, che fa la farmacista. Hanno una figlia, Sofia, che ha cinque anni e va all'asilo. Il fine settimana vanno spesso dai nonni, in campagna.",
+ q:[["it","Che lavoro fa Elena?",["La farmacista","La maestra","L'impiegata in banca","La cuoca"],"«Elena, che fa la farmacista»."],
+  ["it","Quanti anni ha Sofia?",["Cinque","Trentadue","Tre","Dieci"],"«Sofia, che ha cinque anni»."],
+  ["vf","Marco trabalha num banco.",true,"«lavora in una banca»."],
+  ["vf","No fim de semana eles ficam sempre em casa.",false,"«Il fine settimana vanno spesso dai nonni»."]]},
+{titulo:"In treno per Venezia",texto:"Il treno per Venezia parte dal binario 4 alle 10:15. Oggi c'è un ritardo di venti minuti. Il viaggio dura due ore. Anna ha il biglietto, ma non ha la prenotazione del posto: deve cercare un posto libero.",
+ q:[["it","Da quale binario parte il treno?",["Dal binario 4","Dal binario 10","Dal binario 2","Dal binario 20"],"«parte dal binario 4»."],
+  ["it","Di quanti minuti è il ritardo?",["Venti","Quindici","Dieci","Due"],"«un ritardo di venti minuti»."],
+  ["it","Che cosa deve fare Anna?",["Cercare un posto libero","Comprare il biglietto","Cambiare treno","Aspettare due ore"],"«deve cercare un posto libero»."],
+  ["vf","A viagem dura duas horas.",true,"«Il viaggio dura due ore»."]]},
+{titulo:"Una mail breve",texto:"Buongiorno signor Neri, domani non posso venire alla riunione delle nove perché sono dal medico. Le mando i documenti oggi pomeriggio. Possiamo parlare giovedì? Cordiali saluti, Giulia Bassi",
+ q:[["it","Perché Giulia non va alla riunione?",["Perché è dal medico","Perché è in vacanza","Perché ha un'altra riunione","Perché il treno è in ritardo"],"«perché sono dal medico»."],
+  ["it","Quando manda i documenti?",["Oggi pomeriggio","Domani mattina","Giovedì","Alle nove"],"«Le mando i documenti oggi pomeriggio»."],
+  ["vf","Giulia trata o senhor Neri por “tu”.",false,"Ela usa Lei: «Le mando», «Cordiali saluti»."],
+  ["it","Che cosa propone Giulia?",["Di parlare giovedì","Di cancellare il progetto","Di vedersi alle nove","Di telefonare stasera"],"«Possiamo parlare giovedì?»."]]},
+{titulo:"Il mio quartiere",texto:"Abito in un quartiere tranquillo, vicino al parco. Sotto casa c'è un bar e di fronte c'è un supermercato. La fermata dell'autobus è a cinque minuti a piedi. Non c'è la metropolitana, ma con l'autobus arrivo in centro in venti minuti.",
+ q:[["it","Che cosa c'è di fronte a casa?",["Un supermercato","Un bar","Un parco","La fermata"],"«di fronte c'è un supermercato»."],
+  ["it","Quanto tempo ci vuole per arrivare in centro?",["Venti minuti","Cinque minuti","Un'ora","Dieci minuti"],"«arrivo in centro in venti minuti»."],
+  ["vf","No bairro tem metrô.",false,"«Non c'è la metropolitana»."],
+  ["vf","O bairro é tranquilo.",true,"«un quartiere tranquillo»."]]},
+{titulo:"La giornata di Sara",texto:"Sara si sveglia alle sei e mezza. Fa colazione con un caffè e uno yogurt, poi va al lavoro in bicicletta. Lavora in una libreria dalle nove alle cinque. La sera cucina, legge un libro e va a letto alle undici.",
+ q:[["it","Come va al lavoro Sara?",["In bicicletta","In autobus","A piedi","In macchina"],"«va al lavoro in bicicletta»."],
+  ["it","Dove lavora?",["In una libreria","In una biblioteca","In un bar","In una scuola"],"«Lavora in una libreria». Atenção: libreria é livraria; biblioteca é biblioteca."],
+  ["vf","Sara janta fora toda noite.",false,"«La sera cucina»."],
+  ["it","A che ora va a letto?",["Alle undici","Alle sei e mezza","Alle cinque","Alle nove"],"«va a letto alle undici»."]]},
+{titulo:"Al bar",texto:"— Buongiorno! Che cosa prende? — Un cappuccino e un cornetto alla marmellata, grazie. — Mi dispiace, il cornetto alla marmellata è finito. C'è alla crema o al cioccolato. — Allora al cioccolato. Quant'è? — Tre euro e venti.",
+ q:[["it","Che cosa beve il cliente?",["Un cappuccino","Un caffè","Un tè","Un succo"],"«Un cappuccino e un cornetto»."],
+  ["it","Perché il cliente cambia cornetto?",["Quello alla marmellata è finito","Non gli piace la marmellata","È troppo caro","È freddo"],"«il cornetto alla marmellata è finito»."],
+  ["it","Quale cornetto prende alla fine?",["Al cioccolato","Alla crema","Alla marmellata","Nessuno"],"«Allora al cioccolato»."],
+  ["vf","O cliente paga três euros e vinte.",true,"«Tre euro e venti»."]]},
+{titulo:"Il nuovo collega",texto:"Da lunedì c'è un nuovo collega in ufficio: si chiama Ahmed, è egiziano e parla quattro lingue. È architetto e lavora con Giulia al progetto della biblioteca. Il primo giorno tutti lo invitano a pranzo.",
+ q:[["it","Di che nazionalità è Ahmed?",["Egiziano","Italiano","Spagnolo","Brasiliano"],"«è egiziano»."],
+  ["it","Quante lingue parla?",["Quattro","Due","Tre","Cinque"],"«parla quattro lingue»."],
+  ["it","Con chi lavora?",["Con Giulia","Con il direttore","Da solo","Con Lucas"],"«lavora con Giulia al progetto»."],
+  ["vf","No primeiro dia, ninguém fala com Ahmed.",false,"«Il primo giorno tutti lo invitano a pranzo»."]]},
+{titulo:"Che tempo fa?",texto:"Oggi a Milano fa freddo: ci sono 4 gradi e piove. Domani il tempo è migliore: c'è il sole, ma fa ancora freddo. Nel fine settimana arriva la neve in montagna.",
+ q:[["it","Che tempo fa oggi a Milano?",["Piove e fa freddo","C'è il sole","Nevica","Fa caldo"],"«fa freddo: ci sono 4 gradi e piove»."],
+  ["it","Com'è il tempo domani?",["C'è il sole, ma fa freddo","Piove","Nevica in città","Fa molto caldo"],"«c'è il sole, ma fa ancora freddo»."],
+  ["it","Dove arriva la neve nel fine settimana?",["In montagna","A Milano","Al mare","In tutta Italia"],"«arriva la neve in montagna»."],
+  ["vf","Hoje fazem 4 graus em Milão.",true,"«ci sono 4 gradi»."]]}],
+A2:[
+{titulo:"Una riunione spostata",texto:"Gentili colleghi, la riunione con il cliente, prevista per martedì alle 10, è stata spostata a giovedì alla stessa ora, perché il cliente ha un problema con il volo. Vi prego di confermare la vostra presenza entro domani. Chi non può partecipare può collegarsi in videochiamata. Grazie, Paola",
+ q:[["it","Perché la riunione è stata spostata?",["Il cliente ha un problema con il volo","Paola è malata","La sala è occupata","Il progetto è finito"],"«perché il cliente ha un problema con il volo»."],
+  ["it","Quando sarà la riunione?",["Giovedì alle 10","Martedì alle 10","Giovedì alle 12","Domani"],"«spostata a giovedì alla stessa ora» (alle 10)."],
+  ["it","Che cosa può fare chi non può venire?",["Collegarsi in videochiamata","Mandare una mail al cliente","Spostare di nuovo la riunione","Niente"],"«può collegarsi in videochiamata»."],
+  ["vf","Os colegas devem confirmar a presença até amanhã.",true,"«confermare la vostra presenza entro domani»."]]},
+{titulo:"Un sopralluogo",texto:"Ieri l'ingegner Rossi ha fatto un sopralluogo nel cantiere della nuova scuola. Ha controllato le fondazioni e ha trovato tutto in ordine, ma ha notato che manca la recinzione su un lato del cantiere. Ha chiesto all'impresa di installarla entro venerdì, perché senza recinzione il cantiere non è sicuro.",
+ q:[["it","Che cosa ha controllato l'ingegnere?",["Le fondazioni","Il tetto","L'impianto elettrico","Le finestre"],"«Ha controllato le fondazioni»."],
+  ["it","Qual è il problema?",["Manca la recinzione su un lato","Le fondazioni sono rotte","L'impresa è in ritardo","Piove nel cantiere"],"«manca la recinzione su un lato del cantiere»."],
+  ["it","Entro quando va installata la recinzione?",["Entro venerdì","Entro ieri","Entro un mese","Entro lunedì"],"«entro venerdì»."],
+  ["vf","Para o engenheiro, sem cerca a obra não é segura.",true,"«senza recinzione il cantiere non è sicuro»."]]},
+{titulo:"Le vacanze di Luca",texto:"L'estate scorsa Luca è andato in Sicilia con due amici. Hanno noleggiato una macchina e hanno visitato Palermo, Siracusa e l'Etna. Il viaggio è stato bellissimo, ma faceva molto caldo: quasi 40 gradi! L'anno prossimo vorrebbero andare in Puglia, ma in primavera.",
+ q:[["it","Con chi è andato Luca in Sicilia?",["Con due amici","Con la famiglia","Da solo","Con i colleghi"],"«con due amici»."],
+  ["it","Come si sono spostati in Sicilia?",["In macchina","In treno","In autobus","In bicicletta"],"«Hanno noleggiato una macchina»."],
+  ["it","Perché, secondo te, vogliono andare in Puglia in primavera?",["Perché in estate fa troppo caldo","Perché costa di più","Perché lavorano in primavera","Perché in Puglia piove sempre"],"Eles reclamaram do calor: «faceva molto caldo»."],
+  ["vf","Luca não gostou da viagem.",false,"«Il viaggio è stato bellissimo»."]]},
+{titulo:"Dal medico",texto:"— Buongiorno, dottore. Da tre giorni ho mal di gola e un po' di febbre. — Ha anche la tosse? — Sì, soprattutto la sera. — Allora le prescrivo uno sciroppo: lo prenda tre volte al giorno, dopo i pasti. Beva molta acqua e resti a casa per due giorni.",
+ q:[["it","Da quanto tempo il paziente sta male?",["Da tre giorni","Da due giorni","Da una settimana","Da ieri"],"«Da tre giorni ho mal di gola»."],
+  ["it","Quando ha la tosse?",["Soprattutto la sera","Solo la mattina","Mai","Dopo i pasti"],"«soprattutto la sera»."],
+  ["it","Quante volte al giorno deve prendere lo sciroppo?",["Tre","Due","Una","Quattro"],"«tre volte al giorno»."],
+  ["vf","O médico manda o paciente voltar logo ao trabalho.",false,"«resti a casa per due giorni»."]]},
+{titulo:"Un annuncio di lavoro",texto:"Studio di ingegneria a Bologna cerca ingegnere civile con almeno due anni di esperienza in cantiere. Richiesti: buona conoscenza dell'inglese e patente B. Offriamo contratto a tempo indeterminato e orario flessibile. Inviare il curriculum entro il 30 novembre.",
+ q:[["it","Quanti anni di esperienza sono richiesti?",["Almeno due","Almeno cinque","Nessuno","Uno"],"«almeno due anni di esperienza»."],
+  ["it","Quale lingua bisogna conoscere?",["L'inglese","Lo spagnolo","Il tedesco","Il francese"],"«buona conoscenza dell'inglese»."],
+  ["it","Che tipo di contratto offrono?",["A tempo indeterminato","Di sei mesi","Uno stage","Part-time"],"«contratto a tempo indeterminato»."],
+  ["vf","É preciso ter carteira de motorista.",true,"«patente B»."]]},
+{titulo:"Un reclamo",texto:"Gentile servizio clienti, una settimana fa ho ordinato una stampante sul vostro sito, ma ho ricevuto un modello diverso da quello che avevo scelto. Vorrei restituirla e ricevere il modello giusto. Potreste indicarmi come fare? In attesa di una vostra risposta, porgo cordiali saluti. Marta Ferri",
+ q:[["it","Che cosa ha ordinato Marta?",["Una stampante","Un computer","Un telefono","Una scrivania"],"«ho ordinato una stampante»."],
+  ["it","Qual è il problema?",["Ha ricevuto un modello diverso","La stampante è rotta","Non è arrivato niente","Il prezzo è sbagliato"],"«ho ricevuto un modello diverso»."],
+  ["it","Che cosa vuole Marta?",["Ricevere il modello giusto","Un rimborso","Uno sconto","Comprare un'altra stampante"],"«Vorrei restituirla e ricevere il modello giusto»."],
+  ["vf","Marta fez o pedido há uma semana.",true,"«una settimana fa ho ordinato»."]]},
+{titulo:"Quando ero piccolo",texto:"Quando ero piccolo abitavo in un paese di montagna. D'inverno nevicava spesso e andavo a scuola a piedi con mio fratello. Il pomeriggio giocavamo con i vicini. Poi, a diciotto anni, mi sono trasferito a Torino per studiare.",
+ q:[["it","Dove abitava da piccolo?",["In un paese di montagna","A Torino","Al mare","In una grande città"],"«abitavo in un paese di montagna»."],
+  ["it","Come andava a scuola?",["A piedi con il fratello","In autobus","In macchina con il padre","In bicicletta"],"«andavo a scuola a piedi con mio fratello»."],
+  ["it","Perché si è trasferito a Torino?",["Per studiare","Per lavorare","Per la famiglia","Per il clima"],"«mi sono trasferito a Torino per studiare»."],
+  ["vf","Ele se mudou para Turim aos dezoito anos.",true,"«a diciotto anni»."]]},
+{titulo:"Il nuovo ufficio",texto:"Il mese prossimo il nostro studio si trasferirà in un nuovo ufficio in via Roma. Sarà più grande e avrà una sala riunioni con un grande schermo. L'unico problema è il parcheggio: ci sono pochi posti, quindi chi può dovrebbe venire in autobus o in bicicletta.",
+ q:[["it","Quando si trasferirà lo studio?",["Il mese prossimo","La settimana prossima","L'anno prossimo","Domani"],"«Il mese prossimo»."],
+  ["it","Che cosa avrà la sala riunioni?",["Un grande schermo","Una cucina","Una terrazza","Un pianoforte"],"«una sala riunioni con un grande schermo»."],
+  ["it","Perché è meglio venire in autobus o in bicicletta?",["Ci sono pochi posti auto","L'ufficio è lontano","Fa bel tempo","È più economico"],"«ci sono pochi posti, quindi…»."],
+  ["vf","O novo escritório será menor que o atual.",false,"«Sarà più grande»."]]},
+{titulo:"Una telefonata con l'impresa",texto:"— Pronto, sono Marco dell'impresa Bianchi. La chiamo per il preventivo che ci ha chiesto. — Buongiorno, grazie. Ci sono novità? — Sì: il prezzo totale è di 12.000 euro, trasporto incluso. Però i tempi di consegna sono di sei settimane, non di quattro. — Capisco. Mi può mandare tutto per mail? — Certo, glielo mando oggi stesso.",
+ q:[["it","Perché telefona Marco?",["Per il preventivo","Per una riunione","Per un problema in cantiere","Per un pagamento in ritardo"],"«La chiamo per il preventivo»."],
+  ["it","Il trasporto è incluso nel prezzo?",["Sì","No","Solo in parte","Non si sa"],"«12.000 euro, trasporto incluso»."],
+  ["it","Quante settimane servono per la consegna?",["Sei","Quattro","Dodici","Due"],"«sei settimane, non di quattro»."],
+  ["vf","Marco vai mandar tudo por e-mail no mesmo dia.",true,"«glielo mando oggi stesso»."]]},
+{titulo:"Progetti per il futuro",texto:"Fra due anni Giulia finirà il master in architettura. Dopo, le piacerebbe lavorare all'estero, forse in Germania o in Olanda, perché lì ci sono molti progetti di edilizia sostenibile. Per questo motivo, da settembre seguirà un corso di tedesco.",
+ q:[["it","Che cosa finirà Giulia fra due anni?",["Il master in architettura","Il corso di tedesco","Un progetto in Olanda","La scuola"],"«Fra due anni Giulia finirà il master»."],
+  ["it","Dove le piacerebbe lavorare?",["All'estero","In Italia","Nella sua città","In un'altra regione italiana"],"«le piacerebbe lavorare all'estero»."],
+  ["it","Perché seguirà un corso di tedesco?",["Perché forse vuole lavorare in Germania","Perché il master è in tedesco","Perché è obbligatorio","Perché ha amici tedeschi"],"«forse in Germania… Per questo motivo… un corso di tedesco»."],
+  ["vf","Giulia começa o curso de alemão em setembro.",true,"«da settembre seguirà un corso di tedesco»."]]}]
+};
+/* ---------- conversão para a estrutura usada pelo app ---------- */
+const EXQ=[],EXQI={},EXTX={};
+(function(){const add=(nivel,cat,r,i,tx)=>{const q={id:`${nivel.toLowerCase()}-${cat}-${tx?tx.id.split("-").pop()+"-":""}${i+1}`,nivel,cat,tipo:r[0],q:r[1],x:r[3],tx:tx?tx.id:""};
+  if(r[0]==="vf"){q.o=["Verdadeiro","Falso"];q.a=r[2]?0:1}else{q.o=r[2].slice();q.a=0}EXQ.push(q);EXQI[q.id]=q};
+ Object.keys(EXB_SRC).forEach(n=>["gram","voc"].forEach(c=>EXB_SRC[n][c].forEach((r,i)=>add(n,c,r,i))));
+ Object.keys(EXT_SRC).forEach(n=>EXT_SRC[n].forEach((t,k)=>{const id=`${n.toLowerCase()}-tx-${k+1}`;EXTX[id]={id,nivel:n,titulo:t.titulo,texto:t.texto};t.q.forEach((r,i)=>add(n,"int",r,i,EXTX[id]))}))})();
+
+/* ============================ ABA EXERCÍCIOS: banco de questões de marcar ============================ */
+// Progresso por perfil em S.exerc: { <id da questão>: { r: 1|0 (última resposta), n: tentativas, ok: acertos } }
+const EXCATS=[["gram","Gramática","Verbos, artigos, preposições e pronomes"],["voc","Vocabulário","Palavras do trabalho e do dia a dia, falsos amigos"],["int","Interpretação de texto","Textos curtos com perguntas"]];
+const EXTIPO={comp:"Complete a frase",mc:"Escolha a resposta",frase:"Qual frase está correta?",it:"Responda sobre o texto",vf:"Verdadeiro ou falso?"};
+const EX={lvl:"A1",run:null,tx:null,txAns:{}};
+function exStat(id){return(S.exerc||{})[id]||null}
+function exPool(lvl,cat){return EXQ.filter(q=>q.nivel===lvl&&(!cat||cat==="mix"?true:q.cat===cat))}
+function exCounts(list){let ok=0,wrong=0,seen=0;list.forEach(q=>{const s=exStat(q.id);if(!s)return;seen++;s.r?ok++:wrong++});return{ok,wrong,seen,tot:list.length}}
+function exRecord(q,ok){S.exerc=S.exerc||{};const s=S.exerc[q.id]=S.exerc[q.id]||{r:0,n:0,ok:0};s.n++;s.r=ok?1:0;if(ok)s.ok++;save()}
+function exPick(list,n){const nunca=shuffle(list.filter(q=>!exStat(q.id))),erradas=shuffle(list.filter(q=>exStat(q.id)&&!exStat(q.id).r)),certas=shuffle(list.filter(q=>exStat(q.id)&&exStat(q.id).r));
+ return[...nunca,...erradas,...certas].slice(0,n)}
+function exLevelSeg(){return`<div class="seg seg2" id="exLvl" role="tablist" aria-label="Nível">${["A1","A2"].map(l=>`<button role="tab" data-exlvl="${l}" class="${EX.lvl===l?"on":""}" aria-selected="${EX.lvl===l}">Nível ${l}</button>`).join("")}</div>`}
+function renderExerc(){const box=$("#exBox");if(!box)return;if(EX.run)return renderExRun();if(EX.tx)return renderExText();
+ const all=exPool(EX.lvl),c=exCounts(all);
+ box.innerHTML=`${exLevelSeg()}
+ <div class="card stack" style="gap:8px"><div class="row" style="justify-content:space-between"><span class="label">Nível ${EX.lvl} · ${all.length} questões</span><span class="chip${c.seen?" hot":""}">${c.ok} certas</span></div>
+  <div class="lvlbar"><i style="width:${all.length?c.ok/all.length*100:0}%"></i></div><p class="small muted">${c.seen?`${c.seen} respondidas · ${c.wrong} para refazer`:"Nenhuma respondida ainda. Tudo é de marcar: toque na opção certa."}</p>
+  <div class="row"><button class="btn primary" data-exstart="mix">Rodada mista (10)</button>${c.wrong?`<button class="btn" data-exwrong="mix">Refazer erradas (${c.wrong})</button>`:""}</div></div>
+ ${EXCATS.map(([k,n,d])=>{const l=exPool(EX.lvl,k),cc=exCounts(l);return`<div class="card stack excat" style="gap:8px"><div class="row" style="justify-content:space-between;align-items:flex-start"><div class="stack" style="gap:2px"><h3>${n}</h3><p class="small muted">${d}</p></div><span class="pill ${cc.ok===cc.tot?"ok":""}">${cc.ok}/${cc.tot}</span></div>
+  <div class="lvlbar"><i style="width:${cc.tot?cc.ok/cc.tot*100:0}%"></i></div>
+  <div class="row">${k==="int"?`<button class="btn primary" data-extexts="1">Ver os textos (${Object.values(EXTX).filter(t=>t.nivel===EX.lvl).length})</button><button class="btn" data-exstart="int">Rodada de perguntas (10)</button>`:`<button class="btn primary" data-exstart="${k}">Começar (10)</button>`}${cc.wrong?`<button class="btn" data-exwrong="${k}">Refazer erradas (${cc.wrong})</button>`:""}</div>
+  ${k==="int"&&EX.showTexts?exTextList():""}</div>`}).join("")}`;
+ $$("#exLvl [data-exlvl]").forEach(b=>b.onclick=()=>{EX.lvl=b.dataset.exlvl;try{localStorage.setItem(KEY+".exlvl",EX.lvl)}catch(e){}renderExerc()});
+ $$("#exBox [data-exstart]").forEach(b=>b.onclick=()=>exStart(b.dataset.exstart,false));
+ $$("#exBox [data-exwrong]").forEach(b=>b.onclick=()=>exStart(b.dataset.exwrong,true));
+ $$("#exBox [data-extexts]").forEach(b=>b.onclick=()=>{EX.showTexts=!EX.showTexts;renderExerc()});
+ $$("#exBox [data-extx]").forEach(b=>b.onclick=()=>exOpenText(b.dataset.extx))}
+function exTextList(){return`<div class="tlist">${Object.values(EXTX).filter(t=>t.nivel===EX.lvl).map((t,i)=>{const qs=EXQ.filter(q=>q.tx===t.id),ok=qs.filter(q=>exStat(q.id)&&exStat(q.id).r).length;
+ return`<button class="tcard${ok===qs.length?" done":""}" data-extx="${t.id}"><span class="tn">${ok===qs.length?"✓":i+1}</span><div><h3>${esc(t.titulo)}</h3><p>${qs.length} perguntas</p></div><span class="pill ${ok===qs.length?"ok":""}">${ok}/${qs.length}</span></button>`}).join("")}</div>`}
+
+/* ---------- rodada de 10 ---------- */
+function exStart(cat,onlyWrong){let list=exPool(EX.lvl,cat);if(onlyWrong)list=list.filter(q=>exStat(q.id)&&!exStat(q.id).r);
+ const qs=(onlyWrong?shuffle(list):exPick(list,10)).slice(0,10).map(q=>({q,ord:q.tipo==="vf"?[0,1]:shuffle(q.o.map((_,i)=>i)),ans:null}));
+ if(!qs.length)return;EX.run={cat,qs,i:0,onlyWrong};window.scrollTo(0,0);renderExRun()}
+function exPrompt(q){if(q.tipo==="comp"||q.tipo==="it")return`<div class="qq it exq">${esc(q.q).replace(/___/g,'<span class="exgap">___</span>')}</div>`;
+ return`<div class="qq exq">${esc(q.q).replace(/«(.+?)»/g,'«<b class="it">$1</b>»')}</div>`}
+function exTextBox(t,withAudio){return`<div class="card stack extext"><span class="label">Texto · ${esc(t.titulo)}</span>${withAudio?`<div class="exaud">${audioHTML()}</div>`:""}<p class="it exparas">${esc(t.texto).replace(/ — /g,"<br>— ")}</p></div>`}
+function renderExRun(){const R=EX.run,box=$("#exBox");if(R.i>=R.qs.length)return renderExEnd();const it=R.qs[R.i],q=it.q,catN=(EXCATS.find(c=>c[0]===q.cat)||[])[1]||"";
+ const tx=q.tx?EXTX[q.tx]:null;
+ let h=`<div class="row" style="justify-content:space-between"><button class="back" id="exQuit">← Sair</button><span class="chip">${R.i+1} de ${R.qs.length}</span></div>
+ <div class="lvlbar"><i style="width:${R.i/R.qs.length*100}%"></i></div>
+ ${tx?exTextBox(tx,true):""}
+ <div class="qz exqz"><span class="qn">${q.nivel} · ${catN} · ${EXTIPO[q.tipo]}</span>${exPrompt(q)}
+ <div class="opts${q.tipo==="vf"?" optsvf":""}">${it.ord.map(k=>`<button class="opt${it.ans!=null?(k===q.a?" right":k===it.ans?" wrong":""):""}" data-exo="${k}" ${it.ans!=null?"disabled":""}>${esc(q.o[k])}</button>`).join("")}</div>
+ ${it.ans!=null?`<div class="fb ${it.ans===q.a?"ok":"no"}"><b>${it.ans===q.a?"Certo!":"Não foi dessa vez."}</b>${it.ans!==q.a?`<span>Resposta: <b>${esc(q.o[q.a])}</b></span>`:""}<span>${esc(q.x)}</span></div>
+  <button class="btn primary" id="exNext">${R.i+1<R.qs.length?"Próxima →":"Ver resultado"}</button>`:""}</div>`;
+ box.innerHTML=h;tokenize(box);
+ if(tx){const a=box.querySelector(".exaud");if(a)audioAttach(a,[{el:box.querySelector(".exparas"),text:tx.texto.replace(/—/g,"")}])}
+ $("#exQuit").onclick=()=>{audioStop();EX.run=null;renderExerc();window.scrollTo(0,0)};
+ $$("#exBox [data-exo]").forEach(b=>b.onclick=()=>{if(it.ans!=null)return;it.ans=+b.dataset.exo;exRecord(q,it.ans===q.a);renderExRun()});
+ if($("#exNext"))$("#exNext").onclick=()=>{audioStop();R.i++;renderExRun();window.scrollTo(0,0)}}
+function renderExEnd(){const R=EX.run,ok=R.qs.filter(x=>x.ans===x.q.a).length,n=R.qs.length,wrong=R.qs.filter(x=>x.ans!==x.q.a);
+ if(!R.logged){R.logged=1;logInc("e");logEvento("exercicio",EX.lvl+":"+R.cat);save();renderHome()}
+ $("#exBox").innerHTML=`<div class="card stack"><span class="label">Resultado</span><h2>${ok}/${n} · ${Math.round(ok/n*100)}%</h2><p class="muted small">${ok===n?"Tudo certo!":ok>=n*.7?"Muito bem. As erradas ficam guardadas para você refazer.":"As erradas ficam guardadas: use “Refazer erradas” para treinar de novo."}</p>
+  ${wrong.length?`<div class="stack" style="gap:8px">${wrong.map(x=>`<div class="exwrong"><div class="small ${x.q.tipo==="comp"||x.q.tipo==="it"?"it":""}">${esc(x.q.q)}</div><div class="small">Certa: <b>${esc(x.q.o[x.q.a])}</b></div></div>`).join("")}</div>`:""}
+  <div class="row"><button class="btn primary" id="exAgain">Nova rodada</button>${wrong.length?`<button class="btn" id="exRedo">Refazer as erradas</button>`:""}<button class="btn ghost" id="exBack">Voltar</button></div></div>`;
+ tokenize($("#exBox"));
+ $("#exAgain").onclick=()=>exStart(R.cat,false);$("#exBack").onclick=()=>{EX.run=null;renderExerc();window.scrollTo(0,0)};
+ if($("#exRedo"))$("#exRedo").onclick=()=>{EX.run={cat:R.cat,i:0,qs:shuffle(wrong.map(x=>({q:x.q,ord:x.q.tipo==="vf"?[0,1]:shuffle(x.q.o.map((_,i)=>i)),ans:null})))};renderExRun();window.scrollTo(0,0)}}
+
+/* ---------- um texto com as suas perguntas na mesma tela ---------- */
+function exOpenText(id){EX.tx=EXTX[id];EX.txAns[id]=EX.txAns[id]||{ans:{},ord:{}};window.scrollTo(0,0);renderExText()}
+function renderExText(){const t=EX.tx,box=$("#exBox"),st=EX.txAns[t.id],qs=EXQ.filter(q=>q.tx===t.id),list=Object.values(EXTX).filter(x=>x.nivel===t.nivel),i=list.indexOf(t),nx=list[i+1];
+ const right=qs.filter(q=>st.ans[q.id]===q.a).length,answered=Object.keys(st.ans).length;
+ box.innerHTML=`<button class="back" id="exTxBack">← Exercícios</button>
+ <div class="tophead"><span class="label">${t.nivel} · Interpretação · texto ${i+1} de ${list.length}</span><h2 class="lettit">${esc(t.titulo)}</h2></div>
+ ${exTextBox(t,true)}
+ <div class="row" style="justify-content:space-between"><h3>Perguntas</h3><div class="row" style="gap:8px"><span class="chip${right===qs.length?" hot":""}">${right}/${qs.length}</span>${answered?`<button class="btn ghost small" id="exTxClear">Limpar</button>`:""}</div></div>
+ ${qs.map((q,k)=>{if(!st.ord[q.id])st.ord[q.id]=q.tipo==="vf"?[0,1]:shuffle(q.o.map((_,j)=>j));const a=st.ans[q.id];
+  return`<div class="qz"><span class="qn">Pergunta ${k+1} de ${qs.length} · ${EXTIPO[q.tipo]}</span>${exPrompt(q)}<div class="opts${q.tipo==="vf"?" optsvf":""}">${st.ord[q.id].map(j=>`<button class="opt${a!=null?(j===q.a?" right":j===a?" wrong":""):""}" data-txq="${q.id}" data-j="${j}" ${a!=null?"disabled":""}>${esc(q.o[j])}</button>`).join("")}</div>${a!=null?`<div class="fb ${a===q.a?"ok":"no"}"><b>${a===q.a?"Certo!":"Resposta: "+esc(q.o[q.a])}</b><span>${esc(q.x)}</span></div>`:""}</div>`}).join("")}
+ ${answered===qs.length?`<div class="fb ${right===qs.length?"ok":"no"}"><b>${right}/${qs.length} certas.</b>${right<qs.length?"<span>Releia o texto e toque em “Limpar” para tentar de novo.</span>":""}</div>`:""}
+ <div class="row" style="justify-content:space-between">${list[i-1]?`<button class="btn" data-extx="${list[i-1].id}">← Anterior</button>`:"<span></span>"}${nx?`<button class="btn" data-extx="${nx.id}">Próximo →</button>`:"<span></span>"}</div>`;
+ tokenize(box);const a=box.querySelector(".exaud");if(a)audioAttach(a,[{el:box.querySelector(".exparas"),text:t.texto.replace(/—/g,"")}]);
+ $("#exTxBack").onclick=()=>{audioStop();EX.tx=null;EX.showTexts=true;renderExerc();window.scrollTo(0,0)};
+ if($("#exTxClear"))$("#exTxClear").onclick=()=>{EX.txAns[t.id]={ans:{},ord:{}};renderExText()};
+ $$("#exBox [data-extx]").forEach(b=>b.onclick=()=>{audioStop();exOpenText(b.dataset.extx)});
+ $$("#exBox [data-txq]").forEach(b=>b.onclick=()=>{const q=EXQI[b.dataset.txq];if(st.ans[q.id]!=null)return;st.ans[q.id]=+b.dataset.j;exRecord(q,st.ans[q.id]===q.a);
+  if(Object.keys(st.ans).length===qs.length){logInc("e");logEvento("exercicio",t.id)}
+  const y=window.scrollY;renderExText();window.scrollTo(0,y)})}
+
 /* ============================ INÍCIO ============================ */
 syncFavCards();syncErrCards();syncSentCards();renderDecks();renderBoxes();renderHome();updateFavCount();
 try{const lt=localStorage.getItem(KEY+".let");if(lt&&LETI[lt])LT.cur=LETI[lt];const ns=localStorage.getItem(KEY+".ns");if(ns)setNS(ns)}catch(e){}
 $$("#prefSeg [data-ps]").forEach(b=>b.onclick=()=>setPrefSeg(b.dataset.ps));
 try{if(localStorage.getItem(KEY+".ps")==="duv")setPrefSeg("duv")}catch(e){}duvCount();
+try{const l=localStorage.getItem(KEY+".exlvl");if(l==="A1"||l==="A2")EX.lvl=l}catch(e){}
 initCloud();
 (function(){let start="inicio";const h=location.hash.slice(1);
  if(VALID.includes(h))start=h;else{try{const t=localStorage.getItem(KEY+".tab");if(VALID.includes(t))start=t}catch(e){}}
@@ -6458,7 +6888,7 @@ initCloud();
 
 /* ============================ PWA ============================ */
 /* ---------- atualizações: compara a versão aberta com a publicada (sw.js) e atualiza com um toque ---------- */
-const APP_V="quaderno-2026-11-15g";
+const APP_V="quaderno-2026-11-15h";
 const UPD={newV:"",busy:false,last:0};
 function updLabel(v){const m=String(v).match(/(\d{4})-(\d\d)-(\d\d)([a-z0-9]*)$/);return m?`${m[3]}/${m[2]}/${m[1]}${m[4]?" · "+m[4]:""}`:v}
 function updUI(state){const ver=$("#updVer"),msg=$("#updMsg"),go=$("#updGo"),chk=$("#updCheck"),bar=$("#updBar");if(ver)ver.textContent="versão "+updLabel(APP_V);
@@ -6554,10 +6984,11 @@ async function sbRest(method,q,body,extra){const t=await sbToken();if(!t)throw{c
  return r.status===204?null:r.json().catch(()=>null)}
 /* junta dois estados quando os dois aparelhos mudaram desde a última sincronização */
 function mergeStates(a,b){const n=(a.updatedAt||0)>=(b.updatedAt||0)?a:b,o=n===a?b:a,out=JSON.parse(JSON.stringify(n));
- const maps=["cards","favs","newsDone","course","writing","shadow","errs","log","tests","sents","estat","diary","chats","bt","dict","pairs","leituras","modi","eventos","duvidas"];
+ const maps=["cards","favs","newsDone","course","writing","shadow","errs","log","tests","sents","estat","diary","chats","bt","dict","pairs","leituras","modi","eventos","duvidas","exerc"];
  maps.forEach(k=>{const x=o[k]||{},y=out[k]=out[k]||{};Object.keys(x).forEach(id=>{
   if(!(id in y)){y[id]=x[id];return}
   if(k==="cards"){const c=x[id],d=y[id],w=v=>((v&&v.reps)||0)+((v&&v.lapses)||0);if(w(c)>w(d)||(w(c)===w(d)&&(c&&c.due||"")>(d&&d.due||"")))y[id]=c}
+  else if(k==="exerc"&&x[id]&&y[id]){if((x[id].n||0)>(y[id].n||0))y[id]=x[id]}
   else if(k==="eventos"&&Array.isArray(x[id])&&Array.isArray(y[id])){const seen=new Set(y[id].map(e=>JSON.stringify(e)));x[id].forEach(e=>{const j=JSON.stringify(e);if(!seen.has(j)){seen.add(j);y[id].push(e)}})}
   else if(k==="log"&&x[id]&&typeof x[id]==="object"){Object.keys(x[id]).forEach(f=>{if(typeof x[id][f]==="number")y[id][f]=Math.max(y[id][f]||0,x[id][f])})}
   else if(k==="course"&&x[id]&&y[id]&&typeof x[id]==="object"){const m=Object.assign({},x[id],y[id]);if(x[id].best!=null||y[id].best!=null)m.best=Math.max(x[id].best||0,y[id].best||0);y[id]=m}})});
