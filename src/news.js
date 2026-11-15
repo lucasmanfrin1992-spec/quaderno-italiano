@@ -38,8 +38,8 @@ function updReadBtn(){const b=$("#readAll"),st=$("#readStop");if(b)b.innerHTML=R
  if(st)st.hidden=READ.state==="idle"}
 
 /* sub-abas */
-function setNS(v){$$("#newsSeg button").forEach(b=>{const on=b.dataset.ns===v;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
- ["read","cal","favs"].forEach(k=>$("#ns-"+k).hidden=k!==v);if(v==="cal")renderCal();if(v==="favs")renderFavs();
+function setNS(v){if(v!=="read"&&v!=="cal")v="read";$$("#newsSeg button").forEach(b=>{const on=b.dataset.ns===v;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
+ ["read","cal"].forEach(k=>$("#ns-"+k).hidden=k!==v);if(v==="cal")renderCal();
  try{localStorage.setItem(KEY+".ns",v)}catch(e){}}
 $$("#newsSeg button").forEach(b=>b.addEventListener("click",()=>setNS(b.dataset.ns)));
 document.addEventListener("click",e=>{const g=e.target.closest("[data-ns-go]");if(g){setNS(g.dataset.nsGo);window.scrollTo(0,0)}});
@@ -61,7 +61,7 @@ function renderNews(){const box=$("#newsBox"),n=NEWS.cur;NEWS.rendered=n;
   <h2 class="ntitle">${tok(n.title||"",-1)}</h2>
   ${n.titlePt?`<p class="ptpara" hidden>${esc(n.titlePt)}</p>`:""}
   <div class="row">${canSpeak?`<button class="btn" id="readAll"></button><button class="btn ghost" id="readStop" hidden><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>Parar</button>`:""}<button class="btn ghost" id="togglePt" aria-pressed="false">Mostrar tradução</button>${!isLatest&&NEWS.latest?`<button class="btn ghost" id="toLatest">Ir para a mais recente</button>`:""}</div>
-  <p class="hint">Toque numa palavra para ouvir a pronúncia e ver significado, sinônimos e exemplo. Com a estrela, ela vai para a sua revisão.</p>
+  <p class="hint">Toque numa palavra para ouvir a pronúncia e ver significado, sinônimos e exemplo. A estrela salva a palavra em Preferiti; “Marcar um trecho” salva uma frase.</p>
   ${paras}
   ${srcs?`<p class="src">Texto adaptado para o nível ${esc(n.level||"A2")} a partir de: ${srcs}</p>`:""}
  </article>`;
@@ -85,7 +85,6 @@ function addFavCard(k){const id="w:"+k;CARDS[id]={deck:"fav",fav:S.favs[k]};if(!
 function removeFavCard(k){const id="w:"+k;delete CARDS[id];ORDER.fav=ORDER.fav.filter(x=>x!==id);if(SESSION)SESSION.queue=SESSION.queue.filter(x=>x!==id)}
 function syncFavCards(){Object.keys(CARDS).forEach(id=>{if(id.startsWith("w:"))delete CARDS[id]});ORDER.fav=[];Object.keys(S.favs||{}).forEach(addFavCard)}
 function newFavIds(){return S.settings.decks.fav?ORDER.fav.filter(id=>!S.cards[id]):[]}
-function updateFavCount(){const n=Object.keys(S.favs).length;$("#favCount").textContent=n?String(n):""}
 
 /* questionário */
 const QZ={date:null,ans:{},order:{}};
@@ -130,16 +129,6 @@ function renderCal(){const box=$("#calBox"),t=today(),cur=t.slice(0,7),base=NEWS
  $("#calPrev").onclick=()=>{NEWS.calMonth=pk;renderCal()};$("#calNext").onclick=()=>{if(nk<=cur){NEWS.calMonth=nk;renderCal()}};
  $$("#calBox [data-day]").forEach(b=>b.onclick=()=>openDate(b.dataset.day))}
 
-/* minhas palavras */
-function dueLabel(id){const st=S.cards[id];if(!st)return"nova";if(st.due<=today())return"revisar hoje";const d=Math.round((new Date(st.due+"T12:00")-new Date(today()+"T12:00"))/864e5);return d===1?"amanhã":"em "+d+" dias"}
-function renderFavs(){const box=$("#favBox"),keys=Object.keys(S.favs).sort((a,b)=>(S.favs[b].added||"").localeCompare(S.favs[a].added||"")||a.localeCompare(b));
- if(!keys.length){box.innerHTML=`<div class="card stack"><h3>Nenhuma palavra salva ainda</h3><p class="muted small">Na notícia, toque numa palavra e depois na estrela. Ela entra aqui e nos cartões, com revisão espaçada no estilo do Anki: Errei, Difícil, Bom ou Fácil decidem quando ela volta.</p><button class="btn" data-ns-go="read">Ir para a notícia</button></div>`;return}
- const ids=keys.map(k=>"w:"+k),dueN=ids.filter(id=>!S.cards[id]||S.cards[id].due<=today()).length;
- box.innerHTML=`<div class="card row" style="justify-content:space-between"><div><b>${keys.length} ${keys.length===1?"palavra":"palavras"}</b><div class="small muted">${dueN} para revisar hoje</div></div><button class="btn primary" id="favReview" ${dueN?"":"disabled"}>Revisar estas palavras</button></div>
- <div class="vlist">${keys.map(k=>{const f=S.favs[k];return`<div class="vrow favrow"><div class="w"><i>${esc(f.lemma)}</i><span>${esc(f.meaning)}</span>${f.synonyms&&f.synonyms.length?`<span class="syn">≈ ${esc(f.synonyms.join(", "))}</span>`:""}<span class="lvl">${dueLabel("w:"+k)}</span></div><div class="row" style="gap:6px;flex-wrap:nowrap">${spkBtn(f.lemma)}<button class="spk" data-unfav="${esc(k)}" aria-label="Remover ${esc(f.lemma)}">${X_SVG}</button></div></div>`}).join("")}</div>`;
- $$("[data-unfav]").forEach(b=>b.onclick=()=>{const k=b.dataset.unfav;delete S.favs[k];removeFavCard(k);save();renderFavs();updateFavCount();refreshTokenMarks();renderDecks();renderHome()});
- if($("#favReview"))$("#favReview").onclick=()=>{const q=shuffle(ids.filter(id=>CARDS[id]&&(!S.cards[id]||S.cards[id].due<=today())));SESSION={queue:q,total:q.length,done:0,shown:false,dirFlip:null,extra:true};showTab("cartoes")}}
-
 /* card na tela inicial */
 function renderHomeNews(){const el=$("#homeNews");if(!el)return;const n=NEWS.latest;
  if(!n){el.innerHTML=NEWS.state==="loading"?`<span class="label">Notícia do dia</span><p class="muted small">Carregando…</p>`:`<span class="label">Notícia do dia</span><p class="muted small">${NEWS.state==="nodb"?"Disponível quando o app é aberto no Claude, com a sua conta.":NEWS.state==="empty"?"A notícia do dia é publicada toda manhã, por volta das 6h50.":"Não foi possível carregar agora."}</p>`;return}
@@ -171,6 +160,6 @@ async function initCloud(){
  try{const s=await stateRef.get();
   if(s.exists){const r=clone(s.data());if((r.updatedAt||0)>(S.updatedAt||0)){const wasReset=hydrate(r);saveLocal();if(wasReset)save();rerenderAll()}else if((S.updatedAt||0)>(r.updatedAt||0)||r.resetEpoch!==RESET_EPOCH)scheduleSync()}
   else if(S.updatedAt)scheduleSync()}catch(e){}}
-function rerenderAll(){rollDay();syncFavCards();syncErrCards();syncSentCards();SESSION=null;renderDecks();renderBoxes();renderHome();renderNewsAll();if(!$("#v-curso").hidden&&!CUR)renderCourse();if(!$("#v-escrita").hidden&&!WCUR)renderWriting();
- if(!$("#v-cartoes").hidden)renderFlash();if(!$("#v-news").hidden){renderNews();if(!$("#ns-favs").hidden)renderFavs()}}
+function rerenderAll(){rollDay();syncFavCards();syncErrCards();syncSentCards();SESSION=null;renderDecks();renderBoxes();renderHome();renderNewsAll();if(!$("#v-curso").hidden&&!CUR)renderCourse();
+ if(!$("#v-cartoes").hidden)renderFlash();if(!$("#v-news").hidden)renderNews();if(!$("#v-preferiti").hidden)renderFavs()}
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&syncDirty){clearTimeout(syncT);flushSync()}});

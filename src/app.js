@@ -28,11 +28,17 @@ const TENSES={pres:{n:"presente",f:pres},pass:{n:"passato prossimo",f:pass},fut:
 /* ============================ ESTADO ============================ */
 const KEY="quaderno.v1";
 const RESET_EPOCH="2026-11-02"; // muda este valor para zerar os cartões de todos
-const DECKS={err:"Meus erros",fav:"Minhas palavras",vA1:"Vocabulário A1",vA2:"Vocabulário A2",verb:"Verbos (presente, passato, futuro)"};
-function defState(){return{cards:{},settings:{decks:{err:true,frase:true,fav:true,vA1:true,vA2:true,verb:true},newPerDay:20,dir:"mix",typing:false},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},favs:{},newsDone:{},course:{},writing:{},shadow:{},errs:{},log:{},tests:{},sents:{},estat:{},diary:{},chats:{},bt:{},dict:{},pairs:{},resetEpoch:RESET_EPOCH,updatedAt:0}}
+const DECKS={err:"Meus erros",fav:"Preferiti (palavras e frases)",vA1:"Vocabulário A1",vA2:"Vocabulário A2",verb:"Verbos (presente, passato, futuro)"};
+const DATA_V=2; // versão do formato dos dados salvos; migrar() leva os dados antigos para a versão atual sem apagar nada
+function defState(){return{cards:{},settings:{decks:{err:true,frase:true,fav:true,vA1:true,vA2:true,verb:true},newPerDay:20,dir:"mix",typing:false},daily:{date:"",newDone:0,reviewed:0},streak:{last:"",count:0},favs:{},newsDone:{},course:{},writing:{},shadow:{},errs:{},log:{},tests:{},sents:{},estat:{},diary:{},chats:{},bt:{},dict:{},pairs:{},versaoDados:DATA_V,resetEpoch:RESET_EPOCH,updatedAt:0}}
 function hydrate(o){const d=defState();S=Object.assign(d,o);S.settings=Object.assign(defState().settings,o.settings||{});S.settings.decks=Object.assign(defState().settings.decks,(o.settings||{}).decks||{});
+ migrar(o.versaoDados||1);
  S.favs=S.favs||{};S.newsDone=S.newsDone||{};S.cards=S.cards||{};S.course=S.course||{};S.writing=S.writing||{};S.shadow=S.shadow||{};S.errs=S.errs||{};S.log=S.log||{};S.tests=S.tests||{};
  if(o.resetEpoch!==RESET_EPOCH){S.cards={};S.daily={date:"",newDone:0,reviewed:0};S.streak={last:"",count:0};delete S.best;S.resetEpoch=RESET_EPOCH;return true}return false}
+function migrar(de){try{
+ if(de<2){Object.values(S.errs||{}).forEach(e=>{if(e&&e.f==="Escreva a frase que você ouviu")e.f="Ouça a frase e diga o que ela significa"}); // v2: sem perguntas escritas
+  if(S.settings)S.settings.typing=false}
+ }catch(e){}S.versaoDados=DATA_V}
 let S=defState();
 let DB=null,UID=null,stateRef=null,syncT=null,syncing=false,syncDirty=false,syncRetried=false;
 try{const raw=localStorage.getItem(KEY);if(raw&&hydrate(JSON.parse(raw)))localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
@@ -112,11 +118,11 @@ function tokenize(root){(root||document).querySelectorAll(".it").forEach(el=>{if
  nodes.forEach(n=>{if(!n.nodeValue.trim())return;const span=document.createElement("span");span.innerHTML=tokText(n.nodeValue);n.replaceWith(...span.childNodes)})})}
 
 /* ============================ ABAS ============================ */
-const VALID=["inicio","curso","escrita","shadow","news","cartoes"];
-function showTab(name){if(!VALID.includes(name))name="inicio";if(name!=="news"&&typeof READ!=="undefined"&&READ.state!=="idle")stopReading();$$("[data-view]").forEach(v=>v.hidden=v.dataset.view!==name);$$("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===name));
- try{localStorage.setItem(KEY+".tab",name)}catch(e){}window.scrollTo(0,0);if(name==="cartoes")renderFlash();if(name==="inicio")renderHome();if(name==="curso")renderCourse();if(name==="escrita"){renderWriting();renderWMode()}if(name!=="shadow"&&typeof SHP!=="undefined"&&SHP.state!=="idle")stopPod(true);if(name==="shadow"){renderShadow();renderSMode()}if(name==="news"){renderNews();if(!$("#ns-cal").hidden)renderCal();if(!$("#ns-favs").hidden)renderFavs()}}
+const VALID=["inicio","curso","news","preferiti","cartoes"];
+function showTab(name){if(!VALID.includes(name))name="inicio";cancelRange();if(name!=="news"&&typeof READ!=="undefined"&&READ.state!=="idle")stopReading();$$("[data-view]").forEach(v=>v.hidden=v.dataset.view!==name);$$("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===name));
+ try{localStorage.setItem(KEY+".tab",name)}catch(e){}window.scrollTo(0,0);if(name==="cartoes")renderFlash();if(name==="inicio")renderHome();if(name==="curso")renderCourse();if(name==="preferiti")renderFavs();if(name==="news"){renderNews();if(!$("#ns-cal").hidden)renderCal()}}
 $$("nav.tabs button").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
-document.addEventListener("click",e=>{const g=e.target.closest("[data-goto]");if(g){showTab(g.dataset.goto);if(g.dataset.pod)openPod(g.dataset.pod);if(g.dataset.topic)openTopic(g.dataset.topic,g.dataset.part||"voc");if(g.dataset.wtask)openWTask(g.dataset.wtask)}});
+document.addEventListener("click",e=>{const g=e.target.closest("[data-goto]");if(g){showTab(g.dataset.goto);if(g.dataset.topic)openTopic(g.dataset.topic,g.dataset.part||"voc");}});
 
 /* ============================ CURSO ============================ */
 let CLVL="A1",CUR=null,CPART="voc";
@@ -137,7 +143,7 @@ function renderCourse(){if(CUR&&!$("#cTopic").hidden)return;
 function openTopic(id,part){const t=TOPIC[id];if(!t)return;CUR=t;CLVL=t.lvl;CPART=part||"voc";$("#cHome").hidden=true;$("#cTopic").hidden=false;try{localStorage.setItem(KEY+".topic",id)}catch(e){}renderTopic();window.scrollTo(0,0)}
 function closeTopic(){CUR=null;RUN=null;TEST=null;$("#cTopic").hidden=true;$("#cHome").hidden=false;renderCourse();try{localStorage.removeItem(KEY+".topic")}catch(e){}window.scrollTo(0,0)}
 function markSeen(part){const c=S.course[CUR.id]=S.course[CUR.id]||{};if(!c[part]){c[part]=1;save()}}
-function renderTopic(){const t=CUR,c=tprog(t.id),idx=COURSE.indexOf(t),nxt=COURSE[idx+1],w=WRITING.find(x=>x.topic===t.id);
+function renderTopic(){const t=CUR,c=tprog(t.id),idx=COURSE.indexOf(t),nxt=COURSE[idx+1];
  const tabs=[["voc","Vocabulário"],["gram","Gramática"],["hist","História"],["ex","Exercícios"]];
  let h=`<button class="back" id="cBack">← Unidade ${t.lvl}</button>
  <div class="tophead"><span class="label">${t.lvl} · Tópico ${t.n} de 10</span><h2 class="it" style="font-style:normal;color:var(--ink)">${esc(t.t)}</h2><p class="muted small">${esc(t.sub)}</p></div>
@@ -155,7 +161,6 @@ function renderTopic(){const t=CUR,c=tprog(t.id),idx=COURSE.indexOf(t),nxt=COURS
  else if(CPART==="hist"){markSeen("hist");renderStory(body)}
  else{if(!RUN||RUN.topic!==t.id)RUN=null;if(RUN)renderQ();else renderExIntro()}
  if(CPART!=="ex"||!RUN){const nav=document.createElement("div");nav.className="row";
-  if(CPART==="ex"&&w)nav.innerHTML=`<button class="btn" data-goto="escrita" data-wtask="${w.id}">Escrita deste tópico: ${esc(w.t)}</button>`;
   if(nxt&&CPART==="ex")nav.innerHTML+=`<button class="btn" id="nextTopic">Próximo: ${esc(nxt.t)} →</button>`;
   body.appendChild(nav);if($("#nextTopic"))$("#nextTopic").onclick=()=>openTopic(nxt.id,"voc")}
  $$("#cBody [data-part-go]").forEach(b=>b.onclick=()=>{CPART=b.dataset.partGo;renderTopic();$("#cTopic").scrollIntoView({block:"start"})});
@@ -164,26 +169,26 @@ function renderTopic(){const t=CUR,c=tprog(t.id),idx=COURSE.indexOf(t),nxt=COURS
 /* exercícios do tópico */
 let RUN=null;
 function renderExIntro(){const t=CUR,c=tprog(t.id);
- $("#cBody").innerHTML=`<div class="card stack"><span class="label">Exercícios · 16 questões por rodada</span><h3>Pratique o que viu</h3><p class="small muted">Completar com uma palavra, marcar a opção certa, escolher a frase correta e exercícios de escuta. Uma parte das questões é gerada na hora, então cada rodada é diferente. Cada resposta vem com a explicação, e os erros vão para os cartões em “Meus erros”. Acima de 70% o tópico fica concluído.</p>${c.best!=null?`<p class="small">Seu melhor resultado: <b>${c.best}%</b></p>`:""}<button class="btn primary" id="exStart">${c.best!=null?"Fazer de novo":"Começar"}</button></div>`;
+ $("#cBody").innerHTML=`<div class="card stack"><span class="label">Exercícios · 16 questões por rodada</span><h3>Pratique o que viu</h3><p class="small muted">Tudo por múltipla escolha: completar a frase, marcar a opção certa, escolher a frase correta e exercícios de escuta. Uma parte das questões é gerada na hora, então cada rodada é diferente. Cada resposta vem com a explicação, e os erros vão para os cartões em “Meus erros”. Acima de 70% o tópico fica concluído.</p>${c.best!=null?`<p class="small">Seu melhor resultado: <b>${c.best}%</b></p>`:""}<button class="btn primary" id="exStart">${c.best!=null?"Fazer de novo":"Começar"}</button></div>`;
  $("#exStart").onclick=()=>{RUN={topic:t.id,qs:buildQs(t),i:0,score:0,wrong:[]};renderQ()}}
 function blankify(s){return esc(s).replace("___",'<span class="blank">&nbsp;</span>')}
 function renderQ(){const r=RUN,q=r.qs[r.i],n=r.qs.length;
- const kind=q.type==="f"?"Complete com uma palavra":q.type==="x"?"Marque a frase correta":q.type==="lf"?"Ouça e complete a palavra que falta":q.type==="lm"?"Ouça e marque a frase que você escutou":q.voc?"Vocabulário":"Marque a opção certa";
+ if((q.type==="f"||q.type==="lf")&&!q.opts)q.opts=fillOpts(q);
+ const kind=q.type==="f"?"Escolha a palavra que completa a frase":q.type==="x"?"Marque a frase correta":q.type==="lf"?"Ouça e escolha a palavra que falta":q.type==="lm"?"Ouça e marque a frase que você escutou":q.voc?"Vocabulário":"Marque a opção certa";
  let h=`<div class="row" style="justify-content:space-between"><span class="label">${r.test?"Teste · ":""}${r.i+1} de ${n}${q.gen?" · gerada":""}</span><button class="btn ghost small" id="exQuit">Sair</button></div>
  <div class="progress"><i style="width:${r.i/n*100}%"></i></div><div class="card stack"><span class="qkind">${kind}</span>`;
  if(q.type==="lf"||q.type==="lm")h+=`<button class="btn listenbtn" id="lPlay">${SPK_SVG}Ouvir de novo</button>`;
  if(q.type==="lm"){}else if(q.type!=="x")h+=`<div class="q${q.voc?"":" it"}">${q.voc?esc(q.q):blankify(q.q)}</div>`;else if(q.q&&q.q!=="Marque a frase correta")h+=`<p>${esc(q.q)}</p>`;
- if(q.type==="f"||q.type==="lf")h+=`${q.hint?`<span class="hintchip">${esc(q.hint)}</span>`:""}<form id="fForm" class="fillrow"><input type="text" id="fIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="uma palavra" aria-label="Resposta"><button class="btn primary" type="submit">Verificar</button></form>`;
- else h+=`<div class="opts">${q.opts.map((o,k)=>`<button class="opt" data-k="${k}">${esc(o)}</button>`).join("")}</div>`;
+ if((q.type==="f"||q.type==="lf")&&q.hint)h+=`<span class="hintchip">${esc(q.hint)}</span>`;
+ h+=`<div class="opts${q.type==="f"||q.type==="lf"?" optsw":""}">${q.opts.map((o,k)=>`<button class="opt" data-k="${k}">${esc(o)}</button>`).join("")}</div>`;
  h+=`<div id="fb"></div></div>`;$("#cBody").innerHTML=h;if(q.type!=="lf")tokenize($("#cBody"));
  $("#exQuit").onclick=()=>{const t=r.test,f=r.focus;RUN=null;t?openTest(t):f?closeTopic():renderTopic()};
  if($("#lPlay")){const sp=()=>speak(q.say);$("#lPlay").onclick=sp;setTimeout(sp,250)}
- if(q.type!=="f"&&q.type!=="lf")$$("#cBody .opt").forEach(b=>b.onclick=()=>{const ch=q.opts[+b.dataset.k],ok=ch===q.a;q.chosen=ch;$$("#cBody .opt").forEach(x=>{x.disabled=true;if(q.opts[+x.dataset.k]===q.a)x.classList.add("right")});if(!ok)b.classList.add("wrong");feedback(ok,q)});
- else{const inp=$("#fIn");if(q.type==="f")inp.focus({preventScroll:true});$("#fForm").onsubmit=e=>{e.preventDefault();if(!inp.value.trim())return;const answers=q.a.split("/");const u=norm(inp.value);
-  const okN=answers.some(a=>norm(a)===u);const exact=answers.some(a=>a.toLowerCase().trim()===inp.value.toLowerCase().trim().replace(/[’`]/g,"'"));inp.disabled=true;$("#fForm button").disabled=true;feedback(okN,q,okN&&!exact)}}}
-function feedback(ok,q,accentNote){const r=RUN;q.ok=ok;recordCat(qCat(q),ok);if(ok)r.score++;else{r.wrong.push(q);addErrCard(q);save()}
+ const right=qAns(q);
+ $$("#cBody .opt").forEach(b=>b.onclick=()=>{const ch=q.opts[+b.dataset.k],ok=ch===right;q.chosen=ch;$$("#cBody .opt").forEach(x=>{x.disabled=true;if(q.opts[+x.dataset.k]===right)x.classList.add("right")});if(!ok)b.classList.add("wrong");feedback(ok,q)})}
+function feedback(ok,q){const r=RUN;q.ok=ok;recordCat(qCat(q),ok);if(ok)r.score++;else{r.wrong.push(q);addErrCard(q);save()}
  const full=q.type==="lf"||q.type==="lm"?q.say:q.type==="f"&&!q.q.includes("→")?q.q.replace("___",q.a.split("/")[0]).replace(/\s*\(.*?\)\s*$/,""):q.type==="x"?q.a:"";
- $("#fb").innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${ok?"Certo!":"Resposta: "+esc(q.a.split("/").join(" ou "))}</b>${accentNote?`<span>Atenção à grafia/acento: <b>${esc(q.a.split("/")[0])}</b></span>`:""}${full?`<div class="row" style="gap:8px;flex-wrap:nowrap"><i class="it" style="flex:1">${esc(full)}</i>${spkBtn(full)}</div>`:""}<div>${esc(q.exp)}</div></div>
+ $("#fb").innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${ok?"Certo!":"Resposta: "+esc(q.a.split("/").join(" ou "))}</b>${full?`<div class="row" style="gap:8px;flex-wrap:nowrap"><i class="it" style="flex:1">${esc(full)}</i>${spkBtn(full)}</div>`:""}<div>${esc(q.exp)}</div></div>
  <button class="btn primary" id="nextQ" style="margin-top:12px">${r.i<r.qs.length-1?"Próxima":"Ver resultado"}</button>`;tokenize($("#fb"));
  $("#nextQ").onclick=()=>{r.i++;r.i<r.qs.length?renderQ():(r.test?endTest():r.focus?endFocus():endEx())};$("#nextQ").focus({preventScroll:true})}
 function endEx(){const r=RUN,n=r.qs.length,pct=Math.round(r.score/n*100),c=S.course[r.topic]=S.course[r.topic]||{};if(c.best==null||pct>c.best)c.best=pct;c.ex=1;c.last=today();if(r.review)revAfter(r.topic,pct);else revInit(r.topic);logInc("e");save();
@@ -194,52 +199,6 @@ function endEx(){const r=RUN,n=r.qs.length,pct=Math.round(r.score/n*100),c=S.cou
  <div class="row"><button class="btn primary" id="again">Nova rodada</button><button class="btn" id="toGram">Rever a gramática</button>${nxt&&pct>=70?`<button class="btn" id="goNext">Próximo tópico →</button>`:""}</div></div>`;
  tokenize($("#cBody"));RUN=null;
  $("#again").onclick=()=>{RUN={topic:t.id,qs:buildQs(t),i:0,score:0,wrong:[]};renderQ()};$("#toGram").onclick=()=>{CPART="gram";renderTopic()};if($("#goNext"))$("#goNext").onclick=()=>openTopic(nxt.id,"voc")}
-
-/* ============================ ESCRITA ============================ */
-let WLVL="A1",WCUR=null;
-$$("#wSeg button").forEach(b=>b.addEventListener("click",()=>{WLVL=b.dataset.wl;renderWriting()}));
-function wordCount(s){return(String(s).match(new RegExp("["+LET+"]+","g"))||[]).length}
-function renderWriting(){if(WCUR&&!$("#wTask").hidden)return;
- $$("#wSeg button").forEach(b=>{const on=b.dataset.wl===WLVL;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
- $("#wlist").innerHTML=WRITING.filter(w=>w.lvl===WLVL).map(w=>{const s=S.writing[w.id],dn=s&&(s.done||s.result||s.sent);return`<button class="wcard" data-wopen="${w.id}"><div class="row"><span class="label">${w.kind==="frasi"?"Frases completas":"Texto"} · ${w.min}–${w.max} palavras</span><span class="pill ${dn?"ok":"todo"}">${dn?"feito":"a fazer"}</span></div><h3>${esc(w.t)}</h3><p>${esc(w.task)}</p></button>`}).join("");
- $$("[data-wopen]").forEach(b=>b.onclick=()=>openWTask(b.dataset.wopen))}
-function draftKey(id){return KEY+".draft."+id}
-function getDraft(w){try{const d=localStorage.getItem(draftKey(w.id));if(d)return JSON.parse(d)}catch(e){}const s=S.writing[w.id];return s?{text:s.text||"",answers:s.answers||[]}:{text:"",answers:[]}}
-function setDraft(w,d){try{localStorage.setItem(draftKey(w.id),JSON.stringify(d))}catch(e){}}
-function openWTask(id){const w=WRITING.find(x=>x.id===id);if(!w)return;WMODE="text";renderWMode();WCUR=w;WLVL=w.lvl;$("#wHome").hidden=true;$("#wTask").hidden=false;renderWTask();window.scrollTo(0,0)}
-function closeWTask(){WCUR=null;$("#wTask").hidden=true;$("#wHome").hidden=false;renderWriting();window.scrollTo(0,0)}
-function curText(w){if(w.kind==="frasi")return w.qs.map((q,i)=>($("#wa"+i)||{}).value||"").map((a,i)=>a.trim()).join("\n");return($("#wText")||{}).value||""}
-function renderWTask(){const w=WCUR,d=getDraft(w),s=S.writing[w.id];const t=TOPIC[w.topic];
- let h=`<button class="back" id="wBack">← Escrita ${w.lvl}</button>
- <div class="tophead"><span class="label">${w.lvl} · ${w.kind==="frasi"?"Frases completas":"Texto"} · foco: ${esc(w.focus)}</span><h2>${esc(w.t)}</h2></div>
- <div class="card stack"><p>${esc(w.task)}</p><div class="stack" style="gap:6px"><span class="label">Expressões úteis</span><div class="chips2">${w.useful.map(u=>`<span class="it">${esc(u)}</span>`).join("")}</div></div>
- ${t?`<p class="small muted">Base: tópico <button class="btn ghost small" data-goto="curso" data-topic="${t.id}" data-part="gram" style="padding:2px 8px">${esc(t.t)}</button></p>`:""}</div>`;
- if(w.kind==="frasi")h+=w.qs.map((q,i)=>`<div class="wq"><label for="wa${i}"><span class="it">${esc(q)}</span></label><textarea id="wa${i}" class="short" spellcheck="false" lang="it">${esc(d.answers[i]||"")}</textarea></div>`).join("");
- else h+=`<div class="wq"><label for="wText">Seu texto</label><textarea id="wText" spellcheck="false" lang="it" placeholder="Scrivi qui…">${esc(d.text||"")}</textarea></div>`;
- h+=`<div class="wmeta"><span id="wCount"></span><span>O rascunho fica salvo enquanto você escreve.</span></div>
- <div class="row"><button class="btn primary" id="wSend">Terminei — conferir</button></div><p class="small muted" id="wMsg"></p><div id="wRes" class="stack" style="gap:14px"></div>`;
- $("#wTask").innerHTML=h;tokenize($("#wTask"));$("#wBack").onclick=closeWTask;
- const upd=()=>{const tx=curText(w),n=wordCount(tx);$("#wCount").textContent=`${n} palavras · meta ${w.min}–${w.max}`;setDraft(w,{text:w.kind==="frasi"?"":tx,answers:w.kind==="frasi"?w.qs.map((q,i)=>$("#wa"+i).value):[]})};
- $$("#wTask textarea").forEach(a=>a.addEventListener("input",upd));upd();
- $("#wSend").onclick=()=>selfCheck(w);
- if(s&&s.done)renderWCheck(w,s)}
-function selfCheck(w){const tx=curText(w).trim(),n=wordCount(tx),msg=$("#wMsg");
- if(n<Math.min(8,w.min)){msg.textContent="Escreva um pouco mais antes de terminar.";return}msg.textContent="";
- const answers=w.kind==="frasi"?w.qs.map((q,i)=>$("#wa"+i).value.trim()):[];const prev=S.writing[w.id]||{};
- S.writing[w.id]={text:w.kind==="frasi"?"":tx,answers,at:today(),words:n,done:true,checks:prev.checks||[]};if(!prev.done||prev.at!==today())logInc("w");save();
- renderWCheck(w,S.writing[w.id]);renderHome();$("#wRes").scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})}
-function renderWCheck(w,rec){const m=WMODEL[w.id]||{model:"",check:[]},items=[...m.check,...WCHECK_ALL],ck=rec.checks||[];
- const lenOk=rec.words>=w.min&&rec.words<=w.max*1.3;
- const model=Array.isArray(m.model)?m.model.map((x,i)=>`<div class="exi"><div><span class="small muted">${esc(w.qs[i]||"")}</span><i class="it">${esc(x)}</i></div>${spkBtn(x)}</div>`).join(""):`<div class="corrtext it">${esc(m.model)}</div>${spkBtn(m.model)}`;
- $("#wRes").innerHTML=`<div class="card stack"><span class="label">Autocorreção · ${fmtBR(rec.at)}</span>
-  <p class="small ${lenOk?"":"warnt"}">${rec.words} palavras ${lenOk?"— dentro da meta.":"— a meta era de "+w.min+" a "+w.max+"."}</p>
-  <p class="small">Releia o seu texto e marque cada item que você conferiu. Se algo não estiver certo, corrija acima e toque em “Terminei” de novo.</p>
-  <div class="checks">${items.map((it,i)=>`<label class="chk"><input type="checkbox" data-ck="${i}" ${ck.includes(i)?"checked":""}><span>${esc(it)}</span></label>`).join("")}</div>
-  <p class="small muted" id="ckCount"></p></div>
- <div class="stack" style="gap:8px"><span class="label">Texto-modelo para comparar</span><p class="small muted">Não precisa ser igual: compare as estruturas, os artigos, as preposições e os tempos verbais. Toque nas palavras para ver o significado.</p>${model}</div>`;
- tokenize($("#wRes"));
- const upd=()=>{const c=$$("#wRes [data-ck]").filter(x=>x.checked).map(x=>+x.dataset.ck);rec.checks=c;save();$("#ckCount").textContent=c.length===items.length?"Tudo conferido. Ótimo trabalho!":`${c.length} de ${items.length} itens conferidos.`};
- $$("#wRes [data-ck]").forEach(x=>x.onchange=upd);$("#ckCount").textContent=`${ck.length} de ${items.length} itens conferidos.`}
 
 /* ============================ CARTÕES (repetição espaçada) ============================ */
 const IV=[0,1,2,4,8,16,32,64];
@@ -259,7 +218,8 @@ function buildSession(){rollDay();const due=shuffle(dueIds()),nw=[...newErrIds()
  SESSION={queue:q,total:q.length,done:0,shown:false,dirFlip:null}}
 function cardFace(id){const c=CARDS[id];if(c.sent){const e=c.sent;return{front:blankWord(e.s,e.w),sub:"minhas frases"+(e.m?" · "+e.m:""),back:e.w,note:e.s,say:e.s,sayFront:false,blank:true}}
  if(c.err){const e=c.err;return{front:e.f,sub:"meus erros · "+e.s,back:e.b,note:e.n,say:e.say,sayFront:false,blank:true}}if(c.fav){const f=c.fav,bits=[];if(f.synonyms&&f.synonyms.length)bits.push("Sinônimos: "+f.synonyms.join(", "));if(f.example)bits.push("Ex.: "+f.example+(f.examplePt?" ("+f.examplePt+")":""));
-  return{front:f.lemma,sub:f.date?"salva em "+fmtBR(f.added||f.date):"minhas palavras",back:f.meaning,note:bits.join(" · "),say:f.lemma,sayFront:true}}
+  if(f.tipo==="frase"&&f.context&&f.context!==f.lemma)bits.push("No texto: "+f.context);
+  return{front:f.lemma,sub:(f.tipo==="frase"?"frase salva":"palavra salva")+(f.added||f.date?" em "+fmtBR(f.added||f.date):""),back:f.meaning+(f.auto?" (palavra por palavra)":""),note:bits.join(" · "),say:f.lemma,sayFront:true}}
  if(c.v){let dir=S.settings.dir;if(dir==="mix"){if(SESSION.dirFlip===null)SESSION.dirFlip=Math.random()<.5;dir=SESSION.dirFlip?"pt":"it"}
   return dir==="it"?{front:c.v.it,sub:c.v.theme,back:c.v.pt,say:c.v.it,sayFront:true}:{front:c.v.pt,sub:c.v.theme,back:c.v.it,say:c.v.it,sayFront:false}}
  return{front:c.front,sub:c.sub,back:c.back,note:c.note,say:c.say,sayFront:false}}
@@ -281,16 +241,13 @@ function renderFlash(){if(!SESSION||SESSION.queue.length===0&&SESSION.total===0)
   <p class="muted">${s.total?`Você revisou ${s.total} cartões hoje.`:"Todos os cartões de hoje já foram feitos."} ${nextDue?"Próxima revisão: "+nextDue.split("-").reverse().join("/")+".":""}</p>
   ${newIds(1).length?`<button class="btn" id="more">Estudar mais 10 novos</button>`:`<p class="small muted">Os cartões novos são liberados quando você abre o vocabulário de um tópico do curso.</p><button class="btn" data-goto="curso">Ir para o curso</button>`}</div>`;
   if($("#more"))$("#more").onclick=()=>{const extra=newIds(10);SESSION={queue:extra,total:extra.length,done:0,shown:false,dirFlip:null,extra:true};renderFlash()};renderBoxes();return}
- const id=s.queue[0],f=cardFace(id),c=CARDS[id],isNew=!S.cards[id],typ=canType(f,c);
- const sugR=s.typed?(s.typed.ok?2:0):-1;
+ const id=s.queue[0],f=cardFace(id),c=CARDS[id],isNew=!S.cards[id];
  area.innerHTML=`<div class="flash"><span class="deck label">${esc(DECKS[c.deck])}${isNew?" · novo":""}</span>${spkBtn(f.say)}
   <span class="label">${esc(f.sub||"")}</span><div class="front">${f.blank?blankify(f.front):esc(f.front)}</div>
-  ${s.shown?`<div class="back">${s.typed?`<div class="typed ${s.typed.ok?"tok":"tno"}">Você escreveu: <b>${esc(s.typed.v)}</b> ${s.typed.ok?"✓":"✗"}</div>`:""}<b>${esc(f.back)}</b>${f.note?`<div class="note">${esc(f.note)}</div>`:""}</div>`:""}</div>
-  ${s.shown?`<div class="rate">${[["r0",0,"Errei"],["",1,"Difícil"],["",2,"Bom"],["r3",3,"Fácil"]].map(([cl,r,l])=>`<button class="${cl}${r===sugR?" sug":""}" data-r="${r}">${l}<span>${intervalLabel(id,r)}</span></button>`).join("")}</div>`
-  :typ?`<form id="tyForm" class="fillrow"><input type="text" id="tyIn" autocomplete="off" autocapitalize="off" spellcheck="false" lang="it" placeholder="Escreva em italiano" aria-label="Sua resposta"><button class="btn primary" type="submit">Conferir</button></form><button class="btn ghost small" id="reveal">Não sei — mostrar resposta</button>`
+  ${s.shown?`<div class="back"><b>${esc(f.back)}</b>${f.note?`<div class="note">${esc(f.note)}</div>`:""}</div>`:""}</div>
+  ${s.shown?`<div class="rate">${[["r0",0,"Errei"],["",1,"Difícil"],["",2,"Bom"],["r3",3,"Fácil"]].map(([cl,r,l])=>`<button class="${cl}" data-r="${r}">${l}<span>${intervalLabel(id,r)}</span></button>`).join("")}</div>`
   :`<button class="btn primary" id="reveal">Mostrar resposta</button>`}`;
- if(s.shown)$$(".rate button").forEach(b=>b.onclick=()=>rate(+b.dataset.r));else{$("#reveal").onclick=()=>{s.shown=true;renderFlash();if(!f.sayFront)speak(f.say)};if(f.sayFront&&isNew)speak(f.say);
-  if($("#tyForm")){$("#tyIn").focus({preventScroll:true});$("#tyForm").onsubmit=e=>{e.preventDefault();const v=$("#tyIn").value.trim();if(!v)return;s.typed={v,ok:typeAnswers(f.back).includes(norm(v))};s.shown=true;renderFlash();speak(f.say)}}}
+ if(s.shown)$$(".rate button").forEach(b=>b.onclick=()=>rate(+b.dataset.r));else{$("#reveal").onclick=()=>{s.shown=true;renderFlash();if(!f.sayFront)speak(f.say)};if(f.sayFront&&isNew)speak(f.say);}
  renderBoxes()}
 function rate(r){const s=SESSION,id=s.queue.shift(),isNew=!S.cards[id];
  if(isNew&&!s.extra&&CARDS[id]&&CARDS[id].deck!=="fav"&&CARDS[id].deck!=="err"&&CARDS[id].deck!=="frase")S.daily.newDone++;logInc("c");
@@ -298,7 +255,7 @@ function rate(r){const s=SESSION,id=s.queue.shift(),isNew=!S.cards[id];
  if(r===0)s.queue.splice(Math.min(3,s.queue.length),0,id);else s.done++;
  S.cards[id]=st;S.daily.reviewed++;
  const t=today();if(S.streak.last!==t){S.streak.count=S.streak.last===addDays(-1)?S.streak.count+1:1;S.streak.last=t}
- if(!s.queue.length)logInc("cz",1);save();s.shown=false;s.typed=null;s.dirFlip=null;renderFlash()}
+ if(!s.queue.length)logInc("cz",1);save();s.shown=false;s.dirFlip=null;renderFlash()}
 document.addEventListener("keydown",e=>{if($("#v-cartoes").hidden||!SESSION||!SESSION.queue.length||e.target.matches("input,select,textarea"))return;
  if(!SESSION.shown&&(e.key===" "||e.key==="Enter")){e.preventDefault();$("#reveal")&&$("#reveal").click()}else if(SESSION.shown&&"1234".includes(e.key))rate(+e.key-1)});
 function ivlOf(c){return c.ivl!=null?c.ivl:(IV[c.b]||0)}
@@ -306,8 +263,7 @@ function renderBoxes(){const cnt=[0,0,0,0,0,0,0,0],lim=[0,1,3,7,15,31,63,1e9];Ob
  $("#boxes").innerHTML=cnt.map(n=>`<div style="height:${Math.max(4,n/mx*100)}%" title="${n} cartões"></div>`).join("")}
 function renderDecks(){$("#decks").innerHTML=Object.entries(DECKS).map(([k,n])=>`<label for="dk-${k}"><input type="checkbox" id="dk-${k}" data-deck="${k}" ${S.settings.decks[k]?"checked":""}><span>${n}</span><em>${ORDER[k].length}</em></label>`).join("");
  $$("[data-deck]").forEach(cb=>cb.onchange=()=>{S.settings.decks[cb.dataset.deck]=cb.checked;save();SESSION=null;renderFlash()});
- $("#newPerDay").value=String(S.settings.newPerDay);$("#dir").value=S.settings.dir;$("#typing").checked=!!S.settings.typing}
-$("#typing").onchange=e=>{S.settings.typing=e.target.checked;save();renderFlash()};
+ $("#newPerDay").value=String(S.settings.newPerDay);$("#dir").value=S.settings.dir}
 $("#newPerDay").onchange=e=>{S.settings.newPerDay=+e.target.value;save();SESSION=null;renderFlash()};
 $("#dir").onchange=e=>{S.settings.dir=e.target.value;save();renderFlash()};
 function updateChips(){rollDay();const due=dueIds().length,nw=newErrIds().length+newSentIds().length+newFavIds().length+Math.min(newLeft(),newIds(newLeft()).length);
@@ -317,8 +273,5 @@ function renderHome(){const {due,nw}=updateChips();$("#nDue").textContent=due;$(
  $("#todayTitle").textContent=due+nw?(due+nw)+" cartões te esperando":"Tudo em dia por hoje";
  const t=nextTopic(),c=tprog(t.id),doneN=COURSE.filter(x=>isDone(x.id)).length;
  $("#homeCourse").innerHTML=`<div class="row" style="justify-content:space-between"><span class="label">Curso · ${doneN}/${COURSE.length} tópicos</span><span class="cefr">${t.lvl}</span></div><h3>${esc(t.t)}</h3><p class="small muted">${esc(t.sub)}</p><div class="row"><button class="btn primary" data-goto="curso" data-topic="${t.id}" data-part="${c.voc?(c.gram?"ex":"gram"):"voc"}">${c.voc?"Continuar":"Começar"} tópico ${t.n}</button></div>`;
- const isW=w=>{const s=S.writing[w.id];return!!(s&&(s.done||s.result||s.sent))},doneW=WRITING.filter(isW).length;const nextW=WRITING.find(w=>!isW(w)&&(isDone(w.topic)||w.topic===t.id))||WRITING.find(w=>!isW(w));
- $("#homeWriting").innerHTML=`<span class="label">Escrita · ${doneW}/${WRITING.length} temas</span><p class="small muted">Escreva, confira com o checklist e compare com o texto-modelo.</p>${nextW?`<h3>${esc(nextW.t)}</h3><div class="row"><button class="btn" data-goto="escrita" data-wtask="${nextW.id}">Escrever agora</button></div>`:""}`;
- const sp=PODS.find(p=>p.topic===t.id)||PODS[0],ss=S.shadow[sp.topic];
- $("#homeShadow").innerHTML=`<div class="row" style="justify-content:space-between"><span class="label">Shadowing · ${esc(TOPIC[sp.topic].lvl)} · tópico ${TOPIC[sp.topic].n}</span>${ss?`<span class="pill ok">${ss.n}×</span>`:""}</div><h3>${esc(sp.t)}</h3><p class="small muted">${esc(sp.sit)}</p><div class="row"><button class="btn" data-goto="shadow" data-pod="${sp.topic}">Praticar a pronúncia</button></div>`;
+ renderHomePref();
  renderGoal();renderHomeReview();renderHomeWeak();renderHomeNews()}

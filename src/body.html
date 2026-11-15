@@ -30,11 +30,10 @@
     <div class="card stack" id="homeWeak" hidden></div>
     <div class="homegrid">
       <div class="card" id="homeCourse"></div>
-      <div class="card" id="homeWriting"></div>
+      <div class="card" id="homePref"></div>
     </div>
     <div class="card" id="homeNews"><span class="label">Notícia do dia</span><p class="muted small">Carregando…</p></div>
-    <div class="card" id="homeShadow"></div>
-    <p class="hint">Dica: em qualquer parte do curso, toque numa palavra em italiano para ver o significado, exemplos e, nas preposições e artigos, como a forma se constrói.</p>
+    <p class="hint">Dica: em qualquer texto, toque numa palavra em italiano para ver o significado e os exemplos. A estrela salva a palavra em Preferiti; “Marcar um trecho” salva uma frase inteira.</p>
   </section>
 
   <!-- ===================== CURSO ===================== -->
@@ -50,64 +49,25 @@
     <div id="cTopic" class="stack" style="gap:18px" hidden></div>
   </section>
 
-  <!-- ===================== ESCRITA ===================== -->
-  <section class="view" id="v-escrita" data-view="escrita" hidden>
-    <div id="wHome" class="stack" style="gap:16px">
-      <div class="stack" style="gap:6px"><h2>Escrita</h2><p class="muted small">Temas para escrever com checklist e texto-modelo, tradução de volta e diário de 3 frases.</p></div>
-      <div class="seg" id="wMode" role="tablist" aria-label="Tipo de escrita">
-        <button role="tab" data-wm="text" class="on" aria-selected="true">Textos</button>
-        <button role="tab" data-wm="tr" aria-selected="false">Tradução</button>
-        <button role="tab" data-wm="diary" aria-selected="false">Diário</button>
-      </div>
-      <div id="wp-text" class="stack" style="gap:16px">
-        <div class="seg seg2" id="wSeg" role="tablist" aria-label="Nível da escrita">
-          <button role="tab" data-wl="A1" class="on" aria-selected="true">Escrita A1</button>
-          <button role="tab" data-wl="A2" aria-selected="false">Escrita A2</button>
-        </div>
-        <div class="wlist" id="wlist"></div>
-      </div>
-      <div id="wp-tr" class="stack" style="gap:16px" hidden></div>
-      <div id="wp-diary" class="stack" style="gap:16px" hidden></div>
-    </div>
-    <div id="wTask" class="stack" style="gap:16px" hidden></div>
-  </section>
-
-  <!-- ===================== SHADOWING ===================== -->
-  <section class="view" id="v-shadow" data-view="shadow" hidden>
-    <div id="sHome" class="stack" style="gap:18px">
-      <div class="seg" id="sMode" role="tablist" aria-label="Tipo de prática">
-        <button role="tab" data-sm="pod" class="on" aria-selected="true">Podcasts</button>
-        <button role="tab" data-sm="pairs" aria-selected="false">Pares mínimos</button>
-        <button role="tab" data-sm="dict" aria-selected="false">Ditado</button>
-      </div>
-      <div id="shp-pod" class="stack" style="gap:18px">
-        <div id="sIntro" class="stack" style="gap:16px"></div>
-        <div class="seg seg2" id="sSeg" role="tablist" aria-label="Nível dos podcasts">
-          <button role="tab" data-sl="A1" class="on" aria-selected="true">Podcasts A1</button>
-          <button role="tab" data-sl="A2" aria-selected="false">Podcasts A2</button>
-        </div>
-        <div class="tlist" id="slist"></div>
-        <div class="card" id="sLinks"></div>
-      </div>
-      <div id="shp-pairs" class="stack" style="gap:16px" hidden></div>
-      <div id="shp-dict" class="stack" style="gap:16px" hidden></div>
-    </div>
-    <div id="sPlay" class="stack" style="gap:16px" hidden></div>
-  </section>
-
   <!-- ===================== NOTÍCIA ===================== -->
   <section class="view" id="v-news" data-view="news" hidden>
-    <div class="seg" id="newsSeg" role="tablist" aria-label="Notícia">
+    <div class="seg seg2" id="newsSeg" role="tablist" aria-label="Notícia">
       <button role="tab" data-ns="read" class="on" aria-selected="true">Notícia</button>
       <button role="tab" data-ns="cal" aria-selected="false">Calendário</button>
-      <button role="tab" data-ns="favs" aria-selected="false">Minhas palavras<span class="cnt" id="favCount"></span></button>
     </div>
     <div id="ns-read" class="stack" style="gap:20px">
       <div id="newsBox"><div class="card stack"><span class="label">Notícia do dia</span><p class="muted small">Carregando…</p></div></div>
       <div id="quizBox"></div>
     </div>
     <div id="ns-cal" hidden><div class="card stack" id="calBox"></div></div>
-    <div id="ns-favs" class="stack" hidden><div id="favBox" class="stack"></div></div>
+  </section>
+
+  <!-- ===================== PREFERITI ===================== -->
+  <section class="view" id="v-preferiti" data-view="preferiti" hidden>
+    <div class="row" style="justify-content:space-between">
+      <div class="stack" style="gap:2px"><h2>Preferiti</h2><p class="muted small">Palavras e frases que você salvou com a estrela.</p></div>
+    </div>
+    <div id="favBox" class="stack"></div>
   </section>
 
   <!-- ===================== CARTÕES ===================== -->
@@ -130,7 +90,6 @@
         <label for="newPerDay" class="small" style="flex:1">Cartões novos por dia</label>
         <select id="newPerDay" style="width:auto"><option>10</option><option>15</option><option>20</option><option>30</option><option>50</option></select>
       </div>
-      <label class="row small" for="typing" style="gap:8px"><input type="checkbox" id="typing"> Digitar a resposta antes de ver (vocabulário português → italiano, verbos, frases e erros)</label>
       <div class="row">
         <label for="dir" class="small" style="flex:1">Direção do vocabulário</label>
         <select id="dir" style="width:auto"><option value="it">Italiano → Português</option><option value="pt">Português → Italiano</option><option value="mix">Misturado</option></select>
@@ -147,7 +106,7 @@
       <div><div class="shword" id="shWord"></div><div class="small muted" id="shLemma"></div></div>
       <div class="row" style="gap:6px;flex-wrap:nowrap">
         <button class="iconbtn" id="shSay" data-say="" aria-label="Ouvir pronúncia"><svg viewBox="0 0 24 24"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>
-        <button class="iconbtn star" id="shFav" aria-pressed="false" aria-label="Salvar nas minhas palavras"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg></button>
+        <button class="iconbtn star" id="shFav" aria-pressed="false" aria-label="Salvar em Preferiti"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg></button>
         <button class="iconbtn" id="shClose" aria-label="Fechar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       </div>
     </div>
@@ -158,8 +117,7 @@
 <nav class="tabs" aria-label="Seções do app"><div class="in" role="tablist">
   <button role="tab" data-tab="inicio" aria-selected="true"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Início</button>
   <button role="tab" data-tab="curso" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M8 7h7M8 11h5"/></svg>Curso</button>
-  <button role="tab" data-tab="escrita" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>Escrita</button>
-  <button role="tab" data-tab="shadow" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M3 10v4M7 7v10M11 4v16M15 8v8M19 10v4"/></svg>Shadowing</button>
   <button role="tab" data-tab="news" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 5h13v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v10a2 2 0 0 1-2 2"/><path d="M7 9h7M7 13h7M7 17h4"/></svg>Notícia</button>
+  <button role="tab" data-tab="preferiti" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>Preferiti</button>
   <button role="tab" data-tab="cartoes" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="14" height="13" rx="2"/><path d="M7 7V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-2"/></svg>Cartões</button>
 </div></nav>

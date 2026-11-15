@@ -7,17 +7,20 @@ function ctxSentence(btn){const inNews=btn.closest("#newsBox");
  const blk=btn.closest(".exi,.q,.decr,.eq,.cjr,.vcell,.igcc,li,td,p,.corrtext,.fix,.chips2 span,label,.fb,.it")||btn.parentElement;
  let t=(blk.querySelector&&blk.querySelector(".it")&&!blk.classList.contains("it")?blk.querySelector(".it").textContent:blk.textContent)||"";
  t=t.replace(/\s+/g," ").trim();return findSentence(t,btn.textContent)}
-function openWord(btn){$$("button.w.on").forEach(x=>x.classList.remove("on"));btn.classList.add("on");
+function openWord(btn){if(RANGE&&finishRange(btn))return;
+ $$("button.w.on").forEach(x=>x.classList.remove("on"));btn.classList.add("on");
  const k=btn.dataset.w,surface=btn.textContent.replace(/[!?.,]/g,"").trim()||k,inNews=!!btn.closest("#newsBox");
  const local=lookupLocal(k,surface.toLowerCase());
  let entry=null,src="";
  if(inNews){const g=gloss(k);if(g){entry=Object.assign({},g);src="news";if(local){entry.how=entry.how||local.how;entry.form=local.form;entry.formNote=local.formNote;entry.verb=local.verb;entry.examples=local.examples;entry.found=local.found}}}
  if(!entry&&local){entry=local;src="local"}
  if(!entry&&AI_CACHE[k]){entry=AI_CACHE[k];src="ai"}
- SH={k,surface,sentence:ctxSentence(btn),entry,src,btn,ai:src==="ai"?AI_CACHE[k]:null};
+ if(!entry&&S.favs[k]&&S.favs[k].own){entry={lemma:k,meaning:S.favs[k].meaning,pos:"",own:true};src="own"} // palavra salva com tradução do próprio usuário
+ SH={mode:"word",k,surface,sentence:ctxSentence(btn),entry,src,btn,ai:src==="ai"?AI_CACHE[k]:null};
  renderSheet();showSheet(true);speak(surface)}
 document.addEventListener("click",e=>{const b=e.target.closest("button.w");if(b){e.preventDefault();openWord(b)}});
 function showSheet(on){$("#sheet").hidden=!on;$("#sheetBack").hidden=!on;
+ if(!on)clearRangeMarks();
  if(on){$("#sheet").scrollTop=0;setTimeout(()=>$("#shClose").focus({preventScroll:true}),0)}else{$$("button.w.on").forEach(x=>x.classList.remove("on"));if(SH&&SH.btn&&document.contains(SH.btn))SH.btn.focus({preventScroll:true})}}
 function favKeyOf(e,k){return String((e&&e.lemma)||k).toLowerCase().trim()}
 function verbBlock(vf,surface){const x=vf.find(z=>z.tk!=="inf"&&z.tk!=="impv")||vf.find(z=>z.tk!=="inf")||vf[0],v=x.v;
@@ -33,12 +36,13 @@ function verbBlock(vf,surface){const x=vf.find(z=>z.tk!=="inf"&&z.tk!=="impv")||
  return`<p class="small">Forma de ${label} · <b>${TLAB[x.tk]}</b> · ${esc(who)}${others.length?` · também ${esc(others.join(", "))}`:""}${impTxt?` · também ${impTxt}`:""}</p>${miniConj(v,x.tk,vf.filter(z=>z.v===v&&z.tk===x.tk).map(z=>z.i))}`}
 function miniConj(v,tk,mark){const f=TENSES[tk].f(v),m=[].concat(mark);return`<div class="stack" style="gap:6px"><span class="label">${TENSES[tk].n} de ${esc(v.inf)}</span><div class="cjmini">${f.map((x,i)=>`<span><em>${P[i]}</em><b class="${m.includes(i)?"me":""}" style="font-weight:${m.includes(i)?700:500}">${esc(x)}</b></span>`).join("")}</div></div>`}
 function extLinks(){return`<div class="row"><a class="btn small" href="https://www.wordreference.com/itpt/${encodeURIComponent(SH.surface.toLowerCase())}" target="_blank" rel="noopener">Ver no WordReference</a></div>`}
-function renderSheet(){const e=SH.entry,fk=e?favKeyOf(e,SH.k):null,isFav=!!(fk&&S.favs[fk]&&e.meaning);
+function renderSheet(){$("#shWord").classList.toggle("phrase",SH.mode==="phrase");if(SH.mode==="phrase"){renderPhrase();return}
+ const e=SH.entry,fk=e?favKeyOf(e,SH.k):null,isFav=!!(fk&&S.favs[fk]&&e.meaning);
  $("#shWord").textContent=SH.surface;
  const lem=e&&e.lemma&&e.lemma.toLowerCase()!==SH.surface.toLowerCase()?"forma de “"+e.lemma+"”":"";
  $("#shLemma").textContent=[lem,e&&e.pos].filter(Boolean).join(" · ");
  const fav=$("#shFav");fav.disabled=!(e&&e.meaning);fav.classList.toggle("on",isFav);fav.setAttribute("aria-pressed",isFav);
- fav.setAttribute("aria-label",isFav?"Remover das minhas palavras":"Salvar nas minhas palavras");
+ fav.setAttribute("aria-label",isFav?"Remover de Preferiti":"Salvar em Preferiti");
  $("#shSay").dataset.say=SH.surface;
  let h="";
  if(e){h+=`<div class="shmean">${esc(e.meaning||"")}</div>`;
@@ -51,20 +55,24 @@ function renderSheet(){const e=SH.entry,fk=e?favKeyOf(e,SH.k):null,isFav=!!(fk&&
   if(exs.length)h+=`<div class="stack" style="gap:6px"><span class="label">Exemplos de uso</span><div class="exl">${exs.slice(0,4).map(x=>`<div class="exi"><div><i class="it">${esc(x[0])}</i>${x[1]?`<span>${esc(x[1])}</span>`:""}</div>${spkBtn(x[0])}</div>`).join("")}</div></div>`;
   if(e.phrases&&e.phrases.length)h+=`<div class="stack" style="gap:6px"><span class="label">Expressões do curso</span><div class="exl">${e.phrases.map(p=>`<div class="exi"><div><i class="it">${esc(p.it)}</i><span>${esc(p.pt)}</span></div>${spkBtn(p.it)}</div>`).join("")}</div></div>`;
   if(e.topic&&TOPIC[e.topic])h+=`<p class="small muted">Do vocabulário de <b>${esc(TOPIC[e.topic].lvl)} · ${esc(TOPIC[e.topic].t)}</b>.</p>`;
-  if(e.meaning)h+=`<p class="favline small">${isFav?"★ Salva nas minhas palavras. Ela aparece nos cartões de revisão.":"Toque na estrela para revisar esta palavra nos cartões."}</p>`;
+  if(e.meaning)h+=`<p class="favline small">${isFav?"★ Salva em Preferiti. Ela aparece nos cartões de revisão.":"Toque na estrela para salvar em Preferiti e revisar nos cartões."}</p>`;
  }
- else h+=`<p class="muted">Esta palavra ainda não está no dicionário do app. Veja o significado no dicionário online:</p>`+extLinks();
+ else h+=`<p class="muted">Sem tradução cadastrada para esta palavra. Veja o significado no dicionário online e, se quiser, salve em Preferiti com a sua tradução.</p>`+extLinks()+`<form class="fillrow" id="shOwnF"><input type="text" id="shOwn" autocomplete="off" placeholder="Sua tradução" aria-label="Sua tradução"><button class="btn primary" type="submit">☆ Salvar</button></form>`;
  if(SH.sentence&&SH.sentence.toLowerCase()!==SH.surface.toLowerCase())h+=`<div class="stack" style="gap:6px"><span class="label">Onde aparece</span><div class="exi"><div><i class="it">${esc(SH.sentence)}</i></div>${spkBtn(SH.sentence)}</div></div>`;
- if(SH.sentence&&SH.sentence.split(/\s+/).length>2){const sid=sentCardId(SH.sentence,SH.surface),sv=!!(S.sents||{})[sid];h+=`<button class="btn small${sv?" ghost":""}" id="shSent">${sv?"★ Frase salva nos cartões (tocar para remover)":"Salvar a frase nos cartões"}</button>`}
+ if(SH.sentence&&SH.sentence.split(/\s+/).length>2){const sid=sentCardId(SH.sentence,SH.surface),sv=!!(S.sents||{})[sid];h+=`<button class="btn small${sv?" ghost":""}" id="shSent">${sv?"★ Frase com lacuna salva (tocar para remover)":"Salvar a frase com lacuna nos cartões"}</button>`}
+ if(canRange(SH.btn))h+=`<button class="btn small" id="shRange">Marcar um trecho (salvar frase)</button>`;
  $("#shBody").innerHTML=h;tokenize($("#shBody"));
- if($("#shSent"))$("#shSent").onclick=()=>{saveSentence(SH.sentence,SH.surface,SH.entry&&SH.entry.meaning);renderSheet();renderDecks();renderHome()};
+ if($("#shSent"))$("#shSent").onclick=()=>{saveSentence(SH.sentence,SH.surface,SH.entry&&SH.entry.meaning);renderSheet();renderDecks();renderHome();updateFavCount()};
+ if($("#shRange"))$("#shRange").onclick=()=>startRange(SH.btn);
+ if($("#shOwnF"))$("#shOwnF").onsubmit=ev=>{ev.preventDefault();saveOwn($("#shOwn").value)};
 }
 $("#shClose").onclick=()=>showSheet(false);
 $("#sheetBack").onclick=()=>showSheet(false);
 $("#shFav").onclick=toggleFav;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#sheet").hidden)showSheet(false)});
-function toggleFav(){const e=SH&&SH.entry;if(!e||!e.meaning)return;const key=favKeyOf(e,SH.k);
+function toggleFav(){if(SH&&SH.mode==="phrase"){S.favs[SH.k]?removePhrase():savePhrase();return}
+ const e=SH&&SH.entry;if(!e||!e.meaning)return;const key=favKeyOf(e,SH.k);
  if(S.favs[key]){delete S.favs[key];removeFavCard(key)}
  else{const ex=e.example?[e.example,e.examplePt||""]:((e.found||[])[0]||(e.examples||[])[0]||["",""]);
-  S.favs[key]={lemma:e.lemma||SH.surface,surface:SH.surface,pos:e.pos||"",meaning:e.meaning||"",synonyms:(e.synonyms||[]).slice(0,5),example:ex[0]||"",examplePt:ex[1]||"",context:SH.sentence,date:SH.btn&&SH.btn.closest("#newsBox")&&NEWS.cur?NEWS.cur.date:today(),added:today()};addFavCard(key)}
+  S.favs[key]={lemma:e.lemma||SH.surface,surface:SH.surface,pos:e.pos||"",meaning:e.meaning||"",synonyms:(e.synonyms||[]).slice(0,5),example:ex[0]||"",examplePt:ex[1]||"",context:SH.sentence,date:SH.btn&&SH.btn.closest("#newsBox")&&NEWS.cur?NEWS.cur.date:today(),added:today(),tipo:"palavra",origem:origemOf(SH.btn)};addFavCard(key)}
  save();renderSheet();refreshTokenMarks();updateFavCount();renderDecks();renderHome()}
