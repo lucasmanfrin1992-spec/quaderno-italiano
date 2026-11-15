@@ -1,0 +1,63 @@
+"""Gera os áudios gravados do PWA (audio/<chave>.mp3 + audio/index.json) com uma voz italiana offline (Piper).
+
+Uso:
+  1) python3 tools/harvest_audio.py        -> lista as frases que o app lê em voz alta (precisa do Playwright e do Chrome)
+  2) python3 tools/build_audio.py MODELO.onnx
+     MODELO: voz it_IT-paola-medium do projeto Piper (https://huggingface.co/rhasspy/piper-voices, pasta it/it_IT/paola/medium),
+     com o .onnx.json ao lado. Requer: pip install piper-tts; ffmpeg.
+Só gera o que ainda não existe; apaga os arquivos que não são mais usados.
+"""
+import io, json, os, subprocess, sys, wave
+from multiprocessing import Pool
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT = os.path.join(ROOT, 'audio')
+LIST = os.path.join(ROOT, 'tools', 'audio_texts.json')
+_voice = None
+
+def _init(model):
+    global _voice
+    from piper import PiperVoice
+    _voice = PiperVoice.load(model)
+
+def _synth(item):
+    key, text = item
+    dst = os.path.join(OUT, key + '.mp3')
+    buf = io.BytesIO()
+    with wave.open(buf, 'wb') as w:
+        if hasattr(_voice, 'synthesize_wav'):
+            _voice.synthesize_wav(text, w)
+        else:
+            _voice.synthesize(text, w)
+    r = subprocess.run(['ffmpeg', '-loglevel', 'error', '-y', '-f', 'wav', '-i', 'pipe:0',
+                        '-af', 'silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse,apad=pad_dur=0.12',
+                        '-ac', '1', '-ar', '22050', '-b:a', '32k', dst], input=buf.getvalue())
+    return key if r.returncode == 0 and os.path.exists(dst) else None
+
+def main():
+    if len(sys.argv) < 2:
+        sys.exit(__doc__)
+    model = sys.argv[1]
+    items = json.load(open(LIST, encoding='utf-8'))
+    os.makedirs(OUT, exist_ok=True)
+    want = {k for k, _ in items}
+    todo = [(k, t) for k, t in items if not os.path.exists(os.path.join(OUT, k + '.mp3'))]
+    print(f'{len(items)} frases; {len(todo)} para gerar')
+    done = 0
+    if todo:
+        with Pool(max(1, (os.cpu_count() or 2) - 0), initializer=_init, initargs=(model,)) as pool:
+            for k in pool.imap_unordered(_synth, todo, chunksize=8):
+                done += 1 if k else 0
+                if done % 250 == 0:
+                    print(' ', done, 'prontos', flush=True)
+    removed = 0
+    for f in os.listdir(OUT):
+        if f.endswith('.mp3') and f[:-4] not in want:
+            os.remove(os.path.join(OUT, f)); removed += 1
+    keys = sorted(k for k in want if os.path.exists(os.path.join(OUT, k + '.mp3')))
+    size = sum(os.path.getsize(os.path.join(OUT, k + '.mp3')) for k in keys)
+    v = str(len(keys)) + '-' + format(abs(hash(tuple(keys))) % (36 ** 6), 'x')
+    json.dump({'v': v, 'voz': 'Paola', 'keys': keys}, open(os.path.join(OUT, 'index.json'), 'w'), separators=(',', ':'))
+    print(f'gerados {done}, removidos {removed}; total {len(keys)} arquivos, {size/1048576:.1f} MB')
+
+if __name__ == '__main__':
+    main()

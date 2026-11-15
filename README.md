@@ -17,3 +17,12 @@ O conteúdo e o código ficam em `src/` (curso A1 em `a1.js`, A2 em `a2.js`, di�
 
 1. `python3 tools/build.py` — gera `index.html` (esta PWA) e `dist/artifact.html` (a versão do Claude).
 2. Suba o número da versão em `sw.js` (`const V=...`) para os celulares baixarem a versão nova.
+
+## Áudio gravado (voz italiana offline)
+
+O PWA toca arquivos MP3 em `audio/` (um por frase ou palavra; a lista fica em `audio/index.json`). Eles funcionam no iPhone mesmo no modo silencioso, ao contrário da voz do navegador. Frases sem arquivo, como a notícia do dia, usam a voz do aparelho.
+
+Depois de mudar textos do app:
+1. `python3 tools/build.py` e `python3 -m http.server 8765` na raiz;
+2. `python3 tools/harvest_audio.py` (lista as frases em `tools/audio_texts.json`; usa Playwright e Chrome);
+3. `python3 tools/build_audio.py it_IT-paola-medium.onnx` (gera só os arquivos novos; requer `pip install piper-tts` e ffmpeg; a voz é a it_IT "paola" medium do projeto Piper).
